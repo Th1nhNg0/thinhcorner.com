@@ -110,12 +110,8 @@ const getTopTracks = async () => {
       imageUrl: track.album.images[1].url,
       // previewUrl: track.preview_url,
     })) || [];
-  const lastUpdated = new Date();
 
-  return {
-    tracks,
-    lastUpdated,
-  };
+  return tracks;
 };
 
 export { getNowPlaying, getTopTracks };

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function MusicPage() {
-  const { tracks, lastUpdated } = await getTopTracks();
+  const tracks = await getTopTracks();
 
-  return <MusicTable tracks={tracks} lastUpdated={lastUpdated} />;
+  return <MusicTable tracks={tracks} />;
 }
