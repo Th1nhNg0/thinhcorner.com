@@ -4,7 +4,7 @@ import BooksTable from "./BooksTable";
 
 export const revalidate = 3600;
 export const metadata: Metadata = {
-  title: "Reading",
+  title: "Reading - Thịnh's Corner"
 };
 
 export default async function page() {

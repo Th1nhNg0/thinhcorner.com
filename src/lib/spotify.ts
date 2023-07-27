@@ -42,12 +42,17 @@ export type NowPlaying = NowPlayingTrue | NowPlayingFalse;
 const getNowPlaying = async () => {
   const { access_token } = await getAccessToken();
 
-  const song = await fetch(NOW_PLAYING_ENDPOINT, {
+  const res = await fetch(NOW_PLAYING_ENDPOINT, {
     headers: {
       Authorization: `Bearer ${access_token}`,
     },
-  }).then((res) => res.json());
-
+  });
+  if (res.status === 204 || res.status > 400) {
+    return {
+      isPlaying: false,
+    } as NowPlaying;
+  }
+  const song = await res.json();
   if (song.item === null) {
     return {
       isPlaying: false,

@@ -11,7 +11,9 @@ function PostCard(post: Post) {
       <Anchor component={Link} href={post.url} color="black">
         {post.title}
       </Anchor>
-      <Text color="dark.3"> {format(parseISO(post.date), "dd-MM-yyyy")}</Text>
+      <Text color="dark.2" size="sm">
+        {format(parseISO(post.date), "dd-MM-yyyy")}
+      </Text>
     </Box>
   );
 }
@@ -22,7 +24,7 @@ export default function Home() {
   );
 
   return (
-    <Stack>
+    <Stack spacing="lg">
       {posts.map((post, idx) => (
         <PostCard key={idx} {...post} />
       ))}
