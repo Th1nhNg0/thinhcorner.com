@@ -4,13 +4,7 @@ import { Anchor, Box, Group, Image, Table, Text, Title } from "@mantine/core";
 import React from "react";
 import { formatDistance } from "date-fns";
 
-export default function MusicTable({
-  tracks,
-  lastUpdated,
-}: {
-  tracks: TopTrack[];
-  lastUpdated: Date;
-}) {
+export default function MusicTable({ tracks }: { tracks: TopTrack[] }) {
   const rows = tracks.map((track) => (
     <tr key={track.id}>
       <td>
@@ -53,10 +47,6 @@ export default function MusicTable({
       <Text>
         These are my top tracks on Spotify, based on the last 4 weeks of
         listening.
-      </Text>
-      <Text>
-        Last updated:{" "}
-        {formatDistance(lastUpdated, new Date(), { addSuffix: true })}
       </Text>
       <Table mt="lg">
         <thead>
