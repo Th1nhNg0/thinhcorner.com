@@ -9,6 +9,7 @@ import {
   SimpleGrid,
   Stack,
   Table,
+  Text,
   Title,
 } from "@mantine/core";
 import Link from "next/link";
@@ -24,7 +25,12 @@ export default function BooksTable({
   const cr_rows = books.read.map((element) => (
     <tr key={element.url}>
       <td>
-        <Anchor href={element.url} target="_blank" component={Link}>
+        <Anchor
+          color="black"
+          href={element.url}
+          target="_blank"
+          component={Link}
+        >
           {element.title}
         </Anchor>
       </td>
@@ -60,9 +66,15 @@ export default function BooksTable({
         <Table fontSize="md">
           <thead>
             <tr>
-              <th>Book</th>
-              <th>Author</th>
-              <th>Rating</th>
+              <th>
+                <Text color="black">Book</Text>
+              </th>
+              <th>
+                <Text color="black">Author</Text>
+              </th>
+              <th>
+                <Text color="black">Rating</Text>
+              </th>
             </tr>
           </thead>
           <tbody>{cr_rows}</tbody>
