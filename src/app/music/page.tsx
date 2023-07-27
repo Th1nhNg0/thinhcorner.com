@@ -1,11 +1,15 @@
+import { getTopTracks } from "@/lib/spotify";
 import { Metadata } from "next";
 import React from "react";
+import MusicTable from "./MusicTable";
 
-export const revalidate = 3600;
+export const revalidate = 60 * 60 * 24;
 export const metadata: Metadata = {
   title: "Music - Thịnh's Corner",
 };
 
-export default function MusicPage() {
-  return <div>page</div>;
+export default async function MusicPage() {
+  const tracks = await getTopTracks();
+  const lastUpdated = new Date();
+  return <MusicTable tracks={tracks} lastUpdated={lastUpdated} />;
 }

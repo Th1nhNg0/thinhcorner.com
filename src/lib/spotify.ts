@@ -78,7 +78,15 @@ const getNowPlaying = async () => {
 };
 
 export interface TopTrack {
-  artist: string;
+  id: string;
+  artist: {
+    href: string;
+    id: string;
+    name: string;
+    external_urls: {
+      spotify: string;
+    };
+  }[];
   songUrl: string;
   title: string;
   imageUrl: string;
@@ -95,11 +103,12 @@ const getTopTracks = async () => {
   }).then((res) => res.json());
   const tracks =
     items?.slice(0, 10).map((track: any) => ({
-      artist: track.artists.map((_artist: any) => _artist.name).join(", "),
+      id: track.id,
+      artist: track.artists,
       songUrl: track.external_urls.spotify,
       title: track.name,
       imageUrl: track.album.images[1].url,
-      previewUrl: track.preview_url,
+      // previewUrl: track.preview_url,
     })) || [];
   return tracks as TopTrack[];
 };

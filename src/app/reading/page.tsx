@@ -2,9 +2,9 @@ import { get_book } from "@/lib/goodread";
 import { Metadata } from "next";
 import BooksTable from "./BooksTable";
 
-export const revalidate = 3600;
+export const revalidate = 60 * 60 * 24;
 export const metadata: Metadata = {
-  title: "Reading - Thịnh's Corner"
+  title: "Reading - Thịnh's Corner",
 };
 
 export default async function page() {
