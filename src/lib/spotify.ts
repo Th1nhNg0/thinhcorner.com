@@ -101,7 +101,7 @@ const getTopTracks = async () => {
       Authorization: `Bearer ${access_token}`,
     },
   }).then((res) => res.json());
-  const tracks =
+  const tracks: TopTrack[] =
     items?.slice(0, 10).map((track: any) => ({
       id: track.id,
       artist: track.artists,
@@ -110,7 +110,12 @@ const getTopTracks = async () => {
       imageUrl: track.album.images[1].url,
       // previewUrl: track.preview_url,
     })) || [];
-  return tracks as TopTrack[];
+  const lastUpdated = new Date();
+
+  return {
+    tracks,
+    lastUpdated,
+  };
 };
 
 export { getNowPlaying, getTopTracks };
