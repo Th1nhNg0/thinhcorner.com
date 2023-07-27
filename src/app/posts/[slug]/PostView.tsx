@@ -31,7 +31,7 @@ export default function PostView({ post }: { post: Post }) {
           {post.title}
         </Title>
       </Box>
-      <Divider my="xl" color="black" />
+      <Divider my="xl"  />
       <TypographyStylesProvider>
         <MDXContent
           components={{
