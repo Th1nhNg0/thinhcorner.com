@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "Timeline - Thịnh's Corner",
 };
 
-export default function page() {
+export default function AboutPage() {
   return (
     <Box>
       <Title mb="lg">My Timeline</Title>
