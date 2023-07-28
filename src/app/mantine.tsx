@@ -1,13 +1,7 @@
 "use client";
 
 import { CacheProvider } from "@emotion/react";
-import {
-  Container,
-  DefaultMantineColor,
-  MantineProvider,
-  Tuple,
-  useEmotionCache,
-} from "@mantine/core";
+import { Container, MantineProvider, useEmotionCache } from "@mantine/core";
 import { Josefin_Sans } from "next/font/google";
 import { useServerInsertedHTML } from "next/navigation";
 
