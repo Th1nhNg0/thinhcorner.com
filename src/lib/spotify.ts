@@ -102,7 +102,7 @@ const getTopTracks = async () => {
     },
   }).then((res) => res.json());
   const tracks: TopTrack[] =
-    items?.slice(0, 10).map((track: any) => ({
+    items?.map((track: any) => ({
       id: track.id,
       artist: track.artists,
       songUrl: track.external_urls.spotify,

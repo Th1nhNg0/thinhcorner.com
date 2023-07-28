@@ -12,7 +12,7 @@ export default function AboutView() {
   return (
     <Box>
       <Title mb="lg">My Timeline</Title>
-      <Timeline active={3} bulletSize={32} color="cyan">
+      <Timeline active={3} bulletSize={32} color="yellow">
         <Timeline.Item
           title="Doing right now"
           bullet={<BsFillRocketTakeoffFill />}
@@ -90,7 +90,7 @@ export default function AboutView() {
           bullet={<PiMedal />}
         >
           <Text component="time" size="sm" dateTime="2017-04-16">
-            {format(new Date(2017, 3, 16), "dd/MM/yyy")}
+            {format(new Date(2017, 3, 9), "dd/MM/yyy")}
           </Text>
           <Image src="/timelines/olp.jpg" alt="" />
         </Timeline.Item>
@@ -106,7 +106,6 @@ export default function AboutView() {
         <Timeline.Item
           title="Graduate from Vo Thi Sau Secondary School"
           bullet={<SlGraduation />}
-          lineVariant="dashed"
         >
           <Text component="time" size="sm" dateTime="2016-07-15">
             {format(new Date(2016, 6, 15), "dd/MM/yyy")}
@@ -116,7 +115,6 @@ export default function AboutView() {
         <Timeline.Item
           title="Learning to play guitar"
           bullet={<PiGuitarLight />}
-          lineVariant="dashed"
         >
           <Text component="time" size="sm" dateTime="2012">
             2012
