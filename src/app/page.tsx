@@ -11,7 +11,7 @@ function PostCard(post: Post) {
       <Anchor component={Link} href={post.url} color="black">
         {post.title}
       </Anchor>
-      <Text color="dark.2" size="sm">
+      <Text color="dimmed" size="sm">
         {format(parseISO(post.date), "dd-MM-yyyy")}
       </Text>
     </Box>
