@@ -35,7 +35,6 @@
     "rehype-katex": "^6.0.3",
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
-    "schema-dts": "^1.1.2",
     "typescript": "5.1.6",
     "unist-util-visit": "^5.0.0"
   }
