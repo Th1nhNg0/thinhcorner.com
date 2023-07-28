@@ -2,7 +2,7 @@
 
 import { ActionIcon, Divider, Group } from "@mantine/core";
 import { AiFillRead, AiFillHome, AiFillInfoCircle } from "react-icons/ai";
-import { BsMusicNoteBeamed } from "react-icons/bs";
+import { BsMusicNoteBeamed, BsFillRocketTakeoffFill } from "react-icons/bs";
 import { Box } from "@mantine/core";
 import React from "react";
 import Link from "next/link";
@@ -22,6 +22,18 @@ export default function Header() {
         >
           <AiFillHome />
         </ActionIcon>
+        <ActionIcon
+          title="Timeline"
+          size={40}
+          fz={20}
+          variant="filled"
+          color="dark"
+          component={Link}
+          href="/timeline"
+        >
+          <BsFillRocketTakeoffFill />
+        </ActionIcon>
+
         <ActionIcon
           title="Reading"
           size={40}

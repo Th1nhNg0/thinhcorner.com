@@ -7,7 +7,7 @@ export const generateStaticParams = async () =>
 
 export const generateMetadata = ({ params }: { params: { slug: string } }) => {
   const post = allPosts.find((post) => post._raw.flattenedPath === params.slug);
-  if (!post) notFound();
+  if (!post) return { title: "Not found" };
   return {
     title: post.title,
   };
