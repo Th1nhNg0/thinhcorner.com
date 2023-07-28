@@ -8,7 +8,7 @@ import { MdOutlineScience } from "react-icons/md";
 import { PiBaby, PiGuitarLight, PiMedal } from "react-icons/pi";
 import { SlGraduation } from "react-icons/sl";
 
-export default function AboutPage() {
+export default function AboutView() {
   return (
     <Box>
       <Title mb="lg">My Timeline</Title>
