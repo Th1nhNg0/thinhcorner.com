@@ -3,6 +3,7 @@ import RootStyleRegistry from "./mantine";
 import { getNowPlaying } from "@/lib/spotify";
 import Footer from "./Footer";
 import Header from "./Header";
+import GA from "./GA";
 
 export const revalidate = 120;
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export default async function RootLayout({
   return (
     <html lang="en-US">
       <head />
+      <GA GA_TRACKING_ID="G-P4B7XCWCYP" />
       <body>
         <RootStyleRegistry>
           <Header />
