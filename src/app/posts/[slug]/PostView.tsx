@@ -17,28 +17,45 @@ export default function PostView({ post }: { post: Post }) {
   const MDXContent = useMDXComponent(post.body.code);
 
   return (
-    <article className="mx-auto max-w-xl py-8">
+    <article
+      className="mx-auto max-w-xl py-8"
+      itemScope
+      itemType="http://schema.org/BlogPosting"
+    >
       <Box className="mb-8 text-center">
         <Flex justify="space-between">
-          <Text component="time" color="dimmed" dateTime={post.date}>
+          <Text
+            component="time"
+            color="dimmed"
+            itemProp="datePublished"
+            dateTime={post.date}
+          >
             {format(parseISO(post.date), "LLLL d, yyyy")}
           </Text>
           <Text color="dimmed">
-            {post.readingTime.words} words • {post.readingTime.text}
+            <span itemProp="wordCount">{post.readingTime.words}</span> words •{" "}
+            <span itemProp="timeRequired">{post.readingTime.text}</span>
           </Text>
         </Flex>
-        <Title mt="sm" order={1} className="text-3xl font-bold">
+        <Title
+          mt="sm"
+          order={1}
+          className="text-3xl font-bold"
+          itemProp="headline"
+        >
           {post.title}
         </Title>
       </Box>
       <Divider my="xl" />
-      <TypographyStylesProvider>
-        <MDXContent
-          components={{
-            ...MDXComponents,
-          }}
-        />
-      </TypographyStylesProvider>
+      <Box itemProp="articleBody">
+        <TypographyStylesProvider>
+          <MDXContent
+            components={{
+              ...MDXComponents,
+            }}
+          />
+        </TypographyStylesProvider>
+      </Box>
     </article>
   );
 }
