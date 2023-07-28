@@ -20,10 +20,10 @@ export default function PostView({ post }: { post: Post }) {
     <article className="mx-auto max-w-xl py-8">
       <Box className="mb-8 text-center">
         <Flex justify="space-between">
-          <Text component="time" dateTime={post.date}>
+          <Text component="time" color="dimmed" dateTime={post.date}>
             {format(parseISO(post.date), "LLLL d, yyyy")}
           </Text>
-          <Text>
+          <Text color="dimmed">
             {post.readingTime.words} words • {post.readingTime.text}
           </Text>
         </Flex>
@@ -31,7 +31,7 @@ export default function PostView({ post }: { post: Post }) {
           {post.title}
         </Title>
       </Box>
-      <Divider my="xl"  />
+      <Divider my="xl" />
       <TypographyStylesProvider>
         <MDXContent
           components={{
