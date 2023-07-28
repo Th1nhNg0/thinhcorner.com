@@ -12,28 +12,12 @@ import { Prism } from "@mantine/prism";
 import { Post } from "contentlayer/generated";
 import { format, parseISO } from "date-fns";
 import { useMDXComponent } from "next-contentlayer/hooks";
-import { BlogPosting } from "schema-dts";
 
 export default function PostView({ post }: { post: Post }) {
   const MDXContent = useMDXComponent(post.body.code);
-  const blogPosting: BlogPosting = {
-    "@type": "BlogPosting",
-    headline: post.title,
-    datePublished: post.date,
-    dateModified: post.date,
-    author: {
-      "@type": "Person",
-      name: "Thịnh Ngô",
-    },
-    wordCount: post.readingTime.words,
-  };
 
   return (
     <article className="mx-auto max-w-xl py-8">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPosting) }}
-      />
       <Box className="mb-8 text-center">
         <Flex justify="space-between">
           <Text component="time" color="dimmed" dateTime={post.date}>
