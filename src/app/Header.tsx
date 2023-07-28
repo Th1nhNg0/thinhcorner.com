@@ -1,11 +1,9 @@
 "use client";
 
-import { ActionIcon, Divider, Group } from "@mantine/core";
-import { AiFillRead, AiFillHome, AiFillInfoCircle } from "react-icons/ai";
-import { BsMusicNoteBeamed, BsFillRocketTakeoffFill } from "react-icons/bs";
-import { Box } from "@mantine/core";
-import React from "react";
+import { ActionIcon, Box, Divider, Group } from "@mantine/core";
 import Link from "next/link";
+import { AiFillHome, AiFillInfoCircle, AiFillRead } from "react-icons/ai";
+import { BsFillRocketTakeoffFill, BsMusicNoteBeamed } from "react-icons/bs";
 
 export default function Header() {
   return (
@@ -16,9 +14,9 @@ export default function Header() {
           size={40}
           fz={20}
           variant="filled"
-          color="dark"
           component={Link}
           href="/"
+          color="dark"
         >
           <AiFillHome />
         </ActionIcon>
@@ -27,20 +25,19 @@ export default function Header() {
           size={40}
           fz={20}
           variant="filled"
-          color="dark"
           component={Link}
+          color="dark"
           href="/timeline"
         >
           <BsFillRocketTakeoffFill />
         </ActionIcon>
-
         <ActionIcon
           title="Reading"
           size={40}
           fz={20}
           variant="filled"
-          color="dark"
           component={Link}
+          color="dark"
           href="/reading"
         >
           <AiFillRead />
@@ -50,8 +47,8 @@ export default function Header() {
           size={40}
           fz={20}
           variant="filled"
-          color="dark"
           component={Link}
+          color="dark"
           href="/music"
         >
           <BsMusicNoteBeamed />
@@ -61,8 +58,8 @@ export default function Header() {
           size={40}
           fz={20}
           variant="filled"
-          color="dark"
           component={Link}
+          color="dark"
           href="/about"
         >
           <AiFillInfoCircle />
