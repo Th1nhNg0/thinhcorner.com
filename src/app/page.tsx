@@ -8,10 +8,10 @@ import Link from "next/link";
 function PostCard(post: Post) {
   return (
     <Box>
-      <Anchor component={Link} href={post.url} color="black">
+      <Anchor component={Link} href={post.url} fw={600} color="black" fz="lg">
         {post.title}
       </Anchor>
-      <Text color="dimmed" size="sm">
+      <Text color="dimmed" size="sm" fz="md">
         {format(parseISO(post.date), "dd-MM-yyyy")}
       </Text>
     </Box>

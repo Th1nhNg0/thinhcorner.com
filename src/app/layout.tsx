@@ -8,6 +8,7 @@ import RootStyleRegistry from "./mantine";
 export const revalidate = 120;
 export const metadata: Metadata = {
   title: "Thịnh's Corner",
+  metadataBase: new URL("https://thinhcorner.com"),
   description: "A place to put my thoughts in writing",
   icons: "/images/logo.png",
   openGraph: {

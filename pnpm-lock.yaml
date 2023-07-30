@@ -10,6 +10,7 @@ specifiers:
   '@types/node': 20.4.5
   '@types/react': 18.2.16
   '@types/react-dom': 18.2.7
+  chart.js: ^4.3.2
   cheerio: 1.0.0-rc.12
   contentlayer: ^0.3.4
   date-fns: ^2.30.0
@@ -20,6 +21,7 @@ specifiers:
   next-contentlayer: ^0.3.4
   next-sitemap: ^4.1.8
   react: 18.2.0
+  react-chartjs-2: ^5.2.0
   react-dom: 18.2.0
   react-icons: ^4.10.1
   reading-time: ^1.5.0
@@ -39,6 +41,7 @@ dependencies:
   '@types/node': 20.4.5
   '@types/react': 18.2.16
   '@types/react-dom': 18.2.7
+  chart.js: 4.3.2
   cheerio: 1.0.0-rc.12
   contentlayer: 0.3.4
   date-fns: 2.30.0
@@ -49,6 +52,7 @@ dependencies:
   next-contentlayer: 0.3.4_qwuk4utl5nggdbqnf5ewff5ec4
   next-sitemap: 4.1.8_next@13.4.12
   react: 18.2.0
+  react-chartjs-2: 5.2.0_k4sg4gdfzgbcbnxzaosomum2qi
   react-dom: 18.2.0_react@18.2.0
   react-icons: 4.10.1_react@18.2.0
   reading-time: 1.5.0
@@ -728,6 +732,10 @@ packages:
     dependencies:
       jsbi: 4.3.0
       tslib: 2.6.1
+    dev: false
+
+  /@kurkle/color/0.3.2:
+    resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
     dev: false
 
   /@mantine/core/6.0.17_dzhovqxgwkn3m534xa3br7f3um:
@@ -1831,6 +1839,13 @@ packages:
 
   /character-reference-invalid/2.0.1:
     resolution: {integrity: sha512-iBZ4F4wRbyORVsu0jPV7gXkOsGYjGHPmAyv+HiHG8gi5PtC9KI2j1+v8/tlibRvjoWX027ypmG/n0HtO5t7unw==}
+    dev: false
+
+  /chart.js/4.3.2:
+    resolution: {integrity: sha512-pvQNyFOY1QmbmIr8oDORL16/FFivfxj8V26VFpFilMo4cNvkV5WXLJetDio365pd9gKUHGdirUTbqJfw8tr+Dg==}
+    engines: {pnpm: '>=7'}
+    dependencies:
+      '@kurkle/color': 0.3.2
     dev: false
 
   /cheerio-select/2.1.0:
@@ -4746,6 +4761,16 @@ packages:
     resolution: {integrity: sha512-iHZWu+q3IdFZFX36ro/lKBkSvfkztY5Y7HMiPlOUjhupPcG2JMfst2KKEpu5XndviX/3UhFbRngUPNKtgvtZiA==}
     dependencies:
       inherits: 2.0.4
+    dev: false
+
+  /react-chartjs-2/5.2.0_k4sg4gdfzgbcbnxzaosomum2qi:
+    resolution: {integrity: sha512-98iN5aguJyVSxp5U3CblRLH67J8gkfyGNbiK3c+l1QI/G4irHMPQw44aEPmjVag+YKTyQ260NcF82GTQ3bdscA==}
+    peerDependencies:
+      chart.js: ^4.1.1
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      chart.js: 4.3.2
+      react: 18.2.0
     dev: false
 
   /react-dom/18.2.0_react@18.2.0:
