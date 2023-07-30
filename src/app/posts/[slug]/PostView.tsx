@@ -1,17 +1,21 @@
 "use client";
 import {
+  Blockquote,
   Box,
   Center,
+  Code,
   Divider,
   Flex,
+  Image,
+  List,
   Text,
   Title,
-  TypographyStylesProvider,
 } from "@mantine/core";
 import { Prism } from "@mantine/prism";
 import { Post } from "contentlayer/generated";
 import { format, parseISO } from "date-fns";
 import { useMDXComponent } from "next-contentlayer/hooks";
+import "katex/dist/katex.css";
 
 export default function PostView({ post }: { post: Post }) {
   const MDXContent = useMDXComponent(post.body.code);
@@ -48,34 +52,48 @@ export default function PostView({ post }: { post: Post }) {
       </Box>
       <Divider my="xl" />
       <Box itemProp="articleBody">
-        <TypographyStylesProvider>
-          <MDXContent
-            components={{
-              ...MDXComponents,
-            }}
-          />
-        </TypographyStylesProvider>
+        <MDXContent
+          components={{
+            ...MDXComponents,
+          }}
+        />
       </Box>
     </article>
   );
 }
-
 const MDXComponents = {
-  pre: Pre,
+  pre: customPre,
+  code: customCode,
   img: CustomImage,
+  blockquote: CustomBlockquote,
+  p: (props: any) => <Text component="p" size="lg" {...props} />,
+  li: (props: any) => <List.Item fz="lg">{props.children}</List.Item>,
+  ol: (props: any) => <List withPadding>{props.children}</List>,
+  ul: (props: any) => <List withPadding>{props.children}</List>,
 };
 
+function customCode(props: any) {
+  return <Code color="dark">{props.children}</Code>;
+}
+
+function CustomBlockquote({ children }: any) {
+  return (
+    <Blockquote>
+      <Box mt={-16}>{children}</Box>
+    </Blockquote>
+  );
+}
 function CustomImage({ src, alt }: any) {
   return (
     <Center>
-      <picture>
-        <img src={src} alt={alt} />
-      </picture>
+      <Box>
+        <Image src={src} alt={alt} />
+      </Box>
     </Center>
   );
 }
 
-function Pre(props: any) {
+function customPre(props: any) {
   return (
     <Prism
       mb={20}
