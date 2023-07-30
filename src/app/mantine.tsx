@@ -2,11 +2,11 @@
 
 import { CacheProvider } from "@emotion/react";
 import { Container, MantineProvider, useEmotionCache } from "@mantine/core";
-import { Josefin_Sans } from "next/font/google";
+import { Quicksand } from "next/font/google";
 import { useServerInsertedHTML } from "next/navigation";
 
-const josefin_sans = Josefin_Sans({
-  subsets: ["latin", "latin-ext"],
+const myFont = Quicksand({
+  subsets: ["vietnamese", "latin", "latin-ext"],
 });
 
 export default function RootStyleRegistry({
@@ -32,9 +32,16 @@ export default function RootStyleRegistry({
         withNormalizeCSS
         withGlobalStyles
         theme={{
-          fontFamily: josefin_sans.style.fontFamily,
+          fontFamily: myFont.style.fontFamily,
+          fontSizes: {
+            xs: "14px",
+            sm: "16px",
+            md: "18px",
+            lg: "20px",
+            xl: "22px",
+          },
           headings: {
-            fontFamily: josefin_sans.style.fontFamily,
+            fontFamily: myFont.style.fontFamily,
             fontWeight: 400,
             sizes: {
               h1: {
