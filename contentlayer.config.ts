@@ -6,7 +6,7 @@ import remarkMath from "remark-math";
 
 export const Post = defineDocumentType(() => ({
   name: "Post",
-  filePathPattern: `**/*.md`,
+  filePathPattern: `**/*.mdx`,
   contentType: "mdx",
   fields: {
     title: { type: "string", required: true },
