@@ -14,8 +14,9 @@ import {
 import { Prism } from "@mantine/prism";
 import { Post } from "contentlayer/generated";
 import { format, parseISO } from "date-fns";
-import { useMDXComponent } from "next-contentlayer/hooks";
 import "katex/dist/katex.css";
+import { useMDXComponent } from "next-contentlayer/hooks";
+import Comment from "./Comment";
 
 export default function PostView({ post }: { post: Post }) {
   const MDXContent = useMDXComponent(post.body.code);
@@ -51,16 +52,18 @@ export default function PostView({ post }: { post: Post }) {
         </Title>
       </Box>
       <Divider my="xl" />
-      <Box itemProp="articleBody">
+      <Box itemProp="articleBody" mb={50}>
         <MDXContent
           components={{
             ...MDXComponents,
           }}
         />
       </Box>
+      <Comment />
     </article>
   );
 }
+
 const MDXComponents = {
   pre: customPre,
   code: customCode,
@@ -68,8 +71,16 @@ const MDXComponents = {
   blockquote: CustomBlockquote,
   p: (props: any) => <Text component="p" size="lg" {...props} />,
   li: (props: any) => <List.Item fz="lg">{props.children}</List.Item>,
-  ol: (props: any) => <List withPadding>{props.children}</List>,
-  ul: (props: any) => <List withPadding>{props.children}</List>,
+  ol: (props: any) => (
+    <List withPadding type="ordered">
+      {props.children}
+    </List>
+  ),
+  ul: (props: any) => (
+    <List withPadding type="unordered">
+      {props.children}
+    </List>
+  ),
 };
 
 function customCode(props: any) {
@@ -83,9 +94,10 @@ function CustomBlockquote({ children }: any) {
     </Blockquote>
   );
 }
+
 function CustomImage({ src, alt }: any) {
   return (
-    <Center>
+    <Center pos="relative">
       <Box>
         <Image src={src} alt={alt} />
       </Box>
