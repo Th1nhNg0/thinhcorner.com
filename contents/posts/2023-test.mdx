@@ -5,10 +5,36 @@ date: 2023-07-30
 
 > Working in progress, comeback later for more updates
 
-Bài viết này tóm tắt một số thông tin về bộ dự liệu lớn liên quan tới văn bản vi phạm pháp luật Việt Nam, được trích xuất từ website https://thuvienphapluat.vn/
+Bài viết này tóm tắt một số thông tin về bộ dự liệu lớn liên quan tới văn bản vi phạm pháp luật Việt Nam, được trích xuất từ website [Thư viện Pháp luật](https://thuvienphapluat.vn/).
 
-import { Chart1, Chart2 } from "../components/Chart";
+Dữ liệu cập nhật đến tháng 6 năm 2023. Gồm 318517 văn bản vi phạm pháp luật Việt Nam. Thuộc tính của văn bản:
+
+- Tên văn bản
+- Số hiệu văn bản
+- Loại văn bản
+- Lĩnh vực của văn bản
+- Người ký
+- Nơi ban hành
+- Ngày ban hành
+- Ngày hiệu lực
+- Ngày công báo
+- Số công báo
+- Tình trạng hiệu lực
+- Liên kết giữa các văn bản
+
+Sau đây là một số biểu đồ thống kê về dữ liệu này:
+
+import { Chart1, Chart2, Chart3, Chart4 } from "./components/2023-test/Chart";
 
 <Chart1 />
-
+<br />
 <Chart2 />
+<br />
+<Chart3 />
+
+Từ biểu đồ trên ta thấy: số lượng văn bản thường tăng đột biến vào các tháng giữa và cuối
+năm. Vì đây là các thời điểm diễn ra Kỳ họp Quốc hội.
+
+<Chart4 />
+
+Tuy nhiên, khoảng 10 năm trở lại đây, số lượng văn bản được ban hành tăng rất nhanh. Điển hình như số lượng văn bản ở năm 2021 nhiều gấp đôi năm 2011
