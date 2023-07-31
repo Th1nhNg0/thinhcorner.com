@@ -8,12 +8,12 @@ import Content from "./Content";
 export default function PostView({ post }: { post: Post }) {
   return (
     <article
-      className="prose max-w-none prose-img:mx-auto prose-img:rounded-lg prose-p:text-xl prose-pre:bg-[#151515]"
+      className="prose max-w-none prose-img:mx-auto prose-img:rounded-lg text-xl prose-pre:bg-[#151515]"
       itemScope
       itemType="http://schema.org/BlogPosting"
     >
       <div className="mb-8">
-        <div className="flex not-prose justify-between text-lg text-gray-600 mb-3">
+        <div className="flex justify-between mb-3 text-lg text-gray-600 not-prose">
           <time itemProp="datePublished" dateTime={post.date}>
             {format(parseISO(post.date), "LLLL d, yyyy")}
           </time>
@@ -26,7 +26,7 @@ export default function PostView({ post }: { post: Post }) {
           {post.title}
         </h1>
       </div>
-      <div className="w-full h-px bg-black/30 my-5"></div>
+      <div className="w-full h-px my-5 bg-black/30"></div>
       <div itemProp="articleBody" className="">
         <Content code={post.body.code} />
       </div>
