@@ -69,18 +69,10 @@ const MDXComponents = {
   code: customCode,
   img: CustomImage,
   blockquote: CustomBlockquote,
-  p: (props: any) => <Text component="p" size="lg" {...props} />,
+  p: (props: any) => <Text component="p" size="lg" color="black" {...props} />,
   li: (props: any) => <List.Item fz="lg">{props.children}</List.Item>,
-  ol: (props: any) => (
-    <List withPadding type="ordered">
-      {props.children}
-    </List>
-  ),
-  ul: (props: any) => (
-    <List withPadding type="unordered">
-      {props.children}
-    </List>
-  ),
+  ol: (props: any) => <List type="ordered">{props.children}</List>,
+  ul: (props: any) => <List type="unordered">{props.children}</List>,
 };
 
 function customCode(props: any) {
