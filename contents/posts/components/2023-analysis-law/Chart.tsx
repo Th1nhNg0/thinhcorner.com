@@ -1,4 +1,4 @@
-import { Flex, Table } from "@mantine/core";
+import { Box, Flex, Table, Text } from "@mantine/core";
 import {
   ArcElement,
   BarController,
@@ -310,45 +310,50 @@ export function Chart5() {
   };
   const middle_index = Math.floor(Object.keys(data).length / 2);
   return (
-    <Flex gap="md">
-      <Table withBorder>
-        <thead>
-          <tr>
-            <th>Loại văn bản</th>
-            <th>Số lượng</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Object.entries(data)
-            .sort(([, a], [, b]) => b - a)
-            .slice(0, middle_index)
-            .map(([key, value]) => (
-              <tr key={key}>
-                <td>{key}</td>
-                <td>{value}</td>
-              </tr>
-            ))}
-        </tbody>
-      </Table>
-      <Table withBorder>
-        <thead>
-          <tr>
-            <th>Loại văn bản</th>
-            <th>Số lượng</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Object.entries(data)
-            .sort(([, a], [, b]) => b - a)
-            .slice(middle_index)
-            .map(([key, value]) => (
-              <tr key={key}>
-                <td>{key}</td>
-                <td>{value}</td>
-              </tr>
-            ))}
-        </tbody>
-      </Table>
-    </Flex>
+    <Box>
+      <Text ta="center" size="sm" fw={600} color="#666">
+        Số lượng văn bản theo loại văn bản
+      </Text>
+      <Flex gap="md">
+        <Table withBorder>
+          <thead>
+            <tr>
+              <th>Loại văn bản</th>
+              <th>Số lượng</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(data)
+              .sort(([, a], [, b]) => b - a)
+              .slice(0, middle_index)
+              .map(([key, value]) => (
+                <tr key={key}>
+                  <td>{key}</td>
+                  <td>{value}</td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+        <Table withBorder>
+          <thead>
+            <tr>
+              <th>Loại văn bản</th>
+              <th>Số lượng</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(data)
+              .sort(([, a], [, b]) => b - a)
+              .slice(middle_index)
+              .map(([key, value]) => (
+                <tr key={key}>
+                  <td>{key}</td>
+                  <td>{value}</td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+      </Flex>
+    </Box>
   );
 }
