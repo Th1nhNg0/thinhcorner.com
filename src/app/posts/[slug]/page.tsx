@@ -28,11 +28,7 @@ const PostLayout = ({ params }: { params: { slug: string } }) => {
   const post = allPosts.find((post) => post._raw.flattenedPath === params.slug);
   if (!post) notFound();
 
-  return (
-    <>
-      <PostView post={post} />
-    </>
-  );
+  return <PostView post={post} />;
 };
 
 export default PostLayout;

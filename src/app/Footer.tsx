@@ -1,7 +1,6 @@
 "use client";
 
 import { NowPlaying } from "@/lib/spotify";
-import { Anchor, Box, Center, Divider, Group, Text } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,34 +10,31 @@ export default function Footer({
   spotifyNowPlaying: NowPlaying;
 }) {
   return (
-    <Box>
-      <Divider my="xl" />
+    <div className="py-5">
+      <div className="w-full h-px bg-black/30 mb-5"></div>
       {spotifyNowPlaying.isPlaying ? (
-        <Box mb="lg">
+        <div className="flex gap-3 mb-5">
           <Image
             src={"/images/wave.gif"}
             alt="song wave"
             width={30}
             height={30}
           />
-          <Anchor
-            ml={10}
+          <Link
             href={spotifyNowPlaying.songUrl}
             target="_blank"
-            component={Link}
             style={{
               position: "relative",
             }}
-            color="black"
           >
             {spotifyNowPlaying.title} - {spotifyNowPlaying.artist}
-          </Anchor>
-        </Box>
+          </Link>
+        </div>
       ) : null}
-      <Text>
+      <p className="text-gray-800 text-sm">
         ©{new Date().getFullYear()} Thịnh Ngô • A place to put my thoughts in
         writing
-      </Text>
-    </Box>
+      </p>
+    </div>
   );
 }
