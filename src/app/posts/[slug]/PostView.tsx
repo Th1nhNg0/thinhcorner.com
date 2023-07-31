@@ -1,120 +1,36 @@
 "use client";
 
-import {
-  Blockquote,
-  Box,
-  Center,
-  Code,
-  Divider,
-  Flex,
-  Image,
-  List,
-  Table,
-  Text,
-  Title,
-} from "@mantine/core";
-import { Prism } from "@mantine/prism";
 import { Post } from "contentlayer/generated";
 import { format, parseISO } from "date-fns";
-import "katex/dist/katex.css";
-import { useMDXComponent } from "next-contentlayer/hooks";
 import Comment from "./Comment";
+import Content from "./Content";
 
 export default function PostView({ post }: { post: Post }) {
   return (
     <article
-      className="mx-auto max-w-xl py-8"
+      className="prose max-w-none prose-img:mx-auto prose-img:rounded-lg prose-p:text-xl "
       itemScope
       itemType="http://schema.org/BlogPosting"
     >
-      <Box className="mb-8 text-center">
-        <Flex justify="space-between">
-          <Text
-            component="time"
-            color="dimmed"
-            itemProp="datePublished"
-            dateTime={post.date}
-          >
+      <div className="mb-8">
+        <div className="flex not-prose justify-between text-lg text-gray-600 mb-3">
+          <time itemProp="datePublished" dateTime={post.date}>
             {format(parseISO(post.date), "LLLL d, yyyy")}
-          </Text>
-          <Text color="dimmed">
+          </time>
+          <p>
             <span itemProp="wordCount">{post.readingTime.words}</span> words •{" "}
             <span itemProp="timeRequired">{post.readingTime.text}</span>
-          </Text>
-        </Flex>
-        <Title
-          mt="sm"
-          order={1}
-          className="text-3xl font-bold"
-          itemProp="headline"
-        >
+          </p>
+        </div>
+        <h1 itemProp="headline" className="leading-normal">
           {post.title}
-        </Title>
-      </Box>
-      <Divider my="xl" />
-      <Box itemProp="articleBody" mb={50}>
-        {/* work around for bug client and server of nextjs? */}
-        {typeof document !== "undefined" && <Content code={post.body.code} />}
-      </Box>
+        </h1>
+      </div>
+      <div className="w-full h-px bg-black/30 my-5"></div>
+      <div itemProp="articleBody" className="">
+        <Content code={post.body.code} />
+      </div>
       <Comment />
     </article>
-  );
-}
-
-function Content({ code }: { code: string }) {
-  const MDXContent = useMDXComponent(code);
-  return (
-    <MDXContent
-      components={{
-        ...MDXComponents,
-      }}
-    />
-  );
-}
-
-const MDXComponents = {
-  pre: customPre,
-  code: customCode,
-  img: CustomImage,
-  blockquote: CustomBlockquote,
-  p: (props: any) => <Text component="p" size="lg" color="black" {...props} />,
-  li: (props: any) => <List.Item fz="lg">{props.children}</List.Item>,
-  ol: (props: any) => <List type="ordered">{props.children}</List>,
-  ul: (props: any) => <List type="unordered">{props.children}</List>,
-  table: (props: any) => <Table>{props.children}</Table>,
-};
-
-function customCode(props: any) {
-  return <Code color="dark">{props.children}</Code>;
-}
-
-function CustomBlockquote({ children }: any) {
-  return (
-    <Blockquote>
-      <Box mt={-16}>{children}</Box>
-    </Blockquote>
-  );
-}
-
-function CustomImage({ src, alt }: any) {
-  return (
-    <Center pos="relative">
-      <Box>
-        <Image src={src} alt={alt} />
-      </Box>
-    </Center>
-  );
-}
-
-function customPre(props: any) {
-  return (
-    <Prism
-      mb={20}
-      colorScheme="dark"
-      withLineNumbers
-      language={props.children.props.className.replace("language-", "")}
-    >
-      {props.children.props.children}
-    </Prism>
   );
 }

@@ -1,4 +1,3 @@
-import { Box, Flex, Table, Text } from "@mantine/core";
 import {
   ArcElement,
   BarController,
@@ -310,12 +309,10 @@ export function Chart5() {
   };
   const middle_index = Math.floor(Object.keys(data).length / 2);
   return (
-    <Box>
-      <Text ta="center" size="sm" fw={600} color="#666">
-        Số lượng văn bản theo loại văn bản
-      </Text>
-      <Flex gap="md">
-        <Table withBorder>
+    <div>
+      <p>Số lượng văn bản theo loại văn bản</p>
+      <div className="flex gap-3">
+        <table className="table">
           <thead>
             <tr>
               <th>Loại văn bản</th>
@@ -333,8 +330,8 @@ export function Chart5() {
                 </tr>
               ))}
           </tbody>
-        </Table>
-        <Table withBorder>
+        </table>
+        <table className="table">
           <thead>
             <tr>
               <th>Loại văn bản</th>
@@ -352,8 +349,8 @@ export function Chart5() {
                 </tr>
               ))}
           </tbody>
-        </Table>
-      </Flex>
-    </Box>
+        </table>
+      </div>
+    </div>
   );
 }
