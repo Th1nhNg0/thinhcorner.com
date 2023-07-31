@@ -1,17 +1,6 @@
 "use client";
 
 import { Book } from "@/lib/goodread";
-import {
-  Anchor,
-  Box,
-  Image,
-  Rating,
-  SimpleGrid,
-  Stack,
-  Table,
-  Text,
-  Title,
-} from "@mantine/core";
 import Link from "next/link";
 
 export default function BooksTable({
@@ -24,62 +13,49 @@ export default function BooksTable({
 }) {
   const cr_rows = books.read.map((element) => (
     <tr key={element.url}>
-      <td>
-        <Anchor
-          color="black"
-          href={element.url}
-          target="_blank"
-          component={Link}
-        >
+      <td className="border-t py-2">
+        <Link href={element.url} target="_blank">
           {element.title}
-        </Anchor>
+        </Link>
       </td>
-      <td>{element.author}</td>
-      <td>
-        <Rating value={element.rating} readOnly />
-      </td>
+      <td className="border-t py-2 px-2">{element.author}</td>
+      <td className="border-t py-2">{element.rating}/5</td>
     </tr>
   ));
 
   return (
-    <Stack>
-      <Box>
-        <Title>Currently Reading</Title>
-        <SimpleGrid
-          cols={4}
-          breakpoints={[
-            { maxWidth: "sm", cols: 2 },
-            { maxWidth: "md", cols: 3 },
-          ]}
-        >
+    <div>
+      <div>
+        <h2 className="text-5xl font-bold mb-5">Currently Reading</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4">
           {books.current_reads.map((element) => (
-            <Box key={element.url} title={element.title}>
-              <Anchor href={element.url} target="_blank" component={Link}>
-                <Image src={element.thumbnail} alt={element.title} />
-              </Anchor>
-            </Box>
+            <div key={element.url} title={element.title}>
+              <Link href={element.url} target="_blank">
+                <picture>
+                  <img
+                    src={element.thumbnail}
+                    alt={element.title}
+                    className="w-full h-full object-cover"
+                  />
+                </picture>
+              </Link>
+            </div>
           ))}
-        </SimpleGrid>
-      </Box>
-      <Box>
-        <Title>Finished</Title>
-        <Table fontSize="md">
+        </div>
+      </div>
+      <div className="mt-10">
+        <h2 className="text-5xl font-bold mb-5">Finished</h2>
+        <table className="table border-collapse">
           <thead>
             <tr>
-              <th>
-                <Text color="black">Book</Text>
-              </th>
-              <th>
-                <Text color="black">Author</Text>
-              </th>
-              <th>
-                <Text color="black">Rating</Text>
-              </th>
+              <th className="text-left">Book</th>
+              <th className="text-left  px-2">Author</th>
+              <th className="text-left">Rating</th>
             </tr>
           </thead>
           <tbody>{cr_rows}</tbody>
-        </Table>
-      </Box>
-    </Stack>
+        </table>
+      </div>
+    </div>
   );
 }
