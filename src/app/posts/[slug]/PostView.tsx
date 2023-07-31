@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Blockquote,
   Box,
@@ -8,6 +9,7 @@ import {
   Flex,
   Image,
   List,
+  Table,
   Text,
   Title,
 } from "@mantine/core";
@@ -19,8 +21,6 @@ import { useMDXComponent } from "next-contentlayer/hooks";
 import Comment from "./Comment";
 
 export default function PostView({ post }: { post: Post }) {
-  const MDXContent = useMDXComponent(post.body.code);
-
   return (
     <article
       className="mx-auto max-w-xl py-8"
@@ -53,14 +53,22 @@ export default function PostView({ post }: { post: Post }) {
       </Box>
       <Divider my="xl" />
       <Box itemProp="articleBody" mb={50}>
-        <MDXContent
-          components={{
-            ...MDXComponents,
-          }}
-        />
+        {/* work around for bug client and server of nextjs? */}
+        {typeof document !== "undefined" && <Content code={post.body.code} />}
       </Box>
       <Comment />
     </article>
+  );
+}
+
+function Content({ code }: { code: string }) {
+  const MDXContent = useMDXComponent(code);
+  return (
+    <MDXContent
+      components={{
+        ...MDXComponents,
+      }}
+    />
   );
 }
 
@@ -73,6 +81,7 @@ const MDXComponents = {
   li: (props: any) => <List.Item fz="lg">{props.children}</List.Item>,
   ol: (props: any) => <List type="ordered">{props.children}</List>,
   ul: (props: any) => <List type="unordered">{props.children}</List>,
+  table: (props: any) => <Table>{props.children}</Table>,
 };
 
 function customCode(props: any) {
