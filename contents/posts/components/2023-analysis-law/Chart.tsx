@@ -1,14 +1,17 @@
+"use client";
+
+import { Box, Flex, Table, Text } from "@mantine/core";
 import {
   ArcElement,
   BarController,
   BarElement,
   CategoryScale,
   Chart as ChartJS,
+  Title as ChartTitle,
   Colors,
   Legend,
   LinearScale,
   PieController,
-  Title,
   Tooltip,
 } from "chart.js";
 import { Bar, Pie } from "react-chartjs-2";
@@ -22,7 +25,7 @@ ChartJS.register(
   ArcElement,
   Legend,
   Tooltip,
-  Title,
+  ChartTitle,
   Colors
 );
 
@@ -273,5 +276,86 @@ export function Chart4() {
         },
       }}
     />
+  );
+}
+
+export function Chart5() {
+  const data = {
+    "Quyết định": 192618,
+    "Nghị quyết": 31207,
+    "Kế hoạch": 23248,
+    "Thông tư": 20409,
+    "Chỉ thị": 13731,
+    "Thông báo": 13492,
+    "Nghị định": 7898,
+    "Thông tư liên tịch": 3061,
+    "Văn bản hợp nhất": 2353,
+    "Hướng dẫn": 1792,
+    "Báo cáo": 1492,
+    "Điều ước quốc tế": 1369,
+    "Công điện": 1265,
+    "Sắc lệnh": 992,
+    Luật: 942,
+    "Văn bản khác": 916,
+    Lệnh: 793,
+    "Pháp lệnh": 351,
+    "Quy định": 255,
+    "Quy chế": 158,
+    "Thông tri": 34,
+    "Công ước": 19,
+    "Điều lệ": 17,
+    "Hiến pháp": 7,
+    "Hiệp định": 6,
+    "Sắc luật": 5,
+    "Thoả thuận": 5,
+    "Văn bản WTO": 68,
+  };
+  const middle_index = Math.floor(Object.keys(data).length / 2);
+  return (
+    <Box>
+      <Text ta="center" size="sm" fw={600} color="#666">
+        Số lượng văn bản theo loại văn bản
+      </Text>
+      <Flex gap="lg">
+        <Table withBorder>
+          <thead>
+            <tr>
+              <th>Loại văn bản</th>
+              <th>Số lượng</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(data)
+              .sort(([, a], [, b]) => b - a)
+              .slice(0, middle_index)
+              .map(([key, value]) => (
+                <tr key={key}>
+                  <td>{key}</td>
+                  <td>{value}</td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+        <Table withBorder>
+          <thead>
+            <tr>
+              <th>Loại văn bản</th>
+              <th>Số lượng</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(data)
+              .sort(([, a], [, b]) => b - a)
+              .slice(middle_index)
+              .map(([key, value]) => (
+                <tr key={key}>
+                  <td>{key}</td>
+                  <td>{value}</td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+      </Flex>
+    </Box>
   );
 }
