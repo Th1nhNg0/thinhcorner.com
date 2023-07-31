@@ -1,41 +1,41 @@
 "use client";
-import { Anchor, Box, List, Text, Title } from "@mantine/core";
+
+import Link from "next/link";
 
 export default function View() {
   return (
-    <Box>
-      <Title>Hi. I&apos;m Thinh.</Title>
-      <Text>
+    <div className="prose max-w-none prose-lg">
+      <h1>Hi. I&apos;m Thinh.</h1>
+      <p>
         I made this site just for fun. Inspired by{" "}
-        <Anchor href="https://garden.bradwoods.io">
+        <Link href="https://garden.bradwoods.io">
           Brad Woods&apos; Digital Garden
-        </Anchor>{" "}
-        and{" "}
-        <Anchor href="https://nathanrooy.github.io/">Nathan Rooy Blog</Anchor>
-      </Text>
-      <Text>Some of my links:</Text>
-      <List>
-        <List.Item>
-          <Anchor href="https://github.com/Th1nhNg0" target="_blank">
+        </Link>{" "}
+        and <Link href="https://nathanrooy.github.io/">Nathan Rooy Blog</Link>
+      </p>
+      <p>Some of my links:</p>
+      <ul>
+        <li>
+          <Link href="https://github.com/Th1nhNg0" target="_blank">
             GitHub
-          </Anchor>
-        </List.Item>
-        <List.Item>
-          <Anchor href="https://www.facebook.com/Th1nhNg0/" target="_blank">
+          </Link>
+        </li>
+        <li>
+          <Link href="https://www.facebook.com/Th1nhNg0/" target="_blank">
             Facebook
-          </Anchor>
-        </List.Item>
-        <List.Item>
-          <Anchor href="https://www.goodreads.com/th1nhng0" target="_blank">
+          </Link>
+        </li>
+        <li>
+          <Link href="https://www.goodreads.com/th1nhng0" target="_blank">
             Goodreads
-          </Anchor>
-        </List.Item>
-        <List.Item>
-          <Anchor href="mailto:thinhngow@gmail.com" target="_blank">
+          </Link>
+        </li>
+        <li>
+          <Link href="mailto:thinhngow@gmail.com" target="_blank">
             Mail
-          </Anchor>
-        </List.Item>
-      </List>
-    </Box>
+          </Link>
+        </li>
+      </ul>
+    </div>
   );
 }

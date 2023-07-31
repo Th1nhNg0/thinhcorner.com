@@ -1,143 +1,141 @@
 "use client";
-import { Anchor, Box, Image, Text, Timeline, Title } from "@mantine/core";
 import { format } from "date-fns";
-
-import { BsFillRocketTakeoffFill } from "react-icons/bs";
-import { GoBook } from "react-icons/go";
-import { MdOutlineScience } from "react-icons/md";
-import { PiBaby, PiGuitarLight, PiMedal } from "react-icons/pi";
-import { SlGraduation } from "react-icons/sl";
 
 export default function AboutView() {
   return (
-    <Box>
-      <Title mb="lg">My Timeline</Title>
-      <Timeline active={3} bulletSize={32} color="yellow">
-        <Timeline.Item
-          title="Doing right now"
-          bullet={<BsFillRocketTakeoffFill />}
-        >
-          <Text>
+    <div>
+      <h1 className="text-5xl font-bold mb-10">My Timeline</h1>
+
+      <ol className="relative ml-3 border-l-2 border-gray-200 dark:border-gray-700 space-y-6">
+        <Item title="Doing right now" icon="🚀">
+          <p>
             - Learning about Data Science and AI.
             <br />- Research Geographic Information System and ERP System.
-          </Text>
-        </Timeline.Item>
-        <Timeline.Item
+          </p>
+        </Item>
+
+        <Item
           title="First research paper published"
-          bullet={<MdOutlineScience />}
+          icon="📜"
+          time="2023-07-18"
         >
-          <Text component="time" size="sm" dateTime="2023-07-18">
-            {format(new Date(2023, 6, 18), "dd/MM/yyy")}
-          </Text>
-          <Text>
-            Intelligent Retrieval System on Legal Information - 15th Asian
-            Conference on Intelligent Information and Database Systems
-          </Text>
-        </Timeline.Item>
-        <Timeline.Item
+          <p>
+            Paper: Intelligent Retrieval System on Legal Information - 15th
+            Asian Conference on Intelligent Information and Database Systems
+          </p>
+        </Item>
+
+        <Item
           title="Won first prize in WebDev Adventure 2022"
-          bullet={<PiMedal />}
+          icon="🥇"
+          time="2022-05-13"
         >
-          <Text component="time" size="sm" dateTime="2022-05-13">
-            {format(new Date(2022, 4, 13), "dd/MM/yyy")}
-          </Text>
-          <Text>
-            <Anchor
-              target="_blank"
-              href="https://github.com/Th1nhNg0/travel_flow_hackathon"
-            >
-              Link to Project
-            </Anchor>
-          </Text>
-          <Image src="/timelines/webdev2022.jpg" alt="" />
-        </Timeline.Item>
-        <Timeline.Item
+          <a
+            className="text-blue-500 hover:underline"
+            href="https://github.com/Th1nhNg0/travel_flow_hackathon"
+          >
+            Link to Project
+          </a>
+          <picture>
+            <img src="/timelines/webdev2022.jpg" alt="" />
+          </picture>
+        </Item>
+
+        <Item
           title="Start studying at University of Science, Vietnam National University Ho Chi Minh City"
-          bullet={<GoBook />}
+          icon="🏫"
+          time="2019-08-15"
         >
-          <Text component="time" size="sm" dateTime="2019-08-15">
-            {format(new Date(2019, 7, 15), "dd/MM/yyy")}
-          </Text>
-          <Image src="/timelines/hcmus.jpg" alt="" />
-        </Timeline.Item>
-        <Timeline.Item
+          <picture>
+            <img src="/timelines/hcmus.jpg" alt="" />
+          </picture>
+        </Item>
+
+        <Item
           title="Graduate from Phan Ngoc Hien High School for the Gifted"
-          bullet={<SlGraduation />}
-        >
-          <Text component="time" size="sm" dateTime="2019-05-21">
-            {format(new Date(2019, 4, 21), "dd/MM/yyy")}
-          </Text>
-        </Timeline.Item>
-        <Timeline.Item
+          icon="🎓"
+          time="2019-05-21"
+        />
+        <Item
           title="Won the Consolation prize at the national competition for excellent students in high school"
-          bullet={<PiMedal />}
+          icon="🏅"
+          time="2019-04-21"
         >
-          <Text component="time" size="sm" dateTime="2019-04-21">
-            {format(new Date(2019, 1, 21), "dd/MM/yyy")}
-          </Text>
-          <Image src="/timelines/hsgqg.jpg" alt="" />
-        </Timeline.Item>
-        <Timeline.Item
+          <picture>
+            <img src="/timelines/hsgqg.jpg" alt="" />
+          </picture>
+        </Item>
+        <Item
           title="Won the First prize at the provincial competition for excellent students in high school"
-          bullet={<PiMedal />}
-        >
-          <Text component="time" size="sm" dateTime="2017-10-11">
-            {format(new Date(2017, 9, 11), "dd/MM/yyy")}
-          </Text>
-        </Timeline.Item>
-        <Timeline.Item
+          icon="🥇"
+          time="2017-10-11"
+        />
+
+        <Item
           title="Won Silver medal at olympic competition 30/4 XXIII"
-          bullet={<PiMedal />}
+          icon="🥈"
+          time="2017-04-16"
         >
-          <Text component="time" size="sm" dateTime="2017-04-16">
-            {format(new Date(2017, 3, 9), "dd/MM/yyy")}
-          </Text>
-          <Image src="/timelines/olp.jpg" alt="" />
-        </Timeline.Item>
-        <Timeline.Item
+          <picture>
+            <img src="/timelines/olp.jpg" alt="" />
+          </picture>
+        </Item>
+        <Item
           title="Start studying at Phan Ngoc Hien High School for the Gifted"
-          bullet={<GoBook />}
+          icon="🏫"
+          time="2016-09-10"
         >
-          <Text component="time" size="sm" dateTime="2016-09-10">
-            {format(new Date(2016, 8, 10), "dd/MM/yyy")}
-          </Text>
-          <Image src="/timelines/cpnh.jpg" alt="" />
-        </Timeline.Item>
-        <Timeline.Item
+          <picture>
+            <img src="/timelines/cpnh.jpg" alt="" />
+          </picture>
+        </Item>
+        <Item
           title="Graduate from Vo Thi Sau Secondary School"
-          bullet={<SlGraduation />}
-        >
-          <Text component="time" size="sm" dateTime="2016-07-15">
-            {format(new Date(2016, 6, 15), "dd/MM/yyy")}
-          </Text>
-        </Timeline.Item>
-
-        <Timeline.Item
-          title="Learning to play guitar"
-          bullet={<PiGuitarLight />}
-        >
-          <Text component="time" size="sm" dateTime="2012">
-            2012
-          </Text>
-        </Timeline.Item>
-
-        <Timeline.Item
+          icon="🎓"
+          time="2016-07-15"
+        />
+        <Item title="Learning to play guitar" icon="🎸" time="2012" />
+        <Item
           title="Start studying at Vo Thi Sau Secondary School"
-          bullet={<GoBook />}
-          lineVariant="dashed"
+          icon="🏫"
+          time="2012"
         >
-          <Text component="time" size="sm" dateTime="2012">
-            2012
-          </Text>
-          <Image src="/timelines/vts.jpg" alt="" />
-        </Timeline.Item>
+          <picture>
+            <img src="/timelines/vts.jpg" alt="" />
+          </picture>
+        </Item>
+        <Item
+          title="Born in Ca Mau City, Vietnam"
+          icon="👶"
+          time="2001-09-08"
+        />
+      </ol>
+    </div>
+  );
+}
 
-        <Timeline.Item title="Born in Ca Mau City, Vietnam" bullet={<PiBaby />}>
-          <Text component="time" size="sm" dateTime="2001-09-08">
-            {format(new Date(2001, 8, 8), "dd/MM/yyy")}
-          </Text>
-        </Timeline.Item>
-      </Timeline>
-    </Box>
+function Item({
+  title,
+  children,
+  icon,
+  time = new Date().toISOString(),
+}: {
+  title: string;
+  children?: React.ReactNode;
+  icon: string;
+  time?: string;
+}) {
+  const is_only_year = time.length === 4;
+  return (
+    <li className="ml-6">
+      <span className="absolute rounded-full -ml-px -left-4 ring-4 ring-white bg-white text-2xl">
+        {icon}
+      </span>
+      <h2 className="mb-1 text-lg font-semibold text-black">{title}</h2>
+      <time className="block mb-2 leading-none text-gray-600" dateTime={time}>
+        {is_only_year ? time : format(new Date(time), "dd/MM/yyy")}
+      </time>
+      {children}
+    </li>
   );
 }

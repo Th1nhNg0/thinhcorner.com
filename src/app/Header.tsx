@@ -1,6 +1,5 @@
 "use client";
 
-import { ActionIcon, Box, Divider, Group } from "@mantine/core";
 import Link from "next/link";
 import { AiFillHome, AiFillInfoCircle, AiFillRead } from "react-icons/ai";
 import {
@@ -11,76 +10,52 @@ import {
 
 export default function Header() {
   return (
-    <Box>
-      <Group>
-        <ActionIcon
+    <div className="py-10 pb-5">
+      <div className="flex gap-5">
+        <Link
           title="Home"
-          size={40}
-          fz={20}
-          variant="filled"
-          component={Link}
           href="/"
-          color="dark"
+          className="bg-gray-900 text-white p-3 text-xl rounded"
         >
           <AiFillHome />
-        </ActionIcon>
-        <ActionIcon
+        </Link>
+        <Link
+          className="bg-gray-900 text-white p-3 text-xl rounded"
           title="Timeline"
-          size={40}
-          fz={20}
-          variant="filled"
-          component={Link}
-          color="dark"
           href="/timeline"
         >
           <BsFillRocketTakeoffFill />
-        </ActionIcon>
-        <ActionIcon
+        </Link>
+        <Link
+          className="bg-gray-900 text-white p-3 text-xl rounded"
           title="Reading"
-          size={40}
-          fz={20}
-          variant="filled"
-          component={Link}
-          color="dark"
           href="/reading"
         >
           <AiFillRead />
-        </ActionIcon>
-        <ActionIcon
+        </Link>
+        <Link
+          className="bg-gray-900 text-white p-3 text-xl rounded"
           title="Music"
-          size={40}
-          fz={20}
-          variant="filled"
-          component={Link}
-          color="dark"
           href="/music"
         >
           <BsMusicNoteBeamed />
-        </ActionIcon>
-        <ActionIcon
+        </Link>
+        <Link
+          className="bg-gray-900 text-white p-3 text-xl rounded"
           title="Rss"
-          size={40}
-          fz={20}
-          variant="filled"
-          component={Link}
-          color="dark"
           href="/rss"
         >
           <BsFillRssFill />
-        </ActionIcon>
-        <ActionIcon
+        </Link>
+        <Link
+          className="bg-gray-900 text-white p-3 text-xl rounded"
           title="About"
-          size={40}
-          fz={20}
-          variant="filled"
-          component={Link}
-          color="dark"
           href="/about"
         >
           <AiFillInfoCircle />
-        </ActionIcon>
-      </Group>
-      <Divider my="lg" />
-    </Box>
+        </Link>
+      </div>
+      <div className="w-full h-px bg-black/30 mt-5"></div>
+    </div>
   );
 }
