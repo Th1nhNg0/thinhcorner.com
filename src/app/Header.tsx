@@ -3,7 +3,11 @@
 import { ActionIcon, Box, Divider, Group } from "@mantine/core";
 import Link from "next/link";
 import { AiFillHome, AiFillInfoCircle, AiFillRead } from "react-icons/ai";
-import { BsFillRocketTakeoffFill, BsMusicNoteBeamed } from "react-icons/bs";
+import {
+  BsFillRocketTakeoffFill,
+  BsFillRssFill,
+  BsMusicNoteBeamed,
+} from "react-icons/bs";
 
 export default function Header() {
   return (
@@ -52,6 +56,17 @@ export default function Header() {
           href="/music"
         >
           <BsMusicNoteBeamed />
+        </ActionIcon>
+        <ActionIcon
+          title="Rss"
+          size={40}
+          fz={20}
+          variant="filled"
+          component={Link}
+          color="dark"
+          href="/rss"
+        >
+          <BsFillRssFill />
         </ActionIcon>
         <ActionIcon
           title="About"
