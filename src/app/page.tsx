@@ -1,20 +1,19 @@
 "use client";
 
-import { Anchor, Box, Stack, Text } from "@mantine/core";
 import { Post, allPosts } from "contentlayer/generated";
 import { compareDesc, format, parseISO } from "date-fns";
 import Link from "next/link";
 
 function PostCard(post: Post) {
   return (
-    <Box>
-      <Anchor component={Link} href={post.url} fw={600} color="black" fz="lg">
+    <div>
+      <Link href={post.url} className="text-xl font-semibold">
         {post.title}
-      </Anchor>
-      <Text color="dimmed" size="sm" fz="md">
+      </Link>
+      <time className="block text-gray-600">
         {format(parseISO(post.date), "dd-MM-yyyy")}
-      </Text>
-    </Box>
+      </time>
+    </div>
   );
 }
 
@@ -24,10 +23,10 @@ export default function Home() {
   );
 
   return (
-    <Stack spacing="lg">
+    <div className="space-y-5">
       {posts.map((post, idx) => (
         <PostCard key={idx} {...post} />
       ))}
-    </Stack>
+    </div>
   );
 }

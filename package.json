@@ -10,13 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/server": "^11.11.0",
     "@giscus/react": "^2.3.0",
-    "@mantine/core": "^6.0.17",
-    "@mantine/hooks": "^6.0.17",
-    "@mantine/next": "^6.0.17",
-    "@mantine/prism": "^6.0.17",
     "@types/node": "20.4.5",
     "@types/react": "18.2.16",
     "@types/react-dom": "18.2.7",
@@ -37,9 +31,16 @@
     "react-icons": "^4.10.1",
     "reading-time": "^1.5.0",
     "rehype-katex": "^6.0.3",
+    "rehype-prism-plus": "^1.6.1",
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
     "typescript": "5.1.6",
     "unist-util-visit": "^5.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.9",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.27",
+    "tailwindcss": "^3.3.3"
   }
 }
