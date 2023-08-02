@@ -1,0 +1,64 @@
+---
+title: "The Start of the AI Era: ChatGPT and Beyond"
+date: 2023-08-02
+---
+
+> Working in progress, comeback later for more updates
+
+Timing class to help tracking code run time
+
+```py
+
+import time
+from contextlib import contextmanager
+import treelib as tl
+
+class Timer:
+    def __init__(self,live=False):
+        self.tree = tl.Tree()
+        self.current_node = None
+        self.live = live
+
+    @contextmanager
+    def __call__(self, name):
+        start = time.time()
+        node_id = name + str(start)
+        parent_node = self.current_node
+        if self.current_node is None:
+            self.tree.create_node('{} running'.format(name), node_id)
+        else:
+            self.tree.create_node('{} running'.format(name), node_id, parent = self.current_node)
+        self.current_node = node_id
+        yield
+        end = time.time()
+        duration = end - start
+        self.tree.update_node(node_id, tag = '{}: {:.6f}s'.format(name, duration))
+        self.current_node = parent_node
+        if self.live:
+            print('{}: {:.6f}s'.format(name, duration))
+
+    def summary(self):
+        self.tree.show(data_property="")
+
+timer = Timer(live=True)
+with timer("All stage"):
+    with timer("stage 1"):
+        time.sleep(1)
+    with timer("stage 2"):
+        for i in range(3):
+            with timer("stage 3"):
+                for i in range(10000000):
+                    pass
+timer.summary()
+```
+
+Output:
+
+```
+All stage: 1.773689s
+├── stage 1: 1.009683s
+└── stage 2: 0.764006s
+    ├── stage 3: 0.232493s
+    ├── stage 3: 0.255485s
+    └── stage 3: 0.276028s
+```

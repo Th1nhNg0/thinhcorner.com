@@ -8,7 +8,7 @@ import Content from "./Content";
 export default function PostView({ post }: { post: Post }) {
   return (
     <article
-      className="prose max-w-none prose-img:mx-auto prose-img:rounded-lg text-xl prose-pre:bg-[#151515]"
+      className="prose max-w-none prose-img:mx-auto prose-img:rounded-lg md:text-xl prose-pre:bg-[#151515]"
       itemScope
       itemType="http://schema.org/BlogPosting"
     >
