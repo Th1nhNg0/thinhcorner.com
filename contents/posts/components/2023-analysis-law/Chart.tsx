@@ -310,9 +310,11 @@ export function Chart5() {
   const middle_index = Math.floor(Object.keys(data).length / 2);
   return (
     <div>
-      <p>Số lượng văn bản theo loại văn bản</p>
+      <p className="mb-0 font-semibold text-center">
+        Số lượng văn bản theo loại văn bản
+      </p>
       <div className="flex gap-3">
-        <table className="table">
+        <table className="table mt-2">
           <thead>
             <tr>
               <th>Loại văn bản</th>
@@ -331,7 +333,7 @@ export function Chart5() {
               ))}
           </tbody>
         </table>
-        <table className="table">
+        <table className="table mt-2">
           <thead>
             <tr>
               <th>Loại văn bản</th>

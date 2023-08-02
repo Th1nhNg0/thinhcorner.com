@@ -15,47 +15,47 @@ export default function Header() {
         <Link
           title="Home"
           href="/"
-          className="bg-gray-900 text-white p-3 text-xl rounded"
+          className="p-2 text-xl text-white bg-gray-900 rounded md:p-3"
         >
           <AiFillHome />
         </Link>
         <Link
-          className="bg-gray-900 text-white p-3 text-xl rounded"
+          className="p-2 text-xl text-white bg-gray-900 rounded md:p-3"
           title="Timeline"
           href="/timeline"
         >
           <BsFillRocketTakeoffFill />
         </Link>
         <Link
-          className="bg-gray-900 text-white p-3 text-xl rounded"
+          className="p-2 text-xl text-white bg-gray-900 rounded md:p-3"
           title="Reading"
           href="/reading"
         >
           <AiFillRead />
         </Link>
         <Link
-          className="bg-gray-900 text-white p-3 text-xl rounded"
+          className="p-2 text-xl text-white bg-gray-900 rounded md:p-3"
           title="Music"
           href="/music"
         >
           <BsMusicNoteBeamed />
         </Link>
         <Link
-          className="bg-gray-900 text-white p-3 text-xl rounded"
+          className="p-2 text-xl text-white bg-gray-900 rounded md:p-3"
           title="Rss"
           href="/rss"
         >
           <BsFillRssFill />
         </Link>
         <Link
-          className="bg-gray-900 text-white p-3 text-xl rounded"
+          className="p-2 text-xl text-white bg-gray-900 rounded md:p-3"
           title="About"
           href="/about"
         >
           <AiFillInfoCircle />
         </Link>
       </div>
-      <div className="w-full h-px bg-black/30 mt-5"></div>
+      <div className="w-full h-px mt-5 bg-black/30"></div>
     </div>
   );
 }
