@@ -12,14 +12,6 @@ export const generateMetadata = ({ params }: { params: { slug: string } }) => {
     title: post.title,
     openGraph: {
       title: post.title,
-      images: [
-        {
-          url: "https://thinhcorner.com/images/socialbg.png",
-          width: 1920,
-          height: 1080,
-          alt: "Thịnh's Corner",
-        },
-      ],
     },
   };
 };
