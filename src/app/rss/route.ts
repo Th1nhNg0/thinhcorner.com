@@ -1,4 +1,5 @@
 import { allPosts } from "contentlayer/generated";
+import { compareDesc } from "date-fns";
 import { Feed } from "feed";
 
 export async function GET(request: Request) {
@@ -18,14 +19,16 @@ export async function GET(request: Request) {
     },
   });
 
-  allPosts.forEach((post) => {
-    feed.addItem({
-      title: post.title,
-      id: "https://thinhcorner.com" + post.url,
-      link: "https://thinhcorner.com" + post.url,
-      date: new Date(post.date),
+  allPosts
+    .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
+    .forEach((post) => {
+      feed.addItem({
+        title: post.title,
+        id: "https://thinhcorner.com" + post.url,
+        link: "https://thinhcorner.com" + post.url,
+        date: new Date(post.date),
+      });
     });
-  });
   feed.addCategory("Technologie");
   feed.addCategory("Blog");
 
