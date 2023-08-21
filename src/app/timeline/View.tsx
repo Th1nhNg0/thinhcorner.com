@@ -4,9 +4,9 @@ import { format } from "date-fns";
 export default function AboutView() {
   return (
     <div>
-      <h1 className="text-5xl font-bold mb-10">My Timeline</h1>
+      <h1 className="mb-10 text-5xl font-bold">My Timeline</h1>
 
-      <ol className="relative ml-3 border-l-2 border-gray-200 dark:border-gray-700 space-y-6">
+      <ol className="relative ml-3 space-y-6 border-l-2 border-gray-200 dark:border-gray-700">
         <Item title="Doing right now" icon="🚀">
           <p>
             - Learning about Data Science and AI.
@@ -19,10 +19,13 @@ export default function AboutView() {
           icon="📜"
           time="2023-07-18"
         >
-          <p>
+          <a
+            href="/timeline/paper.pdf"
+            className="text-blue-500 hover:underline"
+          >
             Paper: Intelligent Retrieval System on Legal Information - 15th
             Asian Conference on Intelligent Information and Database Systems
-          </p>
+          </a>
         </Item>
 
         <Item
@@ -37,7 +40,7 @@ export default function AboutView() {
             Link to Project
           </a>
           <picture>
-            <img src="/timelines/webdev2022.jpg" alt="" />
+            <img src="/timeline/webdev2022.jpg" alt="" />
           </picture>
         </Item>
 
@@ -47,7 +50,7 @@ export default function AboutView() {
           time="2019-08-15"
         >
           <picture>
-            <img src="/timelines/hcmus.jpg" alt="" />
+            <img src="/timeline/hcmus.jpg" alt="" />
           </picture>
         </Item>
 
@@ -62,7 +65,7 @@ export default function AboutView() {
           time="2019-04-21"
         >
           <picture>
-            <img src="/timelines/hsgqg.jpg" alt="" />
+            <img src="/timeline/hsgqg.jpg" alt="" />
           </picture>
         </Item>
         <Item
@@ -77,7 +80,7 @@ export default function AboutView() {
           time="2017-04-16"
         >
           <picture>
-            <img src="/timelines/olp.jpg" alt="" />
+            <img src="/timeline/olp.jpg" alt="" />
           </picture>
         </Item>
         <Item
@@ -86,7 +89,7 @@ export default function AboutView() {
           time="2016-09-10"
         >
           <picture>
-            <img src="/timelines/cpnh.jpg" alt="" />
+            <img src="/timeline/cpnh.jpg" alt="" />
           </picture>
         </Item>
         <Item
@@ -101,7 +104,7 @@ export default function AboutView() {
           time="2012"
         >
           <picture>
-            <img src="/timelines/vts.jpg" alt="" />
+            <img src="/timeline/vts.jpg" alt="" />
           </picture>
         </Item>
         <Item
@@ -128,7 +131,7 @@ function Item({
   const is_only_year = time.length === 4;
   return (
     <li className="ml-6">
-      <span className="absolute rounded-full -ml-px -left-4 ring-4 ring-white bg-white text-2xl">
+      <span className="absolute -ml-px text-2xl bg-white rounded-full -left-4 ring-4 ring-white">
         {icon}
       </span>
       <h2 className="mb-1 text-lg font-semibold text-black">{title}</h2>
