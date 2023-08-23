@@ -15,6 +15,19 @@ export default function AboutView() {
         </Item>
 
         <Item
+          title="Finished my graduation thesis at HCMUS"
+          icon="📜"
+          time="2023-07-16"
+        >
+          <a
+            href="/timeline/thesis.pdf"
+            className="text-blue-500 hover:underline"
+          >
+            Deep learning in legal system: Opportunities and Challenges
+          </a>
+        </Item>
+
+        <Item
           title="First research paper published"
           icon="📜"
           time="2023-07-18"
