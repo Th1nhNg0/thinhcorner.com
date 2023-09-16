@@ -32,12 +32,11 @@ export default function AboutView() {
           icon="📜"
           time="2023-07-18"
         >
-          <a
-            href="/timeline/paper.pdf"
+              <a
+            href="https://doi.org/10.1007/978-981-99-5834-4_8"
             className="text-blue-500 hover:underline"
           >
-            Paper: Intelligent Retrieval System on Legal Information - 15th
-            Asian Conference on Intelligent Information and Database Systems
+Intelligent Retrieval System on Legal Information
           </a>
         </Item>
 
