@@ -9,8 +9,9 @@ export default function AboutView() {
       <ol className="relative ml-3 space-y-6 border-l-2 border-gray-200 dark:border-gray-700">
         <Item title="Doing right now" icon="🚀">
           <p>
-            - Learning about Data Science and AI.
-            <br />- Research Geographic Information System and ERP System.
+           - Research The TOGAF® Standard, 10th Edition
+
+            <br />- Learning to be a Enterprise Architecture
           </p>
         </Item>
 
