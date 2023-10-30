@@ -22,7 +22,7 @@ export default function PostView({ post }: { post: Post }) {
             <span itemProp="timeRequired">{post.readingTime.text}</span>
           </p>
         </div>
-        <h1 itemProp="headline" className="leading-normal">
+        <h1 itemProp="headline" className="text-4xl leading-normal">
           {post.title}
         </h1>
       </div>
