@@ -10,8 +10,10 @@ export const generateMetadata = ({ params }: { params: { slug: string } }) => {
   if (!post) return { title: "Not found" };
   return {
     title: post.title,
+    description: post.description,
     openGraph: {
       title: post.title,
+      description: post.description,
     },
   };
 };
