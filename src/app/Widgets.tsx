@@ -25,7 +25,8 @@ function DiscordPresence() {
   return (
     <div className="p-3 text-white bg-gray-900 rounded-lg lg:col-span-2 drop-shadow-xl bg-noise">
       <p className="font-semibold lg:text-lg">Current activity</p>
-      {data?.activities.length === 0 && <p>Nothing</p>}
+      {data?.activities.filter((activity) => activity.type === 0).length ===
+        0 && <p>Nothing</p>}
       <div className="mt-3 space-y-5">
         {data?.activities
           .filter((activity) => activity.type === 0)
@@ -54,6 +55,17 @@ function DiscordPresence() {
             "bg-red-700 outline-red-900": data?.discord_status == "dnd",
             "bg-gray-700 outline-gray-900": data?.discord_status == "offline",
           })}
+          title={
+            data?.discord_status == "online"
+              ? "Online"
+              : data?.discord_status == "idle"
+              ? "Idle"
+              : data?.discord_status == "dnd"
+              ? "Do not disturb"
+              : data?.discord_status == "offline"
+              ? "Offline"
+              : ""
+          }
         ></span>
       </div>
     </div>
