@@ -16,6 +16,9 @@ module.exports = {
           xl: "700px",
         },
       },
+      animation: {
+        "spin-slow": "spin 5s linear infinite",
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],

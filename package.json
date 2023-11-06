@@ -16,6 +16,7 @@
     "@types/react-dom": "18.2.7",
     "chart.js": "^4.3.2",
     "cheerio": "1.0.0-rc.12",
+    "clsx": "^2.0.0",
     "contentlayer": "^0.3.4",
     "date-fns": "^2.30.0",
     "eslint": "8.45.0",
@@ -36,8 +37,10 @@
     "rehype-prism-plus": "^1.6.1",
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
+    "tailwind-merge": "^2.0.0",
     "typescript": "5.1.6",
-    "unist-util-visit": "^5.0.0"
+    "unist-util-visit": "^5.0.0",
+    "use-lanyard": "^1.5.2"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",

@@ -3,11 +3,12 @@
 import { Post, allPosts } from "contentlayer/generated";
 import { compareDesc, format, parseISO } from "date-fns";
 import Link from "next/link";
+import Widgets from "./Widgets";
 
 function PostCard(post: Post) {
   return (
     <div>
-      <Link href={post.url} className="text-xl font-semibold">
+      <Link href={post.url} className="text-lg font-semibold">
         {post.title}
       </Link>
       <time className="block text-gray-600">
@@ -24,9 +25,16 @@ export default function Home() {
 
   return (
     <div className="space-y-5">
-      {posts.map((post, idx) => (
-        <PostCard key={idx} {...post} />
-      ))}
+      <Widgets />
+      <div className="w-full h-px mt-3 bg-black/30"></div>
+      <div>
+        <h2 className="mb-5 text-2xl font-bold">Latest Posts</h2>
+        <div className="space-y-3">
+          {posts.map((post, idx) => (
+            <PostCard key={idx} {...post} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

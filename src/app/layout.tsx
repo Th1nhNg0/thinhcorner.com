@@ -1,10 +1,9 @@
-import { getNowPlaying } from "@/lib/spotify";
-import "./globals.css";
 import { Metadata } from "next";
 import { Quicksand } from "next/font/google";
 import Footer from "./Footer";
 import GA from "./GA";
 import Header from "./Header";
+import "./globals.css";
 
 const myFont = Quicksand({
   subsets: ["vietnamese", "latin", "latin-ext"],
@@ -39,16 +38,14 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const spotifyNowPlaying = await getNowPlaying();
-
   return (
     <html lang="en-US">
       <head />
       <GA GA_TRACKING_ID="G-P4B7XCWCYP" />
-      <body className={`container ${myFont.className}`}>
+      <body className={`container ${myFont.className} bg-noise`}>
         <Header />
         {children}
-        <Footer spotifyNowPlaying={spotifyNowPlaying} />
+        <Footer />
       </body>
     </html>
   );
