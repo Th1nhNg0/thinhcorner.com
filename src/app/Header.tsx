@@ -11,44 +11,44 @@ import {
 export default function Header() {
   return (
     <div className="py-10 pb-5">
-      <div className="flex gap-5">
+      <div className="flex justify-between gap-3 lg:justify-normal lg:gap-4">
         <Link
           title="Home"
           href="/"
-          className="p-2 text-xl text-white bg-gray-900 rounded md:p-3"
+          className="p-2 text-xl text-white bg-gray-900 rounded-lg md:p-3 bg-noise"
         >
           <AiFillHome />
         </Link>
         <Link
-          className="p-2 text-xl text-white bg-gray-900 rounded md:p-3"
+          className="p-2 text-xl text-white bg-gray-900 rounded-lg md:p-3 bg-noise"
           title="Timeline"
           href="/timeline"
         >
           <BsFillRocketTakeoffFill />
         </Link>
         <Link
-          className="p-2 text-xl text-white bg-gray-900 rounded md:p-3"
+          className="p-2 text-xl text-white bg-gray-900 rounded-lg md:p-3 bg-noise"
           title="Reading"
           href="/reading"
         >
           <AiFillRead />
         </Link>
         <Link
-          className="p-2 text-xl text-white bg-gray-900 rounded md:p-3"
+          className="p-2 text-xl text-white bg-gray-900 rounded-lg md:p-3 bg-noise"
           title="Music"
           href="/music"
         >
           <BsMusicNoteBeamed />
         </Link>
         <Link
-          className="p-2 text-xl text-white bg-gray-900 rounded md:p-3"
+          className="p-2 text-xl text-white bg-gray-900 rounded-lg md:p-3 bg-noise"
           title="Rss"
           href="/rss"
         >
           <BsFillRssFill />
         </Link>
         <Link
-          className="p-2 text-xl text-white bg-gray-900 rounded md:p-3"
+          className="p-2 text-xl text-white bg-gray-900 rounded-lg md:p-3 bg-noise"
           title="About"
           href="/about"
         >

@@ -8,9 +8,7 @@ export default function AboutView() {
 
       <ol className="relative ml-3 space-y-6 border-l-2 border-gray-200 dark:border-gray-700">
         <Item title="Doing right now" icon="🚀">
-          <p>
-           - Plan for MBA
-          </p>
+          <p>- Plan for MBA</p>
         </Item>
 
         <Item
@@ -31,11 +29,11 @@ export default function AboutView() {
           icon="📜"
           time="2023-07-18"
         >
-              <a
+          <a
             href="https://doi.org/10.1007/978-981-99-5834-4_8"
             className="text-blue-500 hover:underline"
           >
-Intelligent Retrieval System on Legal Information
+            Intelligent Retrieval System on Legal Information
           </a>
         </Item>
 
@@ -142,7 +140,7 @@ function Item({
   const is_only_year = time.length === 4;
   return (
     <li className="ml-6">
-      <span className="absolute -ml-px text-2xl bg-white rounded-full -left-4 ring-4 ring-white">
+      <span className="absolute -ml-px text-2xl bg-white rounded-full bg-noise -left-4">
         {icon}
       </span>
       <h2 className="mb-1 text-lg font-semibold text-black">{title}</h2>
