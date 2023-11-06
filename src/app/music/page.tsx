@@ -3,7 +3,8 @@ import { Metadata } from "next";
 import React from "react";
 import MusicTable from "./MusicTable";
 
-export const revalidate = 60 * 60 * 24;
+export const revalidate = 24 * 60 * 60;
+
 export const metadata: Metadata = {
   title: "Music - Thịnh's Corner",
 };
