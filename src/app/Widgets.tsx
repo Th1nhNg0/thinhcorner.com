@@ -1,38 +1,99 @@
 "use client";
 import { useTime } from "@/lib/useTime";
-import { cn, resolveActivity, resolveActivityTypeName } from "@/lib/utils";
-import { differenceInMilliseconds, format, formatDistance } from "date-fns";
+import { cn, resolveActivity, stringFromType } from "@/lib/utils";
+import { differenceInMilliseconds } from "date-fns";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FaMobileAlt, FaLaptop } from "react-icons/fa";
+import { FaLaptop, FaMobileAlt } from "react-icons/fa";
 import { Activity, useLanyardWS } from "use-lanyard";
+import Lottie from "react-lottie";
+import cat from "./cat.json";
 
 const MYBIRTHDAY = new Date(2001, 8, 8, 22, 5, 0);
 const MYDISCORDID = "335602055441940481";
 
 export default function Widgets() {
   return (
-    <div className="grid gap-5 lg:grid-cols-2">
-      <DiscordPresence />
-      <MyAge />
+    <div className="grid gap-3 md:grid-cols-2">
+      <Info />
+      <Map />
       <Spotify />
+      <MyAge />
+      <DiscordPresence />
+    </div>
+  );
+}
+
+function Info() {
+  return (
+    <div className="relative p-3 min-h-[150px] md:min-h-0 text-white bg-gray-900 rounded-xl drop-shadow-xl bg-noise">
+      <div className="absolute bottom-0 right-0">
+        <Lottie
+          options={{
+            animationData: cat,
+            loop: false,
+            autoplay: true,
+          }}
+          isClickToPauseDisabled={true}
+          width={200}
+          height={200}
+          speed={0.5}
+        />
+      </div>
+      <div className="relative text-xl">
+        <p>
+          Hi. I&apos;m <b> Thinh</b>.
+        </p>
+        <p>Welcome to my corner of the internet.</p>
+      </div>
+    </div>
+  );
+}
+
+function Map() {
+  // get map image from:
+  // https://render.openstreetmap.org/cgi-bin/export?bbox=106.6545867919922,10.746126188284567,106.72110557556152,10.773952188496649&scale=80000&format=png
+  return (
+    <div className="relative overflow-hidden rounded-xl drop-shadow-xl group ">
+      <div className="absolute flex flex-col items-center justify-center gap-1 -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
+        <div className="relative duration-300 ease-in-out group-hover:rotate-12 group-hover:scale-110">
+          <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
+            <div className="bg-green-500 rounded-full w-14 h-14 animate-ping"></div>
+          </div>
+          <picture>
+            <img
+              src="/images/logo.png"
+              alt=""
+              className="relative w-16 h-16 p-2 bg-white border-2 border-green-500 rounded-full bg-noise"
+            />
+          </picture>
+        </div>
+        <div className="pl-1 pr-2 text-sm text-white duration-300 ease-in-out rounded-full bg-black/80 group-hover:-rotate-3 group-hover:scale-110">
+          📍Ho Chi Minh
+        </div>
+      </div>
+      <picture>
+        <img
+          src="/images/map.png"
+          className="object-cover w-full h-full"
+          alt=""
+        />
+      </picture>
     </div>
   );
 }
 
 function DiscordPresence() {
   const data = useLanyardWS(MYDISCORDID);
+  const activities = data?.activities.filter((e) => e.name !== "Spotify") || [];
   return (
-    <div className="p-3 text-white bg-gray-900 rounded-lg lg:col-span-2 drop-shadow-xl bg-noise">
-      <p className="font-semibold lg:text-lg">Current activity</p>
-      {data?.activities.filter((activity) => activity.type === 0).length ===
-        0 && <p>Nothing</p>}
+    <div className="p-3 text-white bg-gray-900 rounded-xl md:col-span-2 drop-shadow-xl bg-noise">
+      <p className="font-bold md:text-2xl">Current activity</p>
+      {activities.length == 0 && <p>Nothing</p>}
       <div className="mt-3 space-y-5">
-        {data?.activities
-          .filter((activity) => activity.type === 0)
-          .map((activity) => (
-            <Activity key={activity.id} activity={activity} />
-          ))}
+        {activities.map((activity) => (
+          <Activity key={activity.id} activity={activity} />
+        ))}
       </div>
       <div className="flex items-center justify-end gap-2 text-sm">
         {data?.active_on_discord_desktop && (
@@ -74,22 +135,37 @@ function DiscordPresence() {
 
 function Activity({ activity }: { activity: Activity }) {
   const time = useTime(activity.timestamps);
+  const largeImage = resolveActivity(activity, "large") || "";
+  const smallImage = resolveActivity(activity, "small") || "";
+
   return (
     <div className="flex items-center gap-3">
-      <picture>
-        <img
-          src={resolveActivity(activity, "large") || ""}
-          className="object-cover w-24 h-24 rounded-lg"
-          alt=""
-        />
-      </picture>
+      <div className="relative">
+        <picture>
+          <img
+            src={largeImage}
+            className="object-cover w-24 h-24 rounded-lg"
+            alt=""
+          />
+        </picture>
+        {smallImage && (
+          <div className="absolute bottom-0 right-0 p-1 translate-x-3 translate-y-3 bg-gray-900 rounded-full bg-noise ">
+            <picture>
+              <img
+                src={smallImage}
+                className="object-cover w-10 h-10 rounded-full "
+                alt=""
+              />
+            </picture>
+          </div>
+        )}
+      </div>
       <div className="flex-1">
         <p className="text-lg font-bold">
-          {resolveActivityTypeName(activity)} {activity.name}
+          {stringFromType(activity.type)} {activity.name}
         </p>
-        <p>
-          {activity.details} - {activity.state}
-        </p>
+        <p>{activity.details}</p>
+        <p>{activity.state}</p>
         <p>
           {time && time.start && !time.end && (
             <span title={time.start}>{time.start} elapsed</span>
@@ -97,7 +173,7 @@ function Activity({ activity }: { activity: Activity }) {
           {time && time.end && !time.start && (
             <span title={time.end}>{time.end} left</span>
           )}
-          {time && time.completion && (
+          {time && time.start && time.end && time.completion && (
             <div className="w-full ">
               <div className="flex justify-between">
                 <span className="text-xs font-semibold text-gray-400 uppercase">
@@ -140,9 +216,9 @@ function MyAge() {
     return ageInMs / 1000 / 60 / 60 / 24 / 365;
   }
   return (
-    <div className="p-3 text-white bg-gray-900 rounded-lg drop-shadow-xl bg-noise">
-      <p className="font-semibold lg:text-lg">My Age</p>
-      <p className="font-mono text-xl font-bold lg:text-2xl tabular-nums">
+    <div className="row-start-2 p-3 text-white bg-gray-900 md:row-start-auto rounded-xl drop-shadow-xl bg-noise">
+      <p className="font-semibold md:text-lg">My Age 🕛</p>
+      <p className="my-2 font-mono text-xl font-bold md:text-2xl tabular-nums">
         {age.toFixed(9)}
       </p>
     </div>
@@ -157,15 +233,15 @@ function Spotify() {
   if (!spotify)
     return (
       <div className="relative p-3 overflow-hidden text-white bg-gray-900 rounded-lg bg-noise drop-shadow-xl group">
-        <p className="relative font-semibold lg:text-lg">Currently listening</p>
-        <p className="relative text-xl font-bold font lg:text-2xl whitespace-nowrap">
+        <p className="relative font-semibold md:text-lg">Currently listening</p>
+        <p className="relative text-xl font-bold font md:text-2xl whitespace-nowrap">
           Not listening to anything
         </p>
       </div>
     );
   return (
     <Link
-      className="relative p-3 overflow-hidden text-white rounded-lg drop-shadow-xl group spinning-bg"
+      className="relative p-3 min-h-[200px] md:min-h-0 overflow-hidden text-white rounded-xl drop-shadow-xl group "
       href={`https://open.spotify.com/track/${spotify.track_id}`}
       target="_blank"
       title="Open in Spotify"
@@ -174,7 +250,7 @@ function Spotify() {
         <picture>
           <img
             src={spotify.album_art_url || ""}
-            className="duration-1000 animate-spin-slow"
+            className="object-cover w-full h-full duration-1000 animate-spin-slow"
             alt=""
           />
         </picture>
@@ -188,24 +264,24 @@ function Spotify() {
       </div>
       <div className="absolute bottom-0 left-0 w-full">
         <div className="flex justify-between px-2 pb-0.5">
-          <span className="text-xs font-semibold text-gray-400 uppercase">
+          <span className="text-xs font-semibold text-green-500 uppercase shadow">
             {time?.start}
           </span>
-          <span className="text-xs font-semibold text-gray-400 uppercase">
+          <span className="text-xs font-semibold text-green-500 uppercase shadow">
             {time?.end}
           </span>
         </div>
         <span className="w-full h-1 bg-gray-800/50">
           <span
-            className="absolute bottom-0 left-0 h-1 bg-green-500/50"
+            className="absolute bottom-0 left-0 h-1 bg-green-500"
             style={{
               width: `${time?.completion}%`,
             }}
           ></span>
         </span>
       </div>
-      <p className="relative font-semibold lg:text-lg">Currently listening</p>
-      <p className="relative text-xl font-bold lg:text-2xl line-clamp-1">
+      <p className="relative font-semibold md:text-lg">Currently listening</p>
+      <p className="relative my-2 text-xl font-bold md:text-2xl line-clamp-1">
         {spotify.song}
       </p>
     </Link>
