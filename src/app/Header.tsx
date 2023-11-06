@@ -15,40 +15,40 @@ export default function Header() {
         <Link
           title="Home"
           href="/"
-          className="p-2 text-xl text-white bg-gray-900 rounded-lg md:p-3 bg-noise"
+          className="p-3 text-2xl text-white bg-gray-900 lg:text-xl rounded-xl bg-noise"
         >
           <AiFillHome />
         </Link>
         <Link
-          className="p-2 text-xl text-white bg-gray-900 rounded-lg md:p-3 bg-noise"
+          className="p-3 text-2xl text-white bg-gray-900 lg:text-xl rounded-xl bg-noise"
           title="Timeline"
           href="/timeline"
         >
           <BsFillRocketTakeoffFill />
         </Link>
         <Link
-          className="p-2 text-xl text-white bg-gray-900 rounded-lg md:p-3 bg-noise"
+          className="p-3 text-2xl text-white bg-gray-900 lg:text-xl rounded-xl bg-noise"
           title="Reading"
           href="/reading"
         >
           <AiFillRead />
         </Link>
         <Link
-          className="p-2 text-xl text-white bg-gray-900 rounded-lg md:p-3 bg-noise"
+          className="p-3 text-2xl text-white bg-gray-900 lg:text-xl rounded-xl bg-noise"
           title="Music"
           href="/music"
         >
           <BsMusicNoteBeamed />
         </Link>
         <Link
-          className="p-2 text-xl text-white bg-gray-900 rounded-lg md:p-3 bg-noise"
+          className="p-3 text-2xl text-white bg-gray-900 lg:text-xl rounded-xl bg-noise"
           title="Rss"
           href="/rss"
         >
           <BsFillRssFill />
         </Link>
         <Link
-          className="p-2 text-xl text-white bg-gray-900 rounded-lg md:p-3 bg-noise"
+          className="p-3 text-2xl text-white bg-gray-900 lg:text-xl rounded-xl bg-noise"
           title="About"
           href="/about"
         >
