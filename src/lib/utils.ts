@@ -70,12 +70,17 @@ export const resolveActivity = (
   return resolveAsset(activity.application_id, largeImage);
 };
 
-export const resolveActivityTypeName = (activity: Activity | undefined) => {
-  if (activity?.type == 0) return "Playing";
-  if (activity?.type == 1) return "Streaming";
-  if (activity?.type == 2) return "Listening to";
-  if (activity?.type == 3) return "Watching";
-  if (activity?.type == 4) return "Custom Status";
-  if (activity?.type == 5) return "Competing in";
-  return "Nothing";
+export const stringFromType = (type: number) => {
+  switch (type) {
+    case 0:
+      return "Playing";
+    case 1:
+      return "Streaming";
+    case 2:
+      return "Listening to";
+    case 3:
+      return "Watching";
+    default:
+      return "";
+  }
 };
