@@ -2,11 +2,11 @@
 import { useTime } from "@/lib/useTime";
 import { cn, resolveActivity, stringFromType } from "@/lib/utils";
 import { differenceInMilliseconds } from "date-fns";
+import { useLottie } from "lottie-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaLaptop, FaMobileAlt } from "react-icons/fa";
 import { Activity, useLanyardWS } from "use-lanyard";
-import Lottie from "react-lottie";
 import cat from "./cat.json";
 
 const MYBIRTHDAY = new Date(2001, 8, 8, 22, 5, 0);
@@ -24,21 +24,31 @@ export default function Widgets() {
   );
 }
 
+function Cat() {
+  const options = {
+    animationData: cat,
+    loop: false,
+    autoplay: false,
+    speed: 0.3,
+  };
+  const { View, play } = useLottie(options, {
+    width: 200,
+    height: 200,
+  });
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      play();
+    }, 3000);
+    return () => clearTimeout(timeout);
+  }, []);
+  return View;
+}
+
 function Info() {
   return (
     <div className="relative p-3 min-h-[150px] md:min-h-0 text-white bg-gray-900 rounded-xl drop-shadow-xl bg-noise">
       <div className="absolute bottom-0 right-0">
-        <Lottie
-          options={{
-            animationData: cat,
-            loop: false,
-            autoplay: true,
-          }}
-          isClickToPauseDisabled={true}
-          width={200}
-          height={200}
-          speed={0.5}
-        />
+        <Cat />
       </div>
       <div className="relative text-xl">
         <p>
