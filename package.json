@@ -23,6 +23,7 @@
     "eslint-config-next": "13.5.6",
     "feed": "^4.2.2",
     "image-size": "^1.0.2",
+    "lottie-react": "^2.4.0",
     "next": "13.5.6",
     "next-contentlayer": "^0.3.4",
     "next-sitemap": "^4.1.8",
@@ -30,7 +31,6 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.10.1",
-    "react-lottie": "^1.2.3",
     "react-twitter-embed": "^4.0.4",
     "reading-time": "^1.5.0",
     "rehype-highlight": "^6.0.0",
@@ -45,7 +45,6 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
-    "@types/react-lottie": "^1.2.8",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.27",
     "tailwindcss": "^3.3.3"
