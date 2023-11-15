@@ -4,6 +4,7 @@ import Footer from "./Footer";
 import GA from "./GA";
 import Header from "./Header";
 import "./globals.css";
+import { Analytics } from '@vercel/analytics/react';
 
 const myFont = Quicksand({
   subsets: ["vietnamese", "latin", "latin-ext"],
@@ -41,10 +42,12 @@ export default async function RootLayout({
   return (
     <html lang="en-US">
       <head />
-      <GA GA_TRACKING_ID="G-P4B7XCWCYP" />
       <body className={`container ${myFont.className} bg-noise`}>
         <Header />
         {children}
+        <GA GA_TRACKING_ID="G-P4B7XCWCYP" />
+        <Analytics />
+
         <Footer />
       </body>
     </html>
