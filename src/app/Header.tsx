@@ -12,7 +12,7 @@ import { TbLetterG } from "react-icons/tb";
 export default function Header() {
   return (
     <div className="py-10 pb-5">
-      <div className="flex justify-between gap-3 lg:justify-normal lg:gap-4">
+      <div className="flex flex-wrap justify-between gap-3 lg:justify-normal lg:gap-4">
         <Link
           title="Home"
           href="/"
