@@ -7,6 +7,7 @@ import {
   BsFillRssFill,
   BsMusicNoteBeamed,
 } from "react-icons/bs";
+import { TbLetterG } from "react-icons/tb";
 
 export default function Header() {
   return (
@@ -39,6 +40,13 @@ export default function Header() {
           href="/music"
         >
           <BsMusicNoteBeamed />
+        </Link>
+        <Link
+          className="p-3 text-2xl text-white bg-gray-900 lg:text-xl rounded-xl bg-noise"
+          title="Project G"
+          href="/project-g"
+        >
+          <TbLetterG />
         </Link>
         <Link
           className="p-3 text-2xl text-white bg-gray-900 lg:text-xl rounded-xl bg-noise"
