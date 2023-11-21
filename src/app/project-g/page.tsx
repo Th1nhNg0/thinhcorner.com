@@ -43,12 +43,10 @@ export default function page() {
             . It&apos;s look so cute and better than my old assets.
           </p>
           <div className="mt-2">
-            <video
-              src="/projectG/21112023.mp4"
-              autoPlay={true}
-              loop
-              controls
-            ></video>
+            <video autoPlay={true} loop controls>
+              <source src="/projectG/21112023.webm" type="video/webm" />
+              <source src="/projectG/21112023.mp4" type="video/mp4" />
+            </video>
           </div>
         </div>
         <div>
@@ -61,12 +59,10 @@ export default function page() {
             fire rate, damage, range.
           </p>
           <div className="mt-2">
-            <video
-              src="/projectG/20112023.mp4"
-              autoPlay={true}
-              loop
-              controls
-            ></video>
+            <video autoPlay={true} loop controls>
+              <source src="/projectG/20112023.webm" type="video/webm" />
+              <source src="/projectG/20112023.mp4" type="video/mp4" />
+            </video>
           </div>
         </div>
       </div>
