@@ -28,6 +28,31 @@ export default function page() {
         <h2 className="mb-3 text-3xl font-bold">What I&apos;ve done so far?</h2>
         <div>
           <time className="font-mono text-2xl text-gray-800">
+            {format(new Date("2023-11-21"), "dd/MM/yyyy")}
+          </time>
+          <p>
+            Add game assets:{" "}
+            <a
+              className="text-blue-900 underline"
+              href="https://skullreaper.itch.io/cute-tower-defense"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Cute Tower Defense
+            </a>
+            . It&apos;s look so cute and better than my old assets.
+          </p>
+          <div className="mt-2">
+            <video
+              src="/projectG/21112023.mp4"
+              autoPlay={true}
+              loop
+              controls
+            ></video>
+          </div>
+        </div>
+        <div>
+          <time className="font-mono text-2xl text-gray-800">
             {format(new Date("2023-11-20"), "dd/MM/yyyy")}
           </time>
           <p>
