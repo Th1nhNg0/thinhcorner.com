@@ -31,7 +31,7 @@ export default function page() {
             {format(new Date("2023-11-21"), "dd/MM/yyyy")}
           </time>
           <p>
-            Add game assets:{" "}
+            Adding game assets:{" "}
             <a
               className="text-blue-900 underline"
               href="https://skullreaper.itch.io/cute-tower-defense"
@@ -41,6 +41,8 @@ export default function page() {
               Cute Tower Defense
             </a>
             . It&apos;s look so cute and better than my old assets.
+            <br />
+            Addding simple tower placement system.
           </p>
           <div className="mt-2">
             <video autoPlay={true} loop controls>
