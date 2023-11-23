@@ -28,6 +28,23 @@ export default function page() {
         <h2 className="mb-3 text-3xl font-bold">What I&apos;ve done so far?</h2>
         <div>
           <time className="font-mono text-2xl text-gray-800">
+            {format(new Date("2023-11-23"), "dd/MM/yyyy")}
+          </time>
+          <p>
+            Adding simple health and gold mechanic.
+            <br />
+            Kill monster to get gold and use gold to buy tower.
+          </p>
+          <div className="mt-2">
+            <video autoPlay={true} loop controls>
+              <source src="/projectG/23112023.webm" type="video/webm" />
+              <source src="/projectG/23112023.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+
+        <div>
+          <time className="font-mono text-2xl text-gray-800">
             {format(new Date("2023-11-21"), "dd/MM/yyyy")}
           </time>
           <p>
