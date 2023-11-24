@@ -24,17 +24,68 @@ export default function page() {
         </p>
       </div>
 
-      <div className="space-y-5">
+      <div className="space-y-5 prose max-w-none">
         <h2 className="mb-3 text-3xl font-bold">What I&apos;ve done so far?</h2>
+        <div>
+          <time className="font-mono text-2xl text-gray-800">
+            {format(new Date("2023-11-24"), "dd/MM/yyyy")}
+          </time>
+          <div>
+            <p>Adding basic upgrade and selling towers function.</p>
+            <p>The game should be like this:</p>
+            <ul>
+              <li>
+                <b>Project G</b> offers 6 distinct tower types.
+              </li>
+              <li>
+                When purchasing a tower, it&apos;s randomly selected from
+                it&apos;s set according to a distribution.
+              </li>
+              <li>
+                Tower upgrades involve merging two identical towers to create a
+                more potent tower. And the upgraded tower is randomly selected
+              </li>
+              <li>
+                This fusion mechanism introduces strategic depth to the game as
+                you strive to enhance your defenses.
+              </li>
+            </ul>
+            <p>Here is an example of Probability Distribution Table</p>
+            <table className="table border border-black table-auto">
+              <tr>
+                <th className="border">Basic</th>
+                <th className="border">Advanced</th>
+                <th className="border">Expert</th>
+                <th className="border">Master</th>
+                <th className="border">Legendary</th>
+                <th className="border">Divine</th>
+              </tr>
+              <tr>
+                <td className="border">30%</td>
+                <td className="border">25%</td>
+                <td className="border">20%</td>
+                <td className="border">15%</td>
+                <td className="border">8%</td>
+                <td className="border">2%</td>
+              </tr>
+            </table>
+          </div>
+          <div className="mt-2">
+            <video autoPlay={true} loop controls>
+              <source src="/projectG/24112023.webm" type="video/webm" />
+              <source src="/projectG/24112023.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+
         <div>
           <time className="font-mono text-2xl text-gray-800">
             {format(new Date("2023-11-23"), "dd/MM/yyyy")}
           </time>
-          <p>
-            Adding simple health and gold mechanic.
-            <br />
-            Kill monster to get gold and use gold to buy tower.
-          </p>
+          <div>
+            <p> Adding simple health and gold mechanic.</p>
+            <p>Kill monster to get gold and use gold to buy tower.</p>
+          </div>
           <div className="mt-2">
             <video autoPlay={true} loop controls>
               <source src="/projectG/23112023.webm" type="video/webm" />
@@ -58,9 +109,8 @@ export default function page() {
               Cute Tower Defense
             </a>
             . It&apos;s look so cute and better than my old assets.
-            <br />
-            Addding simple tower placement system.
           </p>
+          <p>Addding simple tower placement system.</p>
           <div className="mt-2">
             <video autoPlay={true} loop controls>
               <source src="/projectG/21112023.webm" type="video/webm" />
