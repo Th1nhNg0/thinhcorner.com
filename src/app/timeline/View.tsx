@@ -12,7 +12,12 @@ export default function AboutView() {
         </Item>
 
         <Item
-          title="Finished my graduation thesis at HCMUS"
+          title="Graduated from University of Science, Vietnam National University Ho Chi Minh City"
+          icon="🎓"
+          time="2023-11-25"
+        ></Item>
+        <Item
+          title="Finished my graduation thesis at University of Science, Vietnam National University Ho Chi Minh City"
           icon="📜"
           time="2023-07-16"
         >
@@ -64,7 +69,7 @@ export default function AboutView() {
         </Item>
 
         <Item
-          title="Graduate from Phan Ngoc Hien High School for the Gifted"
+          title="Graduated from Phan Ngoc Hien High School for the Gifted"
           icon="🎓"
           time="2019-05-21"
         />
@@ -102,7 +107,7 @@ export default function AboutView() {
           </picture>
         </Item>
         <Item
-          title="Graduate from Vo Thi Sau Secondary School"
+          title="Graduated from Vo Thi Sau Secondary School"
           icon="🎓"
           time="2016-07-15"
         />
