@@ -3,9 +3,10 @@ import * as cheerio from "cheerio";
 export interface Book {
   title: string;
   url: string;
-  thumbnail: string;
   rating: number;
   author: string;
+  cover?: string;
+  date_read?: string;
 }
 
 export async function get_book() {
@@ -32,23 +33,21 @@ async function crawl_book(url: string) {
     const url =
       "https://www.goodreads.com" +
       $(el).find("td:nth-child(4) a").attr("href");
-    const thumbnail = $(el)
-      .find("td:nth-child(3) img")
-      .attr("src")
-      ?.trim()
-      .replace(/.\_.+\_/, "._SX250_");
-
     const rating = $(el).find("td.rating");
     const stars = rating.find("span.staticStar.p10").length;
-
+    let cover = $(el).find("td.cover img").attr("src");
+    if (cover) {
+      cover = cover.replace(/.\_.+\_/, "._SX500_");
+    }
     const author = $(el).find("td:nth-child(5) .value").text().trim();
-
+    const date_read = $(el).find("td.date_read .date_read_value").text().trim();
     const book: Book = {
       title,
       url,
-      thumbnail: thumbnail || "",
       rating: stars,
       author,
+      date_read,
+      cover: cover,
     };
     books.push(book);
   });
