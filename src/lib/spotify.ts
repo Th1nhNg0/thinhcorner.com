@@ -4,7 +4,8 @@ const refresh_token = process.env.SPOTIFY_REFRESH_TOKEN as string;
 
 const basic = Buffer.from(`${client_id}:${client_secret}`).toString("base64");
 const NOW_PLAYING_ENDPOINT = `https://api.spotify.com/v1/me/player/currently-playing`;
-const TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=50`;
+const TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=20`;
+const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played?limit=5`;
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
 
 const getAccessToken = async () => {
@@ -114,4 +115,41 @@ const getTopTracks = async () => {
   return tracks;
 };
 
-export { getNowPlaying, getTopTracks };
+export interface RecentlyPlayedTrack {
+  id: string;
+  artist: {
+    href: string;
+    id: string;
+    name: string;
+    external_urls: {
+      spotify: string;
+    };
+  }[];
+  songUrl: string;
+  title: string;
+  imageUrl: string;
+  played_at: string;
+}
+
+const getRecentlyPlayed = async () => {
+  const { access_token } = await getAccessToken();
+  const response = await fetch(`${RECENTLY_PLAYED_ENDPOINT}`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+  const { items } = await response.json();
+  const tracks: RecentlyPlayedTrack[] =
+    items?.map((track: any) => ({
+      id: track.track.id,
+      artist: track.track.artists,
+      songUrl: track.track.external_urls.spotify,
+      title: track.track.name,
+      imageUrl: track.track.album.images[1].url,
+      played_at: track.played_at,
+    })) || [];
+
+  return tracks;
+};
+
+export { getNowPlaying, getTopTracks, getRecentlyPlayed };
