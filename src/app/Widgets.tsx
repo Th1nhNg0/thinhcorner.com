@@ -5,7 +5,6 @@ import { differenceInMilliseconds } from "date-fns";
 import { useLottie } from "lottie-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FaLaptop, FaMobileAlt } from "react-icons/fa";
 import { Activity, useLanyardWS } from "use-lanyard";
 import cat from "./cat.json";
 
@@ -19,7 +18,6 @@ export default function Widgets() {
       <Map />
       <Spotify />
       <MyAge />
-      <DiscordPresence />
     </div>
   );
 }
@@ -89,56 +87,6 @@ function Map() {
           alt=""
         />
       </picture>
-    </div>
-  );
-}
-
-function DiscordPresence() {
-  const data = useLanyardWS(MYDISCORDID);
-  const activities = data?.activities.filter((e) => e.name !== "Spotify") || [];
-  return (
-    <div className="p-3 text-white bg-gray-900 rounded-xl md:col-span-2 drop-shadow-xl bg-noise">
-      <p className="font-bold md:text-2xl">Current activity</p>
-      {activities.length == 0 && <p>Nothing</p>}
-      <div className="mt-3 space-y-5">
-        {activities.map((activity) => (
-          <Activity key={activity.id} activity={activity} />
-        ))}
-      </div>
-      <div className="flex items-center justify-end gap-2 text-sm">
-        {data?.active_on_discord_desktop && (
-          <FaLaptop
-            className="text-base text-green-500"
-            title="Online on computer"
-          />
-        )}
-        {data?.active_on_discord_mobile && (
-          <FaMobileAlt
-            className="text-base text-green-500"
-            title="Online on mobile"
-          />
-        )}
-        <span
-          className={cn("w-3 h-3 rounded-full outline outline-2", {
-            "bg-green-700 outline-green-900 animate-pulse":
-              data?.discord_status == "online",
-            "bg-yellow-700 outline-yellow-900": data?.discord_status == "idle",
-            "bg-red-700 outline-red-900": data?.discord_status == "dnd",
-            "bg-gray-700 outline-gray-900": data?.discord_status == "offline",
-          })}
-          title={
-            data?.discord_status == "online"
-              ? "Online"
-              : data?.discord_status == "idle"
-              ? "Idle"
-              : data?.discord_status == "dnd"
-              ? "Do not disturb"
-              : data?.discord_status == "offline"
-              ? "Offline"
-              : ""
-          }
-        ></span>
-      </div>
     </div>
   );
 }
