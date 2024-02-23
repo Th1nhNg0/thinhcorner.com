@@ -6,15 +6,17 @@ export interface Book {
   rating: number;
   author: string;
   cover?: string;
-  date_read?: string;
+  num_pages?: string;
+  book_published?: string;
+  user_read_at?: string;
 }
 
 export async function get_book() {
   const current_reads = await crawl_book(
-    "https://www.goodreads.com/review/list/161740636-th-nh-ng?shelf=currently-reading"
+    "https://www.goodreads.com/review/list_rss/161740636?shelf=currently-reading"
   );
   const read = await crawl_book(
-    "https://www.goodreads.com/review/list/161740636-th-nh-ng?order=d&shelf=read&sort=date_read&utf8=%E2%9C%93"
+    "https://www.goodreads.com/review/list_rss/161740636?shelf=read"
   );
 
   return {
@@ -26,30 +28,29 @@ export async function get_book() {
 async function crawl_book(url: string) {
   const res = await fetch(url);
   const data = await res.text();
-  const $ = cheerio.load(data);
+  const $ = cheerio.load(data, {
+    xmlMode: true,
+  });
   const books: Book[] = [];
-  $("#booksBody > tr").each((i, el) => {
-    const title = $(el).find("td:nth-child(4) a").text().trim();
-    const url =
-      "https://www.goodreads.com" +
-      $(el).find("td:nth-child(4) a").attr("href");
-    const rating = $(el).find("td.rating");
-    const stars = rating.find("span.staticStar.p10").length;
-    let cover = $(el).find("td.cover img").attr("src");
-    if (cover) {
-      cover = cover.replace(/.\_.+\_/, "._SX500_");
-    }
-    const author = $(el).find("td:nth-child(5) .value").text().trim();
-    const date_read = $(el).find("td.date_read .date_read_value").text().trim();
-    const book: Book = {
+  $("item").each((i, el) => {
+    const title = $(el).find("title").text();
+    const url = $(el).find("link").text();
+    const rating = Number($(el).find("user_rating").text());
+    const author = $(el).find("author_name").text();
+    const cover = $(el).find("book_large_image_url").text();
+    const num_pages = $(el).find("num_pages").text();
+    const book_published = $(el).find("book_published").text();
+    const user_read_at = $(el).find("user_read_at").text();
+    books.push({
       title,
       url,
-      rating: stars,
+      rating,
       author,
-      date_read,
-      cover: cover,
-    };
-    books.push(book);
+      cover,
+      num_pages,
+      book_published,
+      user_read_at,
+    });
   });
   return books;
 }
