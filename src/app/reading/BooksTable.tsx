@@ -11,25 +11,10 @@ export default function BooksTable({
     read: Book[];
   };
 }) {
-  const cr_rows = books.read.map((element, i) => (
-    <tr key={element.url}>
-      <td className="border-t py-2">
-        <Link href={element.url} target="_blank">
-          {i + 1} - <b className="font-medium">{element.title}</b>
-        </Link>
-      </td>
-      <td className="border-t py-2 px-2">{element.author}</td>
-      <td className="border-t py-2 px-2">{element.rating}/5</td>
-      <td className="border-t py-2 whitespace-nowrap">
-        {element.date_read || "Unkown"}
-      </td>
-    </tr>
-  ));
-
   return (
     <div>
       <div>
-        <h2 className="text-3xl lg:text-5xl font-bold mb-3">
+        <h2 className="mb-3 text-3xl font-bold lg:text-5xl">
           Currently Reading
         </h2>
         <p className="mb-5">
@@ -43,7 +28,7 @@ export default function BooksTable({
                   <img
                     src={element.cover}
                     alt={element.title}
-                    className="w-full h-full object-cover"
+                    className="object-cover w-full h-full"
                   />
                 </picture>
               </Link>
@@ -52,9 +37,9 @@ export default function BooksTable({
         </div>
       </div>
       <div className="mt-10">
-        <h2 className="text-3xl lg:text-5xl font-bold mb-3">Finished</h2>
+        <h2 className="mb-3 text-3xl font-bold lg:text-5xl">Finished</h2>
         <p className="mb-5">I have read {books.read.length} books in total.</p>
-        <div className="grid md:grid-cols-3 gap-5">
+        <div className="grid gap-5 md:grid-cols-3">
           {books.read.map((book, i) => (
             <Link
               href={book.url}
@@ -62,28 +47,37 @@ export default function BooksTable({
               key={book.url}
               className="group bg-gray-900 md:aspect-[4/6] shadow-lg relative overflow-hidden text-white rounded-md bg-noise p-5"
             >
-              <div className="absolute opacity-80 md:opacity-100 right-5  top-1/3 w-1/3 md:left-0 md:top-0 md:w-full md:h-full">
+              <div className="absolute w-1/3 opacity-80 md:opacity-100 right-5 top-1/3 md:left-0 md:top-0 md:w-full md:h-full">
                 <picture>
                   <img
                     src={book.cover}
                     alt=""
-                    className="group-hover:scale-125 duration-300 w-full object-cover  h-full"
+                    className="object-cover w-full h-full duration-300 group-hover:scale-125"
                   />
                 </picture>
               </div>
-              <div className="absolute duration-300 w-full h-full bg-gradient-to-t from-gray-900 left-0 group-hover:opacity-100 opacity-0"></div>
-              <div className="md:absolute bottom-0 group-hover:opacity-100 md:opacity-0 duration-300 delay-75 left-0 w-full md:p-3 ">
-                <p className="text-lg md:text-base font-bold mb-2 relative md:line-clamp-3">
+              <div className="absolute left-0 w-full h-full duration-300 opacity-0 bg-gradient-to-t from-gray-900 group-hover:opacity-100"></div>
+              <div className="bottom-0 left-0 w-full duration-300 delay-75 md:absolute group-hover:opacity-100 md:opacity-0 md:p-3 ">
+                <p className="relative mb-2 text-lg font-bold md:text-base md:line-clamp-3">
                   {i + 1} - {book.title}
                 </p>
-                <p className="mb-1 md:text-sm relative">
+                <p className="relative mb-1 md:text-sm">
                   Author: {book.author}
                 </p>
-                <p className="mb-1 md:text-sm relative">
+                <p className="relative mb-1 md:text-sm">
+                  Book Published: {book.book_published}
+                </p>
+                <p className="relative mb-1 md:text-sm">
+                  Page: {book.num_pages}
+                </p>
+                <p className="relative mb-1 md:text-sm">
                   Rating: {book.rating}/5
                 </p>
-                <p className="mb-1 md:text-sm relative">
-                  Date Read: {book.date_read || "Unkown"}
+                <p className="relative mb-1 md:text-sm">
+                  Date Read:{" "}
+                  {book.user_read_at
+                    ? new Date(book.user_read_at).toLocaleDateString()
+                    : "N/A"}
                 </p>
               </div>
             </Link>
