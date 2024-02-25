@@ -12,6 +12,26 @@ export default function PostView({ post }: { post: Post }) {
       itemScope
       itemType="http://schema.org/BlogPosting"
     >
+      <picture className="relative h-64 overflow-hidden">
+        <div className="absolute w-full h-full to-white via-transparent from-transparent bg-gradient-to-b"></div>
+        <div className="absolute w-full h-full bg-noise"></div>
+        <img
+          src={`https://source.unsplash.com/random?${post?.keywords}`}
+          alt={post.title}
+          className="object-cover object-center w-full h-full"
+        />
+        <span className="absolute bottom-0 right-0 z-10 p-4 text-xs text-white">
+          Image by{" "}
+          <a
+            href={`https://unsplash.com/s/photos/${post?.keywords}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white underline"
+          >
+            Unsplash
+          </a>
+        </span>
+      </picture>
       <div className="mb-8">
         <div className="flex justify-between mb-3 text-lg text-gray-600 not-prose">
           <time itemProp="datePublished" dateTime={post.date}>
