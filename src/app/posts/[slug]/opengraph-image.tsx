@@ -12,12 +12,12 @@ export const contentType = "image/png";
 
 export default async function Image({ params }: { params: { slug: string } }) {
   const post = allPosts.find((post) => post._raw.flattenedPath === params.slug);
-  const image = await fetch(new URL("./logo.png", import.meta.url)).then(
-    (res) => res.arrayBuffer()
-  );
   const fontData = await fetch(
     new URL("./Quicksand-SemiBold.ttf", import.meta.url)
   ).then((res) => res.arrayBuffer());
+  const image = await fetch(new URL("./logo.png", import.meta.url)).then(
+    (res) => res.arrayBuffer()
+  );
 
   return new ImageResponse(
     (
@@ -30,12 +30,22 @@ export default async function Image({ params }: { params: { slug: string } }) {
           alignItems: "center",
           justifyContent: "center",
           fontFamily: "Quicksand",
+          backgroundImage: 'url("https://thinhcorner.com/images/noise.png")',
+          backgroundSize: "repeat",
         }}
       >
-        <div tw="flex justify-center items-center">
-          <img width="256" height="256" src={image as unknown as string} />
-          <div tw="text-5xl ml-20 w-[600px] leading-relaxed line-clamp-2">
-            {post!.title}
+        <div tw="flex justify-between items-center">
+          <div tw="w-[500px] h-[500px]  rounded-md flex overflow-hidden items-center justify-center">
+            <img src={`https://source.unsplash.com/random?${post?.keywords}`} />
+          </div>
+          <div tw="w-[500px] flex flex-col ml-20">
+            <div tw="flex items-center">
+              <img width="60" height="60" src={image as unknown as string} />
+              <p tw="ml-5 text-3xl">ThinhCorner</p>
+            </div>
+            <h1 tw="text-4xl leading-relaxed text-gray-800 mt-5 font-semibold line-clamp-5">
+              {post!.title}
+            </h1>
           </div>
         </div>
       </div>

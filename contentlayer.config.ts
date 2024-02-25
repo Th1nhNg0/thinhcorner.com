@@ -13,6 +13,7 @@ export const Post = defineDocumentType(() => ({
     title: { type: "string", required: true },
     date: { type: "date", required: true },
     hide: { type: "boolean", required: false, default: false },
+    keywords: { type: "string", required: false, default: "" },
   },
   computedFields: {
     url: {
