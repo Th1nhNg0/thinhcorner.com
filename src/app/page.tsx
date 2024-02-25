@@ -19,9 +19,9 @@ function PostCard(post: Post) {
 }
 
 export default function Home() {
-  const posts = allPosts.sort((a, b) =>
-    compareDesc(new Date(a.date), new Date(b.date))
-  );
+  const posts = allPosts
+    .filter((post) => !post.hide)
+    .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)));
 
   return (
     <div className="space-y-5">
