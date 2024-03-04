@@ -32,6 +32,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
           fontFamily: "Quicksand",
           backgroundImage: 'url("https://thinhcorner.com/images/noise.png")',
           backgroundSize: "repeat",
+          backgroundColor:'white'
         }}
       >
         <div tw="flex justify-between items-center">
