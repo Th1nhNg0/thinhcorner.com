@@ -4,8 +4,16 @@ import Link from "next/link";
 
 export default function View() {
   return (
-    <div className="prose max-w-none prose-lg">
+    <div className="prose prose-lg max-w-none">
       <h1>Hi. I&apos;m Thinh.</h1>
+      <p>I&apos;m come from Vietnam, currently living in Ho Chi Minh City.</p>
+      <p>
+        My main interests are in programming, data science, and reading books.
+      </p>
+      <p>
+        Politics and economics are very interesting to me currently, but I
+        haven&apos;t read enough to have a strong opinion on anything.
+      </p>
       <p>
         I made this site just for fun. Inspired by{" "}
         <Link href="https://garden.bradwoods.io">
