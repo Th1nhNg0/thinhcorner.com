@@ -57,6 +57,11 @@ export default function AboutView() {
             <img src="/timeline/webdev2022.jpg" alt="" />
           </picture>
         </Item>
+        <Item
+          title="Start working at KING ATTORNEY JOINT STOCK COMPANY"
+          icon="🏢"
+          time="2021-01-01"
+        ></Item>
 
         <Item
           title="Start studying at University of Science, Vietnam National University Ho Chi Minh City"
