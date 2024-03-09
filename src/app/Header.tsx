@@ -40,13 +40,7 @@ export default function Header() {
         >
           <BsMusicNoteBeamed />
         </Link>
-        <Link
-          className="p-3 text-2xl text-white bg-gray-900 lg:text-xl rounded-xl bg-noise"
-          title="Rss"
-          href="/rss"
-        >
-          <BsFillRssFill />
-        </Link>
+
         <Link
           className="p-3 text-2xl text-white bg-gray-900 lg:text-xl rounded-xl bg-noise"
           title="About"
