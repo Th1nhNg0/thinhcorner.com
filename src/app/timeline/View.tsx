@@ -7,10 +7,7 @@ export default function AboutView() {
       <h1 className="mb-10 text-5xl font-bold">My Timeline</h1>
 
       <ol className="relative ml-3 space-y-6 border-l-2 border-gray-200 dark:border-gray-700">
-        <Item title="Doing right now" icon="🚀">
-          <p>- Plan for MBA</p>
-        </Item>
-
+   
         <Item
           title="Graduated from University of Science, Vietnam National University Ho Chi Minh City"
           icon="🎓"
