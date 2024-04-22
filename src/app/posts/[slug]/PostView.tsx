@@ -47,7 +47,7 @@ export default function PostView({ post }: { post: Post }) {
         </h1>
       </div>
       <div className="w-full h-px my-5 bg-black/30"></div>
-      <div itemProp="articleBody" className="">
+      <div itemProp="articleBody" className="mb-5">
         <Content code={post.body.code} />
       </div>
       <Comment />
