@@ -1,11 +1,11 @@
 import { getBlogPosts } from "@/app/db/blog";
 import { CustomMDX } from "@/components/mdx";
-import { formatDate } from "@/lib/utils";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import readingTime from "reading-time";
 
+import { formatDistanceToNow } from "date-fns";
 import "katex/dist/katex.min.css";
 
 export async function generateMetadata({
@@ -97,7 +97,9 @@ export default function Blog({
       <div className="flex justify-between items-center mt-2 mb-8 text-sm max-w-[650px]">
         <Suspense fallback={<p className="h-5" />}>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            {formatDate(post.metadata.publishedAt)}
+            {formatDistanceToNow(new Date(post.metadata.publishedAt), {
+              addSuffix: true,
+            })}
           </p>
         </Suspense>
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
