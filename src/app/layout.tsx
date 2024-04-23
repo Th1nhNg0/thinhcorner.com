@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Navbar } from "./Navbar";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -36,11 +37,8 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: "Lee Robinson",
+    title: "Thinh's Corner",
     card: "summary_large_image",
-  },
-  verification: {
-    google: "eZSdmzAXlLkKhNJzfgwDqWORghxnJ8qR9_CHdAh5-xw",
   },
 };
 
@@ -63,6 +61,7 @@ export default function RootLayout({
           {children}
         </main>
       </body>
+      <GoogleAnalytics gaId="G-P4B7XCWCYP" />
     </html>
   );
 }

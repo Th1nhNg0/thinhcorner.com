@@ -27,7 +27,7 @@ export function Chart1() {
   return (
     <>
       <p className="text-lg font-medium text-center">
-        Số văn bản theo lĩnh vực
+        Number of documents by field
       </p>
       <ResponsiveContainer width="100%" height={350}>
         <BarChart
@@ -111,7 +111,7 @@ export function Chart2() {
   return (
     <>
       <p className="text-lg font-medium text-center">
-        Số văn bản theo tình trạng hiệu lực
+        Number of documents according to validity status
       </p>
       <ResponsiveContainer width="100%" height={350}>
         <PieChart>
@@ -202,7 +202,7 @@ export function Chart3() {
   return (
     <>
       <p className="text-lg font-medium text-center">
-        Số văn bản ban hành theo tháng
+        Number of documents issued by month
       </p>
       <ResponsiveContainer width="100%" height={350}>
         <BarChart data={data}>
@@ -307,7 +307,7 @@ export function Chart4() {
   return (
     <>
       <p className="text-lg font-medium text-center">
-        Số văn bản ban hành theo năm
+        Number of documents issued by year
       </p>
       <ResponsiveContainer width="100%" height={350}>
         <BarChart data={data}>

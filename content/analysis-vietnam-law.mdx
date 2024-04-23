@@ -1,39 +1,37 @@
 ---
-title: Phân tích văn bản quy phạm pháp luật Việt Nam
+title: Analysis of Vietnamese Legal Documents
 publishedAt: 2023-07-30
-summary: Tóm tắt một số thông tin về bộ dự liệu lớn liên quan văn bản quy phạm pháp luật Việt Nam, được trích xuất từ website Thư viện Pháp luật. Dữ liệu cập nhật đến tháng 6 năm 2023. Gồm 318517 văn bản quy phạm pháp luật Việt Nam.
+summary: "Summary of a large dataset related to Vietnamese legal documents extracted from the Thư viện Pháp luật website. The data is up to date until June 2023. It includes 318517 Vietnamese legal documents."
 ---
 
+This article summarizes some information about a large dataset related to Vietnamese legal documents, extracted from the website [Thư viện Pháp luật](https://thuvienphapluat.vn/).
 
-Bài viết này tóm tắt một số thông tin về bộ dự liệu lớn liên quan tới văn bản quy phạm pháp luật Việt Nam, được trích xuất từ website [Thư viện Pháp luật](https://thuvienphapluat.vn/).
+Data updated to June 2023. Includes 318,517 Vietnamese legal documents. Document attributes:
 
-Dữ liệu cập nhật đến tháng 6 năm 2023. Gồm 318517 văn bản quy phạm pháp luật Việt Nam. Thuộc tính của văn bản:
-
-
-- Tên văn bản
-- Số hiệu văn bản
-- Loại văn bản
-- Lĩnh vực của văn bản
-- Người ký
-- Nơi ban hành
-- Ngày ban hành
-- Ngày hiệu lực
-- Ngày công báo
-- Số công báo
-- Tình trạng hiệu lực
-- Liên kết giữa các văn bản
+- Document name
+- Document number
+- Document type
+- Document field
+- Signer
+- Place of issue
+- Issuance date
+- Effective date
+- Gazette date
+- Gazette number
+- Status of validity
+- Links between documents
  
-Sau đây là một số biểu đồ thống kê về dữ liệu này:
+Here are some statistical charts about this data:
 
 <div className="text-center font-medium">
-Số lượng văn bản theo loại văn bản
+Number of documents by type
 </div>
 <div className="flex gap-10 justify-center -mt-6">
     <Table
     data={{
         headers: [
-        'Loại văn bản',
-        'Số lượng',
+        'Type',
+        'Number',
         ],
         rows: [
         ["Quyết định", 192618],
@@ -57,8 +55,8 @@ Số lượng văn bản theo loại văn bản
     <Table
     data={{
         headers: [
-        'Loại văn bản',
-        'Số lượng',
+        'Type',
+        'Number',
         ],
         rows: [
         ["Luật", 942],
@@ -85,9 +83,9 @@ Số lượng văn bản theo loại văn bản
 <AnalysisVietnamLaw.Chart3/>
 
 
-Từ biểu đồ trên ta thấy: số lượng văn bản thường tăng đột biến vào các tháng giữa và cuối
-năm. Vì đây là các thời điểm diễn ra Kỳ họp Quốc hội.
+From the chart above we see: the number of documents often increases dramatically in the middle and last months
+year. Because these are the times when the National Assembly Session takes place.
 
 <AnalysisVietnamLaw.Chart4/>
 
-Tuy nhiên, khoảng 10 năm trở lại đây, số lượng văn bản được ban hành tăng rất nhanh. Điển hình như số lượng văn bản ở năm 2021 nhiều gấp đôi năm 2011
+However, in the past 10 years, the number of documents issued has increased rapidly. Typically, the number of documents in 2021 is twice as much as in 2011
