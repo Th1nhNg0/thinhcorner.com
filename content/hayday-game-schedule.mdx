@@ -20,10 +20,29 @@ In Hay Day, your main job is to make products based on the orders that you recei
 
 To make products in the game, you need two main resources: goods (or product) and machine. Each goods has a production time, a machine that can produce it and goods that are required to make it. For example, to make a _chicken feed_, you need _3 wheat_ and _1 corn_. The production time of a _chicken feed_ is _20 minutes_ and it can be made in the _feed mill_. And 
 
+For a deep dive into the game, you can check out the [Hay Day Wiki](https://hayday.fandom.com/wiki/Hay_Day_Wiki). 
+
 <Image src="/images/hayday-game-schedule/chart-dark.png" width="1100" height="800" className="hidden dark:block"/>
 <Image src="/images/hayday-game-schedule/chart-light.png" className="dark:hidden block" width="1100" height="800" />
 
+## The problem
 
-For a deep dive into the game, you can check out the [Hay Day Wiki](https://hayday.fandom.com/wiki/Hay_Day_Wiki). 
+Hay Day is a really easy game, at least when I started playing. Wheat is planted, gathered, and sold. Alternately, you may use wheat to produce and sell bread. However, as the game progresses, you will acquire additional machines, goods, and orders. At that point, the scheduling issue arises.
 
-When I first started playing Hay Day 
+Here is some charts that show how fast the game can grow:
+
+<HaydayGameSchedule.Chart/>
+
+As you can see, just in level 20 of the game, we have 40 goods and 10 machines. The permutation of the goods and machines is huge.
+
+So what do we want to solve here? Let clarify the problem:
+
+- An order is a set of goods that need to be made.
+- A machine can only produce one good at a time.
+- A machine can only produce a good if it has all the required goods.
+- A good can only be produced on a specific machine.
+
+Our target:
+
+- Given a set of orders, find a schedule that maximize the **makespan** of the orders.
+- The makespan is the time between the start of the first order and the end of the last order.

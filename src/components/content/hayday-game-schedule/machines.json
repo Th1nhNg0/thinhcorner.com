@@ -1,0 +1,466 @@
+[
+  {
+    "Name": "Bakery",
+    "Level": 2,
+    "Price": 20,
+    "Time": "10 sec",
+    "XP": 3,
+    "Size": "3x3"
+  },
+  {
+    "Name": "Feed mill",
+    "Level": 3,
+    "Price": 5,
+    "Time": "40 sec",
+    "XP": 4,
+    "Size": "3x3"
+  },
+  {
+    "Name": "Feed mill",
+    "Level": 12,
+    "Price": "3,200",
+    "Time": "40 sec",
+    "XP": 4,
+    "Size": "3x3"
+  },
+  {
+    "Name": "Dairy",
+    "Level": 6,
+    "Price": 50,
+    "Time": "2 h",
+    "XP": 8,
+    "Size": "4x4"
+  },
+  {
+    "Name": "Sugar mill",
+    "Level": 7,
+    "Price": 350,
+    "Time": "6 h",
+    "XP": 13,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Sugar mill",
+    "Level": 76,
+    "Price": "200,000",
+    "Time": "6 h",
+    "XP": 13,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Popcorn pot",
+    "Level": 8,
+    "Price": 650,
+    "Time": "8 h",
+    "XP": 14,
+    "Size": "3x3"
+  },
+  {
+    "Name": "BBQ grill",
+    "Level": 9,
+    "Price": 730,
+    "Time": "8 h",
+    "XP": 14,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Pie oven",
+    "Level": 14,
+    "Price": "2,200",
+    "Time": "12 h",
+    "XP": 17,
+    "Size": "3x3"
+  },
+  {
+    "Name": "Loom",
+    "Level": 17,
+    "Price": "3,200",
+    "Time": "1 d",
+    "XP": 19,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Sewing machine",
+    "Level": 19,
+    "Price": "4,500",
+    "Time": "20 h",
+    "XP": 19,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Cake oven",
+    "Level": 21,
+    "Price": "12,100",
+    "Time": "1 d",
+    "XP": 24,
+    "Size": "3x3"
+  },
+  {
+    "Name": "Mine",
+    "Level": 24,
+    "Price": "21,000",
+    "Time": "1 d 11 h",
+    "XP": 28,
+    "Size": "N/A"
+  },
+  {
+    "Name": "Smelter",
+    "Level": 24,
+    "Price": "12,500",
+    "Time": "18 h",
+    "XP": 21,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Smelter",
+    "Level": 24,
+    "Price": "22,000",
+    "Time": "18 h",
+    "XP": 21,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Smelter",
+    "Level": 24,
+    "Price": "31,500 (3rd)",
+    "Time": "18 h",
+    "XP": 21,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Smelter",
+    "Level": 24,
+    "Price": "41,000 (4th)",
+    "Time": "18 h",
+    "XP": 21,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Smelter",
+    "Level": 24,
+    "Price": "50,500 (5th)",
+    "Time": "18 h",
+    "XP": 21,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Juice press",
+    "Level": 26,
+    "Price": "31,000",
+    "Time": "1 d 8 h",
+    "XP": 27,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Lure workbench",
+    "Level": 27,
+    "Price": "N/A",
+    "Time": "N/A",
+    "XP": "N/A",
+    "Size": "N/A"
+  },
+  {
+    "Name": "Ice cream maker",
+    "Level": 29,
+    "Price": "38,000",
+    "Time": "1 d 7 h",
+    "XP": 27,
+    "Size": "3x2"
+  },
+  {
+    "Name": "Net maker",
+    "Level": 30,
+    "Price": "28,000",
+    "Time": "2 d",
+    "XP": 32,
+    "Size": "N/A"
+  },
+  {
+    "Name": "Jam maker",
+    "Level": 35,
+    "Price": "59,000",
+    "Time": "1 d 12 h",
+    "XP": 28,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Jeweler",
+    "Level": 38,
+    "Price": "68,000",
+    "Time": "1 d 12 h",
+    "XP": 28,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Honey extractor",
+    "Level": 39,
+    "Price": "35,000",
+    "Time": "1 d",
+    "XP": 24,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Coffee kiosk",
+    "Level": 42,
+    "Price": "75,000",
+    "Time": "1 d 11 h",
+    "XP": 35,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Lobster pool",
+    "Level": 44,
+    "Price": "80,000",
+    "Time": "2 d",
+    "XP": 32,
+    "Size": "N/A"
+  },
+  {
+    "Name": "Soup kitchen",
+    "Level": 46,
+    "Price": "115,000",
+    "Time": "1 d 12 h",
+    "XP": 28,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Candle maker",
+    "Level": 48,
+    "Price": "118,000",
+    "Time": "1 d 14 h",
+    "XP": 24,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Flower shop",
+    "Level": 49,
+    "Price": "120,000",
+    "Time": "1 d 15 h",
+    "XP": 30,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Duck salon",
+    "Level": 50,
+    "Price": "90,000",
+    "Time": "2 d 5 h",
+    "XP": 34,
+    "Size": "N/A"
+  },
+  {
+    "Name": "Candy machine",
+    "Level": 51,
+    "Price": "120,000",
+    "Time": "1 d",
+    "XP": 27,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Sauce maker",
+    "Level": 54,
+    "Price": "135,000",
+    "Time": "1 d 16 h",
+    "XP": 30,
+    "Size": "3x3"
+  },
+  {
+    "Name": "Sushi bar",
+    "Level": 56,
+    "Price": "150,000",
+    "Time": "1 d 20 h",
+    "XP": 38,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Salad bar",
+    "Level": 58,
+    "Price": "165,000",
+    "Time": "2 d",
+    "XP": 32,
+    "Size": "3x3"
+  },
+  {
+    "Name": "Sandwich bar",
+    "Level": 61,
+    "Price": "180,000",
+    "Time": "2 d 4 h",
+    "XP": 34,
+    "Size": "3x3"
+  },
+  {
+    "Name": "Smoothie mixer",
+    "Level": 64,
+    "Price": "220,000",
+    "Time": "3 d",
+    "XP": 39,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Pasta maker",
+    "Level": 67,
+    "Price": "400,000",
+    "Time": "3 d 7 h",
+    "XP": 43,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Wok kitchen",
+    "Level": 69,
+    "Price": "350,000",
+    "Time": "3 d 8 h",
+    "XP": 41,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Hat maker",
+    "Level": 70,
+    "Price": "260,000",
+    "Time": "3 d 3 h",
+    "XP": 40,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Pasta kitchen",
+    "Level": 72,
+    "Price": "550,000",
+    "Time": "3 d 12 h",
+    "XP": 42,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Hot dog stand",
+    "Level": 75,
+    "Price": "650,000",
+    "Time": "3 d 16 h",
+    "XP": 41,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Donut maker",
+    "Level": 76,
+    "Price": "680,000",
+    "Time": "3 d 18 h",
+    "XP": 42,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Taco kitchen",
+    "Level": 77,
+    "Price": "700,000",
+    "Time": "3 d 18 h",
+    "XP": 43,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Omelet station",
+    "Level": 77,
+    "Price": "600,000",
+    "Time": "3 d 8 h",
+    "XP": 41,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Tea stand",
+    "Level": 80,
+    "Price": "750,000",
+    "Time": "3 d 23 h",
+    "XP": 44,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Fondue pot",
+    "Level": 81,
+    "Price": "800,000",
+    "Time": "4 d",
+    "XP": 44,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Bath kiosk",
+    "Level": 84,
+    "Price": "850,000",
+    "Time": "4 d",
+    "XP": 44,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Deep fryer",
+    "Level": 87,
+    "Price": "900,000",
+    "Time": "3 d 23 h",
+    "XP": 44,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Preservation station",
+    "Level": 91,
+    "Price": "950,000",
+    "Time": "4 d",
+    "XP": 44,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Pottery studio",
+    "Level": 94,
+    "Price": "1,000,000",
+    "Time": "4 d",
+    "XP": 46,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Fudge shop",
+    "Level": 99,
+    "Price": "1,050,000",
+    "Time": "4 d",
+    "XP": 44,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Yogurt Maker",
+    "Level": 103,
+    "Price": "1,100,000",
+    "Time": "4 d",
+    "XP": 44,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Stew Pot",
+    "Level": 106,
+    "Price": "1,150,000",
+    "Time": "4 d",
+    "XP": 44,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Cupcake Maker",
+    "Level": 109,
+    "Price": "1,200,000",
+    "Time": "4 d",
+    "XP": 44,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Waffle Maker",
+    "Level": 114,
+    "Price": "1,250,000",
+    "Time": "4d",
+    "XP": 44,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Porridge Bar",
+    "Level": 119,
+    "Price": "1,300,000",
+    "Time": "4d",
+    "XP": 44,
+    "Size": "2x2"
+  },
+  {
+    "Name": "Milkshake Bar",
+    "Level": 124,
+    "Price": "1,350,000",
+    "Time": "4d",
+    "XP": 44,
+    "Size": "2x2"
+  }
+]

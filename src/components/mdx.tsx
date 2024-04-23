@@ -10,6 +10,7 @@ import { highlight } from "sugar-high";
 import { TweetComponent } from "./tweet";
 
 import * as AnalysisVietnamLaw from "./content/analysis-vietnam-law/Chart";
+import * as HaydayGameSchedule from "./content/hayday-game-schedule";
 
 function Table({ data }) {
   let headers = data.headers.map((header, index) => (
@@ -193,6 +194,7 @@ let components = {
   ConsCard,
   // recharts
   AnalysisVietnamLaw: { ...AnalysisVietnamLaw },
+  HaydayGameSchedule: { ...HaydayGameSchedule },
 };
 
 export function CustomMDX(props) {
