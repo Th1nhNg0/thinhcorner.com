@@ -12,6 +12,11 @@ import Link from "next/link";
 
 export const revalidate = 60 * 5;
 
+export const metadata = {
+  title: "Music",
+  description: "My music taste.",
+};
+
 export default async function page() {
   const tracks = await getTopTracks();
   const recentTracks = await getRecentlyPlayed();

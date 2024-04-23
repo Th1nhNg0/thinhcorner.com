@@ -1,4 +1,4 @@
-import { getBlogPosts } from "@/app/db/blog";
+import { getBlogPosts } from "@/lib/blog";
 import { CustomMDX } from "@/components/mdx";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";

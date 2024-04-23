@@ -2,6 +2,11 @@
 
 import { formatDistanceToNow } from "date-fns";
 
+export const metadata = {
+  title: "Timeline",
+  description: "My timeline.",
+};
+
 export default function AboutView() {
   return (
     <div>

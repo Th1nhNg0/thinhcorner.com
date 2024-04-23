@@ -10,6 +10,11 @@ import { get_book } from "@/lib/goodread";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 
+export const metadata = {
+  title: "Reading",
+  description: "Books I have read.",
+};
+
 export default async function page() {
   const books = await get_book();
 

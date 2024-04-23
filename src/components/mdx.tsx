@@ -1,13 +1,15 @@
-import Link from "next/link";
-import Image from "next/image";
+import { YouTubeEmbed } from "@next/third-parties/google";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { TweetComponent } from "./tweet";
-import { highlight } from "sugar-high";
+import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import rehypeKatex from "rehype-katex";
-import remarkMath from "remark-math";
 import remarkGfm from "remark-gfm";
-import { YouTubeEmbed } from "@next/third-parties/google";
+import remarkMath from "remark-math";
+import { highlight } from "sugar-high";
+import { TweetComponent } from "./tweet";
+
+import * as AnalysisVietnamLaw from "./content/analysis-vietnam-law/Chart";
 
 function Table({ data }) {
   let headers = data.headers.map((header, index) => (
@@ -189,6 +191,8 @@ let components = {
   Callout,
   ProsCard,
   ConsCard,
+  // recharts
+  AnalysisVietnamLaw: { ...AnalysisVietnamLaw },
 };
 
 export function CustomMDX(props) {

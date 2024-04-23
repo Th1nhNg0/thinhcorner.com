@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getBlogPosts } from "../db/blog";
+import { getBlogPosts } from "../../lib/blog";
 import { formatDistanceToNow } from "date-fns";
 
 export const metadata = {
