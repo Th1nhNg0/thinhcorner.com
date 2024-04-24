@@ -136,7 +136,7 @@ In a roulette wheel selection, the circular wheel is divided as described before
 
 ### Crossover
 
-The crossover for this problem is a little bit complex. According to [this paper](https://www.researchgate.net/publication/281545095_SOLVING_JOB_SHOP_SCHEDULING_PROBLEM_WITH_GENETIC_ALGORITHM), they have used order crossover for operations shuffling between two parent schedules. Whereas, uniform crossover operator is used for shuffling of machines assignment to operations
+The crossover for this problem is a little bit complex. According to [this paper](https://www.researchgate.net/publication/281545095_SOLVING_JOB_SHOP_SCHEDULING_PROBLEM_WITH_GENETIC_ALGORITHM), they have used order crossover for tasks shuffling between two parent schedules. Whereas, uniform crossover operator is used for shuffling of machines assignment to tasks.
 
 #### Order crossover
 
@@ -149,24 +149,47 @@ Here's how the order crossover operator works:
 - The offspring solution is created by copying the selected substring from the first parent into the same positions in the offspring.
 - The remaining positions in the offspring are filled with the elements from the second parent, in the order in which they appear, skipping the elements that were already copied from the first parent.
 
-Here's an example to illustrate the process:
+#### Uniform Crossover
+
+Uniform crossover is a type of crossover operator that works by randomly selecting genes from the parents to create the offspring. In uniform crossover, each gene in the offspring is selected from one of the parents with a certain probability.
+
+As the author in the paper mentioned, they have used uniform crossover for shuffling of machines assignment to task.
+
+When the same task in two parents have different machine assignment, the machine assignment of the task in the offspring is randomly selected from one of the parents. Here is the example of the uniform crossover:
+
+<div className="flex justify-center items-center gap-10">
+$
+\text{ Parent1 }= \begin{bmatrix}
+1 & 3 & 2 & 1 & 1 \\
+4 & 5 & 2 & 3 & 1
+\end{bmatrix}
+$
+
+$
+\text{ Parent2 }= \begin{bmatrix}
+2 & 1 & 3 & 2 & 1 \\
+5 & 4 & 2 & 3 & 1
+\end{bmatrix}
+$
+</div>
+
+After uniform crossover:
+
+<div className="flex justify-center">
+$
+\text{ offspring }= \begin{bmatrix}
+1 & 2 & 2 & 1 & 1 \\
+4 & 5 & 2 & 3 & 1
+\end{bmatrix}
+$
+
+</div>
 
 
-Suppose we have two parent solutions represented as sequences of numbers:
 
-Parent 1: $ [1, 2, 3, 4, 5, 6, 7, 8] $
 
-Parent 2: $[5, 3, 1, 7, 2, 8, 6, 4]$
 
-Let's assume we randomly select the substring $[3, 4, 5]$ from Parent 1.
 
-Step 1: Copy the substring $[3, 4, 5]$ into the offspring:
-
-Offspring: $[\_,\_, 3, 4, 5, \_, \_, \_]$
-
-Step 2: Fill in the remaining positions with the elements from Parent 2, skipping the elements already present in the offspring (3, 4, 5):
-
-Offspring: $[5, 1, 3, 4, 5, 7, 2, 8]$
 
 
 ## Resource
