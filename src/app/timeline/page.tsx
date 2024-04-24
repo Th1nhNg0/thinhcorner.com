@@ -153,11 +153,11 @@ function Item({
       <span className="absolute -ml-px text-2xl bg-white dark:bg-[#111010] rounded-full -left-4">
         {icon}
       </span>
-      <h2 className="mb-1 text-lg font-semibold text-black dark:text-gray-100">
+      <h2 className="text-neutral-900 dark:text-neutral-100 tracking-tight">
         {title}
       </h2>
       <time
-        className="block mb-5 leading-none text-gray-600 dark:text-gray-400 text-sm"
+        className="block mb-5 leading-none text-neutral-600 dark:text-neutral-400 text-sm"
         dateTime={time}
       >
         {formatDistanceToNow(new Date(time), {
