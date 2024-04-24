@@ -53,3 +53,32 @@ A simple scheduling to make a order with two egg will look like this:
 But in reality, the scheduling is more complex. Here is the image showing the scheduling of 2 orders with 4 goods:
 
 <Image src="/images/hayday-game-schedule/complex_machine_schedule.png" width="1200" height="400" alt="complex" />
+
+
+## First attempt
+
+So how can we solve this problem? 
+
+The first thing that comes to my mind is [genetic algorithm](https://en.wikipedia.org/wiki/Genetic_algorithm). 
+
+The genetic algorithm is a search heuristic inspired by [Darwin's theory of evolution](https://en.wikipedia.org/wiki/Darwinism). This algorithm borrows the following concepts from natural selection:
+
+- Each individual (solution) has an associated fitness score
+- Individuals with high fitness scores are selected for reproduction
+- Chosen individuals reproduce to create offspring with the characteristics of both parents
+- Some offspring would have random mutations applied to them
+
+The idea is that if the parents have high fitness, the offspring would have high fitness as well.
+
+This entire process of **selection**, **reproduction** (more commonly known as crossover), and **mutation** will repeat many times. At the end, only the fittest individuals will remain. These fittest individuals represent the solutions to our problem.
+
+<Callout emoji="💡">
+Only the fittest will survive - Charles Darwin
+</Callout>
+
+
+## Resource
+
+- [Hay Day Good list](https://hayday.fandom.com/wiki/Goods_List)
+- [Hay Day Production Buildings List](https://hayday.fandom.com/wiki/Production_Buildings_List)
+- [Google's OR-Tools Code for Flexible Job Shop Scheduling](https://github.com/google/or-tools/blob/stable/examples/python/flexible_job_shop_sat.py)
