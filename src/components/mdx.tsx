@@ -11,6 +11,7 @@ import { TweetComponent } from "./tweet";
 
 import * as AnalysisVietnamLaw from "./content/analysis-vietnam-law/Chart";
 import * as HaydayGameSchedule from "./content/hayday-game-schedule";
+import { RoundedImage, RoundedImageRaw } from "./mdx-client";
 
 function Table({ data }) {
   let headers = data.headers.map((header, index) => (
@@ -50,23 +51,6 @@ function CustomLink(props) {
   }
 
   return <a target="_blank" rel="noopener noreferrer" {...props} />;
-}
-
-function RoundedImage(props) {
-  return (
-    <Image
-      alt={props.alt}
-      className="rounded-xl mx-auto object-cover"
-      {...props}
-    />
-  );
-}
-function RoundedImageRaw(props) {
-  return (
-    <picture>
-      <img alt={props.alt} className="rounded-xl !mx-auto" {...props} />
-    </picture>
-  );
 }
 
 function Callout(props) {

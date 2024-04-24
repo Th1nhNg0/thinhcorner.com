@@ -35,12 +35,6 @@ export default function BlogPage() {
                 {post.metadata.title}
               </p>
               <p className="text-neutral-600 dark:text-neutral-400">
-                {post.metadata.language && (
-                  <span className="font-mono uppercase">
-                    {post.metadata.language}
-                  </span>
-                )}{" "}
-                •{" "}
                 {formatDistanceToNow(new Date(post.metadata.publishedAt), {
                   addSuffix: true,
                 })}
