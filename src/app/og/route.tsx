@@ -6,10 +6,11 @@ export const runtime = "edge";
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
   const postTitle = searchParams.get("title");
-  // const font = fetch(
-  //   new URL("../../../public/fonts/kaisei-tokumin-bold.ttf", import.meta.url)
-  // ).then((res) => res.arrayBuffer());
-  // const fontData = await font;
+  console.log(import.meta.url);
+  const font = fetch(
+    new URL("../../../public/fonts/quicksand.ttf", import.meta.url)
+  ).then((res) => res.arrayBuffer());
+  const fontData = await font;
 
   return new ImageResponse(
     (
@@ -30,11 +31,11 @@ export async function GET(req: NextRequest) {
             marginRight: 190,
             display: "flex",
             fontSize: 130,
-            // fontFamily: "Kaisei Tokumin",
-            letterSpacing: "-0.05em",
+            fontFamily: "quicksand",
+            letterSpacing: "-0.02em",
             fontStyle: "normal",
             color: "white",
-            lineHeight: "120px",
+            lineHeight: "140px",
             whiteSpace: "pre-wrap",
           }}
         >
@@ -45,13 +46,13 @@ export async function GET(req: NextRequest) {
     {
       width: 1920,
       height: 1080,
-      // fonts: [
-      //   {
-      //     name: "Kaisei Tokumin",
-      //     data: fontData,
-      //     style: "normal",
-      //   },
-      // ],
+      fonts: [
+        {
+          name: "quicksand",
+          data: fontData,
+          style: "normal",
+        },
+      ],
     }
   );
 }
