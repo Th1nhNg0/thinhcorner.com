@@ -82,7 +82,7 @@ Only the fittest will survive - Charles Darwin
 
 Encoding and decoding are the most important parts of the genetic algorithm. The encoding is the way we represent the solution in the genetic algorithm. The decoding is the way we convert the encoded solution to the real solution. 
 
-In our case, the encoding solution is a $ 2 \times n $ matrix where $ n $ is the number of task (produce good task) we need to schedule. The first row is the machine that will produce the good and the second row is the id of the good that will be produced. The order in the second row is the order of what task will be produced first.
+In our case, the encoding solution is a $ 2 \times n $ matrix where $ n $ is the number of task (produce good task) we need to schedule. The first row is the machine that will produce the good and the second row is the id of the good that will be produced. The order in the second row is the order of what task will be produced first. If task $j$ is required to produce task $i$, the index of task $j$ in the second row must be less than the index of task $i$.
 
 For example, given a 5 tasks, 3 machine to schedule:
 
@@ -115,6 +115,58 @@ To decode the solution, we will create a timeline of the machine and the task th
 Here is the visualization of the decoding solution:
 
 <Image src="/images/hayday-game-schedule/visual.gif" width="600" height="300" alt="visual" />
+
+### Fitness function
+
+The fitness function is the function that we use to evaluate the solution. In our case, the fitness function is the makespan of the solution. This function take a important role in the genetic algorithm. The better the fitness function, the better the solution. It's may affect how the solution is formed.
+
+If we want to finish the orders as soon as possible, we can use the makespan as the fitness function. If we want to finish the orders with the least number of machines, we can use the number of machines as the fitness function. Or we want to finish all the order as soon as possible, we can use the sum of the makespan of all the orders as the fitness function.
+
+In this experiment, I use 2 fitness functions: makespan and sum of makespan of all the orders.
+
+### Selection
+
+Fitness Proportionate Selection is one of the most popular ways of parent selection. In this every individual can become a parent with a probability which is proportional to its fitness. Therefore, fitter individuals have a higher chance of mating and propagating their features to the next generation. Therefore, such a selection strategy applies a selection pressure to the more fit individuals in the population, evolving better individuals over time.
+
+Consider a circular wheel. The wheel is divided into n pies, where n is the number of individuals in the population. Each individual gets a portion of the circle which is proportional to its fitness value.
+
+In a roulette wheel selection, the circular wheel is divided as described before. A fixed point is chosen on the wheel circumference as shown and the wheel is rotated. The region of the wheel which comes in front of the fixed point is chosen as the parent. For the second parent, the same process is repeated.
+
+<Image src="/images/hayday-game-schedule/Roulette-wheel-selection-method.png" width="400" height="400" alt="wheel" />
+
+### Crossover
+
+The crossover for this problem is a little bit complex. According to [this paper](https://www.researchgate.net/publication/281545095_SOLVING_JOB_SHOP_SCHEDULING_PROBLEM_WITH_GENETIC_ALGORITHM), they have used order crossover for operations shuffling between two parent schedules. Whereas, uniform crossover operator is used for shuffling of machines assignment to operations
+
+#### Order crossover
+
+Order crossover operator is a specific type of crossover that is particularly useful when dealing with permutation-based problems, such as the Traveling Salesman Problem (TSP), scheduling problems, or any problem where the solution consists of an ordered sequence of elements.
+
+Here's how the order crossover operator works:
+
+- Two parent solutions are selected from the population.
+- A substring (a sequence of consecutive elements) is randomly selected from one of the parents.
+- The offspring solution is created by copying the selected substring from the first parent into the same positions in the offspring.
+- The remaining positions in the offspring are filled with the elements from the second parent, in the order in which they appear, skipping the elements that were already copied from the first parent.
+
+Here's an example to illustrate the process:
+
+
+Suppose we have two parent solutions represented as sequences of numbers:
+
+Parent 1: $ [1, 2, 3, 4, 5, 6, 7, 8] $
+
+Parent 2: $[5, 3, 1, 7, 2, 8, 6, 4]$
+
+Let's assume we randomly select the substring $[3, 4, 5]$ from Parent 1.
+
+Step 1: Copy the substring $[3, 4, 5]$ into the offspring:
+
+Offspring: $[\_,\_, 3, 4, 5, \_, \_, \_]$
+
+Step 2: Fill in the remaining positions with the elements from Parent 2, skipping the elements already present in the offspring (3, 4, 5):
+
+Offspring: $[5, 1, 3, 4, 5, 7, 2, 8]$
 
 
 ## Resource

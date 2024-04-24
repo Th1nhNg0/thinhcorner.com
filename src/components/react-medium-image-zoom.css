@@ -48,6 +48,7 @@
 [data-rmiz-content="found"] [role="img"],
 [data-rmiz-content="found"] [data-zoom] {
   cursor: zoom-in;
+  margin: auto;
 }
 [data-rmiz-modal]::backdrop {
   display: none;
