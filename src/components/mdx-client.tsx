@@ -2,12 +2,17 @@
 
 import Image from "next/image";
 import Zoom from "react-medium-image-zoom";
+import { cn } from "@/lib/utils";
 import "./react-medium-image-zoom.css";
 
 export function RoundedImage(props) {
   return (
     <Zoom>
-      <Image alt={props.alt} className="rounded-xl  object-cover" {...props} />
+      <Image
+        {...props}
+        alt={props.alt}
+        className={cn("rounded-xl object-cover", props.className)}
+      />
     </Zoom>
   );
 }
@@ -15,7 +20,11 @@ export function RoundedImageRaw(props) {
   return (
     <Zoom>
       <picture>
-        <img alt={props.alt} className="rounded-xl " {...props} />
+        <img
+          {...props}
+          alt={props.alt}
+          className={cn("rounded-xl object-cover", props.className)}
+        />
       </picture>
     </Zoom>
   );
