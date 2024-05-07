@@ -63,8 +63,8 @@ dependencies:
     specifier: ^6.0.0
     version: 6.0.0
   sugar-high:
-    specifier: ^0.6.0
-    version: 0.6.0
+    specifier: ^0.6.1
+    version: 0.6.1
   tailwind-merge:
     specifier: ^2.3.0
     version: 2.3.0
@@ -4736,8 +4736,8 @@ packages:
       pirates: 4.0.6
       ts-interface-checker: 0.1.13
 
-  /sugar-high@0.6.0:
-    resolution: {integrity: sha512-SBE1FI2NTVgLDo9E9yLO2rBT56HZAi3ONGeoTqJsHIN9cEAATrrKjZfIrSc5H5AoZ/mQd8OI7j27rvVXT9IxoA==}
+  /sugar-high@0.6.1:
+    resolution: {integrity: sha512-kg1qMW7WwJcueXIlHkChL/p2EWY3gf8rQmP6n5nUq2TWVqatqDTMLvViS9WgAjgyTKH5/3/b8sRwWPOOAo1zMA==}
     dev: false
 
   /supports-color@5.5.0:
