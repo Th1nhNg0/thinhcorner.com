@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@next/third-parties':
-    specifier: ^14.2.2
-    version: 14.2.2(next@14.2.2)(react@18.3.1)
+    specifier: ^14.2.3
+    version: 14.2.3(next@14.2.2)(react@18.3.1)
   '@tailwindcss/typography':
     specifier: ^0.5.12
     version: 0.5.12(tailwindcss@3.4.3)
@@ -367,8 +367,8 @@ packages:
     dev: false
     optional: true
 
-  /@next/third-parties@14.2.2(next@14.2.2)(react@18.3.1):
-    resolution: {integrity: sha512-udHgllytb8GPbqghxIDf09E7x/4hYgp7WjmfH1Z3u4EG29Mhf12NyXpc49wtd0k3rLydunqDa4MH9ej2y5Ph/A==}
+  /@next/third-parties@14.2.3(next@14.2.2)(react@18.3.1):
+    resolution: {integrity: sha512-j4E2xBSsEZq4VX2pVm3LpGltSwCxETic6glJWfHyYQvpoMdplCAYrQKpF+E9Gg3jfsrfmRAIdTE11m+biBCx1Q==}
     peerDependencies:
       next: ^13.0.0 || ^14.0.0
       react: ^18.2.0
