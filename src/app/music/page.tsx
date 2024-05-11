@@ -150,16 +150,16 @@ export default async function page() {
             listened to were played using shuffle.
           </li>
           <li>
-            I skip <span className="text-[#1DB954]">20%</span> of all started
+            I skip <span className="text-[#1DB954]">1.8%</span> of all started
             songs when using shuffle and{" "}
-            <span className="text-[#1DB954]">18%</span> when not using shuffle.
+            <span className="text-[#1DB954]">16.57%</span> when not using shuffle.
           </li>
           <li>
-            I started <span className="text-[#1DB954]">51%</span> of my songs
+            I started <span className="text-[#1DB954]">48%</span> of my songs
             because I clicked the forward button,{" "}
-            <span className="text-[#1DB954]">1%</span> because I clicked the
-            back button, <span className="text-[#1DB954]">51%</span> because the
-            previous song ended, and <span className="text-[#1DB954]">7%</span>{" "}
+            <span className="text-[#1DB954]">4%</span> because I clicked the
+            back button, <span className="text-[#1DB954]">37%</span> because the
+            previous song ended, and <span className="text-[#1DB954]">11%</span>{" "}
             because I clicked on the song.
           </li>
         </ul>
