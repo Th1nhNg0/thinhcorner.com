@@ -1,3 +1,4 @@
+import { RoundedImageRaw } from "@/components/mdx-client";
 import { formatDistanceToNow } from "date-fns";
 
 export const metadata = {
@@ -55,7 +56,7 @@ export default function AboutView() {
             Link to Project
           </a>
           <picture>
-            <img src="/timeline/webdev2022.jpg" alt="" />
+            <RoundedImageRaw src="/timeline/webdev2022.jpg" alt="" />
           </picture>
         </Item>
         <Item
@@ -70,7 +71,7 @@ export default function AboutView() {
           time="2019-08-15"
         >
           <picture>
-            <img src="/timeline/hcmus.jpg" alt="" />
+            <RoundedImageRaw src="/timeline/hcmus.jpg" alt="" />
           </picture>
         </Item>
 
@@ -84,9 +85,7 @@ export default function AboutView() {
           icon="🏅"
           time="2019-04-21"
         >
-          <picture>
-            <img src="/timeline/hsgqg.jpg" alt="" />
-          </picture>
+          <RoundedImageRaw src="/timeline/hsgqg.jpg" alt="" />
         </Item>
         <Item
           title="Won the First prize at the provincial competition for excellent students in high school"
@@ -99,18 +98,14 @@ export default function AboutView() {
           icon="🥈"
           time="2017-04-16"
         >
-          <picture>
-            <img src="/timeline/olp.jpg" alt="" />
-          </picture>
+          <RoundedImageRaw src="/timeline/olp.jpg" alt="" />
         </Item>
         <Item
           title="Start studying at Phan Ngoc Hien High School for the Gifted"
           icon="🏫"
           time="2016-09-10"
         >
-          <picture>
-            <img src="/timeline/cpnh.jpg" alt="" />
-          </picture>
+          <RoundedImageRaw src="/timeline/cpnh.jpg" alt="" />
         </Item>
         <Item
           title="Graduated from Vo Thi Sau Secondary School"
@@ -123,9 +118,7 @@ export default function AboutView() {
           icon="🏫"
           time="2012"
         >
-          <picture>
-            <img src="/timeline/vts.jpg" alt="" />
-          </picture>
+          <RoundedImageRaw src="/timeline/vts.jpg" alt="" />
         </Item>
         <Item
           title="Born in Ca Mau City, Vietnam"
