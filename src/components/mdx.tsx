@@ -1,6 +1,5 @@
 import { YouTubeEmbed } from "@next/third-parties/google";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import rehypeKatex from "rehype-katex";

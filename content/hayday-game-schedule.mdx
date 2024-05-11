@@ -4,10 +4,9 @@ publishedAt: 2024-04-23
 summary: A deep dive into the scheduling problem in the Hay Day game.
 ---
 
-It's has beed a long time since my last post. I have been busy with my work. I was researching the scheduling problem in the Hay Day game for a while. And now is the good time to share the result with you.
+It's has beed a long time since my last post.  I was researching the scheduling problem in the Hay Day game for a while. And now is the good time to share the result with you.
 
 ## What is Hay Day?
-
 
 Hay Day is a popular mobile game created by Supercell in 2012. It is a farming simulator where you can plant crops and trees, raise animals, sell products, compete in derbies, and so much more. Hay Day is a freemium game so all features of the game are open to players who choose not to buy in-app-purchases.
 
@@ -52,6 +51,18 @@ A simple scheduling to make a order with two egg will look like this:
 But in reality, the scheduling is more complex. Here is the image showing the scheduling of 2 orders with 4 goods:
 
 <Image src="/images/hayday-game-schedule/complex_machine_schedule.png" width="1200" height="400" alt="complex" />
+
+Specifically, our problem is a **Flexible Job Shop Scheduling Problem (FJSP)**. The Flexible Job Shop Scheduling Problem  is a variations of the [Job-shop scheduling problem (JSSP)](https://en.wikipedia.org/wiki/Job-shop_scheduling). 
+
+The JSSP can be formulated as follows: 
+
+- For $n$ jobs, each one is composed of several operations that must be executed on $m$ machines. For each operation uses only one machine for a fixed duration.
+- Each machine can process at most one operation at a time and once an operation starts processing on a given machine, it must complete processing on that same machine without any interruption.
+- The operations of a given job have to be processed in a given set of order.
+- The problem’s main aim is to schedule the activities or operations of the jobs on the machines such that the total time to finish all jobs, that is the makespan, is minimized. 
+
+The term makespan refers to the cumulative time to complete all the operations of all jobs on all machines. It is a measure of the time period from the starting time of the first operation to the ending time of the last operation. Sometimes there may be multiple solutions that have the minimum makespan, but the goal is to find out any one of them: it is not necessary to find all possible optimum solutions
+
 
 
 ## First attempt
@@ -116,84 +127,10 @@ Here is the visualization of the decoding solution:
 
 <Image src="/images/hayday-game-schedule/visual.gif" width="600" height="300" alt="visual" />
 
-### Fitness function
-
-The fitness function is the function that we use to evaluate the solution. In our case, the fitness function is the makespan of the solution. This function take a important role in the genetic algorithm. The better the fitness function, the better the solution. It's may affect how the solution is formed.
-
-If we want to finish the orders as soon as possible, we can use the makespan as the fitness function. If we want to finish the orders with the least number of machines, we can use the number of machines as the fitness function. Or we want to finish all the order as soon as possible, we can use the sum of the makespan of all the orders as the fitness function.
-
-In this experiment, I use 2 fitness functions: makespan and sum of makespan of all the orders.
-
-### Selection
-
-Fitness Proportionate Selection is one of the most popular ways of parent selection. In this every individual can become a parent with a probability which is proportional to its fitness. Therefore, fitter individuals have a higher chance of mating and propagating their features to the next generation. Therefore, such a selection strategy applies a selection pressure to the more fit individuals in the population, evolving better individuals over time.
-
-Consider a circular wheel. The wheel is divided into n pies, where n is the number of individuals in the population. Each individual gets a portion of the circle which is proportional to its fitness value.
-
-In a roulette wheel selection, the circular wheel is divided as described before. A fixed point is chosen on the wheel circumference as shown and the wheel is rotated. The region of the wheel which comes in front of the fixed point is chosen as the parent. For the second parent, the same process is repeated.
-
-<Image src="/images/hayday-game-schedule/Roulette-wheel-selection-method.png" width="400" height="400" alt="wheel" />
-
-### Crossover
-
-The crossover for this problem is a little bit complex. According to [this paper](https://www.researchgate.net/publication/281545095_SOLVING_JOB_SHOP_SCHEDULING_PROBLEM_WITH_GENETIC_ALGORITHM), they have used order crossover for tasks shuffling between two parent schedules. Whereas, uniform crossover operator is used for shuffling of machines assignment to tasks.
-
-#### Order crossover
-
-Order crossover operator is a specific type of crossover that is particularly useful when dealing with permutation-based problems, such as the Traveling Salesman Problem (TSP), scheduling problems, or any problem where the solution consists of an ordered sequence of elements.
-
-Here's how the order crossover operator works:
-
-- Two parent solutions are selected from the population.
-- A substring (a sequence of consecutive elements) is randomly selected from one of the parents.
-- The offspring solution is created by copying the selected substring from the first parent into the same positions in the offspring.
-- The remaining positions in the offspring are filled with the elements from the second parent, in the order in which they appear, skipping the elements that were already copied from the first parent.
-
-#### Uniform Crossover
-
-Uniform crossover is a type of crossover operator that works by randomly selecting genes from the parents to create the offspring. In uniform crossover, each gene in the offspring is selected from one of the parents with a certain probability.
-
-As the author in the paper mentioned, they have used uniform crossover for shuffling of machines assignment to task.
-
-When the same task in two parents have different machine assignment, the machine assignment of the task in the offspring is randomly selected from one of the parents. Here is the example of the uniform crossover:
-
-<div className="flex justify-center items-center gap-10">
-$
-\text{ Parent1 }= \begin{bmatrix}
-1 & 3 & 2 & 1 & 1 \\
-4 & 5 & 2 & 3 & 1
-\end{bmatrix}
-$
-
-$
-\text{ Parent2 }= \begin{bmatrix}
-2 & 1 & 3 & 2 & 1 \\
-5 & 4 & 2 & 3 & 1
-\end{bmatrix}
-$
-</div>
-
-After uniform crossover:
-
-<div className="flex justify-center">
-$
-\text{ offspring }= \begin{bmatrix}
-1 & 2 & 2 & 1 & 1 \\
-4 & 5 & 2 & 3 & 1
-\end{bmatrix}
-$
-
-</div>
-
-
-
-
-
-
-
 
 ## Resource
 
 - [Hay Day Good list](https://hayday.fandom.com/wiki/Goods_List)
 - [Hay Day Production Buildings List](https://hayday.fandom.com/wiki/Production_Buildings_List)
 - [Google's OR-Tools Code for Flexible Job Shop Scheduling](https://github.com/google/or-tools/blob/stable/examples/python/flexible_job_shop_sat.py)
+- [A HYBRID GENETIC ALGORITHM FOR JOB SHOP SCHEDULING PROBLEMS](https://www.researchgate.net/publication/333427432_A_HYBRID_GENETIC_ALGORITHM_FOR_JOB_SHOP_SCHEDULING_PROBLEMS)
