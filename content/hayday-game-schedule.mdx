@@ -65,67 +65,19 @@ The term makespan refers to the cumulative time to complete all the operations o
 
 
 
-## First attempt
+## Solution
 
-So how can we solve this problem? 
+So how can we solve this problem? There are many algorithms that can be used to solve the FJSP. Some of them are:
 
-The first thing that comes to my mind is [genetic algorithm](https://en.wikipedia.org/wiki/Genetic_algorithm). 
+- Genetic Algorithm
+- Simulated Annealing
+- Tabu Search
+- Ant Colony Optimization
 
-The genetic algorithm is a search heuristic inspired by [Darwin's theory of evolution](https://en.wikipedia.org/wiki/Darwinism). This algorithm borrows the following concepts from natural selection:
+And many more. But in this post, I will use Integer Programming to solve the problem. Specifically, I will use Google's OR-Tools to solve the problem.
 
-- Each individual (solution) has an associated fitness score
-- Individuals with high fitness scores are selected for reproduction
-- Chosen individuals reproduce to create offspring with the characteristics of both parents
-- Some offspring would have random mutations applied to them
+OR-Tools is an open-source, fast, and portable software suite for solving combinatorial optimization problems. It is a set of algorithms and techniques for solving optimization problems. It includes a constraint programming solver, a linear programming solver, and a vehicle routing solver.
 
-The idea is that if the parents have high fitness, the offspring would have high fitness as well.
-
-This entire process of **selection**, **reproduction** (more commonly known as crossover), and **mutation** will repeat many times. At the end, only the fittest individuals will remain. These fittest individuals represent the solutions to our problem.
-
-<Callout emoji="💡">
-Only the fittest will survive - Charles Darwin
-</Callout>
-
-<Image src="/images/hayday-game-schedule/naturalselection.jpg" width="2000" height="1000" alt="complex" />
-
-
-### Encoding and decoding
-
-Encoding and decoding are the most important parts of the genetic algorithm. The encoding is the way we represent the solution in the genetic algorithm. The decoding is the way we convert the encoded solution to the real solution. 
-
-In our case, the encoding solution is a $ 2 \times n $ matrix where $ n $ is the number of task (produce good task) we need to schedule. The first row is the machine that will produce the good and the second row is the id of the good that will be produced. The order in the second row is the order of what task will be produced first. If task $j$ is required to produce task $i$, the index of task $j$ in the second row must be less than the index of task $i$.
-
-For example, given a 5 tasks, 3 machine to schedule:
-
-- Task 1: can be produced by machine 1, required Task 2 and Task 3
-- Task 2: can be produced by machine 2,3, required Task 4
-- Task 3: can be produced by machine 1, required Task 5
-- Task 4: can be produced by machine 1,3
-- Task 5: can be produced by machine 3
-
-A valid solution can be encoding as:
-
-<center>
-$
-\begin{bmatrix}
-1 & 3 & 2 & 1 & 1 \\
-4 & 5 & 2 & 3 & 1
-\end{bmatrix}
-$
-</center>
-
-Meaning:
-
-- Task 4 will be produced by machine 1, Task 5 will be produced by machine 3. They can be produced at the same time.
-- Task 2 will be produced by machine 2 after Task 4 is done.
-- Task 3 will be produced by machine 1 after Task 5 is done.
-- Task 1 will be produced by machine 1 after Task 2 and Task 3 are done.
-
-To decode the solution, we will create a timeline of the machine and the task that will be produced by the machine at that time. We loop through the solution matrix and add the task to the timeline from left to right. At each step, we check the time with the required tasks of the task that will be produced and the time of the machine that will produce the task. 
-
-Here is the visualization of the decoding solution:
-
-<Image src="/images/hayday-game-schedule/visual.gif" width="600" height="300" alt="visual" />
 
 
 ## Resource
@@ -133,4 +85,3 @@ Here is the visualization of the decoding solution:
 - [Hay Day Good list](https://hayday.fandom.com/wiki/Goods_List)
 - [Hay Day Production Buildings List](https://hayday.fandom.com/wiki/Production_Buildings_List)
 - [Google's OR-Tools Code for Flexible Job Shop Scheduling](https://github.com/google/or-tools/blob/stable/examples/python/flexible_job_shop_sat.py)
-- [A HYBRID GENETIC ALGORITHM FOR JOB SHOP SCHEDULING PROBLEMS](https://www.researchgate.net/publication/333427432_A_HYBRID_GENETIC_ALGORITHM_FOR_JOB_SHOP_SCHEDULING_PROBLEMS)
