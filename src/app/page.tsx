@@ -33,15 +33,18 @@ export default function Home() {
           politics and economics, but I haven&apos;t have enough knowledge to
           have strong opinions on either.
         </p>
-        <p>
-          Want to know more about me? Check out my{" "}
-          <Link href="/timeline">timeline</Link>.
-        </p>
+        
         <p>
           I made this site just for fun. Inspired by{" "}
           <a href="https://nathanrooy.github.io/">Nathan Rooy Blog</a> and{" "}
           <a href="https://leerob.io/">Lee Robinson site</a>.
         </p>
+        <p>
+          Want to know more about me? Check out my{" "}
+          <Link href="/timeline">timeline</Link>.
+        </p>
+        <p>You can contact me via <a href="mailto:thinhngow@gmail.com">thinhngow@gmail.com</a></p>
+
       </div>
     </div>
   );
