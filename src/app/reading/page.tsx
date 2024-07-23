@@ -15,6 +15,9 @@ export const metadata = {
   description: "Books I have read.",
 };
 
+// 1 week
+export const revalidate = 60 * 60 * 24 * 7;
+
 export default async function page() {
   const books = await get_book();
 
