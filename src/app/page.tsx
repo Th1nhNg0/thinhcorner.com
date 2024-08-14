@@ -9,7 +9,7 @@ export default function Home() {
         Hi. I&apos;m Thinh.👋
       </h1>
 
-      <div className="prose prose-quoteless prose-neutral dark:prose-invert">
+      <div className="prose max-w-none prose-quoteless prose-neutral dark:prose-invert">
         <p>
           I&apos;m a developer. I currently work at{" "}
           <Link
@@ -33,7 +33,7 @@ export default function Home() {
           politics and economics, but I haven&apos;t have enough knowledge to
           have strong opinions on either.
         </p>
-        
+
         <p>
           I made this site just for fun. Inspired by{" "}
           <a href="https://nathanrooy.github.io/">Nathan Rooy Blog</a> and{" "}
@@ -43,8 +43,10 @@ export default function Home() {
           Want to know more about me? Check out my{" "}
           <Link href="/timeline">timeline</Link>.
         </p>
-        <p>You can contact me via <a href="mailto:thinhngow@gmail.com">thinhngow@gmail.com</a></p>
-
+        <p>
+          You can contact me via{" "}
+          <a href="mailto:thinhngow@gmail.com">thinhngow@gmail.com</a>
+        </p>
       </div>
     </div>
   );

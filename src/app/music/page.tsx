@@ -25,7 +25,7 @@ export default async function page() {
     <div>
       <h1 className="font-medium text-2xl mb-8 tracking-tighter">my music</h1>
 
-      <div className="prose dark:prose-invert">
+      <div className="prose max-w-none dark:prose-invert">
         <p>
           These are the songs I&apos;ve listened to most recently on{" "}
           <b className="text-[#1DB954]">Spotify</b>:
@@ -152,7 +152,8 @@ export default async function page() {
           <li>
             I skip <span className="text-[#1DB954]">1.8%</span> of all started
             songs when using shuffle and{" "}
-            <span className="text-[#1DB954]">16.57%</span> when not using shuffle.
+            <span className="text-[#1DB954]">16.57%</span> when not using
+            shuffle.
           </li>
           <li>
             I started <span className="text-[#1DB954]">48%</span> of my songs

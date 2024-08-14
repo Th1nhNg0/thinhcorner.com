@@ -106,7 +106,7 @@ export default function Blog({
           ~{readingTime(post.content).text}
         </p>
       </div>
-      <article className="prose prose-quoteless prose-neutral dark:prose-invert">
+      <article className="prose max-w-none prose-quoteless prose-neutral dark:prose-invert">
         <CustomMDX source={post.content} />
       </article>
     </section>
