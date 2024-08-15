@@ -106,6 +106,18 @@ export default function Blog({
           ~{readingTime(post.content).text}
         </p>
       </div>
+      {post.metadata.draft === "true" && (
+        <div
+          className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4"
+          role="alert"
+        >
+          <p className="font-bold">Draft Article</p>
+          <p>
+            You are viewing a draft article. The content may be incomplete or
+            subject to change.
+          </p>
+        </div>
+      )}
       <article className="prose max-w-none prose-quoteless prose-neutral dark:prose-invert">
         <CustomMDX source={post.content} />
       </article>

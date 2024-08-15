@@ -23,6 +23,7 @@ export default function BlogPage() {
           }
           return 1;
         })
+        .filter((post) => post.metadata.draft !== "true")
         .map((post) => (
           <Link
             key={post.slug}

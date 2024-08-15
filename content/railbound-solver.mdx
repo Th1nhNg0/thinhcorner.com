@@ -1,0 +1,254 @@
+---
+title: Why Solve Puzzles in Minutes When You Can Code a Solution in Days?
+publishedAt: 2024-08-14
+summary: Notyet
+draft: true
+---
+
+
+## About Railbound
+
+Railbound is an enchanting puzzle game that follows two adorable dogs on a global train adventure. As a player, your mission is to connect and disconnect railways across diverse landscapes, ensuring everyone reaches their destination. This delightful game offers:
+
+- Over 240 puzzles set in various parts of the world
+- A range of train-inspired mechanics, including tunnels and semaphores
+- Charming comic-book-style visuals
+- A soothing original soundtrack to accompany your journey
+
+For those interested in experiencing the full game, you can find more information on [the official Railbound website](https://afterburn.games/railbound).
+
+Here are some captivating images from the game:
+
+<div className="columns-1 sm:columns-2 gap-4">
+    <div className="break-inside-avoid mb-4">
+        ![](https://afterburn.games/press/railbound/images/12.gif)
+    </div>
+    <div className="break-inside-avoid mb-4">
+        ![](https://afterburn.games/press/railbound/images/2.png)
+    </div>
+    <div className="break-inside-avoid mb-4 sm:pt-5">
+        ![](https://afterburn.games/press/railbound/images/11.gif)
+    </div>
+    <div className="break-inside-avoid mb-4">
+        ![](https://afterburn.games/press/railbound/images/5.png)
+    </div>
+</div>
+
+## So how do you play this game?
+
+![](https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1967510/extras/rb_steam_gifv5_2.gif?t=1708987449)
+
+
+This game is simpler than my attempts at cooking - there's a grid map, some tracks, and a bunch of trains having an identity crisis. Your job? Play track-laying fairy and fill in the empty spots so that when you hit that magical "play" button, all the trains choo-choo their way to the right spots in the correct order. Easy peasy lemon squeezy, right? WRONG! O.o
+
+Let's peek at some early maps that lull you into a false sense of security:
+
+![](https://steamuserimages-a.akamaihd.net/ugc/1826794130776790064/4C7353B8156F4D1663A0E3AF8E7D0999CC8714F5/)
+![](https://steamuserimages-a.akamaihd.net/ugc/1826794130776804381/1E456241904CC112C1974BAAEC3FB0562B30A1BA/)
+![](https://steamuserimages-a.akamaihd.net/ugc/1826794130776829030/F9C18F43E5C203673A9AB0B496ABB5FC906BA12F/)
+
+
+"Oh, this is fun!" you'll say. Then BAM! Mid-game hits you like a runaway locomotive:
+
+![](https://steamuserimages-a.akamaihd.net/ugc/1826794130778460987/AC03F69EC68D5535C37264BCEA5CFEE88D5A0D53/)
+![](https://steamuserimages-a.akamaihd.net/ugc/1826794130778479664/FE768D345308C90524402FFF98C8EC8C33E42201/)
+![](https://steamuserimages-a.akamaihd.net/ugc/1826794130778496988/27B5EF1B157B89AE48179D79EE570F00A00CEBD0/)
+
+At this point, my brain cells were sending out SOS signals. So, like any reasonable human being, I thought, "Why solve puzzles when I can spend 10 times longer writing a script to solve them for me?" Logic: 100.
+
+
+## First Attempt: Brute Force Approach
+
+
+
+In my initial attempt to solve Railbound puzzles programmatically, I opted for the simplest solution: brute force. The idea was to try all possible combinations of tracks and check if any of them solved the puzzle. To implement this, we need to understand the types of tracks available in the game.
+### Track Types
+
+After playing the game for a while (and maybe losing track of time once or twice), you'll notice that there are only three basic types of tracks, but they can be rotated and flipped in various ways:
+
+![3 tiles](/images/railbound-solver/3%20tiles.png)
+
+These basic types can result in many variants:
+
+![all tiles](/images/railbound-solver/all_tiles.png)
+
+We can index these tiles from 1 to 14, with 0 representing an empty space. This allows us to represent a game grid as a 2D array of integers:
+
+```py
+[[0, 5, 0, 0, 0, 5, 0],
+[0, 5, 0, 6, 0, 5, 0],
+[0, 0, 3, 0, 4, 0, 0],
+[0, 0, 0, 6, 0, 6, 0],
+[0, 0, 2, 0, 1, 0, 0],
+[0, 5, 0, 6, 0, 5, 0],
+[0, 5, 0, 0, 0, 5, 0]]
+```
+
+> Thanks to [Foxtrot](https://github.com/FoxtrotOnce) for the images of the tracks used in the game.
+
+
+
+### Generating All Possible Grids
+
+To generate all possible grid configurations, we can use a depth-first search (DFS) or breadth-first search (BFS) algorithm. However, I prefer using Python's `itertools` for a cleaner implementation:
+
+```python
+def generate_grids(grid, max_replacements):
+    # Find indices of 0s in the grid
+    zero_indices = [i for i, val in enumerate(grid) if val == [0]]
+    # Generate all possible combinations of replacements
+    for r in range(min(max_replacements, len(zero_indices)) + 1):
+        for indices in itertools.combinations(zero_indices, r):
+            for replacements in itertools.product(range(1, 15), repeat=r):
+                new_grid = grid.copy()
+                for idx, value in zip(indices, replacements):
+                    new_grid[idx] = [value]
+                yield new_grid
+
+# Example usage
+initial_grid = [[6, 0, 0, 6]]
+max_replacements = 2
+
+for grid in generate_grids(initial_grid, max_replacements):
+    print(grid)
+```
+
+This generates a list of all possible grid configurations:
+
+![grid_animation](/images/railbound-solver/grid_animation.gif)
+
+
+
+
+### Simulating Train Movement
+
+After generating all possible track configurations, we need to simulate train movement to determine which configurations lead to successful solutions. Here's how we approach this simulation:
+
+#### Core Simulation Loop
+The heart of our simulation is a loop that continues until a solution is found or a maximum number of iterations is reached:
+```
+while max_iterations > 0:
+    for each train:
+        move train
+        check for crashes
+        check if destination reached
+    check for collisions between trains
+    check if trains reached destinations in order
+    if all trains at correct destinations:
+        break loop (solution found)
+    max_iterations -= 1
+```
+
+#### Train Movement
+
+For each train, we:
+
+1. Update its position based on its current direction
+2. Determine the new direction based on the track it moves onto
+
+#### Track Representation
+
+To simplify direction changes, we represent each track type as a set of input-output direction pairs. For example:
+
+- Straight track: (up, up), (down, down), (left, left), (right, right)
+- 90-degree turn: (up, right), (right, down), (down, left), (left, up)
+
+This allows us to easily determine a train's new direction after moving onto a track.
+
+#### Crash Detection
+
+We check for two types of crashes:
+
+1. Train moves out of the grid bounds
+2. Train moves onto an invalid track (e.g., trying to go up on a horizontal-only track)
+
+#### Collision Detection
+
+After moving all trains, we check if any two trains occupy the same position, indicating a collision.
+
+#### Destination Order Checking
+
+We verify that trains reach their destinations in the correct order. If a train reaches its destination before previous trains in the sequence, it's considered an invalid solution.
+
+#### Termination Conditions
+
+The simulation terminates when:
+
+1. All trains reach their destinations in the correct order (solution found)
+2. A train crashes or a collision occurs (invalid configuration)
+3. The maximum number of iterations is reached (prevents infinite loops)
+
+#### Preventing Infinite Loops
+
+To avoid situations where trains might circle endlessly without reaching their destinations, we set a maximum number of iterations:
+```
+max_iterations = some_reasonable_number
+while max_iterations > 0:
+    # ... simulation logic ...
+    max_iterations -= 1
+```
+
+This ensures the simulation will eventually terminate, even if no solution is found.
+
+![grid_animation](/images/railbound-solver/train-go-in-loop.gif)
+
+
+####  Running the Solver
+
+Now that we've got our simulation up and running, it's time to unleash it on some Railbound levels and watch the magic happen!
+
+[TODO: gif of every possible flashing until found the final]
+
+Look at it go! It's like watching a hyperactive squirrel trying to decide which acorn to grab first. Promising, right? Well, hold onto your engineer's cap, because we're about to hit a snag.
+
+#### We Have a Problem
+
+Everything's chugging along nicely until we reach level 13A. Suddenly, our solver decides to take a leisurely stroll through the space-time continuum. Why? Let's break it down:
+
+1. We have 3 types of tracks, but 14 variants in total.
+2. For the first position, we have 14 possibilities.
+3. For the second position, it's 14 x 14 = 196 possibilities.
+4. By the third position, we're up to 14³ = 2,744 possibilities.
+
+Now, imagine you need to place 15 tracks. That's about 10¹⁷ possibilities to check. To put that in perspective, it's almost 20% of the atoms in your morning coffee ☕. (Okay, not really, but it's actually about 20% of the atoms in the observable universe. There are between 10⁷⁸ to 10⁸² atoms out there, in case you were wondering.)
+
+At this point, our poor computer is sweating silicon and begging for mercy. So, how do we tackle this cosmic-scale problem? 🤔
+
+#### Enter: Branch and Bound
+
+Instead of generating every possible track configuration (and possibly creating a few alternate universes in the process), we're going to get smart about it. We'll use a technique called branch and bound, starting our backtracking from positions connected to open tracks (tracks with a side ready to connect).
+
+This approach guarantees that our solution after backtracking is almost valid, significantly reducing our search space. It's like solving a maze by starting from the end and working backwards - much more efficient than trying every possible path from the start.
+
+Here's how our new function will look:
+
+```
+function solve_puzzle(grid):
+    open_tracks = find_open_tracks(grid)
+    return backtrack(grid, open_tracks)
+
+function backtrack(grid, open_tracks):
+    if no open_tracks remain:
+        return simulate_trains(grid)
+    
+    current_track = open_tracks.pop()
+    for each valid track type for current_track:
+        place track on grid
+        if backtrack(grid, open_tracks) succeeds:
+            return success
+        remove track from grid
+    
+    add current_track back to open_tracks
+    return failure
+```
+
+[TODO: There should be more optimization like hashing, etc]
+
+Now, let's fire up this new and improved solver and see how it fares:
+
+[TODO: Insert table comparing the two methods]
+
+Well, would you look at that! Our solver went from "heat death of the universe" to "I'll be done before your coffee gets cold." This is definitely better, but as any true puzzle enthusiast knows, there's always room for improvement.
+
+
+[TODO: Next section: truly optimized solution and have benchmarks to compare]
