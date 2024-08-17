@@ -210,23 +210,55 @@ Let look at this level:
 
 ![level 1-6](https://steamuserimages-a.akamaihd.net/ugc/1826794130776803459/6E0188A71032BB24D0C26CB15793A39C3328EC7D/)
 
-Let have some calculation:
 
-1. We have 13 empty spaces and 3 tracks to fill. That mean we have:
+Let's Have Some Calculations:
+
+1. We have 13 empty spaces and 3 tracks to fill. That means we have:
+
+   $$ 
+   \binom{13}{3} = \frac{13!}{3!(13-3)!} = \frac{13 \times 12 \times 11}{3 \times 2 \times 1} = 286 \text{ combinations}
     $$
-    \binom{13}{3} = \frac{13!}{3!(13-3)!} = \frac{13 \times 12 \times 11}{3 \times 2 \times 1} = 286 \text{ combinations}
-    $$
+
 2. We have 3 types of tracks, but 14 variants in total. So for the first position, we have 14 possibilities.
-3. For the second position, it's 14 x 14 = 196 possibilities.
-4. By the third position, we're up to 14 x 14 x 14 = 2,744 possibilities.
-5. That mean for each 3 positions, 2,744 possibilities to check. And for 286 combinations of 3 positions, we have:
-    $$
-    2,744 \times 286 = 785,584 \text{ possibilities}
+
+3. For the second position, it's $14\times14 = 14^2 = 196$ possibilities.
+
+4. By the third position, we're up to $14\times14\times14=14^3 = 2744$ possibilities.
+
+5. That means for each 3 positions, 2744 possibilities to check. And for 286 combinations of 3 positions, we have:
+
+   $$ 
+   2744 \times 286 = 785584 \text{ possibilities}
     $$
 
-Now, imagine you need to place 15 tracks. That's about 10¹⁷ possibilities to check. To put that in perspective, it's almost 20% of the atoms in your morning coffee ☕. (Okay, not really, but it's actually about 20% of the atoms in the observable universe. There are between 10⁷⁸ to 10⁸² atoms out there, in case you were wondering.)
+Now, imagine you need to place 15 tracks with 30 empty spaces. That's about:
 
-At this point, our poor computer is sweating silicon and begging for mercy. So, how do we tackle this cosmic-scale problem? 🤔
+$$
+ 14^{15}\times\binom{30}{15} = 2.41 \times 10^{25} \text{ possibilities}
+ $$
+
+Estimating Computer Time:
+
+To put this number into perspective, let's estimate how long it would take a computer to process all these possibilities:
+
+1. Assume a modern computer can check 1 billion (10^9) possibilities per second.
+
+2. Time required = (Number of possibilities) / (Possibilities checked per second)
+   
+   $$ 
+   \text{Time} = \frac{2.41 \times 10^{25}}{10^9} = 2.41 \times 10^{16} \text{ seconds} 
+   $$
+
+3. Converting to years:
+   
+   $$
+    \text{Years} = \frac{2.41 \times 10^{16}}{60 \times 60 \times 24 \times 365.25} \approx 764 \text{ million years} 
+   $$
+
+That's more than 150 times the age of the dinosaurs! Even if we could use a supercomputer that's a million times faster, it would still take 764 years.
+
+This astronomical number of possibilities demonstrates why brute-force approaches quickly become impractical for complex optimization problems. It's a prime example of why we need clever algorithms and heuristics to tackle such challenges efficiently.
+
 
 #### Enter: Branch and Bound
 
