@@ -1,8 +1,7 @@
 ---
 title: Why Solve Puzzles in Minutes When You Can Code a Solution in Days?
-publishedAt: 2024-08-14
-summary: Notyet
-draft: true
+publishedAt: 2024-08-18
+summary: A deep dive into solving Railbound puzzles programmatically using a brute-force approach and optimizing it with branch and bound.
 ---
 
 
@@ -21,38 +20,38 @@ Here are some captivating images from the game:
 
 <div className="columns-1 sm:columns-2 gap-4">
     <div className="break-inside-avoid mb-4">
-        ![](https://afterburn.games/press/railbound/images/12.gif)
+        ![](/images/railbound-solver/12.gif)
     </div>
     <div className="break-inside-avoid mb-4">
-        ![](https://afterburn.games/press/railbound/images/2.png)
+        ![](/images/railbound-solver/2.png)
     </div>
     <div className="break-inside-avoid mb-4 sm:pt-5">
-        ![](https://afterburn.games/press/railbound/images/11.gif)
+        ![](/images/railbound-solver/11.gif)
     </div>
     <div className="break-inside-avoid mb-4">
-        ![](https://afterburn.games/press/railbound/images/5.png)
+        ![](/images/railbound-solver/5.png)
     </div>
 </div>
 
 ## So how do you play this game?
 
-![](https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1967510/extras/rb_steam_gifv5_2.gif?t=1708987449)
+![](/images/railbound-solver/rb_steam_gifv5_2.gif)
 
 
 This game is simpler than my attempts at cooking - there's a grid map, some tracks, and a bunch of trains having an identity crisis. Your job? Play track-laying fairy and fill in the empty spots so that when you hit that magical "play" button, all the trains choo-choo their way to the right spots in the correct order. Easy peasy lemon squeezy, right? WRONG! O.o
 
 Let's peek at some early maps that lull you into a false sense of security:
 
-![](https://steamuserimages-a.akamaihd.net/ugc/1826794130776790064/4C7353B8156F4D1663A0E3AF8E7D0999CC8714F5/)
-![](https://steamuserimages-a.akamaihd.net/ugc/1826794130776804381/1E456241904CC112C1974BAAEC3FB0562B30A1BA/)
-![](https://steamuserimages-a.akamaihd.net/ugc/1826794130776829030/F9C18F43E5C203673A9AB0B496ABB5FC906BA12F/)
+![](/images/railbound-solver/2859473536_preview_1-1.jpg)
+![](/images/railbound-solver/2859473536_preview_1-7.jpg)
+![](/images/railbound-solver/2859473536_preview_1-12.jpg)
 
 
 "Oh, this is fun!" you'll say. Then BAM! Mid-game hits you like a runaway locomotive:
 
-![](https://steamuserimages-a.akamaihd.net/ugc/1826794130778460987/AC03F69EC68D5535C37264BCEA5CFEE88D5A0D53/)
-![](https://steamuserimages-a.akamaihd.net/ugc/1826794130778479664/FE768D345308C90524402FFF98C8EC8C33E42201/)
-![](https://steamuserimages-a.akamaihd.net/ugc/1826794130778496988/27B5EF1B157B89AE48179D79EE570F00A00CEBD0/)
+![](/images/railbound-solver/2859473536_preview_8-2A.jpg)
+![](/images/railbound-solver/2859473536_preview_8-4A.jpg)
+![](/images/railbound-solver/2859473536_preview_8-6A.jpg)
 
 At this point, my brain cells were sending out SOS signals. So, like any reasonable human being, I thought, "Why solve puzzles when I can spend 10 times longer writing a script to solve them for me?" Logic: 100.
 
@@ -95,14 +94,14 @@ To generate all possible grid configurations, we can use a depth-first search (D
 ```python
 def generate_grids(grid, max_replacements):
     # Find indices of 0s in the grid
-    zero_indices = [i for i, val in enumerate(grid) if val == [0]]
+    zero_indices = [(i, j) for i, row in enumerate(grid) for j, val in enumerate(row) if val == 0]
     # Generate all possible combinations of replacements
     for r in range(min(max_replacements, len(zero_indices)) + 1):
         for indices in itertools.combinations(zero_indices, r):
             for replacements in itertools.product(range(1, 15), repeat=r):
-                new_grid = grid.copy()
-                for idx, value in zip(indices, replacements):
-                    new_grid[idx] = [value]
+                new_grid = [row[:] for row in grid]  # Create a deep copy of the grid
+                for (i, j), value in zip(indices, replacements):
+                    new_grid[i][j] = value
                 yield new_grid
 
 # Example usage
@@ -116,7 +115,6 @@ for grid in generate_grids(initial_grid, max_replacements):
 This generates a list of all possible grid configurations:
 
 ![grid_animation](/images/railbound-solver/grid_animation.gif)
-
 
 
 
@@ -199,17 +197,25 @@ Now that we've got our simulation up and running, it's time to unleash it on som
 
 
 ![bf](/images/railbound-solver/brutce_force.webp)
+
+
 Look at it go! It's like watching a hyperactive squirrel trying to decide which acorn to grab first. Promising, right? Well, hold onto your engineer's cap, because we're about to hit a snag.
 
 #### We have a problem...
 
+
+
 Everything's chugging along nicely until we reach some special level. Suddenly, our solver decides to take a leisurely stroll through the space-time continuum. Why? Let's break it down:
 
+Let look at the result of the solver:
 
-Let look at this level:
+![bf](/images/railbound-solver/solve_bf.png)
 
-![level 1-6](https://steamuserimages-a.akamaihd.net/ugc/1826794130776803459/6E0188A71032BB24D0C26CB15793A39C3328EC7D/)
+At level 1-6, we check 518467 possibilities to find the solution. At level 1-9, we check 5 million possibilities. That's a lot of possibilities to check, and it's only going to get worse as we tackle more complex levels.
 
+Consider the following level 1-6:
+
+![](/images/railbound-solver/2859473536_preview_1-6.jpg)
 
 Let's Have Some Calculations:
 
@@ -259,42 +265,40 @@ That's more than 150 times the age of the dinosaurs! Even if we could use a supe
 
 This astronomical number of possibilities demonstrates why brute-force approaches quickly become impractical for complex optimization problems. It's a prime example of why we need clever algorithms and heuristics to tackle such challenges efficiently.
 
-
 #### Enter: Branch and Bound
 
-Instead of generating every possible track configuration (and possibly creating a few alternate universes in the process), we're going to get smart about it. We'll use a technique called branch and bound, starting our backtracking from positions connected to open tracks (tracks with a side ready to connect).
+Instead of exhaustively exploring every possible track configuration (and potentially creating a few alternate universes in the process), we're taking a smarter approach. Enter branch and bound, a clever technique that allows us to prune our search space and avoid unnecessary exploration.
 
-This approach guarantees that our solution after backtracking is almost valid, significantly reducing our search space. It's like solving a maze by starting from the end and working backwards - much more efficient than trying every possible path from the start.
+Our strategy is to place tracks strategically, ensuring each new piece connects to the existing network. This approach dramatically reduces the number of configurations we need to evaluate. Here's a glimpse of our optimized `generate_grids` function:
 
-Here's how our new function will look:
-
-```
-function solve_puzzle(grid):
-    open_tracks = find_open_tracks(grid)
-    return backtrack(grid, open_tracks)
-
-function backtrack(grid, open_tracks):
-    if no open_tracks remain:
-        return simulate_trains(grid)
-    
-    current_track = open_tracks.pop()
-    for each valid track type for current_track:
-        place track on grid
-        if backtrack(grid, open_tracks) succeeds:
-            return success
-        remove track from grid
-    
-    add current_track back to open_tracks
-    return failure
+```python
+def generate_grids(grid, max_replacements):
+    def _generate_grids(grid, max_replacements):
+        if max_replacements == 0:
+            yield grid
+            return
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == 0:
+                    for track in range(1, 15):
+                        # this function checks if the track connects to the existing network
+                        if check_track_connect_to_existing(grid, i, j, track): 
+                            new_grid = [row[:] for row in grid]
+                            new_grid[i][j] = track
+                            yield from _generate_grids(new_grid, max_replacements - 1)
+    yield from _generate_grids(grid, max_replacements)
 ```
 
-[TODO: There should be more optimization like hashing, etc]
+Now, let's put our new solver to the test:
 
-Now, let's fire up this new and improved solver and see how it fares:
-
-[TODO: Insert table comparing the two methods]
+![bf](/images/railbound-solver/solve_optimize.png)
 
 Well, would you look at that! Our solver went from "heat death of the universe" to "I'll be done before your coffee gets cold." This is definitely better, but as any true puzzle enthusiast knows, there's always room for improvement.
 
+So till the next time, when we dive deeper into the world of Railbound and unravel more mysteries, keep those tracks aligned and your trains on time!
 
-[TODO: Next section: truly optimized solution and have benchmarks to compare]
+> Note: in this post I only solve the first level of the game. The game have total 12 levels, on the future post I will solve all of them. Stay tuned!
+
+You can check the full code on my [GitHub](https://github.com/Th1nhNg0/railbound-solver). Or join the discussion on [Discord](https://discord.com/channels/441217491612598272/1142318326136180796) where me and some other people are discussing about the game and the solver.
+
+![](/images/railbound-solver/21.png)
