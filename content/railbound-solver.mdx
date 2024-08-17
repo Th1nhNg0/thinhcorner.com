@@ -197,18 +197,32 @@ This ensures the simulation will eventually terminate, even if no solution is fo
 
 Now that we've got our simulation up and running, it's time to unleash it on some Railbound levels and watch the magic happen!
 
-[TODO: gif of every possible flashing until found the final]
 
+![bf](/images/railbound-solver/brutce_force.webp)
 Look at it go! It's like watching a hyperactive squirrel trying to decide which acorn to grab first. Promising, right? Well, hold onto your engineer's cap, because we're about to hit a snag.
 
-#### We Have a Problem
+#### We have a problem...
 
-Everything's chugging along nicely until we reach level 13A. Suddenly, our solver decides to take a leisurely stroll through the space-time continuum. Why? Let's break it down:
+Everything's chugging along nicely until we reach some special level. Suddenly, our solver decides to take a leisurely stroll through the space-time continuum. Why? Let's break it down:
 
-1. We have 3 types of tracks, but 14 variants in total.
-2. For the first position, we have 14 possibilities.
+
+Let look at this level:
+
+![level 1-6](https://steamuserimages-a.akamaihd.net/ugc/1826794130776803459/6E0188A71032BB24D0C26CB15793A39C3328EC7D/)
+
+Let have some calculation:
+
+1. We have 13 empty spaces and 3 tracks to fill. That mean we have:
+    $$
+    \binom{13}{3} = \frac{13!}{3!(13-3)!} = \frac{13 \times 12 \times 11}{3 \times 2 \times 1} = 286 \text{ combinations}
+    $$
+2. We have 3 types of tracks, but 14 variants in total. So for the first position, we have 14 possibilities.
 3. For the second position, it's 14 x 14 = 196 possibilities.
-4. By the third position, we're up to 14³ = 2,744 possibilities.
+4. By the third position, we're up to 14 x 14 x 14 = 2,744 possibilities.
+5. That mean for each 3 positions, 2,744 possibilities to check. And for 286 combinations of 3 positions, we have:
+    $$
+    2,744 \times 286 = 785,584 \text{ possibilities}
+    $$
 
 Now, imagine you need to place 15 tracks. That's about 10¹⁷ possibilities to check. To put that in perspective, it's almost 20% of the atoms in your morning coffee ☕. (Okay, not really, but it's actually about 20% of the atoms in the observable universe. There are between 10⁷⁸ to 10⁸² atoms out there, in case you were wondering.)
 
