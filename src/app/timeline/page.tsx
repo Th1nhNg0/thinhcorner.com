@@ -14,6 +14,11 @@ export default function AboutView() {
       </h1>
       <ol className="relative ml-3 space-y-10 border-l-2 border-gray-100 dark:border-[#211C1C]">
         <Item
+          title="Start learning Master of Business Administration at UEH University of Economics Ho Chi Minh City"
+          icon="🏫"
+          time="2024-10"
+        ></Item>
+        <Item
           title="Graduated from University of Science, Vietnam National University Ho Chi Minh City"
           icon="🎓"
           time="2023-11-25"
