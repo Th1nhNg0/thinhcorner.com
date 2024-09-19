@@ -11,19 +11,7 @@ export default function Home() {
 
       <div className="prose max-w-none prose-quoteless prose-neutral dark:prose-invert">
         <p>
-          I&apos;m a developer. I currently work at{" "}
-          <Link
-            href="https://kaapp.net"
-            target="_blank"
-            className={badgeVariants({
-              variant: "outline",
-              className: "no-underline",
-            })}
-          >
-            King Attorney
-          </Link>
-          , where I help building a platform that help people solve their legal
-          problems.{" "}
+        I'm a data science enthusiast with a CS background, currently navigating the world of business through my MBA journey. Welcome! I'm a data science enthusiast with a CS background, currently navigating the world of business through my MBA journey. Join me as I explore the exciting fusion of tech and entrepreneurship.
         </p>
 
         <Gallery />
