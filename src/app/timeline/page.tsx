@@ -16,7 +16,7 @@ export default function AboutView() {
         <Item
           title="Start learning Master of Business Administration at UEH University of Economics Ho Chi Minh City"
           icon="🏫"
-          time="2024-10"
+          time="2024-10-01"
         ></Item>
         <Item
           title="Graduated from University of Science, Vietnam National University Ho Chi Minh City"
