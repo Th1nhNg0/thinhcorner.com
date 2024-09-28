@@ -1,6 +1,7 @@
 import { badgeVariants } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
+import Project from "./project";
 
 export default function Home() {
   return (
@@ -11,21 +12,13 @@ export default function Home() {
 
       <div className="prose max-w-none prose-quoteless prose-neutral dark:prose-invert">
         <p>
-          I&apos;m a developer. I currently work at{" "}
-          <Link
-            href="https://kaapp.net"
-            target="_blank"
-            className={badgeVariants({
-              variant: "outline",
-              className: "no-underline",
-            })}
-          >
-            King Attorney
-          </Link>
-          , where I help building a platform that help people solve their legal
-          problems.{" "}
+          I'm a data science enthusiast with a CS background, currently
+          navigating the world of business through my MBA journey. Welcome! I'm
+          a data science enthusiast with a CS background, currently navigating
+          the world of business through my MBA journey. Join me as I explore the
+          exciting fusion of tech and entrepreneurship.
         </p>
-
+        <Project />
         <Gallery />
         <p>
           Reading book, doing data science, listening to music and programming
@@ -33,7 +26,6 @@ export default function Home() {
           politics and economics, but I haven&apos;t have enough knowledge to
           have strong opinions on either.
         </p>
-
         <p>
           I made this site just for fun. Inspired by{" "}
           <a href="https://nathanrooy.github.io/">Nathan Rooy Blog</a> and{" "}
