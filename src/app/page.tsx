@@ -12,8 +12,7 @@ export default function Home() {
 
       <div className="prose max-w-none prose-quoteless prose-neutral dark:prose-invert">
         <p>
-          I'm a data science enthusiast with a CS background, currently
-          navigating the world of business through my MBA journey. Welcome! I'm
+           I'm
           a data science enthusiast with a CS background, currently navigating
           the world of business through my MBA journey. Join me as I explore the
           exciting fusion of tech and entrepreneurship.
