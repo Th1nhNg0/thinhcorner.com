@@ -19,13 +19,25 @@ export default function AboutView() {
           time="2024-10-01"
         ></Item>
         <Item
+          title="Second research paper published"
+          icon="🐜"
+          time="2024"
+        >
+          <a
+            href="https://doi.org/10.11591/ijai.v13.i4.pp3962-3973"
+            className="text-blue-500 hover:underline"
+          >
+            Enhancing legal research through knowledge-infused information retrieval for Vietnamese labor law
+          </a>
+        </Item>
+        <Item
           title="Graduated from University of Science, Vietnam National University Ho Chi Minh City"
           icon="🎓"
           time="2023-11-25"
         ></Item>
         <Item
           title="Finished my graduation thesis at University of Science, Vietnam National University Ho Chi Minh City"
-          icon="📜"
+          icon="🐜"
           time="2023-07-16"
         >
           <a
@@ -38,7 +50,7 @@ export default function AboutView() {
 
         <Item
           title="First research paper published"
-          icon="📜"
+          icon="🐜"
           time="2023-07-18"
         >
           <a
@@ -48,6 +60,8 @@ export default function AboutView() {
             Intelligent Retrieval System on Legal Information
           </a>
         </Item>
+
+        
 
         <Item
           title="Won first prize in WebDev Adventure 2022"
@@ -87,7 +101,7 @@ export default function AboutView() {
         />
         <Item
           title="Won the Consolation prize at the national competition for excellent students in high school"
-          icon="🏅"
+          icon="🌿"
           time="2019-04-21"
         >
           <RoundedImageRaw src="/timeline/hsgqg.jpg" alt="" />
@@ -117,7 +131,7 @@ export default function AboutView() {
           icon="🎓"
           time="2016-07-15"
         />
-        <Item title="Learning to play guitar" icon="🎸" time="2012" />
+        <Item title="Learning to play guitar" icon="🌻" time="2012" />
         <Item
           title="Start studying at Vo Thi Sau Secondary School"
           icon="🏫"
