@@ -17,7 +17,6 @@ export default function Home() {
           the world of business through my MBA journey. Join me as I explore the
           exciting fusion of tech and entrepreneurship.
         </p>
-        <Project />
         <Gallery />
         <p>
           Reading book, doing data science, listening to music and programming
