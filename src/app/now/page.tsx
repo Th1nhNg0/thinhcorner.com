@@ -13,21 +13,22 @@ export default function AboutView() {
         my timeline
       </h1>
       <ol className="relative ml-3 space-y-10 border-l-2 border-gray-100 dark:border-[#211C1C]">
+        <Item title="What am i doing now?" icon="🚀" time="now">
+          Currently juggling an MBA and launching multiple startups to
+          revolutionize my country! 🚀🎓😂🌟
+        </Item>
         <Item
           title="Start learning Master of Business Administration at UEH University of Economics Ho Chi Minh City"
           icon="🏫"
           time="2024-10-01"
         ></Item>
-        <Item
-          title="Second research paper published"
-          icon="🐜"
-          time="2024"
-        >
+        <Item title="Second research paper published" icon="📄" time="2024">
           <a
             href="https://doi.org/10.11591/ijai.v13.i4.pp3962-3973"
             className="text-blue-500 hover:underline"
           >
-            Enhancing legal research through knowledge-infused information retrieval for Vietnamese labor law
+            Enhancing legal research through knowledge-infused information
+            retrieval for Vietnamese labor law
           </a>
         </Item>
         <Item
@@ -37,7 +38,7 @@ export default function AboutView() {
         ></Item>
         <Item
           title="Finished my graduation thesis at University of Science, Vietnam National University Ho Chi Minh City"
-          icon="🐜"
+          icon="📝"
           time="2023-07-16"
         >
           <a
@@ -50,7 +51,7 @@ export default function AboutView() {
 
         <Item
           title="First research paper published"
-          icon="🐜"
+          icon="📄"
           time="2023-07-18"
         >
           <a
@@ -60,8 +61,6 @@ export default function AboutView() {
             Intelligent Retrieval System on Legal Information
           </a>
         </Item>
-
-        
 
         <Item
           title="Won first prize in WebDev Adventure 2022"
@@ -172,9 +171,11 @@ function Item({
         className="block mb-5 leading-none text-neutral-600 dark:text-neutral-400 text-sm"
         dateTime={time}
       >
-        {formatDistanceToNow(new Date(time), {
-          addSuffix: true,
-        })}
+        {isNaN(Date.parse(time))
+          ? time
+          : formatDistanceToNow(new Date(time), {
+              addSuffix: true,
+            })}
       </time>
       {children}
     </li>

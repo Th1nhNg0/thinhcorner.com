@@ -52,5 +52,10 @@ async function crawl_book(url: string) {
       user_read_at,
     });
   });
+  books.sort((a, b) => {
+    const dateA = a.user_read_at ? new Date(a.user_read_at).getTime() : 0;
+    const dateB = b.user_read_at ? new Date(b.user_read_at).getTime() : 0;
+    return dateB - dateA;
+  });
   return books;
 }

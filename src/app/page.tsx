@@ -2,6 +2,8 @@ import { badgeVariants } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
 import Project from "./project";
+import Globe from "@/components/ui/globe";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Home() {
   return (
@@ -12,10 +14,9 @@ export default function Home() {
 
       <div className="prose max-w-none prose-quoteless prose-neutral dark:prose-invert">
         <p>
-           I'm
-          a data science enthusiast with a CS background, currently navigating
-          the world of business through my MBA journey. Join me as I explore the
-          exciting fusion of tech and entrepreneurship.
+          I'm a data science enthusiast with a computer science background,
+          currently navigating the world of business through my MBA journey.
+          Join me as I explore the exciting fusion of tech and entrepreneurship.
         </p>
         <Gallery />
         <p>
@@ -24,14 +25,14 @@ export default function Home() {
           politics and economics, but I haven&apos;t have enough knowledge to
           have strong opinions on either.
         </p>
+
         <p>
           I made this site just for fun. Inspired by{" "}
           <a href="https://nathanrooy.github.io/">Nathan Rooy Blog</a> and{" "}
           <a href="https://leerob.io/">Lee Robinson site</a>.
         </p>
         <p>
-          Want to know more about me? Check out my{" "}
-          <Link href="/timeline">timeline</Link>.
+          Want to know more about me? Check <Link href="/now">here</Link>.
         </p>
         <p>
           You can contact me via{" "}
@@ -52,7 +53,7 @@ function Gallery() {
           fill
           sizes="(max-width: 768px) 213px, 33vw"
           priority
-          className="rounded-lg object-cover"
+          className="rounded-lg object-cover border border-stone-200 dark:border-stone-800 "
         />
       </div>
       <div className="relative mb-4 h-80 sm:mb-0">
@@ -62,17 +63,17 @@ function Gallery() {
           fill
           sizes="(max-width: 768px) 213px, 33vw"
           priority
-          className="rounded-lg object-cover"
+          className="rounded-lg object-cover border border-stone-200 dark:border-stone-800 "
         />
       </div>
       <div className="relative h-40 sm:mb-4 sm:h-80">
         <Image
           alt="Where I live"
-          src="/gallery/landmark.jpg"
+          src="/gallery/milky-way.jpg"
           fill
           sizes="(max-width: 768px) 213px, 33vw"
           priority
-          className="rounded-lg object-cover"
+          className="rounded-lg object-cover border border-stone-200 dark:border-stone-800 "
         />
       </div>
       <div className="relative mb-4 h-40 sm:mb-0">
@@ -82,28 +83,31 @@ function Gallery() {
           fill
           sizes="(max-width: 768px) 213px, 33vw"
           priority
-          className="rounded-lg object-cover"
+          className="rounded-lg object-cover border border-stone-200 dark:border-stone-800 "
         />
       </div>
-      <div className="relative mb-4 h-40">
+      <div className="relative mb-4 h-40 ">
         <Image
           alt="My hobby guitar"
           src="/gallery/guitar and tab.jpg"
           fill
           sizes="(max-width: 768px) 213px, 33vw"
           priority
-          className="rounded-lg object-cover"
+          className="rounded-lg object-cover border border-stone-200 dark:border-stone-800 "
         />
       </div>
       <div className="relative h-80">
-        <Image
-          alt="Random memory 2"
-          src="/gallery/lab.jpeg"
-          fill
-          sizes="(max-width: 768px) 213px, 33vw"
-          priority
-          className="rounded-lg object-cover"
-        />
+        <Card className="size-full overflow-hidden  md:h-full bg-stone-950 text-white">
+          <CardHeader>
+            <CardTitle>My Current Location</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Ho Chi Minh City, Vietnam
+            </p>
+          </CardHeader>
+          <div className="relative size-full">
+            <Globe />
+          </div>
+        </Card>
       </div>
     </div>
   );

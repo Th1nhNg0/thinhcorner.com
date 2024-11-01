@@ -7,6 +7,7 @@ type Metadata = {
   summary: string;
   draft?: string;
   image?: string;
+  language?: "en" | "vi" | string;
 };
 
 function parseFrontmatter(fileContent: string) {

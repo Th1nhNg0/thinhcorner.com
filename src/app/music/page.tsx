@@ -170,7 +170,6 @@ export default async function page() {
           <RoundedImageRaw src="/spotify/2.png" alt="Spotify 2" />
           <RoundedImageRaw src="/spotify/3.png" alt="Spotify 3" />
           <RoundedImageRaw src="/spotify/4.png" alt="Spotify 4" />
-          <RoundedImageRaw src="/spotify/5.png" alt="Spotify 5" />
         </div>
       </div>
     </div>
