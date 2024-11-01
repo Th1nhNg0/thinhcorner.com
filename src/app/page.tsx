@@ -1,9 +1,7 @@
-import { badgeVariants } from "@/components/ui/badge";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import Globe from "@/components/ui/globe";
 import Image from "next/image";
 import Link from "next/link";
-import Project from "./project";
-import Globe from "@/components/ui/globe";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Home() {
   return (
