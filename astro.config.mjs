@@ -3,6 +3,7 @@ import { defineConfig } from "astro/config";
 
 import tailwindcss from "@tailwindcss/vite";
 import { remarkReadingTime } from "./remark/remark-reading-time.mjs";
+import { remarkModifiedTime } from "./remark/remark-modified-time.mjs";
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,6 +13,6 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   markdown: {
-    remarkPlugins: [remarkReadingTime],
+    remarkPlugins: [remarkReadingTime, remarkModifiedTime],
   },
 });
