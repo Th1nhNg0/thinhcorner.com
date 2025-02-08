@@ -12,7 +12,6 @@ interface Props {
 export const GET: APIRoute<Props> = async ({ props }) => {
   const interBold = readFileSync("./src/assets/Inter_18pt-Bold.ttf");
   const ogTemplate = readFileSync("./src/assets/og-template.png");
-  console.log(ogTemplate);
   return new ImageResponse(
     {
       type: "div",
