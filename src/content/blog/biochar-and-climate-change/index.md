@@ -1,7 +1,8 @@
 ---
-title: Biochar và biến đổi khí hậu
+title: "Biochar và biến đổi khí hậu"
 date: "2024-12-12"
-description: Biochar là giải pháp tiềm năng giúp giảm phát thải CO2, cải thiện đất và tăng năng suất nông nghiệp. Được tạo ra từ nhiệt phân sinh khối, biochar lưu giữ carbon bền vững trong đất, góp phần chống biến đổi khí hậu. Với khả năng loại bỏ hàng tỷ tấn CO2 mỗi năm, biochar mang lại lợi ích toàn diện cho khí hậu, nông nghiệp và năng lượng.
+description: "Biochar là giải pháp tiềm năng giúp giảm phát thải CO2, cải thiện đất và tăng năng suất nông nghiệp. Được tạo ra từ nhiệt phân sinh khối, biochar lưu giữ carbon bền vững trong đất, góp phần chống biến đổi khí hậu. Với khả năng loại bỏ hàng tỷ tấn CO2 mỗi năm, biochar mang lại lợi ích toàn diện cho khí hậu, nông nghiệp và năng lượng."
+lang: "vi"
 ---
 
 Vấn đề khí hậu hiện nay đã trở nên vô cùng nghiêm trọng. Mỗi năm, loài người thải ra hơn 43 tỷ tấn CO2 vào khí quyển, lượng này cao hơn 25% so với chỉ một thập kỷ trước. Các nhà khoa học đã tính toán một “ngân sách carbon” cho Trái đất. Nếu chúng ta muốn có 75% cơ hội giữ cho mức ấm lên dưới 2 độ C, thì trong nửa đầu thế kỷ này ta chỉ có thể thải ra tối đa 1.000 tỷ tấn CO2. Thế nhưng, lượng khí thải carbon của chúng ta đã tăng nhanh đến mức vào năm 2013, chúng ta đã sử dụng gần 40% hạn mức đó. Và đến năm 2024, ta chỉ còn lại 8% ngân sách carbon. Với tốc độ như vậy, chúng ta sẽ hết “hạn mức” vào năm 2028. Do đó, thời gian để giải quyết cuộc khủng hoảng khí hậu là rất hạn chế, và những năm còn lại của thập kỷ này đặc biệt quan trọng[^CO@2COUNT].
@@ -53,7 +54,7 @@ Người dân địa phương luôn biết rằng Terra Preta có độ phì nhi
 
 Để hiểu rõ tác động thực sự của biochar, chúng ta cần phải xem xét toàn diện hệ thống biochar. Dù nghiên cứu ở quy mô nào, một hệ thống biochar luôn bao gồm những yếu tố chính sau: (a) nguồn sinh khối ban đầu, (b) cách thức sản xuất ra biochar, và (c) khả năng và cách thức sử dụng nó cho đất.[^Scholz]
 
-![biocharsystem](/images/biochar-and-climate-change/biocharsystem.png)
+![biocharsystem](./biocharsystem.png)
 
 ### Nguồn Sinh Khối Sản Xuất Biochar
 
@@ -116,7 +117,7 @@ Cuộc thảo luận toàn cầu về giảm thiểu biến đổi khí hậu c�
 
 **Cơ Chế Thị Trường Carbon**
 
-![carbonmarket](/images/biochar-and-climate-change/carbonmarket.png)
+![carbonmarket](./carbonmarket.png)
 
 Cơ chế tín chỉ carbon và bù đắp carbon đại diện cho một cách tiếp cận dựa trên thị trường để chống lại biến đổi khí hậu, bằng cách cung cấp các khuyến khích tài chính nhằm giảm phát thải khí nhà kính (GHG) và tăng cường cô lập carbon. Các tổ chức, bao gồm doanh nghiệp, chính phủ và cá nhân, có thể tham gia các hoạt động giảm phát thải như cải thiện hiệu quả năng lượng, phát triển năng lượng tái tạo, tái trồng rừng và phục hồi rừng. Kết quả của các hoạt động này là lượng phát thải được giảm, với độ chính xác được xác minh bởi các bên thứ ba. Sau khi xác minh, tín chỉ carbon được phát hành, thường đại diện cho việc giảm một tấn CO₂ hoặc tương đương khí nhà kính khác. Các tín chỉ này được giao dịch như hàng hóa và có thể được mua bởi các tổ chức muốn bù đắp phát thải của mình. Doanh thu từ việc bán tín chỉ carbon đóng vai trò là nguồn tài chính để đầu tư vào các nỗ lực cô lập carbon, chẳng hạn như tái trồng rừng và bảo tồn thiên nhiên.
 

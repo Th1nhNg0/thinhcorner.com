@@ -51,7 +51,7 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post);
 
 <Layout title={post.data.title} description={post.data.description}>
   <Container>
-    <div class="my-10 space-y-1">
+    <div class="mb-10 space-y-1">
       <h1 class="animate text-3xl font-semibold text-black dark:text-white">
         {post.data.title}
       </h1>
@@ -94,18 +94,18 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post);
         ) : null
       }
     </div>
-    {headings.length > 0 && <TableOfContents headings={headings} />}
+    <TableOfContents headings={headings} />
     <article class="prose max-w-none prose-invert">
       <Content />
     </article>
 
     <nav
-      class="mt-8 flex items-center justify-between border-t border-gray-200 pt-8 dark:border-gray-700"
+      class="my-8 flex items-center justify-between border-t border-gray-200 pt-8 dark:border-gray-700"
     >
       {
         prevPost ? (
           <a
-            href={`/posts/${prevPost.id}`}
+            href={`/blog/${prevPost.id}`}
             class="group flex items-center gap-2 hover:text-black dark:hover:text-white"
           >
             <svg
@@ -136,7 +136,7 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post);
       {
         nextPost ? (
           <a
-            href={`/posts/${nextPost.id}`}
+            href={`/blog/${nextPost.id}`}
             class="group flex items-center gap-2 hover:text-black dark:hover:text-white"
           >
             <div class="text-right">
