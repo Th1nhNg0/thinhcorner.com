@@ -2,6 +2,7 @@
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
 import TimelineItem from "@/components/TimelineItem.astro";
+import { Image } from "astro:assets";
 ---
 
 <Layout title="Now" description="What I'm up to now.">
@@ -68,7 +69,14 @@ import TimelineItem from "@/components/TimelineItem.astro";
         >
           Link to Project
         </a>
-        <img src="/timeline/webdev2022.jpg" alt="" class="rounded-lg mt-2" />
+        <Image
+          inferSize={true}
+          width={800}
+          height={450}
+          src="/timeline/webdev2022.jpg"
+          alt=""
+          class="rounded-lg mt-2"
+        />
       </TimelineItem>
       <TimelineItem
         title="Start working at KING ATTORNEY JOINT STOCK COMPANY"
@@ -80,7 +88,14 @@ import TimelineItem from "@/components/TimelineItem.astro";
         icon="🏫"
         time="2019-08-15"
       >
-        <img src="/timeline/hcmus.jpg" alt="" class="rounded-lg mt-2" />
+        <Image
+          inferSize={true}
+          width={800}
+          height={450}
+          src="/timeline/hcmus.jpg"
+          alt=""
+          class="rounded-lg mt-2"
+        />
       </TimelineItem>
       <TimelineItem
         title="Graduated from Phan Ngoc Hien High School for the Gifted"
@@ -92,7 +107,14 @@ import TimelineItem from "@/components/TimelineItem.astro";
         icon="🌿"
         time="2019-04-21"
       >
-        <img src="/timeline/hsgqg.jpg" alt="" class="rounded-lg mt-2" />
+        <Image
+          inferSize={true}
+          width={800}
+          height={450}
+          src="/timeline/hsgqg.jpg"
+          alt=""
+          class="rounded-lg mt-2"
+        />
       </TimelineItem>
       <TimelineItem
         title="Won the First prize at the provincial competition for excellent students in high school"
@@ -104,14 +126,28 @@ import TimelineItem from "@/components/TimelineItem.astro";
         icon="🥈"
         time="2017-04-16"
       >
-        <img src="/timeline/olp.jpg" alt="" class="rounded-lg mt-2" />
+        <Image
+          inferSize={true}
+          width={800}
+          height={450}
+          src="/timeline/olp.jpg"
+          alt=""
+          class="rounded-lg mt-2"
+        />
       </TimelineItem>
       <TimelineItem
         title="Start studying at Phan Ngoc Hien High School for the Gifted"
         icon="🏫"
         time="2016-09-10"
       >
-        <img src="/timeline/cpnh.jpg" alt="" class="rounded-lg mt-2" />
+        <Image
+          inferSize={true}
+          width={800}
+          height={450}
+          src="/timeline/cpnh.jpg"
+          alt=""
+          class="rounded-lg mt-2"
+        />
       </TimelineItem>
       <TimelineItem
         title="Graduated from Vo Thi Sau Secondary School"
@@ -124,7 +160,14 @@ import TimelineItem from "@/components/TimelineItem.astro";
         icon="🏫"
         time="2012"
       >
-        <img src="/timeline/vts.jpg" alt="" class="rounded-lg mt-2" />
+        <Image
+          inferSize={true}
+          width={800}
+          height={450}
+          src="/timeline/vts.jpg"
+          alt=""
+          class="rounded-lg mt-2"
+        />
       </TimelineItem>
       <TimelineItem
         title="Born in Ca Mau City, Vietnam"
@@ -152,7 +195,8 @@ import TimelineItem from "@/components/TimelineItem.astro";
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen></iframe>
+          allowfullscreen
+          loading="lazy"></iframe>
       </TimelineItem>
     </ol>
   </Container>
