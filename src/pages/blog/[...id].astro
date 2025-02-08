@@ -67,6 +67,16 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post);
             </div>
           )
         }
+        <span
+          class="ml-2 inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-300"
+        >
+          Updated: {
+            format(
+              new Date(remarkPluginFrontmatter.lastModified),
+              "dd MMM yyyy"
+            )
+          }
+        </span>
       </div>
 
       {
@@ -87,9 +97,70 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post);
     {headings.length > 0 && <TableOfContents headings={headings} />}
     <article class="animate">
       <Content />
-      <!-- <div class="mt-24">
-        <PostNavigation prevPost={prevPost} nextPost={nextPost} />
-      </div> -->
     </article>
+
+    <nav
+      class="mt-8 flex items-center justify-between border-t border-gray-200 pt-8 dark:border-gray-700"
+    >
+      {
+        prevPost ? (
+          <a
+            href={`/posts/${prevPost.id}`}
+            class="group flex items-center gap-2 hover:text-black dark:hover:text-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m15 18-6-6 6-6" />
+            </svg>
+            <div>
+              <div class="text-sm text-gray-500 dark:text-gray-400">
+                Previous
+              </div>
+              <div class="text-base font-medium">{prevPost.data.title}</div>
+            </div>
+          </a>
+        ) : (
+          <div />
+        )
+      }
+
+      {
+        nextPost ? (
+          <a
+            href={`/posts/${nextPost.id}`}
+            class="group flex items-center gap-2 hover:text-black dark:hover:text-white"
+          >
+            <div class="text-right">
+              <div class="text-sm text-gray-500 dark:text-gray-400">Next</div>
+              <div class="text-base font-medium">{nextPost.data.title}</div>
+            </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </a>
+        ) : (
+          <div />
+        )
+      }
+    </nav>
   </Container>
 </Layout>
