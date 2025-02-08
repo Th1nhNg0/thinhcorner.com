@@ -2,11 +2,12 @@
 import Container from "./Container.astro";
 ---
 
-<header>
+<header transition:persist>
   <Container>
     <div class="py-20">
       <nav class="space-x-5">
         <a href="/" class="text-gray-300 hover:text-white">home</a>
+        <a href="/now" class="text-gray-300 hover:text-white">now</a>
         <a href="/blog" class="text-gray-300 hover:text-white">blog</a>
       </nav>
     </div>
