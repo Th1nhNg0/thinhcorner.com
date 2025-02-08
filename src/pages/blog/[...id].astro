@@ -95,7 +95,7 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post);
       }
     </div>
     {headings.length > 0 && <TableOfContents headings={headings} />}
-    <article class="animate">
+    <article class="prose max-w-none prose-invert">
       <Content />
     </article>
 
