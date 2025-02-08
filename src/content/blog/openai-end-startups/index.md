@@ -1,13 +1,13 @@
 ---
 title: Bản cập nhật ChatGPT mới - Sự kết thúc của hàng nghìn startup AI?
-date: 2023-10-31
+date: "2023-10-31"
 description: Gần đây, OpenAI đã phát hành bản cập nhật mới cho ChatGPT Plus, với khả năng tạo ảnh, duyệt web, và lập trình. Điều này đã dấy lên mối lo ngại rằng đây có thể là "sự kết thúc của 10.000 startup AI". Chúng ta hãy cùng tìm hiểu xem liệu điều đó có thực sự đúng hay không.
 language: vi
 ---
 
 Gần đây, **OpenAI** đã phát hành bản cập nhật mới cho **ChatGPT Plus**, với khả năng tạo ảnh, duyệt web, và lập trình. Điều này đã dấy lên mối lo ngại rằng đây có thể là **"sự kết thúc của 10.000 startup AI"**. Chúng ta hãy cùng tìm hiểu xem liệu điều đó có thực sự đúng hay không.
 
-![bản cập nhật của AI](/images/openai-end-startups/openaiupdate.jpg)
+![bản cập nhật của AI](./openaiupdate.jpg)
 
 Với phiên bản này, người dùng giờ đây có thể tải lên và làm việc với nhiều loại tài liệu khác nhau như PDF, tệp dữ liệu hay bất kỳ tài liệu nào họ muốn phân tích.
 
@@ -17,7 +17,7 @@ Bên cạnh đó, quyền truy cập vào các công cụ như Web Browsing, Adv
 
 Giờ đây, với bản cập nhật mới của OpenAI, tất cả các tác vụ trên có thể được thực hiện ngay trong cùng một session chat, giúp tiết kiệm thời gian và công sức đáng kể cho người dùng. Chắc chắn đây là một bước tiến lớn, xứng đáng được gọi là **"All Tools"!**
 
-![Openai](/images/openai-end-startups/openai.jpg)
+![Openai](./openai.jpg)
 
 Nhiều Startup AI hiện nay đều thuê API của OpenAI và tạo ra các sản phẩm AI dựa trên đó. Với bản cập nhật mới này, OpenAI đã đưa các công cụ AI của mình vào trong ChatGPT, khiến cho các công ty này trở nên vô dụng. Điều này khiến cho nhiều người lo lắng rằng đây có thể là **"sự kết thúc của 10.000 startup AI"**.
 
@@ -39,12 +39,12 @@ Có thể lấy **Jasper AI** ra làm ví dụ. Ra mắt vào tháng 2 năm 2021
 
 [^jasperraise]: [Jasper Announces \$125M Series A Funding Round, Bringing Total Valuation to \$1.5B and Launches New Browser Extension](https://www.prnewswire.com/news-releases/jasper-announces-125m-series-a-funding-round-bringing-total-valuation-to-1-5b-and-launches-new-browser-extension-301651733.html)
 
-![Jasper raise](/images/openai-end-startups/jasperraise.png)
+![Jasper raise](./jasperraise.png)
 
 Nhưng chỉ cách đây 3 tháng, Jasper đã phải cắt giảm nhân sự. Người đứng đầu sản phẩm của Jasper, Jeremy Crane, cũng rời công ty trong tháng sau chưa đầy một năm[^jasperout].
 [^jasperout]: [Jasper, Mutiny AI Startups Cut Workers As Chatbot Rivalry Grows](https://www.theinformation.com/briefings/jasper-mutiny-ai-startups-cut-workers-as-chatbot-rivalry-grows)
 
-![Jasper layoff](/images/openai-end-startups/jasperout.png)
+![Jasper layoff](./jasperout.png)
 
 Và tới đây chúng ta sẽ thấy cảnh mà nhiều công ty startup sụp đổ. Phải chăng chiến lược **"Đứng trên đôi vai người khổng lồ"**[^stepongiant] đã không còn hiệu quả nữa? Có vẻ như chiến lược này đã gây ra hiệu ứng ngược **"cá lớn nuốt cá bé"**, như các tiền lệ đã có trước đây từ các công ty công nghệ lớn[^bigtech].
 
