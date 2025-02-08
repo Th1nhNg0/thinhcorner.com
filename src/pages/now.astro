@@ -1,0 +1,163 @@
+---
+import Container from "@/components/Container.astro";
+import Layout from "@/layouts/Layout.astro";
+import TimelineItem from "@/components/TimelineItem.astro";
+---
+
+<Layout title="Now" description="What I'm up to now.">
+  <Container>
+    <h1 class="font-medium text-3xl mb-8 tracking-tight">My timeline</h1>
+    <ol
+      class="relative ml-3 space-y-12 border-l-[3px] border-zinc-800 hover:border-zinc-700 transition-colors duration-300 pb-24"
+    >
+      <TimelineItem title="What am i doing now?" icon="🚀" time="now">
+        Just learning news things...
+      </TimelineItem>
+      <TimelineItem
+        title="Start learning Master of Business Administration at UEH University of Economics Ho Chi Minh City"
+        icon="🏫"
+        time="2024-10-01"
+      />
+      <TimelineItem
+        title="Second research paper published"
+        icon="📄"
+        time="2024"
+      >
+        <a
+          href="https://doi.org/10.11591/ijai.v13.i4.pp3962-3973"
+          class="text-blue-500 hover:underline"
+        >
+          Enhancing legal research through knowledge-infused information
+          retrieval for Vietnamese labor law
+        </a>
+      </TimelineItem>
+      <TimelineItem
+        title="Graduated from University of Science, Vietnam National University Ho Chi Minh City"
+        icon="🎓"
+        time="2023-11-25"
+      />
+      <TimelineItem
+        title="Finished my graduation thesis at University of Science, Vietnam National University Ho Chi Minh City"
+        icon="📝"
+        time="2023-07-16"
+      >
+        <a href="/timeline/thesis.pdf" class="text-blue-500 hover:underline">
+          Deep learning in legal system: Opportunities and Challenges
+        </a>
+      </TimelineItem>
+      <TimelineItem
+        title="First research paper published"
+        icon="📄"
+        time="2023-07-18"
+      >
+        <a
+          href="https://doi.org/10.1007/978-981-99-5834-4_8"
+          class="text-blue-500 hover:underline"
+        >
+          Intelligent Retrieval System on Legal Information
+        </a>
+      </TimelineItem>
+      <TimelineItem
+        title="Won first prize in WebDev Adventure 2022"
+        icon="🥇"
+        time="2022-05-13"
+      >
+        <a
+          class="text-blue-500 hover:underline"
+          href="https://github.com/Th1nhNg0/travel_flow_hackathon"
+        >
+          Link to Project
+        </a>
+        <img src="/timeline/webdev2022.jpg" alt="" class="rounded-lg mt-2" />
+      </TimelineItem>
+      <TimelineItem
+        title="Start working at KING ATTORNEY JOINT STOCK COMPANY"
+        icon="🏢"
+        time="2021-01-01"
+      />
+      <TimelineItem
+        title="Start studying at University of Science, Vietnam National University Ho Chi Minh City"
+        icon="🏫"
+        time="2019-08-15"
+      >
+        <img src="/timeline/hcmus.jpg" alt="" class="rounded-lg mt-2" />
+      </TimelineItem>
+      <TimelineItem
+        title="Graduated from Phan Ngoc Hien High School for the Gifted"
+        icon="🎓"
+        time="2019-05-21"
+      />
+      <TimelineItem
+        title="Won the Consolation prize at the national competition for excellent students in high school"
+        icon="🌿"
+        time="2019-04-21"
+      >
+        <img src="/timeline/hsgqg.jpg" alt="" class="rounded-lg mt-2" />
+      </TimelineItem>
+      <TimelineItem
+        title="Won the First prize at the provincial competition for excellent students in high school"
+        icon="🥇"
+        time="2017-10-11"
+      />
+      <TimelineItem
+        title="Won Silver medal at olympic competition 30/4 XXIII"
+        icon="🥈"
+        time="2017-04-16"
+      >
+        <img src="/timeline/olp.jpg" alt="" class="rounded-lg mt-2" />
+      </TimelineItem>
+      <TimelineItem
+        title="Start studying at Phan Ngoc Hien High School for the Gifted"
+        icon="🏫"
+        time="2016-09-10"
+      >
+        <img src="/timeline/cpnh.jpg" alt="" class="rounded-lg mt-2" />
+      </TimelineItem>
+      <TimelineItem
+        title="Graduated from Vo Thi Sau Secondary School"
+        icon="🎓"
+        time="2016-07-15"
+      />
+      <TimelineItem title="Learning to play guitar" icon="🌻" time="2012" />
+      <TimelineItem
+        title="Start studying at Vo Thi Sau Secondary School"
+        icon="🏫"
+        time="2012"
+      >
+        <img src="/timeline/vts.jpg" alt="" class="rounded-lg mt-2" />
+      </TimelineItem>
+      <TimelineItem
+        title="Born in Ca Mau City, Vietnam"
+        icon="👶"
+        time="2001-09-08"
+      />
+      <li class="ml-8 py-8">
+        <div class="flex items-center space-x-2 text-zinc-600">
+          <span class="text-2xl">.</span>
+          <span class="text-2xl">.</span>
+          <span class="text-2xl">.</span>
+        </div>
+      </li>
+      <TimelineItem
+        title="Big Bang - The Beginning of Everything"
+        icon="💫"
+        time="13.8 billion years ago"
+      >
+        <p class="text-zinc-500 italic">
+          A long time ago in a galaxy far, far away...
+        </p>
+        <iframe
+          class="w-full aspect-video"
+          src="https://www.youtube.com/embed/UcgV4OFRS-w?si=dTA3vlZNwvSmBMLo"
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen></iframe>
+      </TimelineItem>
+    </ol>
+  </Container>
+</Layout>
+
+<style>
+  /* Remove the gradient style since we're using a simpler design */
+</style>
