@@ -50,7 +50,11 @@ const post = Astro.props;
 const { Content, headings, remarkPluginFrontmatter } = await render(post);
 ---
 
-<Layout title={post.data.title} description={post.data.description}>
+<Layout
+  title={post.data.title}
+  description={post.data.description}
+  image={`/blog/${post.id}/og.png`}
+>
   <Container>
     <div class="mb-10 space-y-1">
       <h1 class="text-3xl font-semibold text-white">
