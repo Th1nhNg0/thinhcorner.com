@@ -8,7 +8,7 @@ import {
   // getTotalSavedTracks,
 } from "@/lib/spotify";
 import { SOCIAL_MEDIA } from "@/consts";
-import { formatDistanceToNow } from "date-fns";
+import { format } from "date-fns";
 
 const topTracks = await getTopTracks();
 const recentlyPlayed = await getRecentlyPlayed();
@@ -77,9 +77,10 @@ const recentlyPlayed = await getRecentlyPlayed();
                   {track.artist.map((a) => a.name).join(", ")}
                 </p>
                 <p class="text-zinc-500 text-xs mt-0.5">
-                  {formatDistanceToNow(new Date(track.played_at), {
-                    addSuffix: true,
-                  })}
+                  {format(
+                    new Date(track.played_at),
+                    "hh:mm a, dd MMM yyyy (zzz)"
+                  )}
                 </p>
               </div>
             </a>
