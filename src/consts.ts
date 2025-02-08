@@ -10,4 +10,9 @@ const SOCIAL_MEDIA: {
   spotify: "https://open.spotify.com/user/21acs5sngq2xkehugtvqkwmuy",
 };
 
-export { SOCIAL_MEDIA };
+const SITE = {
+  title: "Thinh's Corner",
+  description: "Ngô Phú Thịnh's personal blog",
+};
+
+export { SOCIAL_MEDIA, SITE };
