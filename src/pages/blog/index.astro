@@ -1,0 +1,144 @@
+---
+import Container from "@/components/Container.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import { format } from "date-fns";
+
+const blog = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const postsByYear = blog.reduce(
+  (acc, post) => {
+    const year = new Date(post.data.date).getFullYear();
+    if (!acc[year]) {
+      acc[year] = [];
+    }
+    acc[year].push(post);
+    return acc;
+  },
+  {} as Record<number, typeof blog>
+);
+
+const years = Object.keys(postsByYear)
+  .map(Number)
+  .sort((a, b) => b - a);
+---
+
+<Layout
+  description="Read my collection of posts and the things that interest me"
+  title="Posts"
+>
+  <Container>
+    <div class="flex items-center justify-between">
+      <h1 class="text-3xl font-semibold text-white flex items-center gap-3">
+        <span> Posts </span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="32"
+          height="32"
+          viewBox="0 0 24 24"
+          class="text-yellow-500"
+          ><circle cx="5" cy="19" r="0" fill="currentColor"
+            ><animate fill="freeze" attributeName="r" dur="0.2s" values="0;2"
+            ></animate></circle
+          ><g
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            ><path
+              stroke-dasharray="16"
+              stroke-dashoffset="16"
+              d="M4 11c2.39 0 4.68 0.95 6.36 2.64c1.69 1.68 2.64 3.97 2.64 6.36"
+              ><animate
+                fill="freeze"
+                attributeName="stroke-dashoffset"
+                begin="0.2s"
+                dur="0.3s"
+                values="16;0"></animate></path
+            ><path
+              stroke-dasharray="28"
+              stroke-dashoffset="28"
+              d="M4 4c4.24 0 8.31 1.69 11.31 4.69c3 3 4.69 7.07 4.69 11.31"
+              ><animate
+                fill="freeze"
+                attributeName="stroke-dashoffset"
+                begin="0.6s"
+                dur="0.4s"
+                values="28;0"></animate></path
+            ></g
+          ></svg
+        >
+      </h1>
+      <label class="flex items-center gap-2 text-zinc-200">
+        <input type="checkbox" id="englishOnly" class="accent-yellow-500" />
+        English only
+      </label>
+    </div>
+    <section class="mt-16" id="blogPosts">
+      {
+        years.map((year) => (
+          <div class="mb-10" data-year={year}>
+            <h2 class="text-accent mb-6 text-2xl text-zinc-200 font-mono font-bold">
+              {year}
+            </h2>
+            <ul class="space-y-4" role="list">
+              {postsByYear[year].map((post) => (
+                <li
+                  class="grid gap-2 sm:grid-cols-[auto_1fr]"
+                  data-lang={post.data.lang || "en"}
+                >
+                  <time
+                    datetime={post.data.date.toISOString()}
+                    title={post.data.date.toISOString()}
+                    class="min-w-30 font-semibold font-mono text-zinc-400"
+                  >
+                    {format(new Date(post.data.date), "dd MMM Y")}
+                  </time>
+                  <div class="text-zinc-200">
+                    <a data-astro-prefetch="" href={`/blog/${post.id}`}>
+                      {post.data.title}
+                    </a>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </section>
+  </Container>
+</Layout>
+
+<script>
+  const checkbox = document.getElementById("englishOnly") as HTMLInputElement;
+  const blogPosts = document.getElementById("blogPosts");
+
+  checkbox.addEventListener("change", () => {
+    const posts = blogPosts?.querySelectorAll("li");
+    posts?.forEach((post) => {
+      const lang = post.getAttribute("data-lang");
+      if (checkbox.checked && lang !== "en") {
+        post.style.display = "none";
+      } else {
+        post.style.display = "";
+      }
+    });
+
+    // Hide empty years
+    const years = blogPosts?.querySelectorAll("[data-year]");
+    years?.forEach((year) => {
+      const posts = year.querySelectorAll("li");
+      const visiblePosts = Array.from(posts).filter(
+        (post) => post.style.display !== "none"
+      );
+      if (visiblePosts.length === 0) {
+        (year as HTMLElement).style.display = "none";
+      } else {
+        (year as HTMLElement).style.display = "";
+      }
+    });
+  });
+</script>

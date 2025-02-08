@@ -2,8 +2,11 @@
 import { defineConfig } from "astro/config";
 
 import tailwindcss from "@tailwindcss/vite";
-import { remarkReadingTime } from "./remark/remark-reading-time.mjs";
+import rehypeKatex from "rehype-katex";
+import remarkMath from "remark-math";
 import { remarkModifiedTime } from "./remark/remark-modified-time.mjs";
+import { remarkReadingTime } from "./remark/remark-reading-time.mjs";
+import remarkGfm from "remark-gfm";
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,6 +16,12 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   markdown: {
-    remarkPlugins: [remarkReadingTime, remarkModifiedTime],
+    remarkPlugins: [
+      remarkReadingTime,
+      remarkModifiedTime,
+      remarkMath,
+      remarkGfm,
+    ],
+    rehypePlugins: [rehypeKatex],
   },
 });

@@ -153,7 +153,7 @@ const blog = (await getCollection("blog"))
                 <time
                   datetime={post.data.date.toISOString()}
                   title={post.data.date.toISOString()}
-                  class="min-w-30 font-semibold text-zinc-400"
+                  class="min-w-30 font-mono font-semibold text-zinc-400"
                 >
                   {format(new Date(post.data.date), "dd MMM yyyy")}
                 </time>
