@@ -60,33 +60,37 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post);
       <h1 class="text-3xl font-semibold text-white">
         {post.data.title}
       </h1>
-      <div class="flex items-center gap-1.5">
-        <time
-          datetime={post.data.date.toISOString()}
-          title={post.data.date.toISOString()}
-          class="font-base text-sm"
-        >
-          {format(new Date(post.data.date), "dd MMMM yyyy")}
-        </time>
-        &bull;
-        {
-          post.body && (
-            <div class="font-base text-sm">
-              {remarkPluginFrontmatter.minutesRead}
-            </div>
-          )
-        }
-        {
-          remarkPluginFrontmatter.lastModified && (
-            <span class="ml-2 inline-flex items-center rounded-md bg-gray-800 px-2 py-0.5 text-xs font-medium text-gray-300">
-              Updated:{" "}
-              {format(
-                new Date(remarkPluginFrontmatter.lastModified),
-                "dd MMM yyyy"
-              )}
-            </span>
-          )
-        }
+      <div class="flex flex-col md:flex-row gap-2 md:items-center">
+        <div class="flex items-center gap-1.5">
+          <time
+            datetime={post.data.date.toISOString()}
+            title={post.data.date.toISOString()}
+            class="font-base text-sm"
+          >
+            {format(new Date(post.data.date), "dd MMMM yyyy")}
+          </time>
+          &bull;
+          {
+            post.body && (
+              <div class="font-base text-sm">
+                {remarkPluginFrontmatter.minutesRead}
+              </div>
+            )
+          }
+        </div>
+        <div>
+          {
+            remarkPluginFrontmatter.lastModified && (
+              <span class="inline-flex items-center rounded-md bg-gray-800 px-2 py-1 text-xs font-medium text-gray-300">
+                Updated:{" "}
+                {format(
+                  new Date(remarkPluginFrontmatter.lastModified),
+                  "dd MMM yyyy"
+                )}
+              </span>
+            )
+          }
+        </div>
       </div>
 
       {
