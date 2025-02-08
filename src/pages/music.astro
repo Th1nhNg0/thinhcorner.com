@@ -1,0 +1,124 @@
+---
+export const prerender = false;
+import Container from "@/components/Container.astro";
+import Layout from "@/layouts/Layout.astro";
+import {
+  getRecentlyPlayed,
+  getTopTracks,
+  // getTotalSavedTracks,
+} from "@/lib/spotify";
+import { SOCIAL_MEDIA } from "@/consts";
+import { formatDistanceToNow } from "date-fns";
+
+const topTracks = await getTopTracks();
+const recentlyPlayed = await getRecentlyPlayed();
+// const totalSaveTracks = await getTotalSavedTracks();
+---
+
+<Layout
+  title="Music"
+  description="A list of music I've listened to and recommend."
+>
+  <Container>
+    <section class="prose max-w-none prose-invert">
+      <h1 class="font-medium text-3xl mb-8 tracking-tight">My music library</h1>
+      <p>
+        This is a collection of what I've listened to over the past years,
+        automatically generated from my
+        <a href={SOCIAL_MEDIA.spotify} class="text-zinc-200 hover:text-white"
+          >Spotify profile.</a
+        >
+      </p>
+      <!-- <p>
+        I've saved a total of
+        <strong>{totalSaveTracks}</strong> songs on Spotify since I started using
+        it.
+      </p> -->
+    </section>
+
+    <section class="my-8">
+      <h2 class="text-xl font-semibold mb-3">Recently Played</h2>
+      <p class="text-zinc-400 text-sm mb-4">My latest music adventures</p>
+      <div class="space-y-2">
+        {
+          recentlyPlayed.map((track) => (
+            <a
+              href={track.songUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group flex items-center gap-3 p-2 rounded-lg bg-zinc-800/50 hover:bg-zinc-700/50 transition-all"
+            >
+              <div class="relative w-12 h-12 sm:w-16 sm:h-16">
+                <img
+                  src={track.imageUrl}
+                  alt={track.title}
+                  class="rounded-md object-cover w-full h-full"
+                />
+                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 rounded-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-6 h-6 text-white"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <h3 class="font-medium text-sm sm:text-base group-hover:text-white transition-colors line-clamp-1">
+                  {track.title}
+                </h3>
+                <p class="text-zinc-400 text-xs sm:text-sm line-clamp-1">
+                  {track.artist.map((a) => a.name).join(", ")}
+                </p>
+                <p class="text-zinc-500 text-xs mt-0.5">
+                  {formatDistanceToNow(new Date(track.played_at), {
+                    addSuffix: true,
+                  })}
+                </p>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="text-xl font-semibold mb-3">Top Tracks</h2>
+      <p class="text-zinc-400 text-sm mb-4">
+        My most played songs over the past 6 months
+      </p>
+      <div class="grid grid-cols-3 lg:grid-cols-5 gap-3">
+        {
+          topTracks.map((track) => (
+            <a
+              href={track.songUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group p-2 rounded-lg bg-zinc-800/50 hover:bg-zinc-700/50 transition-all"
+            >
+              <div class="relative aspect-square mb-2">
+                <img
+                  src={track.imageUrl}
+                  alt={track.title}
+                  class="rounded-md object-cover w-full h-full"
+                />
+              </div>
+              <h3 class="font-medium text-xs sm:text-sm group-hover:text-white transition-colors line-clamp-1">
+                {track.title}
+              </h3>
+              <p class="text-zinc-400 text-xs line-clamp-1">
+                {track.artist.map((a) => a.name).join(", ")}
+              </p>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </Container>
+</Layout>
