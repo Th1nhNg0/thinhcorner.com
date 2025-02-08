@@ -2,12 +2,12 @@
 title: "Chủ quyền biên giới AI - Chiến lược của NVIDIA"
 date: "2024-12-10"
 description: 'Khám phá chiến lược của NVIDIA trong chủ quyền AI, nơi dữ liệu trở thành "biên giới quốc gia" mới. "Nhà máy AI" của NVIDIA biến dữ liệu thô thành sản phẩm AI giá trị, tác động lớn đến kinh tế và địa chính trị toàn cầu. Tìm hiểu vai trò của Việt Nam trong kế hoạch mở rộng của NVIDIA và thách thức với Trung Quốc. Cập nhật các xu hướng về công nghệ và chủ quyền AI.'
-lang: vi
+lang: "vi"
 ---
 
 **Ngắn gọn:** Những dữ liệu, kiến thức, ký ức, thông tin... của một quần thể cư dân quốc gia rồi sẽ trở thành thứ "chủ quyền" mới trong thời đại của AI. Và chiến lược của NVIDIA là đi tắt đón đầu trong định hình tương lai đó.
 
-### "Nhà máy AI"
+## "Nhà máy AI"
 
 "Nhà máy AI" hiểu đơn giản là nơi nhập vào "nguyên liệu thô" gồm kiến thức, thông tin của người dùng và bằng siêu máy tính, dưới công nghệ của NVIDIA, "xử lý chế biến" những nguyên liệu thô đó và sản xuất đầu ra là những thông tin được tạo ra bởi AI mà chúng ta hàng ngày sử dụng.
 
@@ -15,7 +15,7 @@ Nghĩ sâu hơn một chút, nếu như nhà máy AI hoạt động như vậy t
 
 Đây không chỉ đơn thuần là bảo vệ dữ liệu của một quốc gia trong cơ sở hạ tầng công nghệ nội địa. Thay vào đó, các quốc gia nhận thấy cần phải đầu tư vào cơ sở hạ tầng AI có chủ quyền để hỗ trợ tăng trưởng kinh tế và đổi mới công nghiệp. Đây là lý do mà chính quyền Biden hạn chế việc bán chip AI tiên tiến cho Trung Quốc. Việc này đã tạo áp lực khiến Trung Quốc phải căng mình tự phát triển công nghệ chip riêng.
 
-### Những gì ông Jensen Huang đã nói
+## Những gì ông Jensen Huang đã nói
 
 Không chỉ Trung Quốc, các quốc gia khác đã sớm nhận ra và phát triển hệ thống của riêng mình. Chủ tịch NVIDIA Jensen Huang đã nói:
 
@@ -31,7 +31,7 @@ Bản thân NVIDIA định nghĩa AI có chủ quyền là "năng lực của m�
 
 > “Chúng ta hiện có một loại trung tâm dữ liệu kiểu mới, chuyên về việc tạo ra AI, gọi là một nhà máy sản xuất AI. Về cơ bản, nó tiếp nhận nguyên liệu thô là dữ liệu, xử lý chúng bằng các siêu máy tính AI mà NVIDIA xây dựng và biến chúng thành những token cực kỳ giá trị. Những token này chính là thứ mà mọi người trải nghiệm trên các nền tảng AI sáng tạo tuyệt vời như Midjourney.”
 
-### Những gì Shilpa Kolhatkar nói
+## Những gì Shilpa Kolhatkar nói
 
 Shilpa Kolhatkar, Giám đốc toàn cầu về AI Nations tại NVIDIA, cho biết:
 
@@ -43,7 +43,7 @@ Kolhatkar cũng chỉ ra rằng các quốc gia đang phát triển các mô hì
 
 > "Quyền sở hữu dữ liệu của mỗi quốc gia là độc quyền, là thứ mà họ nhận ra rằng phải được bảo tồn trong biên giới quốc gia."
 
-### Tiêu tốn năng lượng điện và cơ sở hạ tầng
+## Tiêu tốn năng lượng điện và cơ sở hạ tầng
 
 Khi các quốc gia cân nhắc phát triển AI, một thách thức lớn là lượng điện năng tiêu thụ. Theo Báo cáo của Viện Nghiên cứu Điện lực (EPRI):
 
@@ -52,7 +52,7 @@ Khi các quốc gia cân nhắc phát triển AI, một thách thức lớn là 
 
 Việc phụ thuộc quá mức vào một số ít trung tâm dữ liệu cũng tạo rủi ro, từ thiên tai tự nhiên đến gián điệp chính phủ, buộc các quốc gia phải đa dạng hóa cơ sở hạ tầng lưu trữ thông tin.
 
-### Kết luận
+## Kết luận
 
 Việc NVIDIA mở nhà máy AI tại Việt Nam và khắp thế giới quả là chiến lược thông minh có tầm nhìn dài hạn. Mục đích có thể không khác gì việc "khai thác" dữ liệu, kiến thức và ký ức của người dân. Họ đã nhìn xa và ra tay trước khi các quốc gia và cư dân thật sự nhận thức rõ về khái niệm "chủ quyền biên giới AI".
 
