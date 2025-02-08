@@ -1,0 +1,111 @@
+---
+import Container from "@/components/Container.astro";
+import Layout from "@/layouts/Layout.astro";
+import { get_book } from "@/lib/goodread";
+import { format } from "date-fns";
+
+const books = await get_book();
+const read = books.read;
+
+const readByYear = read.reduce(
+  (acc, post) => {
+    if (!post.user_read_at) {
+      if (!acc["Long time ago"]) {
+        acc["Long time ago"] = [];
+      }
+      acc["Long time ago"].push(post);
+      return acc;
+    }
+    const year = new Date(post.user_read_at).getFullYear();
+    if (!acc[year]) {
+      acc[year] = [];
+    }
+    acc[year].push(post);
+    return acc;
+  },
+  {} as Record<string, any[]>
+);
+
+const years = Object.keys(readByYear).sort((a, b) => Number(b) - Number(a));
+const now = new Date();
+---
+
+<Layout title="Reading" description="A list of books I've read and recommend.">
+  <Container>
+    <section class="prose max-w-none prose-invert">
+      <h1 class="font-medium text-3xl mb-8 tracking-tight">My bookshelf</h1>
+      <p>
+        This is a collection of what I’ve read over the past years,
+        automatically generated from my
+        <a href="https://www.goodreads.com/th1nhng0">Goodreads profile.</a>
+        In total, I've read <b>{read.length}</b> books.
+      </p>
+      <p>
+        I'm currently reading: {
+          books.current_reads.map((book, index) => (
+            <>
+              <a href={book.url}>{book.title}</a> by {book.author}
+              {index === books.current_reads.length - 2
+                ? " and "
+                : index < books.current_reads.length - 2
+                  ? ", "
+                  : ""}
+            </>
+          ))
+        }
+      </p>
+      <p>
+        Last updated: {format(now, "MMMM d, yyyy 'at' h:mm a")}
+      </p>
+    </section>
+    <section class="mt-16" id="blogPosts">
+      {
+        years.map((year) => (
+          <div class="mb-10" data-year={year}>
+            <h2 class="text-accent mb-6 text-2xl text-zinc-200 font-mono font-bold">
+              {year}
+            </h2>
+            <ul class="grid grid-cols-1 md:grid-cols-2 gap-6" role="list">
+              {readByYear[year].map((book) => (
+                <li class="flex gap-4 p-4 bg-zinc-800/50 rounded-lg hover:bg-zinc-800/70 transition-colors">
+                  {book.cover && (
+                    <img
+                      src={book.cover}
+                      alt={`Cover of ${book.title}`}
+                      class="w-24 h-36 object-cover rounded-md"
+                    />
+                  )}
+                  <div class="flex flex-col flex-1">
+                    <a
+                      href={book.url}
+                      class="text-zinc-100 font-medium hover:text-accent transition-colors"
+                    >
+                      {book.title}
+                    </a>
+                    <p class="text-sm text-zinc-400">by {book.author}</p>
+                    <div class="flex flex-col gap-1 mt-2 text-sm text-zinc-500">
+                      <div>
+                        My rating:{" "}
+                        <span class="text-yellow-500">
+                          {"★".repeat(Math.round(book.rating))}
+                          {"☆".repeat(5 - Math.round(book.rating))}
+                        </span>
+                      </div>
+                      <div>{book.num_pages} pages</div>
+                      {book.user_read_at && (
+                        <div>
+                          Finished:{" "}
+                          {new Date(book.user_read_at).toLocaleDateString()}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </section>
+  </Container>
+</Layout>

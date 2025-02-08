@@ -53,7 +53,7 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post);
 <Layout title={post.data.title} description={post.data.description}>
   <Container>
     <div class="mb-10 space-y-1">
-      <h1 class="text-3xl font-semibold text-black dark:text-white">
+      <h1 class="text-3xl font-semibold text-white">
         {post.data.title}
       </h1>
       <div class="flex items-center gap-1.5">
@@ -74,7 +74,7 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post);
         }
         {
           remarkPluginFrontmatter.lastModified && (
-            <span class="ml-2 inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+            <span class="ml-2 inline-flex items-center rounded-md bg-gray-800 px-2 py-0.5 text-xs font-medium text-gray-300">
               Updated:{" "}
               {format(
                 new Date(remarkPluginFrontmatter.lastModified),
@@ -91,7 +91,7 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post);
             {post.data.tags.map((tag) => (
               <a
                 href={`/tags/${tag}`}
-                class="rounded-sm border border-black/15 px-2 py-1 text-sm transition-colors duration-300 ease-in-out hover:bg-black/5 hover:text-black focus-visible:bg-black/5 focus-visible:text-black dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:bg-white/5 dark:focus-visible:text-white"
+                class="rounded-sm border border-white/20 px-2 py-1 text-sm transition-colors duration-300 ease-in-out hover:bg-white/5 hover:text-white focus-visible:bg-white/5 focus-visible:text-white"
               >
                 {tag}
               </a>
@@ -101,25 +101,19 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post);
       }
     </div>
     <TableOfContents headings={headings} />
-    <article
-      class="prose prose-img:mx-auto max-w-none prose-zinc dark:prose-invert"
-    >
+    <article class="prose prose-img:mx-auto max-w-none prose-invert">
       <Content />
     </article>
 
-    <nav
-      class="my-8 flex flex-col gap-4 border-t border-gray-200 pt-8 dark:border-gray-700"
-    >
+    <nav class="my-8 flex flex-col gap-4 border-t border-gray-700 pt-8">
       {
         prevPost && (
           <a
             href={`/blog/${prevPost.id}`}
-            class="group relative rounded-lg border border-gray-200 p-4 transition-colors hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600"
+            class="group relative rounded-lg border border-gray-700 p-4 transition-colors hover:border-gray-600"
           >
-            <div class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-              ← Previous Article
-            </div>
-            <div class="line-clamp-2 font-medium text-gray-900 group-hover:text-black dark:text-gray-100 dark:group-hover:text-white">
+            <div class="mb-2 text-sm text-gray-400">← Previous Article</div>
+            <div class="line-clamp-2 font-medium text-gray-100 group-hover:text-white">
               {prevPost.data.title}
             </div>
           </a>
@@ -130,12 +124,10 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post);
         nextPost && (
           <a
             href={`/blog/${nextPost.id}`}
-            class="group relative rounded-lg border border-gray-200 p-4 transition-colors hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600"
+            class="group relative rounded-lg border border-gray-700 p-4 transition-colors hover:border-gray-600"
           >
-            <div class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-              Next Article →
-            </div>
-            <div class="line-clamp-2 font-medium text-gray-900 group-hover:text-black dark:text-gray-100 dark:group-hover:text-white">
+            <div class="mb-2 text-sm text-gray-400">Next Article →</div>
+            <div class="line-clamp-2 font-medium text-gray-100 group-hover:text-white">
               {nextPost.data.title}
             </div>
           </a>
