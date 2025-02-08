@@ -13,9 +13,8 @@ export default defineConfig({
   site: "https://thinhcorner.com",
   adapter: vercel({
     imageService: true,
-
     isr: {
-      expiration: 60 * 60 * 24,
+      expiration: 60 * 15,
     },
   }),
   integrations: [sitemap()],
