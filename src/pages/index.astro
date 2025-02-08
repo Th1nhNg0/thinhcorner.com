@@ -1,6 +1,6 @@
 ---
 import Container from "@/components/Container.astro";
-import { SOCIAL_MEDIA } from "@/consts";
+import { SITE, SOCIAL_MEDIA } from "@/consts";
 import Layout from "@/layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import { format } from "date-fns";
@@ -11,7 +11,7 @@ const blog = (await getCollection("blog"))
   .slice(0, 5);
 ---
 
-<Layout title="Thinh's Corner" description="Ngô Phú Thịnh's personal blog">
+<Layout title={SITE.title} description={SITE.description}>
   <Container>
     <div class="space-y-8">
       <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl">
