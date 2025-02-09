@@ -38,7 +38,9 @@ const now = new Date();
         This is a collection of what I’ve read over the past years,
         automatically generated from my
         <a href="https://www.goodreads.com/th1nhng0">Goodreads profile.</a>
-        In total, I've read <b>{read.length}</b> books.
+      </p>
+      <p>
+        I've read <b>{read.length}</b> books in total.
       </p>
       <p>
         I'm currently reading: {
@@ -70,7 +72,7 @@ const now = new Date();
         <footer class="mt-2 text-sm text-zinc-400">— Plato</footer>
       </blockquote>
     </section>
-    <section class="mt-16" id="blogPosts">
+    <section class="mt-8" id="blogPosts">
       {
         years.map((year) => (
           <div class="mb-10" data-year={year}>
