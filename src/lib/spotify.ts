@@ -4,7 +4,8 @@ const refresh_token = import.meta.env.SPOTIFY_REFRESH_TOKEN;
 
 const basic = Buffer.from(`${client_id}:${client_secret}`).toString("base64");
 const NOW_PLAYING_ENDPOINT = `https://api.spotify.com/v1/me/player/currently-playing`;
-const TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=25`;
+const TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=25`;
+const TOP_ARTISTS_ENDPOINT = `https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=25`;
 const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played?limit=5`;
 const SAVED_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/tracks?limit=50`;
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
@@ -87,6 +88,19 @@ export interface TopTrack {
     external_urls: {
       spotify: string;
     };
+    followers: {
+      href: string | null;
+      total: number;
+    };
+    genres: string[];
+    images: {
+      url: string;
+      height: number | null;
+      width: number | null;
+    }[];
+    popularity: number;
+    type: string;
+    uri: string;
   }[];
   songUrl: string;
   title: string;
@@ -123,6 +137,19 @@ export interface RecentlyPlayedTrack {
     external_urls: {
       spotify: string;
     };
+    followers: {
+      href: string | null;
+      total: number;
+    };
+    genres: string[];
+    images: {
+      url: string;
+      height: number | null;
+      width: number | null;
+    }[];
+    popularity: number;
+    type: string;
+    uri: string;
   }[];
   songUrl: string;
   title: string;
@@ -166,4 +193,57 @@ const getTotalSavedTracks = async () => {
   return data.total;
 };
 
-export { getNowPlaying, getTopTracks, getRecentlyPlayed, getTotalSavedTracks };
+export interface TopArtist {
+  external_urls: {
+    spotify: string;
+  };
+  followers: {
+    href: string | null;
+    total: number;
+  };
+  genres: string[];
+  href: string;
+  id: string;
+  images: {
+    url: string;
+    height: number | null;
+    width: number | null;
+  }[];
+  name: string;
+  popularity: number;
+  type: "artist";
+  uri: string;
+}
+
+const getTopArtists = async () => {
+  const { access_token } = await getAccessToken();
+
+  const { items } = await fetch(TOP_ARTISTS_ENDPOINT, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  }).then((res) => res.json());
+
+  const artists: TopArtist[] =
+    items?.map((artist: any) => ({
+      external_urls: artist.external_urls,
+      followers: artist.followers,
+      genres: artist.genres,
+      href: artist.href,
+      id: artist.id,
+      images: artist.images,
+      name: artist.name,
+      popularity: artist.popularity,
+      type: artist.type,
+      uri: artist.uri,
+    })) || [];
+  return artists;
+};
+
+export {
+  getNowPlaying,
+  getTopTracks,
+  getRecentlyPlayed,
+  getTotalSavedTracks,
+  getTopArtists,
+};

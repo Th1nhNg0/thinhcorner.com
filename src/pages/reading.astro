@@ -55,8 +55,20 @@ const now = new Date();
         }
       </p>
       <p>
-        Last updated: {format(now, "MMMM d, yyyy 'at' h:mm a")}
+        Last updated: <time
+          datetime={now.toISOString()}
+          title={now.toISOString()}
+        >
+          {format(now, "MMMM d, yyyy 'at' h:mm a")}
+        </time>
       </p>
+      <blockquote class="my-8 pl-6 border-l-2 border-zinc-700">
+        <p class="text-lg italic text-zinc-300">
+          Books gives a soul to the universe, wings to the mind, flight to the
+          imagination, and life to everything.
+        </p>
+        <footer class="mt-2 text-sm text-zinc-400">— Plato</footer>
+      </blockquote>
     </section>
     <section class="mt-16" id="blogPosts">
       {
