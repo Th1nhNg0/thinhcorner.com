@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 
+import partytown from "@astrojs/partytown";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
@@ -17,7 +18,14 @@ export default defineConfig({
       expiration: 60 * 15,
     },
   }),
-  integrations: [sitemap()],
+  integrations: [
+    sitemap(),
+    partytown({
+      config: {
+        forward: ["dataLayer.push"],
+      },
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },
