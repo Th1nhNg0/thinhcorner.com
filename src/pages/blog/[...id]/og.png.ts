@@ -56,9 +56,9 @@ export const GET: APIRoute<Props> = async ({ props }) => {
 };
 
 export async function getStaticPaths() {
-  const posts = (await getCollection("blog"))
-    .filter((post) => !post.data.draft)
-    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  const posts = (await getCollection("blog")).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+  );
   return posts.map((post) => ({
     params: { id: post.id },
     props: post,
