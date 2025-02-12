@@ -9,6 +9,7 @@ import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 import { remarkModifiedTime } from "./remark/remark-modified-time.mjs";
 import { remarkReadingTime } from "./remark/remark-reading-time.mjs";
+import mdx from "@astrojs/mdx";
 
 export default defineConfig({
   site: "https://thinhcorner.com",
@@ -25,6 +26,7 @@ export default defineConfig({
         forward: ["dataLayer.push"],
       },
     }),
+    mdx(),
   ],
   vite: {
     plugins: [tailwindcss()],
