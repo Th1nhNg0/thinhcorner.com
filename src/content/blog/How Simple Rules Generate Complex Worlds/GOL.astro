@@ -1,0 +1,87 @@
+<div id="GOL" class="w-full aspect-video overflow-hidden relative">
+  <div class="absolute top-3 right-3">
+    <button
+      class="p-1 bg-amber-500/70 hover:bg-amber-500 rounded cursor-pointer"
+      id="resetGOL"
+      title="Reset"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        ><path
+          fill="currentColor"
+          d="M18.258 3.508a.75.75 0 0 1 .463.693v4.243a.75.75 0 0 1-.75.75h-4.243a.75.75 0 0 1-.53-1.28L14.8 6.31a7.25 7.25 0 1 0 4.393 5.783a.75.75 0 0 1 1.488-.187A8.75 8.75 0 1 1 15.93 5.18l1.51-1.51a.75.75 0 0 1 .817-.162"
+        ></path></svg
+      >
+    </button>
+  </div>
+</div>
+
+<script is:inline>
+  const s = (sketch) => {
+    const div = document.getElementById("GOL");
+    const button = document.getElementById("resetGOL");
+    let grid, next, cols, rows;
+    const resolution = 4;
+
+    button.addEventListener("click", () => {
+      sketch.reset();
+    });
+
+    sketch.reset = () => {
+      for (let i = 0; i < grid.length; i++) {
+        grid[i] = sketch.random() < 0.5 ? 1 : 0;
+      }
+    };
+
+    sketch.setup = () => {
+      sketch.createCanvas(div.offsetWidth, div.offsetHeight);
+      sketch.frameRate(20);
+      cols = (sketch.width / resolution) | 0;
+      rows = (sketch.height / resolution) | 0;
+      grid = new Uint8Array(cols * rows);
+      next = new Uint8Array(cols * rows);
+      sketch.reset();
+    };
+
+    sketch.draw = () => {
+      sketch.background("#18181b");
+      sketch.noStroke();
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          const idx = i + j * cols;
+          const state = grid[idx];
+          // Draw current cell
+          if (state) {
+            const x = i * resolution;
+            const y = j * resolution;
+            sketch.rect(x, y, resolution - 1, resolution - 1);
+          }
+          // Compute next generation
+          let sum = 0;
+          // Count neighbors using direct array access
+          const above = ((j - 1 + rows) % rows) * cols;
+          const below = ((j + 1) % rows) * cols;
+          const left = (i - 1 + cols) % cols;
+          const right = (i + 1) % cols;
+
+          sum =
+            grid[left + above] +
+            grid[i + above] +
+            grid[right + above] +
+            grid[left + j * cols] +
+            grid[right + j * cols] +
+            grid[left + below] +
+            grid[i + below] +
+            grid[right + below];
+
+          next[idx] = sum === 3 || (state && sum === 2) ? 1 : 0;
+        }
+      }
+      [grid, next] = [next, grid]; // Swap buffers
+    };
+  };
+  new p5(s, "GOL");
+</script>
