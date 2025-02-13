@@ -19,7 +19,7 @@ In this article, we'll explore how simple rules can give rise to complex phenome
 
 ## The Game of Life
 
-The universe of the Game of Life is a two-dimensional grid of cells, each of which can be alive or dead. The state of each cell evolves over time according to the following rules:
+The universe of the Game of Life is a **two-dimensional grid of cells**, each of which can be **alive or dead**. The state of each cell **evolves over time** according to the following rules:
 
 1. Any live cell with fewer than two live neighbours dies, as if by underpopulation.
 2. Any live cell with two or three live neighbours lives on to the next generation.
@@ -89,3 +89,42 @@ Various patterns emerge in the Game of Life, each categorized based on its behav
     <td>Heavy-weight spaceship (HWSS)</td>
   </tr>
 </table>
+
+So cool right?
+
+We can even run the Game of Life in the Game of Life! It's been proven that the Game of Life is **Turing completeness**, meaning that it can simulate any algorithm that a computer can run.
+
+<iframe
+  class="w-full aspect-video"
+  src="https://www.youtube.com/embed/xP5-iIeKXE8?si=L7L213HWpasV9e8X"
+  title="YouTube video player"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  referrerpolicy="strict-origin-when-cross-origin"
+  allowfullscreen
+  loading="lazy"
+></iframe>
+
+If you are interested and want to know more about Turing completeness in the Game of Life, I recommend watching [this video by Alan Zucconi](https://youtu.be/Kk2MH9O4pXY?si=5HzphfDG0ZLY-A8b)
+
+I learn about the Game of Life from [The Coding Train](https://youtu.be/FWSR_7kZuYg?si=tkyfWgT1C1k3kJNZ) about 6 year ago. Since then, I have fall in love with the concept like these and I started to explore more about it.
+
+## Wave Function Collapse Algorithm
+
+In 2022, I found a game called [Townscaper](https://www.townscapergame.com/) - a game that let you build a town by just clicking. It's a simple game but the concept behind it is really interesting.
+
+<iframe
+  class="w-full aspect-video"
+  src="https://www.youtube.com/embed/QtVkteAS15M?si=QMQkzdjeCkJATwOA"
+  title="YouTube video player"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  referrerpolicy="strict-origin-when-cross-origin"
+  allowfullscreen
+></iframe>
+
+As you can see in the video that the game is generating a town by just clicking on a grid. But how does it work? How can a simple click generate a complex town?
+
+How the game know what tile to place and what tile should change so it doesn't break the town?
+
+![Townscaper](./townscaper.gif)
