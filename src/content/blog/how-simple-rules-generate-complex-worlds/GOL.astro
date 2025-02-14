@@ -20,7 +20,7 @@
 </div>
 
 <script is:inline>
-  const s = (sketch) => {
+  new p5((sketch) => {
     const div = document.getElementById("GOL");
     const button = document.getElementById("resetGOL");
     let grid, next, cols, rows;
@@ -82,6 +82,5 @@
       }
       [grid, next] = [next, grid]; // Swap buffers
     };
-  };
-  new p5(s, "GOL");
+  }, "GOL");
 </script>

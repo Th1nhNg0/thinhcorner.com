@@ -129,7 +129,7 @@ How does the game know what tile to place and what tile should change so it does
 
 ![Townscaper](./townscaper.gif)
 
-Turns out, the game is using an algorithm called the **Wave Function Collapse algorithm** (WFC)–a greedy, computational algorithm that generates a grid of tiles based on a set of constraints.
+Turns out, the game is using an algorithm called the **Wave Function Collapse algorithm** (WFC)–a greedy, computational algorithm that generates a grid of tiles based on a set of constraints. Developed by [Maxim Gumin](https://paulmerrell.org/model-synthesis/) based on work by [Paul Merrell](https://paulmerrell.org/model-synthesis/).
 
 The algorithm is based on the idea of **quantum mechanics**, where a particle is in a superposition until it is observed. This means a particle can be in any possible state until it is observed.
 
@@ -141,4 +141,6 @@ In WFC, the process starts with a grid where each cell can be any possible tile 
 
 Consider a Sudoku puzzle as an analogy: each empty cell can be one of several numbers initially. You scan the grid for a spot where only one or two digits can logically fit, fill that in, and then use the updated information to further limit the options for the remaining cells. Just like in Sudoku, the WFC algorithm uses constraints to gradually and methodically complete the grid, turning uncertainty into a coherent, final solution.
 
-![Sudoku](./sudoku.webp)
+import Sudoku from "./sudoku.astro";
+
+<Sudoku />

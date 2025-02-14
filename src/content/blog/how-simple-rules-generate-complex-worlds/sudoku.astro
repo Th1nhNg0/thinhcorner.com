@@ -1,0 +1,129 @@
+<div
+  id="SUDOKU"
+  class="w-full aspect-square max-w-sm mx-auto overflow-hidden relative"
+>
+</div>
+<script is:inline>
+  const div = document.getElementById("SUDOKU");
+
+  new p5((sketch) => {
+    let board = [],
+      state = "find",
+      cell = null,
+      cnt = 0,
+      speed = 1;
+    const hlBase = 30,
+      waitBase = 100,
+      cs = div.offsetWidth / 4;
+    sketch.setup = () => {
+      sketch.createCanvas(4 * cs, 4 * cs);
+      sketch.colorMode(sketch.HSB, 360, 100, 100, 255);
+      initBoard();
+    };
+    sketch.draw = () => {
+      sketch.background(220, 10, 95);
+      for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+          let x = j * cs,
+            y = i * cs;
+          if (!board[i][j]) {
+            let p = possAt(i, j),
+              b = sketch.map(p.length, 1, 4, 90, 40);
+            sketch.noStroke();
+            sketch.fill(200, 50, b);
+            sketch.rect(x, y, cs, cs);
+            sketch.fill(0);
+            sketch.textSize(12);
+            sketch.textAlign(sketch.CENTER, sketch.CENTER);
+            let m = cs / 2;
+            for (let n = 1; n <= 4; n++) {
+              let cx = x + ((n - 1) % 2) * m + m / 2,
+                cy = y + sketch.floor((n - 1) / 2) * m + m / 2;
+              if (p.includes(n)) sketch.text(n, cx, cy);
+            }
+          } else {
+            sketch.noStroke();
+            sketch.fill(0, 0, 100);
+            sketch.rect(x, y, cs, cs);
+            sketch.fill(220, 20, 20);
+            sketch.textSize(32);
+            sketch.textAlign(sketch.CENTER, sketch.CENTER);
+            sketch.text(board[i][j], x + cs / 2, y + cs / 2);
+          }
+        }
+      }
+      for (let i = 0; i <= 4; i++) {
+        sketch.stroke("#18181b");
+        sketch.strokeWeight(i == 0 || i == 4 ? 5 : i % 2 == 0 ? 3 : 1);
+        sketch.line(0, i * cs, 4 * cs, i * cs);
+        sketch.line(i * cs, 0, i * cs, 4 * cs);
+      }
+      let hlDur = sketch.floor(hlBase / speed),
+        waitTime = sketch.floor(waitBase / speed);
+      if (state == "find") {
+        cell = findMin();
+        if (!cell) {
+          state = "done";
+          cnt = 0;
+        } else {
+          cnt = 0;
+          state = "highlight";
+        }
+      } else if (state == "highlight") {
+        sketch.noStroke();
+        sketch.fill(200, 50, 100, 150);
+        sketch.rect(cell.col * cs, cell.row * cs, cs, cs);
+        if (++cnt > hlDur) state = "fill";
+      } else if (state == "fill") {
+        let p = possAt(cell.row, cell.col);
+        board[cell.row][cell.col] = p[sketch.floor(sketch.random(p.length))];
+        state = "find";
+      } else if (state == "done") {
+        if (++cnt > waitTime) {
+          initBoard();
+          state = "find";
+        }
+      }
+    };
+    function possAt(r, c) {
+      let used = new Set();
+      for (let j = 0; j < 4; j++) if (board[r][j]) used.add(board[r][j]);
+      for (let i = 0; i < 4; i++) if (board[i][c]) used.add(board[i][c]);
+      let sr = sketch.floor(r / 2) * 2,
+        sc = sketch.floor(c / 2) * 2;
+      for (let i = 0; i < 2; i++)
+        for (let j = 0; j < 2; j++)
+          if (board[sr + i][sc + j]) used.add(board[sr + i][sc + j]);
+      let poss = [];
+      for (let n = 1; n <= 4; n++) if (!used.has(n)) poss.push(n);
+      return poss;
+    }
+    function findMin() {
+      let m = 5,
+        targ = null;
+      for (let i = 0; i < 4; i++)
+        for (let j = 0; j < 4; j++) {
+          if (!board[i][j]) {
+            let p = possAt(i, j);
+            if (p.length && p.length < m) {
+              m = p.length;
+              targ = { row: i, col: j };
+            }
+          }
+        }
+      if (targ) targ.candidates = possAt(targ.row, targ.col);
+      return targ;
+    }
+    function initBoard() {
+      board = [];
+      for (let i = 0; i < 4; i++) {
+        board[i] = [];
+        for (let j = 0; j < 4; j++) board[i][j] = 0;
+      }
+      let x = sketch.floor(sketch.random(4)),
+        y = sketch.floor(sketch.random(4)),
+        n = sketch.floor(sketch.random(4)) + 1;
+      board[x][y] = n;
+    }
+  }, "SUDOKU");
+</script>
