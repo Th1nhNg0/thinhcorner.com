@@ -144,3 +144,9 @@ Consider a Sudoku puzzle as an analogy: each empty cell can be one of several nu
 import Sudoku from "./sudoku.astro";
 
 <Sudoku />
+
+So basically, we just loop through the grid and find the cell with the lowest entropy, collapse it, and update the neighbors. This process repeats until the grid is filled.
+
+Let’s replace the Sudoku grid with a game's tileset, the rule of it is more simpler now. For each tile, we have a set of possible neighbors can be placed next to it. The constraints we are going to use are that the colors on adjacent tiles must match up with each other. Check out [Wave by Oskar Stålberg](https://oskarstalberg.com/game/wave/wave.html) to see the algorithm in action.
+
+![WFC](./wfc.gif)
