@@ -107,11 +107,11 @@ We can even run the Game of Life in the Game of Life! It's been proven that the 
 
 If you are interested and want to know more about Turing completeness in the Game of Life, I recommend watching [this video by Alan Zucconi.](https://youtu.be/Kk2MH9O4pXY?si=5HzphfDG0ZLY-A8b)
 
-I learned about the Game of Life from [The Coding Train](https://youtu.be/FWSR_7kZuYg?si=tkyfWgT1C1k3kJNZ) about 6 years ago. Since then, I have fallen in love with concepts like these, and I started to explore more about them.
+I learned about the Game of Life from [The Coding Train](https://youtu.be/FWSR_7kZuYg?si=tkyfWgT1C1k3kJNZ) about 6 years ago. Since then, I fell in love with these concepts and started exploring them further.
 
 ## Wave Function Collapse Algorithm
 
-In 2022, I found a game called [Townscaper](https://www.townscapergame.com/)–a game that let you build a town by just clicking. It's a simple game, but the concept behind it is really interesting.
+In 2022, I found a game called [Townscaper](https://www.townscapergame.com/)–a game that lets you build a town by just clicking. It's a simple game, but the concept behind it is really interesting.
 
 <iframe
   class="w-full aspect-video"
@@ -133,7 +133,7 @@ Turns out, the game is using an algorithm called the **Wave Function Collapse al
 
 The algorithm is based on the idea of **quantum mechanics**, where a particle is in a superposition until it is observed. This means a particle can be in any possible state until it is observed.
 
-For example, place a cat in a box with a poison that will be released if a radioactive atom decays. The cat is in a superposition of being alive and dead until the box is opened and the cat is observed. At that point, the cat is either alive or dead. This is called the [Schrödinger's cat](https://en.wikipedia.org/wiki/Schr%C3%B6dinger%27s_cat) thought experiment.
+For example, place a cat in a box with poison that will be released if a radioactive atom decays. The cat is in a superposition of being alive and dead until the box is opened and the cat is observed. At that point, the cat is either alive or dead. This is called the [Schrödinger's cat](https://en.wikipedia.org/wiki/Schr%C3%B6dinger%27s_cat) thought experiment.
 
 ![Schrödinger's cat](./Schrodingers_cat.webp)
 
@@ -147,6 +147,6 @@ import Sudoku from "./sudoku.astro";
 
 So basically, we just loop through the grid and find the cell with the lowest entropy, collapse it, and update the neighbors. This process repeats until the grid is filled.
 
-Let’s replace the Sudoku grid with a game's tileset, the rule of it is more simpler now. For each tile, we have a set of possible neighbors can be placed next to it. The constraints we are going to use are that the colors on adjacent tiles must match up with each other. Check out [Wave by Oskar Stålberg](https://oskarstalberg.com/game/wave/wave.html) to see the algorithm in action.
+Let’s replace the Sudoku grid with a game's tileset. The rule is simpler now. For each tile, we have a set of possible neighbors that can be placed next to it. The constraints we are going to use are that the colors on adjacent tiles must match up with each other. Check out [Wave by Oskar Stålberg](https://oskarstalberg.com/game/wave/wave.html) to see the algorithm in action.
 
 ![WFC](./wfc.gif)
