@@ -11,7 +11,7 @@ Khi trí tuệ nhân tạo đang là chủ đề nóng bỏng nhất và dườn
 
 Trong cộng đồng các lập trình viên, Metaverse không còn là một khái niệm xa lạ. Nó đã trở thành một chủ đề được bàn tán sôi nổi, với nhiều ý kiến trái chiều. Một số người cho rằng Metaverse sẽ là tương lai của thế giới ảo, một số người khác lại cho rằng Metaverse chỉ là một trào lưu và sẽ không thể phát triển lâu dài. Sự thật là không ai biết chính xác tiềm năng tổng thể của Metaverse và tác động của nó đối với cuộc sống của chúng ta. Để Metaverse có thể xảy ra, cần hội tụ đủ rất nhiều yếu tố, từ công nghệ, đến nguồn lực và cả sự chấp nhận của cộng đồng. Điều này khác xa với tỷ lệ chấp nhận của internet, mạng xã hội, smartphone, v.v.
 
-![Meta](./metaverse.jpg)
+![Meta](./metaverse.webp)
 
 ## Vậy, Metaverse - Vũ trụ ảo là gì?
 
@@ -60,7 +60,7 @@ Mặc dù vậy, khi đem sản phẩm **kính thực tế ảo** ra so sánh v�
 
 ## Còn ai trên đường đua?
 
-![race](./pexels-chris-peeters-12795.jpg)
+![race](./pexels-chris-peeters-12795.webp)
 
 Nói nhiều về Meta như thế này không có nghĩa là chỉ có mình Meta đang đầu tư vào Metaverse. Có rất nhiều công ty khác cũng đang âm thầm đầu tư vào Metaverse và phát triển với một tốc độ chóng mặt.
 
@@ -85,13 +85,13 @@ Sự phát triển của Fortnite đã diễn ra chậm rãi và ổn định k�
 
 Epic và Meta không phải là những công ty tiềm năng duy nhất đang xây dựng metaverse của riêng họ. **Roblox (RBLX)** cũng tiếp tục phát triển khái niệm metaverse của mình. Và trong báo cáo thu nhập hàng quý gần đây nhất, công ty đã thông báo rằng họ đã đạt được 1 tỷ đô la doanh thu đặt hàng.
 
-![disney_layoff](./roblox.jpg)
+![disney_layoff](./roblox.webp)
 
 ## Trung Quốc đại lục và Metaverse
 
 Do tính chất kinh tế chính trị, các thông tin về Metaverse tại Trung Quốc đại lục không được công bố rộng rãi. Nhưng ta có thể nhìn vào một số điều kiện cần thiết để phát triển Metaverse mà đất nước này đang có.
 
-![chinese](./pexels-jimmy-chan-1038191.jpg)
+![chinese](./pexels-jimmy-chan-1038191.webp)
 
 **Dân số lớn**: Trung Quốc đại lục có dân số lớn nhất thế giới, với hơn 1,4 tỷ người. Điều này tạo ra một cơ hội lớn để phát triển Metaverse, vì có nhiều người dùng tiềm năng.
 

@@ -54,7 +54,7 @@ Người dân địa phương luôn biết rằng Terra Preta có độ phì nhi
 
 Để hiểu rõ tác động thực sự của biochar, chúng ta cần phải xem xét toàn diện hệ thống biochar. Dù nghiên cứu ở quy mô nào, một hệ thống biochar luôn bao gồm những yếu tố chính sau: (a) nguồn sinh khối ban đầu, (b) cách thức sản xuất ra biochar, và (c) khả năng và cách thức sử dụng nó cho đất.[^Scholz]
 
-![biocharsystem](./biocharsystem.png)
+![biocharsystem](./biocharsystem.webp)
 
 ### Nguồn Sinh Khối Sản Xuất Biochar
 

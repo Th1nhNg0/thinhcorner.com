@@ -11,7 +11,7 @@ Với sự phát triển ngày càng mạnh mẽ, vai trò của ngành công ng
 
 ## Công nghệ thông tin là gì?
 
-![Lập trình viên](./it.jpg)
+![Lập trình viên](./it.webp)
 
 Công nghệ thông tin, viết tắt CNTT, (tiếng Anh: Information technology hay là IT) là một nhánh ngành kỹ thuật sử dụng máy tính và phần mềm máy tính để chuyển đổi, lưu trữ, bảo vệ, xử lý, truyền tải và thu thập thông tin[^wiki_it].
 
@@ -21,7 +21,7 @@ Công nghệ thông tin, viết tắt CNTT, (tiếng Anh: Information technology
 
 ## Lập trình viên là ai?
 
-![Lập trình viên](./developer.jpg)
+![Lập trình viên](./developer.webp)
 
 Lập trình viên (tiếng Anh: Programmer) nhiều khi còn được gọi là Developer (gọi tắt Dev) hoặc Coder là người viết ra các chương trình máy tính. Lập trình viên viết các đoạn mã (code) sử dụng ngôn ngữ lập trình (ví dụ: C++, python, Java) để tạo ra các chương trình máy tính này.
 
@@ -35,7 +35,7 @@ Nội dung của phần này được tham khảo từ sách [So, You Want to Be
 
 #### Lập trình viên hệ thống
 
-![Lập trình viên hệ thống](./system_engineer.jpg)
+![Lập trình viên hệ thống](./system_engineer.webp)
 
 **Lập trình hệ thống** là công việc viết những phần mềm cho hệ thống (máy tính). Lập trình hệ thống nhằm xây dựng những phần mềm phục vụ cho phần cứng (hệ thống) máy tính (ví dụ chương trình chống phân mảnh đĩa cứng). Đòi hỏi phải có những hiểu biết chuyên sâu về phần cứng máy tính.
 
@@ -75,7 +75,7 @@ Vị trí công việc này tạo ra và duy trì hệ điều hành (Linux, Win
 
 #### Lập trình viên ứng dụng
 
-![Lập trình viên ứng dụng](./application.jpg)
+![Lập trình viên ứng dụng](./application.webp)
 
 Cũng như lập trình hệ thống, **lập trình ứng dụng** xây dựng những phần mềm phục vụ cho người dùng máy tính. Ví dụ: word, excel, power point... Số lượng lập trình viên ứng dụng đang nhiều hơn so với lập trình viên hệ thống.
 
@@ -125,7 +125,7 @@ Công việc chính của lập trình viên là viết mã. Lập trình viên 
 
 #### Lập trình máy tính lớn
 
-![Lập trình máy tính lớn](./Mainframe.jpg)
+![Lập trình máy tính lớn](./Mainframe.webp)
 
 Máy tính lớn (tiếng Anh: Mainframe) là một loại máy tính thường được sử dụng bởi các công ty, tập đoàn cũng như những tổ chức chính phủ nhằm phục vụ cho các công việc cần xử lí lượng lớn dữ liệu, chẳng hạn như thống kê dữ liệu, lên kế hoạch sử dụng tài nguyên, xử lí giao dịch… Thuở ban đầu, chữ mainframe được người ta dùng để chỉ những thùng máy lớn chứa bộ xử lí và bộ nhớ của những máy tính cỡ lớn. Thế nhưng sau này, khi nhắc tới mainframe, người ta nghĩ đến một cỗ máy to lớn và mạnh mẽ hơn những máy tính cá nhân. Ngoài ra, mainframe còn có tên gọi khác là "Big Iron".
 
@@ -137,7 +137,7 @@ Mainframe có hai loại lập trình viên khác nhau. Lập trình viên ứng
 
 #### Lập trình nhúng và phần mềm hệ thống
 
-![Arduino and Raspberry pi](./raspberry_arduino.jpg)
+![Arduino and Raspberry pi](./raspberry_arduino.webp)
 
 Internet kết nối vạn vật (IoT: Internet of Things) [^wiki_iot] sẽ không thể hoạt động nếu thiếu các lập trình viên viết mã cho từng thiết bị. Mọi "vật" trong IoT đều có phần mềm được viết riêng. Mã này gọi là phần mềm hệ thống, được tải vào bộ nhớ chỉ đọc (hay bộ nhớ flash) và trở thành một phần của thiết bị. Sau khi được viết, tải vào thiết bị, phầm mềm hệ thống trở thành một phần của hệ thống nhúng. Các hệ thống nhúng được sử dụng mỗi khi có nhiệm vụ nào đó lặp đi lặp lại, các nhiệm vụ này có thể đơn giản hoặc phức tạp.
 
@@ -168,7 +168,7 @@ Kỹ năng mà các công ty mong muốn:
 
 ### Video game
 
-![Video game](./video_game.jpg)
+![Video game](./video_game.webp)
 
 #### Phát triển videogame
 
@@ -229,7 +229,7 @@ Nhân viên âm thanh có nhiệm vụ phát triển, ghi âm và xử lý tất
 
 ### Lập trình web
 
-![website](./website.jpg)
+![website](./website.webp)
 
 Website là một tập hợp các trang thông tin có chứa nội dung dạng văn bản, chữ số, âm thanh, hình ảnh, video, v.v... được lưu trữ trên máy chủ (web server) và có thể truy cập từ xa thông qua mạng Internet.
 
@@ -249,7 +249,7 @@ Với sự phát triển chóng mặt của công nghệ, hiện nay đã có nh
 
 #### Trí tuệ nhân tạo
 
-![Ai](./ai.jpg)
+![Ai](./ai.webp)
 
 Trí tuệ nhân tạo hay trí thông minh nhân tạo (Artificial intelligence - viết tắt là AI) là một ngành thuộc lĩnh vực khoa học máy tính (Computer science). Công nghệ AI là công nghệ mô phỏng các quá trình suy nghĩ và học tập của con người cho máy móc, đặc biệt là các hệ thống máy tính. Các quá trình này bao gồm việc học tập (thu thập thông tin và các quy tắc sử dụng thông tin), lập luận (sử dụng các quy tắc để đạt được kết luận gần đúng hoặc xác định) và tự sửa lỗi.
 
@@ -264,7 +264,7 @@ Trí tuệ nhân tạo hay trí thông minh nhân tạo (Artificial intelligence
 
 #### Robot
 
-![robot](./robot.jpg)
+![robot](./robot.webp)
 
 Robot hoặc Rôbốt, Rô-bô , Người máy (tiếng Anh: Robot) là một loại máy có thể thực hiện những công việc một cách tự động bằng sự điều khiển của máy tính hoặc các vi mạch điện tử được lập trình. Robot là một tác nhân cơ khí, nhân tạo, ảo, thường là một hệ thống cơ khí-điện tử. [^wiki_robot]
 
@@ -286,7 +286,7 @@ Kỹ sư robot thiết kế và bảo trì robot, phát triển những các th�
 
 ### An ninh mạng
 
-![cybersecurity](./cyber_sercurity.jpg)
+![cybersecurity](./cyber_sercurity.webp)
 
 An ninh mạng (cybersecurity), an ninh máy tính (computer security), bảo mật công nghệ thông tin (IT security) là việc bảo vệ hệ thống mạng máy tính khỏi các hành vi trộm cắp hoặc làm tổn hại đến phần cứng, phần mềm và các dữ liệu, cũng như các nguyên nhân dẫn đến sự gián đoạn, chuyển lệch hướng của các dịch vụ hiện đang được được cung cấp.[^wiki_security]
 
@@ -308,7 +308,7 @@ Nhân sự làm việc trong mảng an ninh mạng có thể được chia thàn
 
 ### 1. Nhu cầu tuyển dụng nhân lực cao
 
-![Nhân lực IT](./it-vieclam.png)
+![Nhân lực IT](./it-vieclam.webp)
 
 Thống kê từ TopDev[^topdev] cho thấy nhu cầu nhân lực CNTT tăng nhưng thị trường lao động lĩnh vực này tại Việt Nam luôn trong tình trạng thiếu hụt về cả số lượng và chất lượng. Năm 2021, số lượng nhân lực CNTT cần là 500.000 người và thiếu hụt 190.000 người.
 
@@ -316,7 +316,7 @@ Phân tích dữ liệu (Big Data), trí tuệ nhân tạo (AI), an toàn thông
 
 ### 2. Mức lương hấp dẫn
 
-![Mức lương IT](./luong_it.png)
+![Mức lương IT](./luong_it.webp)
 
 Dải lương phổ biến của ngành CNTT là từ 8,4 triệu đồng đến 27,4 triệu đồng. Tùy theo chính sách ở các doanh nghiệp khác nhau, con số này có thể thay đổi. Với những sinh viên mới tốt nghiệp chuyên ngành CNTT, lương cơ bản nằm trong khoảng 7 - 10 triệu đồng/tháng. Những người 1 - 2 năm kinh nghiệm sẽ nhận lương mỗi tháng khoảng 10 - 15 triệu đồng. Con số này có thể lên hơn 20 triệu đồng nếu có tối thiểu 3 năm kinh nghiệm và kỹ năng chuyên sâu, đa dạng.
 

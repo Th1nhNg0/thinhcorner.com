@@ -14,13 +14,13 @@ Hay Day is a popular mobile game created by Supercell in 2012. It is a farming s
 
 In Hay Day, your main job is to make products based on the orders that you receive from the customers. When you complete the order, you will get coins and experience points. The orders are combine of products that you can make in the game. The orders are generated randomly and you can choose to accept or decline them.
 
-![orders](./hayday-orders.png)
+![orders](./hayday-orders.webp)
 
 To make products in the game, you need two main resources: goods (or product) and machine. Each goods has a production time, a machine that can produce it and goods that are required to make it. For example, to make a _chicken feed_, you need _2 wheat_ and _1 corn_. The production time of a _chicken feed_ is _5 minutes_ and it can be made in the _feed mill_.
 
 For a deep dive into the game, you can check out the [Hay Day Wiki](https://hayday.fandom.com/wiki/Hay_Day_Wiki).
 
-![chart light](./chart1.png)
+![chart light](./chart1.webp)
 
 ## The problem
 
