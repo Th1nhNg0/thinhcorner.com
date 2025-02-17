@@ -1,5 +1,5 @@
 ---
-title: "How simple rules generate complex worlds"
+title: "How Simple Rules Generate Complex Worlds"
 date: 2025-02-12
 description: "Exploring the emergence of complexity from simple rules."
 draft: true
@@ -107,11 +107,11 @@ We can even run the Game of Life in the Game of Life! It's been proven that the 
 
 If you are interested and want to know more about Turing completeness in the Game of Life, I recommend watching [this video by Alan Zucconi.](https://youtu.be/Kk2MH9O4pXY?si=5HzphfDG0ZLY-A8b)
 
-I learned about the Game of Life from [The Coding Train](https://youtu.be/FWSR_7kZuYg?si=tkyfWgT1C1k3kJNZ) about 6 years ago. Since then, I fell in love with these concepts and started exploring them further.
+I learned about the Game of Life from [The Coding Train](https://youtu.be/FWSR_7kZuYg?si=tkyfWgT1C1k3kJNZ) about six years ago. Since then, I’ve fallen in love with these concepts and started exploring them further.
 
 ## Wave Function Collapse Algorithm
 
-In 2022, I found a game called [Townscaper](https://www.townscapergame.com/)–a game that lets you build a town by just clicking. It's a simple game, but the concept behind it is really interesting.
+In 2022, I found a game called [Townscaper](https://www.townscapergame.com/)—a game that lets you build a town by just clicking. It's a simple game, but the concept behind it is really interesting.
 
 <iframe
   class="w-full aspect-video"
@@ -123,13 +123,13 @@ In 2022, I found a game called [Townscaper](https://www.townscapergame.com/)–a
   allowfullscreen
 ></iframe>
 
-As you can see in the video, the game is generating a town by just clicking on a grid. But how does it work? How can a simple click generate a complex town?
+As you can see in the video, the game generates a town just by clicking on a grid. But how does it work? How can a simple click generate a complex town?
 
 How does the game know what tile to place and what tile should change so it doesn't break the town?
 
 ![Townscaper](./townscaper.gif)
 
-Turns out, the game is using an algorithm called the **Wave Function Collapse algorithm** (WFC)–a greedy, computational algorithm that generates a grid of tiles based on a set of constraints. Developed by [Maxim Gumin](https://paulmerrell.org/model-synthesis/) based on work by [Paul Merrell](https://paulmerrell.org/model-synthesis/).
+Turns out, the game is using an algorithm called the **Wave Function Collapse algorithm** (WFC)—a greedy, computational algorithm that generates a grid of tiles based on a set of constraints. Developed by [Maxim Gumin](https://github.com/mxgmn) based on work by [Paul Merrell](https://paulmerrell.org/model-synthesis/).
 
 The algorithm is based on the idea of **quantum mechanics**, where a particle is in a superposition until it is observed. This means a particle can be in any possible state until it is observed.
 
@@ -137,16 +137,16 @@ For example, place a cat in a box with poison that will be released if a radioac
 
 ![Schrödinger's cat](./Schrodingers_cat.webp)
 
-In WFC, the process starts with a grid where each cell can be any possible tile from a given set. The algorithm then searches for the cell with the lowest **entropy**–essentially, the one with the most uncertainty. Once found, this cell is **observed**, meaning it collapses into a specific tile based on predefined constraints. These constraints ensure that neighboring tiles fit together logically, just like puzzle pieces. The new information then ripples outward, updating the possible states of nearby cells. This cycle repeats until every cell has settled into its final form, producing the completed level.
+In WFC, the process starts with a grid where each cell can be any possible tile from a given set. The algorithm then searches for the cell with the lowest **entropy**—essentially, the one with the most uncertainty. Once found, this cell is **observed**, meaning it collapses into a specific tile based on predefined constraints.
 
-Consider a Sudoku puzzle as an analogy: each empty cell can be one of several numbers initially. You scan the grid for a spot where only one or two digits can logically fit, fill that in, and then use the updated information to further limit the options for the remaining cells. Just like in Sudoku, the WFC algorithm uses constraints to gradually and methodically complete the grid, turning uncertainty into a coherent, final solution.
+In summary, the rule in Wave Function Collapse is simple: for a given tile, we have a set of possible neighbors that can be placed next to it. Then we try to fill the empty grid by replacing each cell with the tile that matches its neighbors.
 
-import Sudoku from "./sudoku.astro";
+Here are some more examples from Maxim Gumin's [Wave Function Collapse](https://github.com/mxgmn/WaveFunctionCollapse) repository:
 
-<Sudoku />
+![Knots](./knots.png)
 
-So basically, we just loop through the grid and find the cell with the lowest entropy, collapse it, and update the neighbors. This process repeats until the grid is filled.
+![Summer-1](./summer-1.webp)
 
-Let’s replace the Sudoku grid with a game's tileset. The rule is simpler now. For each tile, we have a set of possible neighbors that can be placed next to it. The constraints we are going to use are that the colors on adjacent tiles must match up with each other. Check out [Wave by Oskar Stålberg](https://oskarstalberg.com/game/wave/wave.html) to see the algorithm in action.
+This kind of programming is fascinating to me. It's like magic!
 
-![WFC](./wfc.gif)
+The concept is very similar to [Constraint programming](https://en.wikipedia.org/wiki/Constraint_programming) – a programming paradigm where relations between variables are stated in the form of constraints – that I was researching in my article [Cracking the Scheduling Code in Hay Day](/blog/hayday-game-schedule) last year.
