@@ -139,6 +139,10 @@ For example, place a cat in a box with poison that will be released if a radioac
 
 In WFC, the process starts with a grid where each cell can be any possible tile from a given set. The algorithm then searches for the cell with the lowest **entropy**—essentially, the one with the most uncertainty. Once found, this cell is **observed**, meaning it collapses into a specific tile based on predefined constraints.
 
+You can see the visualization below by [Wave by Oskar Stålberg](https://oskarstalberg.com/game/wave/wave.html).
+
+![WFC](./wfc.gif)
+
 In summary, the rule in Wave Function Collapse is simple: for a given tile, we have a set of possible neighbors that can be placed next to it. Then we try to fill the empty grid by replacing each cell with the tile that matches its neighbors.
 
 Here are some more examples from Maxim Gumin's [Wave Function Collapse](https://github.com/mxgmn/WaveFunctionCollapse) repository:
@@ -150,3 +154,5 @@ Here are some more examples from Maxim Gumin's [Wave Function Collapse](https://
 This kind of programming is fascinating to me. It's like magic!
 
 The concept is very similar to [Constraint programming](https://en.wikipedia.org/wiki/Constraint_programming) – a programming paradigm where relations between variables are stated in the form of constraints – that I was researching in my article [Cracking the Scheduling Code in Hay Day](/blog/hayday-game-schedule) last year.
+
+## MarkovJunior
