@@ -3,6 +3,7 @@ import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
 import { get_book } from "@/lib/goodread";
 import { format } from "date-fns";
+import { GOODREADS_USER_URL } from "@/consts";
 
 const books = await get_book();
 const read = books.read;
@@ -37,7 +38,7 @@ const now = new Date();
       <p>
         This is a collection of what I’ve read over the past years,
         automatically generated from my
-        <a href="https://www.goodreads.com/th1nhng0">Goodreads profile.</a>
+        <a href={GOODREADS_USER_URL}>Goodreads profile.</a>
       </p>
       <p>
         I've read <b>{read.length}</b> books in total.

@@ -1,4 +1,5 @@
-const SOCIAL_MEDIA: {
+// Configuration for all social media profile URLs
+const PERSONAL_SOCIAL_PROFILES: {
   github?: string;
   facebook?: string;
   steam?: string;
@@ -10,9 +11,17 @@ const SOCIAL_MEDIA: {
   spotify: "https://open.spotify.com/user/21acs5sngq2xkehugtvqkwmuy",
 };
 
-const SITE = {
+// Core website metadata for SEO and display
+const WEBSITE_CONFIG = {
   title: "Thinh's Corner",
   description: "Ngô Phú Thịnh's personal blog",
 };
 
-export { SOCIAL_MEDIA, SITE };
+// External reading profile URL for book recommendations integration
+export const GOODREADS_USER_URL = "https://www.goodreads.com/th1nhng0";
+
+// Export constants with descriptive aliases
+export { PERSONAL_SOCIAL_PROFILES as SOCIAL_MEDIA, WEBSITE_CONFIG as SITE };
+
+// GitHub repository URL for blog content source
+export const GITHUB_CONTENT_SOURCE = "https://github.com/th1nhng0/thinhcorner.com/tree/master/src/content/blog";
