@@ -1,48 +1,93 @@
-# Astro Starter Kit: Basics
+# Personal Blog & Portfolio Site
 
-```sh
-npm create astro@latest -- --template basics
-```
+This is a personal website built with [Astro](https://astro.build/), featuring a blog, project showcases (implied, common use case), and integrations with external services like Spotify and Goodreads.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+## ✨ Features
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+- **Blog:** Content managed using Astro's Content Collections (`src/content/blog`).
+- **RSS Feed:** Automatically generated RSS feed available at `/rss.xml` (`src/pages/rss.xml.ts`).
+- **SEO Friendly:** Includes a `robots.txt` file (`src/pages/robots.txt.ts`).
+- **Dynamic Open Graph Images:** Automatically generates OG images for blog posts (`src/pages/blog/[...id]/og.png.ts`).
+- **Spotify Integration:** Shows current listening activity or favorite tracks (powered by `src/lib/spotify.ts`). _Note: Requires environment variables for API keys._
+- **Goodreads Integration:** Displays reading activity or book lists (powered by `src/lib/goodread.ts`). _Note: Requires environment variables for API keys._
+- **Styled Components:** Uses global CSS for styling (`src/styles/global.css`).
+- **Built with Astro:** Fast performance, zero JS by default.
+- **TypeScript:** Type safety throughout the project.
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+## 🚀 Getting Started
 
-## 🚀 Project Structure
+1.  **Clone the repository:**
 
-Inside of your Astro project, you'll see the following folders and files:
+    ```bash
+    git clone https://github.com/Th1nhNg0/thinhcorner.com
+    cd thinhcorner.com
+    ```
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+2.  **Install dependencies:**
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+    ```bash
+    npm install
+    # or yarn install or pnpm install
+    ```
 
-## 🧞 Commands
+3.  **Environment Variables:**
+    Create a `.env` file in the root directory and add the necessary API keys and secrets for Spotify and Goodreads integrations. Refer to `src/lib/spotify.ts` and `src/lib/goodread.ts` for potential required variables.
 
-All commands are run from the root of the project, from a terminal:
+    ```env
+    # Example (check required variables in the .ts files)
+    SPOTIFY_CLIENT_ID=your_client_id
+    SPOTIFY_CLIENT_SECRET=your_client_secret
+    SPOTIFY_REFRESH_TOKEN=your_refresh_token
+    GOODREADS_API_KEY=your_api_key
+    GOODREADS_USER_ID=your_user_id
+    ```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+4.  **Run the development server:**
 
-## 👀 Want to learn more?
+    ```bash
+    npm run dev
+    # or yarn dev or pnpm dev
+    ```
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+    Open [http://localhost:4321](http://localhost:4321) (or the port specified in the terminal) to view the site.
+
+5.  **Build for production:**
+    ```bash
+    npm run build
+    # or yarn build or pnpm build
+    ```
+    This will create a `dist/` directory with the optimized static files.
+
+## 📁 Project Structure
+
+- `public/`: Static assets (images, fonts, etc.).
+- `src/`: Main source code.
+  - `components/`: Reusable Astro/UI components (Assumed - standard practice).
+  - `content/`: Markdown/MDX content collections (e.g., `blog/`).
+    - `blog/`: Contains individual blog post entries.
+  - `layouts/`: Base page layouts (Assumed - standard practice).
+  - `lib/`: Utility functions and API integrations (e.g., `spotify.ts`, `goodread.ts`).
+  - `pages/`: Astro pages and API endpoints (e.g., `rss.xml.ts`, `robots.txt.ts`).
+  - `styles/`: CSS files (e.g., `global.css`).
+  - `consts.ts`: Site-wide constants.
+  - `env.d.ts`: TypeScript definitions for environment variables.
+- `astro.config.mjs`: Astro configuration file.
+- `package.json`: Project dependencies and scripts.
+- `tsconfig.json`: TypeScript configuration.
+
+## ☁️ Deployment
+
+This Astro site can be deployed to various static hosting platforms like:
+
+- Vercel
+- Netlify
+- Cloudflare Pages
+- GitHub Pages
+- AWS Amplify
+- ...and many others!
+
+Refer to the [Astro Deployment Guides](https://docs.astro.build/en/guides/deploy/) for specific instructions. Remember to configure your environment variables in your hosting provider's settings.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request if you have suggestions or improvements. (You can remove or modify this section as needed).
