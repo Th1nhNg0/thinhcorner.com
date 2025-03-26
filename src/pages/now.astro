@@ -20,6 +20,19 @@ import { Image } from "astro:assets";
         time="2024-10-01"
       />
       <TimelineItem
+        title="Third research paper published"
+        icon="📄"
+        time="2024"
+      >
+        <a
+          href="https://arxiv.org/abs/2406.06239"
+          class="text-blue-500 hover:underline"
+        >
+          I-MPN: Inductive Message Passing Network for Efficient
+          Human-in-the-Loop Annotation of Mobile Eye Tracking Data
+        </a>
+      </TimelineItem>
+      <TimelineItem
         title="Second research paper published"
         icon="📄"
         time="2024"
@@ -32,6 +45,7 @@ import { Image } from "astro:assets";
           retrieval for Vietnamese labor law
         </a>
       </TimelineItem>
+
       <TimelineItem
         title="Graduated from University of Science, Vietnam National University Ho Chi Minh City"
         icon="🎓"
@@ -106,16 +120,7 @@ import { Image } from "astro:assets";
         title="Won the Consolation prize at the national competition for excellent students in high school"
         icon="🌿"
         time="2019-04-21"
-      >
-        <Image
-          inferSize={true}
-          width={800}
-          height={450}
-          src="/timeline/hsgqg.jpg"
-          alt=""
-          class="rounded-lg mt-2"
-        />
-      </TimelineItem>
+      />
       <TimelineItem
         title="Won the First prize at the provincial competition for excellent students in high school"
         icon="🥇"
