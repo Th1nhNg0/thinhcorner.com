@@ -23,10 +23,10 @@ importers:
       '@astrojs/vercel':
         specifier: ^8.1.3
         version: 8.1.3(astro@5.5.4(jiti@2.4.2)(lightningcss@1.29.1)(rollup@4.34.5)(typescript@5.7.3)(yaml@2.7.0))(react@19.0.0)(rollup@4.34.5)
+      '@fontsource-variable/genos':
+        specifier: ^5.2.5
+        version: 5.2.5
       '@fontsource-variable/inter':
-        specifier: ^5.1.1
-        version: 5.1.1
-      '@fontsource/windsong':
         specifier: ^5.1.1
         version: 5.1.1
       '@tailwindcss/vite':
@@ -282,11 +282,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@fontsource-variable/genos@5.2.5':
+    resolution: {integrity: sha512-0lLCQfWxqFZIkF1aDxRGBO0uVZTXPjnpJKCvGuTNmx+cXm62FKhJXEWtb9F2cTHU51rlBjiTBqLprPtlDQ/q9A==}
+
   '@fontsource-variable/inter@5.1.1':
     resolution: {integrity: sha512-OpXFTmiH6tHkYijMvQTycFKBLK4X+SRV6tet1m4YOUH7SzIIlMqDja+ocDtiCA72UthBH/vF+3ZtlMr2rN/wIw==}
-
-  '@fontsource/windsong@5.1.1':
-    resolution: {integrity: sha512-pnKzawWAIr3n0LlYoVc28L+XJphEWABna+AMAyNJ6nUZoDCq98Q6sTPc/0d1r2sErqmgOM+HMtxa3u5l5c9rmg==}
 
   '@img/sharp-darwin-arm64@0.33.5':
     resolution: {integrity: sha512-UT4p+iz/2H4twwAoLCqfA9UH5pI6DggwKEGuaPy7nCVQ8ZsiY5PIcrRvD1DzuY3qYL07NtIQcWnBSY/heikIFQ==}
@@ -2447,9 +2447,9 @@ snapshots:
   '@esbuild/win32-x64@0.25.1':
     optional: true
 
-  '@fontsource-variable/inter@5.1.1': {}
+  '@fontsource-variable/genos@5.2.5': {}
 
-  '@fontsource/windsong@5.1.1': {}
+  '@fontsource-variable/inter@5.1.1': {}
 
   '@img/sharp-darwin-arm64@0.33.5':
     optionalDependencies:
