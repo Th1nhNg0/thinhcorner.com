@@ -14,3 +14,9 @@ html {
 body {
   font-family: "Lexend Variable", sans-serif;
 }
+
+@layer components {
+  .gradient-text {
+    @apply font-genos bg-gradient-to-b from-white via-white to-transparent text-transparent bg-clip-text;
+  }
+}
