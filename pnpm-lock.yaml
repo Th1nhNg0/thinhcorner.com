@@ -26,9 +26,9 @@ importers:
       '@fontsource-variable/genos':
         specifier: ^5.2.5
         version: 5.2.5
-      '@fontsource-variable/inter':
-        specifier: ^5.1.1
-        version: 5.1.1
+      '@fontsource-variable/lexend':
+        specifier: ^5.2.6
+        version: 5.2.6
       '@tailwindcss/vite':
         specifier: ^4.0.4
         version: 4.0.4(vite@6.2.2(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0))
@@ -285,8 +285,8 @@ packages:
   '@fontsource-variable/genos@5.2.5':
     resolution: {integrity: sha512-0lLCQfWxqFZIkF1aDxRGBO0uVZTXPjnpJKCvGuTNmx+cXm62FKhJXEWtb9F2cTHU51rlBjiTBqLprPtlDQ/q9A==}
 
-  '@fontsource-variable/inter@5.1.1':
-    resolution: {integrity: sha512-OpXFTmiH6tHkYijMvQTycFKBLK4X+SRV6tet1m4YOUH7SzIIlMqDja+ocDtiCA72UthBH/vF+3ZtlMr2rN/wIw==}
+  '@fontsource-variable/lexend@5.2.6':
+    resolution: {integrity: sha512-rDBYVTp0cMaj/UNK2m5EPHMZw3MZcl2CXdZVlv+OQwpg88r5g9prS60mayZ1N+hyH7XRka2YExAFEYBLEv0NRQ==}
 
   '@img/sharp-darwin-arm64@0.33.5':
     resolution: {integrity: sha512-UT4p+iz/2H4twwAoLCqfA9UH5pI6DggwKEGuaPy7nCVQ8ZsiY5PIcrRvD1DzuY3qYL07NtIQcWnBSY/heikIFQ==}
@@ -2449,7 +2449,7 @@ snapshots:
 
   '@fontsource-variable/genos@5.2.5': {}
 
-  '@fontsource-variable/inter@5.1.1': {}
+  '@fontsource-variable/lexend@5.2.6': {}
 
   '@img/sharp-darwin-arm64@0.33.5':
     optionalDependencies:

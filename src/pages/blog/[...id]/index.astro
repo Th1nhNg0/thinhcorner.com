@@ -5,7 +5,7 @@ import type { CollectionEntry } from "astro:content";
 import { getCollection, render } from "astro:content";
 import { format } from "date-fns";
 import "katex/dist/katex.min.css";
-import EditOnGithub from '../../../components/EditOnGithub.astro';
+import EditOnGithub from "../../../components/EditOnGithub.astro";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog")).sort(
@@ -48,7 +48,9 @@ const prevPost = getPrevPost();
 const post = Astro.props;
 const { Content, remarkPluginFrontmatter } = await render(post);
 
-let slug = Array.isArray(Astro.params.id) ? Astro.params.id[0] : Astro.params.id;
+let slug = Array.isArray(Astro.params.id)
+  ? Astro.params.id[0]
+  : Astro.params.id;
 ---
 
 <Layout
@@ -68,7 +70,7 @@ let slug = Array.isArray(Astro.params.id) ? Astro.params.id[0] : Astro.params.id
       )
     }
     <div class="mb-10 space-y-1">
-      <h1 class="text-3xl font-semibold text-white">
+      <h1 class="text-5xl font-semibold text-white font-genos">
         {post.data.title}
       </h1>
       <div class="flex flex-col md:flex-row gap-2 md:items-center">
