@@ -30,9 +30,9 @@ const years = Object.keys(postsByYear)
   title="Posts"
 >
   <Container>
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between mb-8">
       <h1
-        class="text-5xl mb-8 tracking-tight sm:text-6xl inline-flex items-baseline gap-3 gradient-text"
+        class="text-5xl tracking-tight sm:text-6xl inline-flex items-baseline gap-3 gradient-text"
       >
         <span> Posts </span>
         <a href="/rss.xml" aria-label="RSS feed" title="RSS feed">
@@ -73,14 +73,15 @@ const years = Object.keys(postsByYear)
                   values="28;0"></animate></path
               ></g
             ></svg
-          ></a
-        >
+          >
+        </a>
       </h1>
-      <label class="flex items-center gap-2 text-zinc-200">
+      <label class="flex items-center gap-2 text-zinc-200 cursor-pointer">
         <input type="checkbox" id="englishOnly" class="accent-green-500" />
         English only
       </label>
     </div>
+
     <section id="blogPosts">
       {
         years.map((year) => (
@@ -97,12 +98,12 @@ const years = Object.keys(postsByYear)
                   <time
                     datetime={post.data.date.toISOString()}
                     title={post.data.date.toISOString()}
-                    class="min-w-30 font-semibold font-mono text-zinc-400"
+                    class="min-w-30 font-semibold font-mono text-zinc-400 pt-1"
                   >
                     {format(new Date(post.data.date), "dd MMM y")}
                   </time>
                   <div class="text-zinc-200">
-                    <a data-astro-prefetch="" href={`/blog/${post.id}`}>
+                    <a data-astro-prefetch href={`/blog/${post.id}`}>
                       {post.data.title}
                     </a>
                   </div>
@@ -118,31 +119,35 @@ const years = Object.keys(postsByYear)
 
 <script>
   const checkbox = document.getElementById("englishOnly") as HTMLInputElement;
-  const blogPosts = document.getElementById("blogPosts");
+  const blogPostsContainer = document.getElementById("blogPosts");
 
-  checkbox.addEventListener("change", () => {
-    const posts = blogPosts?.querySelectorAll("li");
+  function filterPosts() {
+    if (!blogPostsContainer) return;
+
+    const posts = blogPostsContainer.querySelectorAll("li[data-lang]");
+
     posts?.forEach((post) => {
-      const lang = post.getAttribute("data-lang");
+      const listItem = post as HTMLLIElement;
+      const lang = listItem.getAttribute("data-lang");
+
       if (checkbox.checked && lang !== "en") {
-        post.style.display = "none";
+        listItem.style.display = "none";
       } else {
-        post.style.display = "";
+        listItem.style.display = "";
       }
     });
 
-    // Hide empty years
-    const years = blogPosts?.querySelectorAll("[data-year]");
-    years?.forEach((year) => {
-      const posts = year.querySelectorAll("li");
-      const visiblePosts = Array.from(posts).filter(
-        (post) => post.style.display !== "none"
+    const yearSections = blogPostsContainer.querySelectorAll("[data-year]");
+    yearSections?.forEach((yearSection) => {
+      const section = yearSection as HTMLElement;
+      const postsInYear = section.querySelectorAll("li[data-lang]");
+      const hasVisiblePosts = Array.from(postsInYear).some(
+        (post) => (post as HTMLLIElement).style.display !== "none"
       );
-      if (visiblePosts.length === 0) {
-        (year as HTMLElement).style.display = "none";
-      } else {
-        (year as HTMLElement).style.display = "";
-      }
+
+      section.style.display = hasVisiblePosts ? "" : "none";
     });
-  });
+  }
+
+  checkbox.addEventListener("change", filterPosts);
 </script>
