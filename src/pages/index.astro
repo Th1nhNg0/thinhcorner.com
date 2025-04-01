@@ -1,13 +1,10 @@
 ---
-// Import necessary components and constants
 import Container from "@/components/Container.astro";
 import { SITE, SOCIAL_MEDIA } from "@/consts";
 import Layout from "@/layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import { format } from "date-fns";
 
-// Fetch and process blog posts
-// Filter out drafts, sort by date descending, and take the latest 5
 const blog = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -17,14 +14,12 @@ const blog = (await getCollection("blog"))
 <Layout title={SITE.title} description={SITE.description}>
   <Container>
     <div class="space-y-8">
-      {/* Main heading with gradient text */}
       <h1
         class="text-5xl tracking-tight sm:text-6xl inline-block gradient-text"
       >
         Ngô Phú Thịnh
       </h1>
       <div class="space-y-4 text-zinc-400">
-        {/* === UPDATED BIO TEXT START === */}
         <p class="leading-relaxed">
           Hello! I'm Ngô Phú Thịnh, an enthusiastic indie hacker exploring the
           entrepreneurial path right here in Ho Chi Minh City, Vietnam. My world
@@ -38,13 +33,10 @@ const blog = (await getCollection("blog"))
           I'd welcome the chance to connect for coffee or discuss working
           together. Feel free to reach out!
         </p>
-        {/* === UPDATED BIO TEXT END === */}
         <p class="font-medium text-zinc-200">Find me on</p>
       </div>
 
-      {/* Social Media Links Section */}
       <div class="not-prose flex flex-wrap gap-3">
-        {/* Facebook Link */}
         {
           SOCIAL_MEDIA.facebook && (
             <a
@@ -69,7 +61,6 @@ const blog = (await getCollection("blog"))
             </a>
           )
         }
-        {/* Github Link */}
         {
           SOCIAL_MEDIA.github && (
             <a
@@ -94,7 +85,6 @@ const blog = (await getCollection("blog"))
             </a>
           )
         }
-        {/* Steam Link */}
         {
           SOCIAL_MEDIA.steam && (
             <a
@@ -119,7 +109,6 @@ const blog = (await getCollection("blog"))
             </a>
           )
         }
-        {/* Spotify Link */}
         {
           SOCIAL_MEDIA.spotify && (
             <a
@@ -156,7 +145,6 @@ const blog = (await getCollection("blog"))
           )
         }
       </div>
-      {/* Email Contact */}
       <p class="text-zinc-400">
         Or mail me at{" "}
         <a
@@ -166,28 +154,23 @@ const blog = (await getCollection("blog"))
           thinhngow@gmail.com
         </a>.
       </p>
-      {/* Recent Blog Posts Section */}
       <section class="my-16">
         <h2 class="text-accent mb-6 text-xl text-zinc-200">
           <a href="/blog/">Posts</a>
         </h2>
         <ul class="space-y-4" role="list">
-          {/* Map through the latest blog posts */}
           {
             blog.map((post) => (
               <li class="grid gap-2 sm:grid-cols-[auto_1fr]">
-                {/* Post Date */}
                 <time
                   datetime={post.data.date.toISOString()}
                   title={post.data.date.toISOString()}
                   class="min-w-30 font-mono font-semibold text-zinc-400"
                 >
-                  {/* Format date like "01 Apr 2025" */}
                   {format(new Date(post.data.date), "dd MMM yyyy")}
                 </time>
-                {/* Post Title and Link */}
                 <div class="text-zinc-200">
-                  <a data-astro-prefetch="" href={`/blog/${post.slug}`}> {/* Use post.slug for link */}
+                  <a data-astro-prefetch="" href={`/blog/${post.id}`}>
                     {post.data.title}
                   </a>
                 </div>
@@ -199,4 +182,3 @@ const blog = (await getCollection("blog"))
     </div>
   </Container>
 </Layout>
-
