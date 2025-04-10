@@ -6,7 +6,6 @@ import { getCollection } from "astro:content";
 import { format } from "date-fns";
 
 const blog = (await getCollection("blog"))
-  .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 5);
 ---
@@ -170,6 +169,9 @@ const blog = (await getCollection("blog"))
                   {format(new Date(post.data.date), "dd MMM yyyy")}
                 </time>
                 <div class="text-zinc-200">
+                  {post.data.draft && (
+                    <span class="text-yellow-400 font-bold mr-2">[Draft]</span>
+                  )}
                   <a data-astro-prefetch="" href={`/blog/${post.id}`}>
                     {post.data.title}
                   </a>

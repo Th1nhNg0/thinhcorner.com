@@ -4,9 +4,9 @@ import Layout from "@/layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import { format } from "date-fns";
 
-const blog = (await getCollection("blog"))
-  .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const blog = (await getCollection("blog")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
 
 const postsByYear = blog.reduce(
   (acc, post) => {
@@ -103,6 +103,11 @@ const years = Object.keys(postsByYear)
                     {format(new Date(post.data.date), "dd MMM y")}
                   </time>
                   <div class="text-zinc-200">
+                    {post.data.draft && (
+                      <span class="text-yellow-400 font-bold mr-2">
+                        [Draft]
+                      </span>
+                    )}
                     <a data-astro-prefetch href={`/blog/${post.id}`}>
                       {post.data.title}
                     </a>
