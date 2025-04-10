@@ -1,15 +1,16 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 
+import mdx from "@astrojs/mdx";
 import partytown from "@astrojs/partytown";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
+import rehypeFigure from "./remark/rehype-figure.mjs";
 import { remarkModifiedTime } from "./remark/remark-modified-time.mjs";
 import { remarkReadingTime } from "./remark/remark-reading-time.mjs";
-import mdx from "@astrojs/mdx";
 
 export default defineConfig({
   site: "https://thinhcorner.com",
@@ -33,7 +34,7 @@ export default defineConfig({
   },
   markdown: {
     remarkPlugins: [remarkReadingTime, remarkModifiedTime, remarkMath],
-    rehypePlugins: [rehypeKatex],
+    rehypePlugins: [rehypeKatex, rehypeFigure],
     gfm: true,
   },
 });
