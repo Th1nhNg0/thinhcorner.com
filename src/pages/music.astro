@@ -37,18 +37,17 @@ const now = new Date();
         >
       </p>
 
-      <p>
+      <p class="leading-relaxed italic">
+        "Music is that voice that tells us that the human race is greater than
+        it knows." — Napoleon Bonaparte
+      </p>
+      <p class="text-sm text-zinc-400 mt-4">
         Last updated: <time
           datetime={now.toISOString()}
           title={now.toISOString()}
         >
           {format(now, "MMMM d, yyyy 'at' h:mm a")}
         </time>
-      </p>
-
-      <p class="leading-relaxed italic">
-        "Music is that voice that tells us that the human race is greater than
-        it knows." — Napoleon Bonaparte
       </p>
     </section>
 

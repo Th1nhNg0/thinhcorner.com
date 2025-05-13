@@ -1,9 +1,19 @@
 ---
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
-import { CRYPTO_DATA } from "../data/crypto";
+import C1 from "@/components/cryptochart/overall_usdt_allocation.html";
+import C2 from "@/components/cryptochart/daily_usdt_allocation.html";
+import C3 from "@/components/cryptochart/cumulative_roi_over_time.html";
+import { format } from "date-fns";
 
-const portfolio_key = CRYPTO_DATA[0].portfolio.map((row) => row.name);
+const overall_data = {
+  total_invested: 489.0,
+  current_portfolio_value: 559.4939480651556,
+  total_profit_loss: 70.49394806515554,
+  total_roi_percent: 14.41594029962281,
+  total_days_of_buy: 119,
+};
+const last_updated = new Date("2025-05-14T00:00:00Z");
 ---
 
 <Layout
@@ -18,239 +28,78 @@ const portfolio_key = CRYPTO_DATA[0].portfolio.map((row) => row.name);
     </h1>
     <section class="prose max-w-none prose-invert">
       <p class="leading-relaxed">
-        This page tracks the distribution of my cryptocurrency investments. The
-        chart and table below are updated periodically to reflect the latest
-        changes in my portfolio.
+        This page provides a transparent overview of my cryptocurrency
+        investment journey. I employ an automated daily investment strategy,
+        focusing on a
+        <b class="text-yellow-400">long-term, 10-year outlook</b>. This approach
+        commenced at the beginning of 2024, reflecting a commitment to
+        disciplined and patient wealth accumulation in the digital asset space.
       </p>
       <p class="leading-relaxed italic">
         "If you aren't thinking about owning a stock for 10 years, don't even
         think about owning it for 10 minutes." — Warren Buffett
       </p>
+      <p class="text-sm text-zinc-400 mt-4">
+        Last updated: {format(last_updated, "MMMM d, yyyy")}
+      </p>
     </section>
-    <div class="space-y-6 my-12">
-      <div class="bg-zinc-800/50 p-6 rounded-xl shadow-lg">
-        <p class="mb-4 text-sm text-zinc-400">
-          The doughnut chart below visualizes the current distribution of my
-          cryptocurrency holdings, showing the percentage allocation for each
-          asset. Data as of {CRYPTO_DATA[0].date}.
-        </p>
-        <canvas id="myChart" class="mb-4"></canvas>
-      </div>
+    <div class="bg-zinc-800/50 rounded-xl shadow-lg mt-6">
+      <div class="grid p-6 grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-xl font-semibold mb-2 text-zinc-200">
+            Total Auto-Invested USDT
+          </h3>
+          <p class="text-4xl font-bold text-green-400">
+            {overall_data.total_invested.toFixed(2)}
+          </p>
+          <p class="text-sm text-zinc-400 mt-1">
+            Total USDT invested via automated daily plan.
+          </p>
+        </div>
 
-      <div class="bg-zinc-800/50 p-6 rounded-xl shadow-lg">
-        <p class="mb-4 text-sm text-zinc-400">
-          The table below provides a historical view of my portfolio
-          distribution on different dates.
-        </p>
-        <div class="overflow-x-auto">
-          <table class="w-full table-auto border-collapse">
-            <thead>
-              <tr class="bg-zinc-900 border-b border-zinc-700">
-                <th class="py-3 px-4 text-left font-semibold">Date</th>
-                {
-                  portfolio_key.map((key) => (
-                    <th class="py-3 px-4 text-left font-semibold">{key}</th>
-                  ))
-                }
-              </tr>
-            </thead>
-            <tbody>
-              {
-                CRYPTO_DATA.map((row) => (
-                  <tr class="border-b border-zinc-700/50 hover:bg-zinc-700/60 transition-colors bg-zinc-800/50">
-                    <td class="py-3 px-4 font-medium">{row.date}</td>
-                    {portfolio_key.map((key) => (
-                      <td class="py-3 px-4">
-                        {row.portfolio.find((r) => r.name === key)?.value}%
-                      </td>
-                    ))}
-                  </tr>
-                ))
-              }
-            </tbody>
-          </table>
+        <div>
+          <h3 class="text-xl font-semibold mb-2 text-zinc-200">
+            Current Portfolio Value
+          </h3>
+          <p class="text-4xl font-bold text-blue-400">
+            {overall_data.current_portfolio_value.toFixed(2)} USDT
+          </p>
+          <p class="text-sm text-zinc-400 mt-1">
+            Estimated current value of all holdings.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-semibold mb-2 text-zinc-200">
+            Total Profit/Loss & ROI
+          </h3>
+          <p class="text-4xl font-bold text-yellow-400">
+            {overall_data.total_profit_loss.toFixed(2)} USDT
+          </p>
+          <p class="text-sm text-zinc-400 mt-1">
+            Overall profit or loss. Return on investment: {
+              overall_data.total_roi_percent.toFixed(2)
+            }%.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-semibold mb-2 text-zinc-200">
+            Total Days of Buy
+          </h3>
+          <p class="text-4xl font-bold text-purple-400">
+            {overall_data.total_days_of_buy}
+          </p>
+          <p class="text-sm text-zinc-400 mt-1">
+            Number of unique days with buy transactions.
+          </p>
         </div>
       </div>
-      <div class="bg-zinc-800/50 p-6 rounded-xl shadow-lg">
-        <p class="mb-4 text-sm text-zinc-400">
-          In addition to manually trading cryptocurrencies, I also have an
-          automated investment plan, purchasing daily with a <b
-            class="text-yellow-400">10-year vision</b
-          >. This strategy started at the beginning of 2025. The chart below
-          shows the daily USDT amount of automated investments, stacked by
-          cryptocurrency.
-        </p>
-        <canvas id="autoInvestChart" class="mb-4"></canvas>
+      <div>
+        <C1 />
+        <C2 />
+        <C3 />
       </div>
     </div>
-
-    <script>
-      import Chart from "chart.js/auto";
-      import ChartDataLabels from "chartjs-plugin-datalabels";
-      import { CRYPTO_DATA } from "../data/crypto";
-      import autoInvestTransactions from "../data/auto_invest_transactions.json";
-
-      Chart.register(ChartDataLabels);
-      Chart.defaults.color = "#F3F4F6"; // Using a softer off-white (Tailwind gray-100 equivalent)
-
-      const latest_data = CRYPTO_DATA[0].portfolio;
-      const ctx = document.getElementById("myChart") as HTMLCanvasElement;
-      if (ctx) {
-        new Chart(ctx, {
-          type: "doughnut",
-          data: {
-            labels: latest_data.map((row) => row.name),
-            datasets: [
-              {
-                label: "Portfolio",
-                data: latest_data.map((row) => row.value),
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
-                display: false,
-              },
-              title: {
-                display: true,
-                text: "Crypto Portfolio Distribution",
-              },
-              datalabels: {
-                formatter: (value, ctx) => {
-                  let sum = 0;
-                  let dataArr = ctx.chart.data.datasets[0].data;
-                  dataArr.forEach((data) => {
-                    if (typeof data === "number" && data !== null) {
-                      sum += data;
-                    }
-                  });
-                  let percentage = ((value * 100) / sum).toFixed(2) + "%";
-                  // Get the label (name) for the current slice
-                  const label = ctx.chart.data.labels?.[ctx.dataIndex] ?? "";
-                  return `${label}\n${percentage}`;
-                },
-                color: "#000", // Changed to black
-              },
-            },
-          },
-        });
-      }
-
-      // Updated chart for auto-invest transactions
-      const autoInvestCtx = document.getElementById(
-        "autoInvestChart"
-      ) as HTMLCanvasElement;
-      if (autoInvestCtx) {
-        const canvasContext = autoInvestCtx.getContext("2d");
-
-        // Check if data is an array and has the required fields
-        if (
-          Array.isArray(autoInvestTransactions) &&
-          autoInvestTransactions.length > 0 &&
-          autoInvestTransactions.every(
-            (t) =>
-              typeof t === "object" &&
-              t !== null &&
-              typeof t.date === "string" &&
-              typeof t.coin === "string" &&
-              typeof t.usdt_amount === "number"
-          )
-        ) {
-          const transactions = autoInvestTransactions as {
-            date: string;
-            coin: string;
-            usdt_amount: number;
-          }[];
-
-          const dates = [...new Set(transactions.map((t) => t.date))].sort();
-          const coins = [...new Set(transactions.map((t) => t.coin))].sort();
-
-          const coinColors = [
-            "rgba(255, 99, 132, 0.7)", // Red
-            "rgba(54, 162, 235, 0.7)", // Blue
-            "rgba(255, 206, 86, 0.7)", // Yellow
-            "rgba(75, 192, 192, 0.7)", // Green
-            "rgba(153, 102, 255, 0.7)", // Purple
-            "rgba(255, 159, 64, 0.7)", // Orange
-          ];
-
-          const datasets = coins.map((coin, index) => {
-            const dataForCoin = dates.map((date) => {
-              const dailyTotalForCoin = transactions
-                .filter((t) => t.date === date && t.coin === coin)
-                .reduce((sum, t) => sum + t.usdt_amount, 0);
-              return dailyTotalForCoin;
-            });
-            return {
-              label: coin,
-              data: dataForCoin,
-              backgroundColor: coinColors[index % coinColors.length],
-            };
-          });
-
-          new Chart(autoInvestCtx, {
-            type: "bar",
-            data: {
-              labels: dates,
-              datasets: datasets,
-            },
-            options: {
-              responsive: true,
-              plugins: {
-                title: {
-                  display: true,
-                  text: "Daily Auto-Investments (USDT) by Coin",
-                },
-                legend: {
-                  display: true,
-                  position: "top",
-                },
-                datalabels: {
-                  display: false, // Stacked bar charts can get cluttered with labels
-                },
-              },
-              scales: {
-                x: {
-                  stacked: true,
-                  title: {
-                    display: true,
-                    text: "Date",
-                  },
-                },
-
-                y: {
-                  stacked: true,
-                  beginAtZero: true,
-                  title: {
-                    display: true,
-                    text: "USDT Buy Amount",
-                  },
-                },
-              },
-            },
-          });
-        } else {
-          // Fallback if data is not in the expected format
-          if (canvasContext) {
-            canvasContext.font = "14px Arial";
-            canvasContext.fillStyle = Chart.defaults.color || "#FFF";
-            canvasContext.textAlign = "center";
-            const canvasWidth = autoInvestCtx.width;
-            canvasContext.fillText(
-              "Auto-invest data is missing, empty, or not in the expected format.",
-              canvasWidth / 2,
-              50
-            );
-            canvasContext.fillText(
-              "Expected format: [{ date: string, coin: string, usdt_amount: number }].",
-              canvasWidth / 2,
-              75
-            );
-          }
-        }
-      }
-    </script>
   </Container>
 </Layout>

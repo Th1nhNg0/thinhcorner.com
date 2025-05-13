@@ -61,17 +61,17 @@ const now = new Date();
           ))
         }
       </p>
-      <p>
+      <p class="leading-relaxed italic">
+        "Books gives a soul to the universe, wings to the mind, flight to the
+        imagination, and life to everything." — Plato
+      </p>
+      <p class="text-sm text-zinc-400 mt-4">
         Last updated: <time
           datetime={now.toISOString()}
           title={now.toISOString()}
         >
           {format(now, "MMMM d, yyyy 'at' h:mm a")}
         </time>
-      </p>
-      <p class="leading-relaxed italic">
-        "Books gives a soul to the universe, wings to the mind, flight to the
-        imagination, and life to everything." — Plato
       </p>
     </section>
     <section class="mt-8" id="blogPosts">
