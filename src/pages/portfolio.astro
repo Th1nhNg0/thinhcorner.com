@@ -5,6 +5,9 @@ import C1 from "@/components/cryptochart/overall_usdt_allocation.html";
 import C2 from "@/components/cryptochart/daily_usdt_allocation.html";
 import C3 from "@/components/cryptochart/cumulative_roi_over_time.html";
 import { format } from "date-fns";
+import BitcoinIcon from "@/assets/crypto-icon/bitcoin-btc-logo.svg";
+import EthereumIcon from "@/assets/crypto-icon/ethereum-eth-logo.svg";
+import BnbIcon from "@/assets/crypto-icon/bnb-bnb-logo.svg";
 
 const overall_data = {
   total_invested: 489.0,
@@ -43,7 +46,9 @@ const last_updated = new Date("2025-05-14T00:00:00Z");
         Last updated: {format(last_updated, "MMMM d, yyyy")}
       </p>
     </section>
-    <div class="bg-zinc-800/50 rounded-xl shadow-lg mt-6">
+    <div
+      class="bg-zinc-800/50 rounded-xl shadow-lg mt-6 divide-y-2 divide-zinc-700 mb-12"
+    >
       <div class="grid p-6 grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <h3 class="text-xl font-semibold mb-2 text-zinc-200">
@@ -95,11 +100,110 @@ const last_updated = new Date("2025-05-14T00:00:00Z");
           </p>
         </div>
       </div>
-      <div>
-        <C1 />
-        <C2 />
-        <C3 />
+
+      <C1 />
+
+      <div class="p-6">
+        <h3 class="text-2xl font-semibold mb-6 text-sky-400 flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="w-7 h-7 mr-3 text-sky-500"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M2.25 13.5a8.25 8.25 0 0 1 8.25-8.25.75.75 0 0 1 .75.75v6.75H18a.75.75 0 0 1 .75.75 8.25 8.25 0 0 1-16.5 0Z"
+              clip-rule="evenodd"></path>
+            <path
+              fill-rule="evenodd"
+              d="M12.75 3a.75.75 0 0 1 .75-.75 8.25 8.25 0 0 1 8.25 8.25.75.75 0 0 1-.75.75h-7.5a.75.75 0 0 1-.75-.75V3Z"
+              clip-rule="evenodd"></path>
+          </svg>
+          Current Daily Buy Plan
+        </h3>
+        <p class="leading-relaxed text-zinc-300 mb-6">
+          I am currently executing a daily buy plan of <b
+            class="text-yellow-400">5 USDT</b
+          >. The allocation for these daily purchases is as follows:
+        </p>
+        <ul class="space-y-5 mb-6">
+          <li
+            class="p-4 rounded-lg bg-zinc-700/70 hover:bg-zinc-600/70 transition-all duration-200 ease-in-out shadow-lg"
+          >
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center">
+                <BitcoinIcon class="w-7 h-7 mr-3 text-orange-400" />
+                <div>
+                  <span class="text-lg font-semibold text-zinc-100"
+                    >Bitcoin (BTC)</span
+                  >
+                  <p class="text-xs text-zinc-400">Dominant Digital Gold</p>
+                  <p class="text-xs text-zinc-400">
+                    Est. Avg. Price: 89,800 USDT
+                  </p>
+                </div>
+              </div>
+              <span class="text-2xl font-bold text-teal-400">75%</span>
+            </div>
+            <div class="w-full bg-zinc-600 rounded-full h-2.5 dark:bg-zinc-800">
+              <div class="bg-orange-500 h-2.5 rounded-full" style="width: 75%">
+              </div>
+            </div>
+          </li>
+          <li
+            class="p-4 rounded-lg bg-zinc-700/70 hover:bg-zinc-600/70 transition-all duration-200 ease-in-out shadow-lg"
+          >
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center">
+                <EthereumIcon class="w-7 h-7 mr-3 text-indigo-400" />
+                <div>
+                  <span class="text-lg font-semibold text-zinc-100"
+                    >Ethereum (ETH)</span
+                  >
+                  <p class="text-xs text-zinc-400">Smart Contract Platform</p>
+                  <p class="text-xs text-zinc-400">
+                    Est. Avg. Price: 2,078 USDT
+                  </p>
+                </div>
+              </div>
+              <span class="text-2xl font-bold text-teal-400">15%</span>
+            </div>
+            <div class="w-full bg-zinc-600 rounded-full h-2.5 dark:bg-zinc-800">
+              <div class="bg-indigo-500 h-2.5 rounded-full" style="width: 15%">
+              </div>
+            </div>
+          </li>
+          <li
+            class="p-4 rounded-lg bg-zinc-700/70 hover:bg-zinc-600/70 transition-all duration-200 ease-in-out shadow-lg"
+          >
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center">
+                <BnbIcon class="w-7 h-7 mr-3 text-yellow-400" />
+                <div>
+                  <span class="text-lg font-semibold text-zinc-100"
+                    >Binance Coin (BNB)</span
+                  >
+                  <p class="text-xs text-zinc-400">Exchange Ecosystem Token</p>
+                  <p class="text-xs text-zinc-400">Est. Avg. Price: 604 USDT</p>
+                </div>
+              </div>
+              <span class="text-2xl font-bold text-teal-400">10%</span>
+            </div>
+            <div class="w-full bg-zinc-600 rounded-full h-2.5 dark:bg-zinc-800">
+              <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 10%">
+              </div>
+            </div>
+          </li>
+        </ul>
+        <p class="leading-relaxed text-zinc-400 text-sm italic">
+          This disciplined strategy underpins the long-term investment approach,
+          focusing on dollar-cost averaging into these core digital assets.
+        </p>
       </div>
+
+      <C2 />
+      <C3 />
     </div>
   </Container>
 </Layout>
