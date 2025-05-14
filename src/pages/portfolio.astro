@@ -17,6 +17,44 @@ const overall_data = {
   total_days_of_buy: 119,
 };
 const last_updated = new Date("2025-05-14T00:00:00Z");
+
+// Helper function to calculate ROI
+const calculateROI = (currentPrice: number, avgPrice: number): string => {
+  return (((currentPrice - avgPrice) / avgPrice) * 100).toFixed(2) + "%";
+};
+
+const dailyBuyPlanData = [
+  {
+    name: "Bitcoin (BTC)",
+    description: "Dominant Digital Gold",
+    currentPrice: 103790.32,
+    avgPrice: 89217.59,
+    allocation: "75%",
+    IconComponent: BitcoinIcon,
+    iconColorClass: "text-orange-400",
+    progressColorClass: "bg-gradient-to-r from-orange-400 to-orange-500",
+  },
+  {
+    name: "Ethereum (ETH)",
+    description: "Smart Contract Platform",
+    currentPrice: 2678.47,
+    avgPrice: 2187.05,
+    allocation: "15%",
+    IconComponent: EthereumIcon,
+    iconColorClass: "text-indigo-400",
+    progressColorClass: "bg-gradient-to-r from-indigo-400 to-indigo-500",
+  },
+  {
+    name: "Binance Coin (BNB)",
+    description: "Exchange Ecosystem Token",
+    currentPrice: 663.0,
+    avgPrice: 604,
+    allocation: "10%",
+    IconComponent: BnbIcon,
+    iconColorClass: "text-yellow-400",
+    progressColorClass: "bg-gradient-to-r from-yellow-400 to-yellow-500",
+  },
+];
 ---
 
 <Layout
@@ -24,12 +62,10 @@ const last_updated = new Date("2025-05-14T00:00:00Z");
   description="A snapshot of my cryptocurrency investments and their distribution."
 >
   <Container>
-    <h1
-      class="text-5xl mb-8 tracking-tight sm:text-6xl inline-block gradient-text"
-    >
+    <h1 class="text-5xl mb-8 tracking-tight sm:text-6xl flex gradient-text">
       My crypto portfolio
     </h1>
-    <section class="prose max-w-none prose-invert">
+    <section class="prose max-w-none prose-invert mb-8">
       <p class="leading-relaxed">
         This page provides a transparent overview of my cryptocurrency
         investment journey. I employ an automated daily investment strategy,
@@ -104,22 +140,7 @@ const last_updated = new Date("2025-05-14T00:00:00Z");
       <C1 />
 
       <div class="p-6">
-        <h3 class="text-2xl font-semibold mb-6 text-sky-400 flex items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            class="w-7 h-7 mr-3 text-sky-500"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M2.25 13.5a8.25 8.25 0 0 1 8.25-8.25.75.75 0 0 1 .75.75v6.75H18a.75.75 0 0 1 .75.75 8.25 8.25 0 0 1-16.5 0Z"
-              clip-rule="evenodd"></path>
-            <path
-              fill-rule="evenodd"
-              d="M12.75 3a.75.75 0 0 1 .75-.75 8.25 8.25 0 0 1 8.25 8.25.75.75 0 0 1-.75.75h-7.5a.75.75 0 0 1-.75-.75V3Z"
-              clip-rule="evenodd"></path>
-          </svg>
+        <h3 class="text-2xl font-semibold mb-4 text-zinc-200">
           Current Daily Buy Plan
         </h3>
         <p class="leading-relaxed text-zinc-300 mb-6">
@@ -127,82 +148,94 @@ const last_updated = new Date("2025-05-14T00:00:00Z");
             class="text-yellow-400">5 USDT</b
           >. The allocation for these daily purchases is as follows:
         </p>
-        <ul class="space-y-5 mb-6">
-          <li
-            class="p-4 rounded-lg bg-zinc-700/70 hover:bg-zinc-600/70 transition-all duration-200 ease-in-out shadow-lg"
+
+        <div class="bg-zinc-800/80 rounded-lg p-3 mb-6 flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="w-6 h-6 mr-3 flex-shrink-0 text-sky-400"
           >
-            <div class="flex items-center justify-between mb-2">
-              <div class="flex items-center">
-                <BitcoinIcon class="w-7 h-7 mr-3 text-orange-400" />
-                <div>
-                  <span class="text-lg font-semibold text-zinc-100"
-                    >Bitcoin (BTC)</span
-                  >
-                  <p class="text-xs text-zinc-400">Dominant Digital Gold</p>
-                  <p class="text-xs text-zinc-400">
-                    Est. Avg. Price: 89,800 USDT
-                  </p>
+            <path
+              fill-rule="evenodd"
+              d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z"
+              clip-rule="evenodd"></path>
+          </svg>
+          <p class="text-sm text-zinc-300">
+            <span class="font-medium text-sky-400">Note:</span> All prices shown
+            reflect snapshot data as of {format(last_updated, "MMMM d, yyyy")} and
+            are not real-time market values.
+          </p>
+        </div>
+
+        <div class="space-y-4 mb-6">
+          {
+            dailyBuyPlanData.map((coin) => (
+              <div class="p-4 rounded-lg bg-zinc-700/70 hover:bg-zinc-600/70 transition-all duration-300 ease-in-out shadow-lg border border-transparent hover:border-zinc-500">
+                <div class="flex items-start md:items-center justify-between flex-col md:flex-row gap-4">
+                  <div class="flex items-center">
+                    <div
+                      class={`p-2.5 rounded-lg mr-3 ${coin.iconColorClass} bg-zinc-800/80`}
+                    >
+                      <coin.IconComponent class="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 class="font-bold text-zinc-100">{coin.name}</h4>
+                      <p class="text-xs text-zinc-400">{coin.description}</p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center space-x-4 self-end md:self-auto">
+                    <div class="flex flex-col items-end">
+                      <div class="flex items-center mb-1">
+                        <span class="text-xs text-zinc-400 mr-2">
+                          Current:{" "}
+                        </span>
+                        <span class="text-sm font-medium text-zinc-200">
+                          {coin.currentPrice.toLocaleString()} USDT
+                        </span>
+                      </div>
+                      <div class="flex items-center mb-1">
+                        <span class="text-xs text-zinc-400 mr-2">
+                          Average:{" "}
+                        </span>
+                        <span class="text-sm font-medium text-zinc-200">
+                          {coin.avgPrice.toLocaleString()} USDT
+                        </span>
+                      </div>
+                      <div class="flex items-center">
+                        <span class="text-xs text-zinc-400 mr-2">ROI: </span>
+                        <span
+                          class={`text-sm font-bold ${parseFloat(calculateROI(coin.currentPrice, coin.avgPrice)) >= 0 ? "text-green-400" : "text-red-400"}`}
+                        >
+                          {calculateROI(coin.currentPrice, coin.avgPrice)}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="bg-zinc-800/80 px-4 py-2 rounded-lg flex flex-col items-center">
+                      <span class="text-xs text-zinc-400 mb-1">Allocation</span>
+                      <span class="text-xl font-bold text-teal-400">
+                        {coin.allocation}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="w-full bg-zinc-800 rounded-full h-2.5 mt-3">
+                  <div
+                    class={`${coin.progressColorClass} h-2.5 rounded-full transition-all duration-500`}
+                    style={`width: ${coin.allocation}`}
+                  />
                 </div>
               </div>
-              <span class="text-2xl font-bold text-teal-400">75%</span>
-            </div>
-            <div class="w-full bg-zinc-600 rounded-full h-2.5 dark:bg-zinc-800">
-              <div class="bg-orange-500 h-2.5 rounded-full" style="width: 75%">
-              </div>
-            </div>
-          </li>
-          <li
-            class="p-4 rounded-lg bg-zinc-700/70 hover:bg-zinc-600/70 transition-all duration-200 ease-in-out shadow-lg"
-          >
-            <div class="flex items-center justify-between mb-2">
-              <div class="flex items-center">
-                <EthereumIcon class="w-7 h-7 mr-3 text-indigo-400" />
-                <div>
-                  <span class="text-lg font-semibold text-zinc-100"
-                    >Ethereum (ETH)</span
-                  >
-                  <p class="text-xs text-zinc-400">Smart Contract Platform</p>
-                  <p class="text-xs text-zinc-400">
-                    Est. Avg. Price: 2,078 USDT
-                  </p>
-                </div>
-              </div>
-              <span class="text-2xl font-bold text-teal-400">15%</span>
-            </div>
-            <div class="w-full bg-zinc-600 rounded-full h-2.5 dark:bg-zinc-800">
-              <div class="bg-indigo-500 h-2.5 rounded-full" style="width: 15%">
-              </div>
-            </div>
-          </li>
-          <li
-            class="p-4 rounded-lg bg-zinc-700/70 hover:bg-zinc-600/70 transition-all duration-200 ease-in-out shadow-lg"
-          >
-            <div class="flex items-center justify-between mb-2">
-              <div class="flex items-center">
-                <BnbIcon class="w-7 h-7 mr-3 text-yellow-400" />
-                <div>
-                  <span class="text-lg font-semibold text-zinc-100"
-                    >Binance Coin (BNB)</span
-                  >
-                  <p class="text-xs text-zinc-400">Exchange Ecosystem Token</p>
-                  <p class="text-xs text-zinc-400">Est. Avg. Price: 604 USDT</p>
-                </div>
-              </div>
-              <span class="text-2xl font-bold text-teal-400">10%</span>
-            </div>
-            <div class="w-full bg-zinc-600 rounded-full h-2.5 dark:bg-zinc-800">
-              <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 10%">
-              </div>
-            </div>
-          </li>
-        </ul>
-        <p class="leading-relaxed text-zinc-400 text-sm italic">
-          This disciplined strategy underpins the long-term investment approach,
-          focusing on dollar-cost averaging into these core digital assets.
-        </p>
+            ))
+          }
+        </div>
       </div>
 
       <C2 />
+
       <C3 />
     </div>
   </Container>
