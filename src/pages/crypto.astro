@@ -3,7 +3,8 @@ import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
 import C1 from "@/components/cryptochart/overall_usdt_allocation.html";
 import C2 from "@/components/cryptochart/daily_usdt_allocation.html";
-import C3 from "@/components/cryptochart/cumulative_roi_over_time.html";
+import C3 from "@/components/cryptochart/cumulative_investment_vs_portfolio_value.html";
+import C4 from "@/components/cryptochart/cumulative_roi_over_time.html";
 import { format } from "date-fns";
 import BitcoinIcon from "@/assets/crypto-icon/bitcoin-btc-logo.svg";
 import EthereumIcon from "@/assets/crypto-icon/ethereum-eth-logo.svg";
@@ -15,12 +16,18 @@ const overall_data = {
   total_profit_loss: 70.49394806515554,
   total_roi_percent: 14.41594029962281,
   total_days_of_buy: 119,
+  profitable_days: 36,
 };
 const last_updated = new Date("2025-05-14T00:00:00Z");
+const dailyBuyAmount = 5; // Added: Centralize daily buy amount
 
-// Helper function to calculate ROI
-const calculateROI = (currentPrice: number, avgPrice: number): string => {
-  return (((currentPrice - avgPrice) / avgPrice) * 100).toFixed(2) + "%";
+// Helper function to calculate ROI - now returns a number
+const calculateROI = (currentPrice: number, avgPrice: number): number => {
+  if (avgPrice === 0) {
+    // Avoid division by zero
+    return 0;
+  }
+  return ((currentPrice - avgPrice) / avgPrice) * 100;
 };
 
 const dailyBuyPlanData = [
@@ -88,37 +95,37 @@ const dailyBuyPlanData = [
       <div class="grid p-6 grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <h3 class="text-xl font-semibold mb-2 text-zinc-200">
-            Total Auto-Invested USDT
+            Total Investment
           </h3>
           <p class="text-4xl font-bold text-green-400">
             {overall_data.total_invested.toFixed(2)} USDT
           </p>
           <p class="text-sm text-zinc-400 mt-1">
-            Total USDT invested via automated daily plan.
+            Total USDT invested through the daily automated buying strategy.
           </p>
         </div>
 
         <div>
           <h3 class="text-xl font-semibold mb-2 text-zinc-200">
-            Current Portfolio Value
+            Current Value
           </h3>
           <p class="text-4xl font-bold text-blue-400">
             {overall_data.current_portfolio_value.toFixed(2)} USDT
           </p>
           <p class="text-sm text-zinc-400 mt-1">
-            Estimated current value of all holdings.
+            Current estimated market value of all cryptocurrency holdings.
           </p>
         </div>
 
         <div>
           <h3 class="text-xl font-semibold mb-2 text-zinc-200">
-            Total Profit/Loss & ROI
+            Profit/Loss Summary
           </h3>
           <p class="text-4xl font-bold text-yellow-400">
             {overall_data.total_profit_loss.toFixed(2)} USDT
           </p>
           <p class="text-sm text-zinc-400 mt-1">
-            Overall profit or loss. Return on investment: {
+            Overall profit/loss in USDT. Total ROI: {
               overall_data.total_roi_percent.toFixed(2)
             }%.
           </p>
@@ -126,13 +133,14 @@ const dailyBuyPlanData = [
 
         <div>
           <h3 class="text-xl font-semibold mb-2 text-zinc-200">
-            Total Days of Buy
+            Investment Timeline
           </h3>
           <p class="text-4xl font-bold text-purple-400">
             {overall_data.total_days_of_buy} days
           </p>
           <p class="text-sm text-zinc-400 mt-1">
-            Number of unique days with buy transactions.
+            Total days with purchases: {overall_data.total_days_of_buy}, days in
+            profit: {overall_data.profitable_days}
           </p>
         </div>
       </div>
@@ -145,7 +153,7 @@ const dailyBuyPlanData = [
         </h3>
         <p class="leading-relaxed text-zinc-300 mb-6">
           I am currently executing a daily buy plan of <b
-            class="text-yellow-400">5 USDT</b
+            class="text-yellow-400">{dailyBuyAmount} USDT</b
           >. The allocation for these daily purchases is as follows:
         </p>
 
@@ -170,73 +178,79 @@ const dailyBuyPlanData = [
 
         <div class="space-y-4 mb-6">
           {
-            dailyBuyPlanData.map((coin) => (
-              <div class="p-4 rounded-lg bg-zinc-700/70 hover:bg-zinc-600/70 transition-all duration-300 ease-in-out shadow-lg border border-transparent hover:border-zinc-500">
-                <div class="flex items-start md:items-center justify-between flex-col md:flex-row gap-4">
-                  <div class="flex items-center">
+            dailyBuyPlanData.map((coin) => {
+              const coinROI = calculateROI(coin.currentPrice, coin.avgPrice);
+              return (
+                <div class="p-4 rounded-lg bg-zinc-700/70 hover:bg-zinc-600/70 transition-all duration-300 ease-in-out shadow-lg border border-transparent hover:border-zinc-500">
+                  {/* ... other coin details ... */}
+                  <div class="flex items-start md:items-center justify-between flex-col md:flex-row gap-4">
+                    <div class="flex items-center">
+                      <div
+                        class={`p-2.5 rounded-lg mr-3 ${coin.iconColorClass} bg-zinc-800/80`}
+                      >
+                        <coin.IconComponent class="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h4 class="font-bold text-zinc-100">{coin.name}</h4>
+                        <p class="text-xs text-zinc-400">{coin.description}</p>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4 self-end md:self-auto">
+                      <div class="flex flex-col items-end">
+                        {/* ... current and average price ... */}
+                        <div class="flex items-center mb-1">
+                          <span class="text-xs text-zinc-400 mr-2">
+                            Current:{" "}
+                          </span>
+                          <span class="text-sm font-medium text-zinc-200">
+                            {coin.currentPrice.toLocaleString()} USDT
+                          </span>
+                        </div>
+                        <div class="flex items-center mb-1">
+                          <span class="text-xs text-zinc-400 mr-2">
+                            Average:{" "}
+                          </span>
+                          <span class="text-sm font-medium text-zinc-200">
+                            {coin.avgPrice.toLocaleString()} USDT
+                          </span>
+                        </div>
+                        <div class="flex items-center">
+                          <span class="text-xs text-zinc-400 mr-2">ROI: </span>
+                          <span
+                            class={`text-sm font-bold ${coinROI >= 0 ? "text-green-400" : "text-red-400"}`}
+                          >
+                            {coinROI.toFixed(2)}%
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="bg-zinc-800/80 px-4 py-2 rounded-lg flex flex-col items-center">
+                        <span class="text-xs text-zinc-400 mb-1">
+                          Allocation
+                        </span>
+                        <span class="text-xl font-bold text-teal-400">
+                          {coin.allocation}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="w-full bg-zinc-800 rounded-full h-2.5 mt-3">
                     <div
-                      class={`p-2.5 rounded-lg mr-3 ${coin.iconColorClass} bg-zinc-800/80`}
-                    >
-                      <coin.IconComponent class="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h4 class="font-bold text-zinc-100">{coin.name}</h4>
-                      <p class="text-xs text-zinc-400">{coin.description}</p>
-                    </div>
-                  </div>
-
-                  <div class="flex items-center space-x-4 self-end md:self-auto">
-                    <div class="flex flex-col items-end">
-                      <div class="flex items-center mb-1">
-                        <span class="text-xs text-zinc-400 mr-2">
-                          Current:{" "}
-                        </span>
-                        <span class="text-sm font-medium text-zinc-200">
-                          {coin.currentPrice.toLocaleString()} USDT
-                        </span>
-                      </div>
-                      <div class="flex items-center mb-1">
-                        <span class="text-xs text-zinc-400 mr-2">
-                          Average:{" "}
-                        </span>
-                        <span class="text-sm font-medium text-zinc-200">
-                          {coin.avgPrice.toLocaleString()} USDT
-                        </span>
-                      </div>
-                      <div class="flex items-center">
-                        <span class="text-xs text-zinc-400 mr-2">ROI: </span>
-                        <span
-                          class={`text-sm font-bold ${parseFloat(calculateROI(coin.currentPrice, coin.avgPrice)) >= 0 ? "text-green-400" : "text-red-400"}`}
-                        >
-                          {calculateROI(coin.currentPrice, coin.avgPrice)}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div class="bg-zinc-800/80 px-4 py-2 rounded-lg flex flex-col items-center">
-                      <span class="text-xs text-zinc-400 mb-1">Allocation</span>
-                      <span class="text-xl font-bold text-teal-400">
-                        {coin.allocation}
-                      </span>
-                    </div>
+                      class={`${coin.progressColorClass} h-2.5 rounded-full transition-all duration-500`}
+                      style={`width: ${coin.allocation}`}
+                    />
                   </div>
                 </div>
-
-                <div class="w-full bg-zinc-800 rounded-full h-2.5 mt-3">
-                  <div
-                    class={`${coin.progressColorClass} h-2.5 rounded-full transition-all duration-500`}
-                    style={`width: ${coin.allocation}`}
-                  />
-                </div>
-              </div>
-            ))
+              );
+            })
           }
         </div>
       </div>
-
       <C2 />
-
       <C3 />
+      <C4 />
     </div>
   </Container>
 </Layout>
