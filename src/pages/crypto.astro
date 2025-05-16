@@ -1,0 +1,256 @@
+---
+import Container from "@/components/Container.astro";
+import Layout from "@/layouts/Layout.astro";
+import C1 from "@/components/cryptochart/overall_usdt_allocation.html";
+import C2 from "@/components/cryptochart/daily_usdt_allocation.html";
+import C3 from "@/components/cryptochart/cumulative_investment_vs_portfolio_value.html";
+import C4 from "@/components/cryptochart/cumulative_roi_over_time.html";
+import { format } from "date-fns";
+import BitcoinIcon from "@/assets/crypto-icon/bitcoin-btc-logo.svg";
+import EthereumIcon from "@/assets/crypto-icon/ethereum-eth-logo.svg";
+import BnbIcon from "@/assets/crypto-icon/bnb-bnb-logo.svg";
+
+const overall_data = {
+  total_invested: 489.0,
+  current_portfolio_value: 559.4939480651556,
+  total_profit_loss: 70.49394806515554,
+  total_roi_percent: 14.41594029962281,
+  total_days_of_buy: 119,
+  profitable_days: 36,
+};
+const last_updated = new Date("2025-05-14T00:00:00Z");
+const dailyBuyAmount = 5; // Added: Centralize daily buy amount
+
+// Helper function to calculate ROI - now returns a number
+const calculateROI = (currentPrice: number, avgPrice: number): number => {
+  if (avgPrice === 0) {
+    // Avoid division by zero
+    return 0;
+  }
+  return ((currentPrice - avgPrice) / avgPrice) * 100;
+};
+
+const dailyBuyPlanData = [
+  {
+    name: "Bitcoin (BTC)",
+    description: "Dominant Digital Gold",
+    currentPrice: 103790.32,
+    avgPrice: 89217.59,
+    allocation: "75%",
+    IconComponent: BitcoinIcon,
+    iconColorClass: "text-orange-400",
+    progressColorClass: "bg-gradient-to-r from-orange-400 to-orange-500",
+  },
+  {
+    name: "Ethereum (ETH)",
+    description: "Smart Contract Platform",
+    currentPrice: 2678.47,
+    avgPrice: 2187.05,
+    allocation: "15%",
+    IconComponent: EthereumIcon,
+    iconColorClass: "text-indigo-400",
+    progressColorClass: "bg-gradient-to-r from-indigo-400 to-indigo-500",
+  },
+  {
+    name: "Binance Coin (BNB)",
+    description: "Exchange Ecosystem Token",
+    currentPrice: 663.0,
+    avgPrice: 604,
+    allocation: "10%",
+    IconComponent: BnbIcon,
+    iconColorClass: "text-yellow-400",
+    progressColorClass: "bg-gradient-to-r from-yellow-400 to-yellow-500",
+  },
+];
+---
+
+<Layout
+  title="Crypto Portfolio"
+  description="A snapshot of my cryptocurrency investments and their distribution."
+>
+  <Container>
+    <h1 class="text-5xl mb-8 tracking-tight sm:text-6xl flex gradient-text">
+      My crypto portfolio
+    </h1>
+    <section class="prose max-w-none prose-invert mb-8">
+      <p class="leading-relaxed">
+        This page provides a transparent overview of my cryptocurrency
+        investment journey. I employ an automated daily investment strategy,
+        focusing on a
+        <b class="text-yellow-400">long-term, 10-year outlook</b>. This approach
+        commenced at the beginning of 2025, reflecting a commitment to
+        disciplined and patient wealth accumulation in the digital asset space.
+      </p>
+      <p class="leading-relaxed italic">
+        "If you aren't thinking about owning a stock for 10 years, don't even
+        think about owning it for 10 minutes." — Warren Buffett
+      </p>
+      <p class="text-sm text-zinc-400 mt-4">
+        Last updated: {format(last_updated, "MMMM d, yyyy")}
+      </p>
+    </section>
+    <div
+      class="bg-zinc-800/50 rounded-xl shadow-lg mt-6 divide-y-2 divide-zinc-700 mb-12"
+    >
+      <div class="grid p-6 grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-xl font-semibold mb-2 text-zinc-200">
+            Total Investment
+          </h3>
+          <p class="text-4xl font-bold text-green-400">
+            {overall_data.total_invested.toFixed(2)} USDT
+          </p>
+          <p class="text-sm text-zinc-400 mt-1">
+            Total USDT invested through the daily automated buying strategy.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-semibold mb-2 text-zinc-200">
+            Current Value
+          </h3>
+          <p class="text-4xl font-bold text-blue-400">
+            {overall_data.current_portfolio_value.toFixed(2)} USDT
+          </p>
+          <p class="text-sm text-zinc-400 mt-1">
+            Current estimated market value of all cryptocurrency holdings.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-semibold mb-2 text-zinc-200">
+            Profit/Loss Summary
+          </h3>
+          <p class="text-4xl font-bold text-yellow-400">
+            {overall_data.total_profit_loss.toFixed(2)} USDT
+          </p>
+          <p class="text-sm text-zinc-400 mt-1">
+            Overall profit/loss in USDT. Total ROI: {
+              overall_data.total_roi_percent.toFixed(2)
+            }%.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-semibold mb-2 text-zinc-200">
+            Investment Timeline
+          </h3>
+          <p class="text-4xl font-bold text-purple-400">
+            {overall_data.total_days_of_buy} days
+          </p>
+          <p class="text-sm text-zinc-400 mt-1">
+            Total days with purchases: {overall_data.total_days_of_buy}, days in
+            profit: {overall_data.profitable_days}
+          </p>
+        </div>
+      </div>
+
+      <C1 />
+
+      <div class="p-6">
+        <h3 class="text-2xl font-semibold mb-4 text-zinc-200">
+          Current Daily Buy Plan
+        </h3>
+        <p class="leading-relaxed text-zinc-300 mb-6">
+          I am currently executing a daily buy plan of <b
+            class="text-yellow-400">{dailyBuyAmount} USDT</b
+          >. The allocation for these daily purchases is as follows:
+        </p>
+
+        <div class="bg-zinc-800/80 rounded-lg p-3 mb-6 flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="w-6 h-6 mr-3 flex-shrink-0 text-sky-400"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z"
+              clip-rule="evenodd"></path>
+          </svg>
+          <p class="text-sm text-zinc-300">
+            <span class="font-medium text-sky-400">Note:</span> All prices shown
+            reflect snapshot data as of {format(last_updated, "MMMM d, yyyy")} and
+            are not real-time market values.
+          </p>
+        </div>
+
+        <div class="space-y-4 mb-6">
+          {
+            dailyBuyPlanData.map((coin) => {
+              const coinROI = calculateROI(coin.currentPrice, coin.avgPrice);
+              return (
+                <div class="p-4 rounded-lg bg-zinc-700/70 hover:bg-zinc-600/70 transition-all duration-300 ease-in-out shadow-lg border border-transparent hover:border-zinc-500">
+                  {/* ... other coin details ... */}
+                  <div class="flex items-start md:items-center justify-between flex-col md:flex-row gap-4">
+                    <div class="flex items-center">
+                      <div
+                        class={`p-2.5 rounded-lg mr-3 ${coin.iconColorClass} bg-zinc-800/80`}
+                      >
+                        <coin.IconComponent class="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h4 class="font-bold text-zinc-100">{coin.name}</h4>
+                        <p class="text-xs text-zinc-400">{coin.description}</p>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4 self-end md:self-auto">
+                      <div class="flex flex-col items-end">
+                        {/* ... current and average price ... */}
+                        <div class="flex items-center mb-1">
+                          <span class="text-xs text-zinc-400 mr-2">
+                            Current:{" "}
+                          </span>
+                          <span class="text-sm font-medium text-zinc-200">
+                            {coin.currentPrice.toLocaleString()} USDT
+                          </span>
+                        </div>
+                        <div class="flex items-center mb-1">
+                          <span class="text-xs text-zinc-400 mr-2">
+                            Average:{" "}
+                          </span>
+                          <span class="text-sm font-medium text-zinc-200">
+                            {coin.avgPrice.toLocaleString()} USDT
+                          </span>
+                        </div>
+                        <div class="flex items-center">
+                          <span class="text-xs text-zinc-400 mr-2">ROI: </span>
+                          <span
+                            class={`text-sm font-bold ${coinROI >= 0 ? "text-green-400" : "text-red-400"}`}
+                          >
+                            {coinROI.toFixed(2)}%
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="bg-zinc-800/80 px-4 py-2 rounded-lg flex flex-col items-center">
+                        <span class="text-xs text-zinc-400 mb-1">
+                          Allocation
+                        </span>
+                        <span class="text-xl font-bold text-teal-400">
+                          {coin.allocation}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="w-full bg-zinc-800 rounded-full h-2.5 mt-3">
+                    <div
+                      class={`${coin.progressColorClass} h-2.5 rounded-full transition-all duration-500`}
+                      style={`width: ${coin.allocation}`}
+                    />
+                  </div>
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+      <C2 />
+      <C3 />
+      <C4 />
+    </div>
+  </Container>
+</Layout>
