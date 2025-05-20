@@ -121,7 +121,9 @@ let slug = Array.isArray(Astro.params.id)
         ) : null
       }
     </div>
-    <article class="prose prose-img:mx-auto max-w-none prose-invert">
+    <article
+      class="prose prose-img:mx-auto max-w-none prose-invert prose-yellow"
+    >
       <Content />
     </article>
 
@@ -144,10 +146,7 @@ let slug = Array.isArray(Astro.params.id)
 
       {
         nextPost && (
-          <a
-            href={`/blog/${nextPost.id}`}
-            class="group relative border border-zinc-700/50 p-4 transition-colors hover:border-gray-600"
-          >
+          <a class="group relative border border-zinc-700/50 p-4 transition-colors hover:border-gray-600">
             <div class="mb-2 text-sm text-gray-400">Next Article →</div>
             <div class="line-clamp-2 font-medium text-gray-100 group-hover:text-white">
               {nextPost.data.title}
