@@ -1,12 +1,21 @@
 ---
+import ChatGPTIcon from "@/assets/chatgpt-icon.svg";
+import GrokIcon from "@/assets/grok-icon.svg";
+import GeminiIcon from "@/assets/google-gemini-icon.svg";
+
 interface Props {
   title?: string;
   date?: string;
   model?: string;
-  query?: string;
+  chatbot?: "chatgpt" | "gemini" | "grok";
 }
 
-const { title = "", date = "", model = "GPT-4" } = Astro.props;
+const {
+  title = "",
+  date = "",
+  model = "GPT-4",
+  chatbot = "chatgpt",
+} = Astro.props;
 ---
 
 <div
@@ -15,21 +24,24 @@ const { title = "", date = "", model = "GPT-4" } = Astro.props;
   {
     (title || date || model) && (
       <div class="border-b border-[#ffffff0d] py-2 px-3 flex items-center justify-between not-prose">
-        <div>
-          {title && <h3 class="font-medium text-gray-200">{title}</h3>}
-          {date && (
-            <div class="text-xs text-gray-400">{`Generated at ${date}`}</div>
-          )}
+        <div class="flex items-center gap-2">
+          {chatbot === "chatgpt" && <ChatGPTIcon class="w-8 h-8" />}
+          {chatbot === "gemini" && <GeminiIcon class="w-8 h-8" />}
+          {chatbot === "grok" && <GrokIcon class="w-8 h-8" />}
+          <div>
+            {title && <h3 class="font-medium text-gray-200">{title}</h3>}
+            {model && <div class="text-xs text-gray-400">{model} model</div>}
+          </div>
         </div>
-        {model && <div class="text-xs text-gray-400">{model} model</div>}
+        {date && (
+          <div class="text-xs text-gray-400">{`Generated at ${date}`}</div>
+        )}
       </div>
     )
   }
 
-  <div class="px-3">
-    <div class="chat-content overflow-x-auto">
-      <slot />
-    </div>
+  <div class="chat-content overflow-x-auto prose-h3:my-auto p-3">
+    <slot />
   </div>
 </div>
 
