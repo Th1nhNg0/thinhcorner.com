@@ -1,0 +1,81 @@
+---
+interface Props {
+  title?: string;
+  date?: string;
+  model?: string;
+  query?: string;
+}
+
+const { title = "", date = "", model = "GPT-4" } = Astro.props;
+---
+
+<div
+  class="chatgpt-frame bg-[#212121] border border-[#ffffff0d] rounded-md overflow-hidden text-sm text-gray-300"
+>
+  {
+    (title || date || model) && (
+      <div class="border-b border-[#ffffff0d] py-2 px-3 flex items-center justify-between not-prose">
+        <div>
+          {title && <h3 class="font-medium text-gray-200">{title}</h3>}
+          {date && (
+            <div class="text-xs text-gray-400">{`Generated at ${date}`}</div>
+          )}
+        </div>
+        {model && <div class="text-xs text-gray-400">{model} model</div>}
+      </div>
+    )
+  }
+
+  <div class="px-3">
+    <div class="chat-content overflow-x-auto">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Removed @reference to global.css as it's not needed for scoped styles */
+
+  .chatgpt-frame {
+    font-family:
+      ui-sans-serif,
+      -apple-system,
+      system-ui,
+      "Segoe UI",
+      Helvetica,
+      "Apple Color Emoji",
+      Arial,
+      sans-serif,
+      "Segoe UI Emoji",
+      "Segoe UI Symbol";
+  }
+
+  /* Use scoped CSS instead of :global() selectors */
+  .chat-content :is(table) {
+    width: 100%;
+    font-size: 0.75rem; /* text-xs */
+    color: #d1d5db; /* text-gray-300 */
+  }
+
+  .chat-content :is(thead) {
+    font-size: 0.75rem; /* text-xs */
+    text-transform: uppercase;
+    background-color: #212121;
+    color: #9ca3af; /* text-gray-400 */
+  }
+
+  .chat-content :is(th),
+  .chat-content :is(td) {
+    padding: 0.75rem 1.5rem; /* px-6 py-3 */
+  }
+
+  .chat-content :is(tbody tr) {
+    border-bottom-width: 1px;
+    background-color: #212121;
+    border-color: #374151; /* border-gray-700 */
+  }
+
+  .chat-content :is(tbody tr:hover) {
+    background-color: #4b5563; /* bg-gray-600 */
+  }
+</style>
