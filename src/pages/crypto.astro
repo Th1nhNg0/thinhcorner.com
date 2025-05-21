@@ -11,14 +11,13 @@ import EthereumIcon from "@/assets/crypto-icon/ethereum-eth-logo.svg";
 import BnbIcon from "@/assets/crypto-icon/bnb-bnb-logo.svg";
 
 const overall_data = {
-  total_invested: 489.0,
-  current_portfolio_value: 559.4939480651556,
-  total_profit_loss: 70.49394806515554,
-  total_roi_percent: 14.41594029962281,
-  total_days_of_buy: 119,
-  profitable_days: 36,
+  total_invested: 529.0,
+  current_portfolio_value: 616.2477806652346,
+  total_profit_loss: 87.24778066523459,
+  total_roi_percent: 16.492964208929035,
+  total_days_of_buy: 127,
 };
-const last_updated = new Date("2025-05-14T00:00:00Z");
+const last_updated = new Date("2025-05-20T00:00:00Z");
 const dailyBuyAmount = 5; // Added: Centralize daily buy amount
 
 // Helper function to calculate ROI - now returns a number
@@ -34,8 +33,8 @@ const dailyBuyPlanData = [
   {
     name: "Bitcoin (BTC)",
     description: "Dominant Digital Gold",
-    currentPrice: 103790.32,
-    avgPrice: 89217.59,
+    currentPrice: 106849,
+    avgPrice: 90281,
     allocation: "75%",
     IconComponent: BitcoinIcon,
     iconColorClass: "text-orange-400",
@@ -44,8 +43,8 @@ const dailyBuyPlanData = [
   {
     name: "Ethereum (ETH)",
     description: "Smart Contract Platform",
-    currentPrice: 2678.47,
-    avgPrice: 2187.05,
+    currentPrice: 2524,
+    avgPrice: 2205,
     allocation: "15%",
     IconComponent: EthereumIcon,
     iconColorClass: "text-indigo-400",
@@ -54,8 +53,8 @@ const dailyBuyPlanData = [
   {
     name: "Binance Coin (BNB)",
     description: "Exchange Ecosystem Token",
-    currentPrice: 663.0,
-    avgPrice: 604,
+    currentPrice: 650,
+    avgPrice: 607,
     allocation: "10%",
     IconComponent: BnbIcon,
     iconColorClass: "text-yellow-400",
@@ -125,7 +124,7 @@ const dailyBuyPlanData = [
             {overall_data.total_profit_loss.toFixed(2)} USDT
           </p>
           <p class="text-sm text-zinc-400 mt-1">
-            Overall profit/loss in USDT. Total ROI: {
+            Total Return on Investment: {
               overall_data.total_roi_percent.toFixed(2)
             }%.
           </p>
@@ -139,8 +138,7 @@ const dailyBuyPlanData = [
             {overall_data.total_days_of_buy} days
           </p>
           <p class="text-sm text-zinc-400 mt-1">
-            Total days with purchases: {overall_data.total_days_of_buy}, days in
-            profit: {overall_data.profitable_days}
+            Total days with purchases: {overall_data.total_days_of_buy}
           </p>
         </div>
       </div>
