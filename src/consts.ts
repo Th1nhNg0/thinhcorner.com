@@ -17,6 +17,11 @@ const WEBSITE_CONFIG = {
   description: "Ngô Phú Thịnh's personal blog",
 };
 
+// Google Analytics (gtag) configuration
+
+export const GOOGLE_ANALYTICS_ID = import.meta.env.PUBLIC_GOOGLE_ANALYTICS_ID;
+export const GOOGLE_ANALYTICS_URL = `https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`;
+
 // External reading profile URL for book recommendations integration
 export const GOODREADS_USER_URL = "https://www.goodreads.com/th1nhng0";
 
@@ -24,4 +29,5 @@ export const GOODREADS_USER_URL = "https://www.goodreads.com/th1nhng0";
 export { PERSONAL_SOCIAL_PROFILES as SOCIAL_MEDIA, WEBSITE_CONFIG as SITE };
 
 // GitHub repository URL for blog content source
-export const GITHUB_CONTENT_SOURCE = "https://github.com/th1nhng0/thinhcorner.com/tree/master/src/content/blog";
+export const GITHUB_CONTENT_SOURCE =
+  "https://github.com/th1nhng0/thinhcorner.com/tree/master/src/content/blog";
