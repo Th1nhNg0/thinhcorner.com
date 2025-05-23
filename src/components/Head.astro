@@ -1,5 +1,5 @@
 ---
-import { SITE } from "@/consts";
+import { SITE, GOOGLE_ANALYTICS_ID, GOOGLE_ANALYTICS_URL } from "@/consts";
 import "@/styles/global.css";
 
 interface Props {
@@ -48,17 +48,18 @@ const { title, description, image = "/og.png" } = Astro.props;
   />
   <link rel="sitemap" href="/sitemap-index.xml" />
 
-  <script
-    type="text/partytown"
-    async
-    src="https://www.googletagmanager.com/gtag/js?id=G-P4B7XCWCYP"></script>
-  <script type="text/partytown">
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
-
-    gtag("config", "G-P4B7XCWCYP");
-  </script>
+  {/* Google Analytics (gtag) */}
+  {
+    import.meta.env.PROD && (
+      <>
+        <script type="text/partytown" async src={GOOGLE_ANALYTICS_URL} />
+        <script type="text/partytown">{`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '${GOOGLE_ANALYTICS_ID}');
+      `}</script>
+      </>
+    )
+  }
 </head>
