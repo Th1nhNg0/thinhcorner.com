@@ -5,7 +5,7 @@ const refresh_token = import.meta.env.SPOTIFY_REFRESH_TOKEN;
 const basic = Buffer.from(`${client_id}:${client_secret}`).toString("base64");
 const NOW_PLAYING_ENDPOINT = `https://api.spotify.com/v1/me/player/currently-playing`;
 const TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=25`;
-const TOP_ARTISTS_ENDPOINT = `https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=25`;
+const TOP_ARTISTS_ENDPOINT = `https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=24`;
 const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played?limit=5`;
 const SAVED_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/tracks?limit=50`;
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
