@@ -1,41 +1,81 @@
 ---
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
-import C1 from "@/components/cryptochart/overall_usdt_allocation.html";
-import C2 from "@/components/cryptochart/daily_usdt_allocation.html";
-import C3 from "@/components/cryptochart/cumulative_investment_vs_portfolio_value.html";
-import C4 from "@/components/cryptochart/cumulative_roi_over_time.html";
+import C1 from "@/components/cryptochart/crypto_allocation_pie_chart.html";
+import C2 from "@/components/cryptochart/cumulative_investment_vs_portfolio_value.html";
+import C3 from "@/components/cryptochart/roi_over_time.html";
 import { format } from "date-fns";
 import BitcoinIcon from "@/assets/crypto-icon/bitcoin-btc-logo.svg";
 import EthereumIcon from "@/assets/crypto-icon/ethereum-eth-logo.svg";
 import BnbIcon from "@/assets/crypto-icon/bnb-bnb-logo.svg";
 
-const overall_data = {
-  total_invested: 529.0,
-  current_portfolio_value: 616.2477806652346,
-  total_profit_loss: 87.24778066523459,
-  total_roi_percent: 16.492964208929035,
-  total_days_of_buy: 127,
+const data = {
+  investment_overview: {
+    total_investment_usdt: 657.0,
+    current_portfolio_value_usdt: 743.22,
+    profit_loss: {
+      absolute_usdt: 86.22,
+      percentage: 13.12,
+    },
+  },
+  investment_timeline: {
+    start_date: "2025-01-15",
+    end_date: "2025-06-22",
+    total_running_days: 159,
+    total_days_with_purchases: 140,
+    purchase_frequency_percentage: 88.05,
+  },
+  coin_breakdown: {
+    BTC: {
+      holdings: 0.00523,
+      current_price_usdt: 107340.58,
+      average_purchase_price_usdt: 93035.51,
+      current_value_usdt: 561.43,
+      roi_percentage: 15.38,
+    },
+    ETH: {
+      holdings: 0.047523,
+      current_price_usdt: 2418.49,
+      average_purchase_price_usdt: 2174.68,
+      current_value_usdt: 114.93,
+      roi_percentage: 11.21,
+    },
+    BNB: {
+      holdings: 0.103484,
+      current_price_usdt: 646.07,
+      average_purchase_price_usdt: 619.97,
+      current_value_usdt: 66.86,
+      roi_percentage: 4.21,
+    },
+  },
+  portfolio_performance: {
+    current_roi_percentage: 6.19,
+    maximum_roi_percentage: 22.12,
+    minimum_roi_percentage: -18.3,
+    average_roi_percentage: -1.72,
+    roi_volatility_std_dev: 9.69,
+    days_in_profit: 54,
+    days_in_loss: 86,
+    profit_day_percentage: 38.57,
+  },
+  metadata: {
+    analysis_date: "2025-06-26 19:11:23",
+    data_source: "Binance Auto-Invest & Convert Transactions",
+    price_data_source: "CryptoDataDownload (Binance USDT pairs)",
+    latest_price_data_date: "2025-06-25",
+  },
 };
-const last_updated = new Date("2025-05-20T00:00:00Z");
-const dailyBuyAmount = 5; // Added: Centralize daily buy amount
 
-// Helper function to calculate ROI - now returns a number
-const calculateROI = (currentPrice: number, avgPrice: number): number => {
-  if (avgPrice === 0) {
-    // Avoid division by zero
-    return 0;
-  }
-  return ((currentPrice - avgPrice) / avgPrice) * 100;
-};
+const last_updated = new Date(data.metadata.analysis_date);
+const dailyBuyAmount = 10; // Added: Centralize daily buy amount
 
 const dailyBuyPlanData = [
   {
     name: "Bitcoin (BTC)",
     description: "Dominant Digital Gold",
-    currentPrice: 106849,
-    avgPrice: 90281,
-    allocation: "75%",
+    currentPrice: data.coin_breakdown.BTC.current_price_usdt,
+    avgPrice: data.coin_breakdown.BTC.average_purchase_price_usdt,
+    allocation: "70%",
     IconComponent: BitcoinIcon,
     iconColorClass: "text-orange-400",
     progressColorClass: "bg-gradient-to-r from-orange-400 to-orange-500",
@@ -43,8 +83,8 @@ const dailyBuyPlanData = [
   {
     name: "Ethereum (ETH)",
     description: "Smart Contract Platform",
-    currentPrice: 2524,
-    avgPrice: 2205,
+    currentPrice: data.coin_breakdown.ETH.current_price_usdt,
+    avgPrice: data.coin_breakdown.ETH.average_purchase_price_usdt,
     allocation: "15%",
     IconComponent: EthereumIcon,
     iconColorClass: "text-indigo-400",
@@ -53,9 +93,9 @@ const dailyBuyPlanData = [
   {
     name: "Binance Coin (BNB)",
     description: "Exchange Ecosystem Token",
-    currentPrice: 650,
-    avgPrice: 607,
-    allocation: "10%",
+    currentPrice: data.coin_breakdown.BNB.current_price_usdt,
+    avgPrice: data.coin_breakdown.BNB.average_purchase_price_usdt,
+    allocation: "15%",
     IconComponent: BnbIcon,
     iconColorClass: "text-yellow-400",
     progressColorClass: "bg-gradient-to-r from-yellow-400 to-yellow-500",
@@ -68,7 +108,7 @@ const dailyBuyPlanData = [
   description="A snapshot of my cryptocurrency investments and their distribution."
 >
   <Container>
-    <h1 class="text-5xl mb-8 tracking-tight sm:text-6xl flex gradient-text">
+    <h1 class="text-5xl mb-8 tracking-tight sm:text-6xl flex gradient-tex">
       My crypto portfolio
     </h1>
     <section class="prose max-w-none prose-invert mb-8 prose-a:text-yellow-500">
@@ -97,7 +137,7 @@ const dailyBuyPlanData = [
             Total Investment
           </h3>
           <p class="text-4xl font-bold text-green-400">
-            {overall_data.total_invested.toFixed(2)} USDT
+            {data.investment_overview.total_investment_usdt.toFixed(2)} USDT
           </p>
           <p class="text-sm text-zinc-400 mt-1">
             Total USDT invested through the daily automated buying strategy.
@@ -109,7 +149,7 @@ const dailyBuyPlanData = [
             Current Value
           </h3>
           <p class="text-4xl font-bold text-blue-400">
-            {overall_data.current_portfolio_value.toFixed(2)} USDT
+            {data.investment_overview.current_portfolio_value_usdt.toFixed(2)} USDT
           </p>
           <p class="text-sm text-zinc-400 mt-1">
             Current estimated market value of all cryptocurrency holdings.
@@ -121,11 +161,11 @@ const dailyBuyPlanData = [
             Profit/Loss Summary
           </h3>
           <p class="text-4xl font-bold text-yellow-400">
-            {overall_data.total_profit_loss.toFixed(2)} USDT
+            {data.investment_overview.profit_loss.absolute_usdt.toFixed(2)} USDT
           </p>
           <p class="text-sm text-zinc-400 mt-1">
             Total Return on Investment: {
-              overall_data.total_roi_percent.toFixed(2)
+              data.investment_overview.profit_loss.percentage.toFixed(2)
             }%.
           </p>
         </div>
@@ -135,18 +175,23 @@ const dailyBuyPlanData = [
             Investment Timeline
           </h3>
           <p class="text-4xl font-bold text-purple-400">
-            {overall_data.total_days_of_buy} days
+            {data.investment_timeline.total_running_days} days
           </p>
           <p class="text-sm text-zinc-400 mt-1">
-            Total days with purchases: {overall_data.total_days_of_buy}
+            Since {
+              format(
+                new Date(data.investment_timeline.start_date),
+                "MMM d, yyyy"
+              )
+            } • {
+              data.investment_timeline.purchase_frequency_percentage.toFixed(0)
+            }% active
           </p>
         </div>
       </div>
 
-      <C1 />
-
       <div class="p-6">
-        <h3 class="text-2xl font-semibold mb-4 text-zinc-200">
+        <h3 class="text-2xl font-semibold mb-4 text-zinc-200 text-center">
           Current Daily Buy Plan
         </h3>
         <p class="leading-relaxed text-zinc-300 mb-6">
@@ -177,7 +222,12 @@ const dailyBuyPlanData = [
         <div class="space-y-4 mb-6">
           {
             dailyBuyPlanData.map((coin) => {
-              const coinROI = calculateROI(coin.currentPrice, coin.avgPrice);
+              // Get ROI from the data based on coin name
+              const coinROI = coin.name.includes("Bitcoin")
+                ? data.coin_breakdown.BTC.roi_percentage
+                : coin.name.includes("Ethereum")
+                  ? data.coin_breakdown.ETH.roi_percentage
+                  : data.coin_breakdown.BNB.roi_percentage;
               return (
                 <div class="p-4 rounded-lg bg-zinc-700/70 hover:bg-zinc-600/70 transition-all duration-300 ease-in-out shadow-lg border border-transparent hover:border-zinc-500">
                   {/* ... other coin details ... */}
@@ -199,18 +249,18 @@ const dailyBuyPlanData = [
                         {/* ... current and average price ... */}
                         <div class="flex items-center mb-1">
                           <span class="text-xs text-zinc-400 mr-2">
-                            Current:{" "}
-                          </span>
-                          <span class="text-sm font-medium text-zinc-200">
-                            {coin.currentPrice.toLocaleString()} USDT
-                          </span>
-                        </div>
-                        <div class="flex items-center mb-1">
-                          <span class="text-xs text-zinc-400 mr-2">
                             Average:{" "}
                           </span>
                           <span class="text-sm font-medium text-zinc-200">
                             {coin.avgPrice.toLocaleString()} USDT
+                          </span>
+                        </div>
+                        <div class="flex items-center mb-1">
+                          <span class="text-xs text-zinc-400 mr-2">
+                            Current:{" "}
+                          </span>
+                          <span class="text-sm font-medium text-zinc-200">
+                            {coin.currentPrice.toLocaleString()} USDT
                           </span>
                         </div>
                         <div class="flex items-center">
@@ -246,9 +296,9 @@ const dailyBuyPlanData = [
           }
         </div>
       </div>
+      <C1 />
       <C2 />
       <C3 />
-      <C4 />
     </div>
   </Container>
 </Layout>
