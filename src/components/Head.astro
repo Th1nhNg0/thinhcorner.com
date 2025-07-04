@@ -53,12 +53,15 @@ const { title, description, image = "/og.png" } = Astro.props;
     import.meta.env.PROD && (
       <>
         <script type="text/partytown" async src={GOOGLE_ANALYTICS_URL} />
-        <script type="text/partytown">{`
+        <script
+          type="text/partytown"
+          set:html={`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', '${GOOGLE_ANALYTICS_ID}');
-      `}</script>
+      `}
+        />
       </>
     )
   }
