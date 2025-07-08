@@ -19,6 +19,10 @@ export default defineConfig({
     isr: {
       expiration: 60 * 15,
     },
+    webAnalytics: {
+      enabled: true,
+    },
+    
   }),
   integrations: [
     sitemap(),
