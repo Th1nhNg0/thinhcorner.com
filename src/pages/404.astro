@@ -1,0 +1,84 @@
+---
+import Container from "@/components/Container.astro";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout
+  title="404 - Page Not Found"
+  description="The page you're looking for doesn't exist."
+>
+  <Container>
+    <div class="space-y-8 text-center py-16">
+      <!-- Large 404 Number -->
+      <div class="space-y-4">
+        <h1 class="text-8xl sm:text-9xl font-genos font-bold gradient-text">
+          404
+        </h1>
+        <h2 class="text-2xl sm:text-3xl font-medium text-zinc-200">
+          Page Not Found
+        </h2>
+      </div>
+
+      <!-- Description -->
+      <div class="space-y-4 max-w-lg mx-auto">
+        <p class="text-lg text-zinc-400 leading-relaxed">
+          Oops! The page you're looking for seems to have wandered off into the
+          digital void.
+        </p>
+        <p class="text-zinc-400">
+          Don't worry though, even the best explorers sometimes take a wrong
+          turn.
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div
+        class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8"
+      >
+        <a
+          href="/"
+          class="flex items-center space-x-2 px-6 py-3 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition-colors duration-200 font-medium text-zinc-200"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path fill="currentColor" d="M10 20v-6h4v6h5v-8h3L12 3L2 12h3v8z"
+            ></path>
+          </svg>
+          <span>Go Home</span>
+        </a>
+
+        <a
+          href="/blog"
+          class="flex items-center space-x-2 px-6 py-3 rounded-lg border border-zinc-700 hover:bg-zinc-800 transition-colors duration-200 font-medium text-zinc-200"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              fill="currentColor"
+              d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6M6 20V4h7v5h5v11H6Z"
+            ></path>
+          </svg>
+          <span>Read Blog</span>
+        </a>
+      </div>
+
+      <!-- Fun Fact -->
+      <div class="pt-12 border-t border-zinc-800">
+        <p class="text-sm text-zinc-500 italic">
+          Fun fact: The HTTP 404 error was named after room 404 at CERN where
+          the World Wide Web was invented!
+        </p>
+      </div>
+    </div>
+  </Container>
+</Layout>
