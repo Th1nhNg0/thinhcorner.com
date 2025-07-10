@@ -147,7 +147,10 @@ let slug = Array.isArray(Astro.params.id)
 
       {
         nextPost && (
-          <a class="group relative border border-zinc-700/50 p-4 transition-colors hover:border-gray-600">
+          <a
+            href={`/blog/${nextPost.id}`}
+            class="group relative border border-zinc-700/50 p-4 transition-colors hover:border-gray-600"
+          >
             <div class="mb-2 text-sm text-gray-400">Next Article →</div>
             <div class="line-clamp-2 font-medium text-gray-100 group-hover:text-white">
               {nextPost.data.title}
