@@ -1,0 +1,155 @@
+---
+export const prerender = false;
+import Container from "@/components/Container.astro";
+import Layout from "@/layouts/Layout.astro";
+import GamesByReleaseYear from "@/components/GamesByReleaseYear.astro";
+import { getAllGames } from "@/lib/rawg";
+import { SOCIAL_MEDIA } from "@/consts";
+import { format } from "date-fns";
+
+const allGames = await getAllGames();
+const now = new Date();
+
+// Prepare data for the release year chart
+const gamesByYear = allGames.reduce(
+  (acc, game) => {
+    if (game.released) {
+      const year = new Date(game.released).getFullYear().toString();
+      acc[year] = (acc[year] || 0) + 1;
+    }
+    return acc;
+  },
+  {} as Record<string, number>
+);
+
+// Find min and max years
+const years = Object.keys(gamesByYear).map((year) => parseInt(year));
+const minYear = Math.min(...years);
+const maxYear = Math.max(...years);
+
+// Fill in missing years with 0 count
+for (let year = minYear; year <= maxYear; year++) {
+  if (!gamesByYear[year.toString()]) {
+    gamesByYear[year.toString()] = 0;
+  }
+}
+
+// Convert to array and sort by year
+const releaseYearData = Object.entries(gamesByYear)
+  .map(([year, count]) => ({ year, count }))
+  .sort((a, b) => parseInt(a.year) - parseInt(b.year));
+---
+
+<Layout
+  title="Games"
+  description="A collection of games I've played and recommend."
+>
+  <Container>
+    <section class="prose max-w-none prose-invert prose-a:text-yellow-500">
+      <h1
+        class="not-prose text-5xl tracking-tight sm:text-6xl inline-block gradient-text"
+      >
+        Games I've Played
+      </h1>
+      <p>
+        Here's my gaming collection — a digital showcase of titles I've enjoyed
+        over time. This library is synced with my
+        <a href={SOCIAL_MEDIA.rawg} class="text-zinc-200 hover:text-white"
+          >RAWG profile</a
+        >.
+      </p>
+
+      <p class="leading-relaxed italic">
+        "Games give you a chance to excel, and if you're playing in good company
+        you don't even mind if you lose because you had the enjoyment of the
+        company during the course of the game." — Gary Gygax
+      </p>
+      <p class="text-sm text-zinc-400 mt-4">
+        Last updated: <time
+          datetime={now.toISOString()}
+          title={now.toISOString()}
+        >
+          {format(now, "MMMM d, yyyy 'at' h:mm a")}
+        </time>
+      </p>
+    </section>
+
+    <section class="my-8">
+      <GamesByReleaseYear data={releaseYearData} />
+    </section>
+
+    <section class="my-8">
+      <h2 class="text-xl font-semibold mb-3">All Games ({allGames.length})</h2>
+
+      <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+        {
+          allGames.map((game) => (
+            <a
+              href={`https://rawg.io/games/${game.slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group block bg-zinc-800/50 rounded-lg overflow-hidden hover:bg-zinc-700/70 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+              style={`box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 2px 10px rgba(0,0,0,0.1);`}
+            >
+              <div class="relative aspect-[16/9]">
+                <img
+                  src={game.background_image}
+                  alt={game.name}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
+                  loading="lazy"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-40" />
+                {game.metacritic && (
+                  <div
+                    class="absolute bottom-2 right-2 flex items-center justify-center rounded-full w-8 h-8 font-bold text-xs"
+                    style={`background: rgba(0,0,0,0.7); border: 2px solid ${
+                      game.metacritic >= 80
+                        ? "#4ade80"
+                        : game.metacritic >= 60
+                          ? "#facc15"
+                          : "#f87171"
+                    };`}
+                  >
+                    <span
+                      class={`${
+                        game.metacritic >= 80
+                          ? "text-green-400"
+                          : game.metacritic >= 60
+                            ? "text-yellow-400"
+                            : "text-red-400"
+                      }`}
+                    >
+                      {game.metacritic}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <div class="p-3">
+                <h3 class="font-semibold text-base transition-colors line-clamp-1 group-hover-game-title">
+                  {game.name}
+                </h3>
+
+                <div class="flex overflow-x-auto scrollbar-hide gap-1 mt-1.5 pb-1">
+                  {game.genres?.map((genre) => (
+                    <span class="inline-block flex-shrink-0 px-1.5 py-0.5 bg-zinc-700/70 rounded text-xs text-zinc-300">
+                      {genre.name}
+                    </span>
+                  ))}
+                </div>
+
+                {game.released && (
+                  <div class="text-xs text-zinc-400 mt-2 pt-2 border-t border-zinc-700/40">
+                    <span>
+                      Released: {format(new Date(game.released), "MMM yyyy")}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </Container>
+</Layout>
