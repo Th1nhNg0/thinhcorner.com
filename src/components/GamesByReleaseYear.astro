@@ -1,0 +1,76 @@
+---
+interface Props {
+  data: Array<{
+    year: string;
+    count: number;
+  }>;
+}
+
+const { data } = Astro.props;
+
+// Find the maximum count to calculate relative heights
+const maxCount = Math.max(...data.map((item) => item.count));
+
+// Pre-calculate label positions for chart
+const totalPoints = data.length;
+const labelIndexes = [
+  0,
+  Math.floor(totalPoints / 3),
+  Math.floor((totalPoints * 2) / 3),
+  totalPoints - 1,
+];
+---
+
+<div
+  class="bg-zinc-700/70 hover:bg-zinc-600/70 transition-all duration-300 ease-in-out shadow-lg border border-transparent hover:border-zinc-500 rounded-lg p-6"
+>
+  <div class="text-xl font-semibold text-zinc-200 text-center mb-4">
+    Games by Release Year
+  </div>
+  <div class="flex gap-2 justify-center h-32 items-baseline mb-5">
+    {
+      data.map((item, index) => {
+        const heightPercentage = (item.count / maxCount) * 100;
+        return (
+          <div
+            class="bg-yellow-400 rounded hover:bg-yellow-300 transition-colors duration-200 relative group cursor-pointer"
+            style={{
+              height: `calc(${heightPercentage}% + 10px)`,
+              width: "10px",
+            }}
+            title={`${item.year}: ${item.count} games`}
+            onclick={`this.querySelector('.tooltip').classList.toggle('show-tooltip')`}
+            onblur={`this.querySelector('.tooltip').classList.remove('show-tooltip')`}
+            tabindex="0"
+          >
+            <div class="tooltip absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-zinc-900 text-zinc-200 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none z-50">
+              {item.year}: {item.count} games
+            </div>
+            {labelIndexes.includes(index) && (
+              <span class="absolute top-full text-xs text-zinc-400 left-1/2 -translate-x-1/2 mt-1">
+                {item.year}
+              </span>
+            )}
+          </div>
+        );
+      })
+    }
+  </div>
+</div>
+
+<style>
+  .show-tooltip {
+    opacity: 1 !important;
+  }
+
+  /* Mobile-specific styles */
+  @media (hover: none) and (pointer: coarse) {
+    .group:hover .tooltip {
+      opacity: 0;
+    }
+
+    .show-tooltip {
+      opacity: 1 !important;
+    }
+  }
+</style>
