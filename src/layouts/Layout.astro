@@ -3,6 +3,7 @@ import Head from "@/components/Head.astro";
 import Header from "@/components/Header.astro";
 import "@fontsource-variable/genos";
 import "@fontsource-variable/lexend";
+import SpeedInsights from "@vercel/speed-insights/astro";
 
 type Props = {
   title: string;
@@ -23,8 +24,8 @@ const { title, description, image } = Astro.props;
     </main>
     <script>
       const imageSelectors = [
-        ...document.querySelectorAll('article.prose img'),
-        ...document.querySelectorAll('[data-zoomable]'),
+        ...document.querySelectorAll("article.prose img"),
+        ...document.querySelectorAll("[data-zoomable]"),
       ] as HTMLElement[];
 
       import mediumZoom from "medium-zoom";
