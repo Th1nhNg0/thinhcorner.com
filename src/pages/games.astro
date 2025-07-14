@@ -2,6 +2,7 @@
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
 import GamesByReleaseYear from "@/components/GamesByReleaseYear.astro";
+import GameModal from "@/components/GameModal.astro";
 import { getAllGames } from "@/lib/rawg";
 import { SOCIAL_MEDIA } from "@/consts";
 import { format } from "date-fns";
@@ -83,16 +84,10 @@ const releaseYearData = Object.entries(gamesByYear)
       <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
         {
           allGames.map((game, index) => {
-            // Load first 6 images eagerly (above the fold for most screens)
-            // 2 cols on mobile (first 4), 3 cols on lg+ (first 6)
-            const isAboveFold = index < 6;
-
             return (
-              <a
-                href={`https://rawg.io/games/${game.slug}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="group block bg-zinc-800/50 rounded-lg overflow-hidden hover:bg-zinc-700/70 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+              <button
+                onclick={`openGameModal('${game.id}')`}
+                class="group block bg-zinc-800/50 rounded-lg overflow-hidden hover:bg-zinc-700/70 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 w-full text-left cursor-pointer"
                 style={`box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 2px 10px rgba(0,0,0,0.1);`}
               >
                 <div class="relative aspect-[16/9]">
@@ -100,9 +95,9 @@ const releaseYearData = Object.entries(gamesByYear)
                     src={game.background_image}
                     alt={game.name}
                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
-                    loading={isAboveFold ? "eager" : "lazy"}
-                    fetchpriority={isAboveFold ? "high" : "auto"}
-                    decoding={isAboveFold ? "sync" : "async"}
+                    loading="lazy"
+                    fetchpriority="auto"
+                    decoding="async"
                   />
                   <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-40" />
                   {game.metacritic && (
@@ -152,11 +147,14 @@ const releaseYearData = Object.entries(gamesByYear)
                     </div>
                   )}
                 </div>
-              </a>
+              </button>
             );
           })
         }
       </div>
     </section>
   </Container>
+
+  <!-- Game Modals -->
+  {allGames.map((game) => <GameModal game={game} />)}
 </Layout>
