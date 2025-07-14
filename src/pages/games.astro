@@ -2,7 +2,6 @@
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
 import GamesByReleaseYear from "@/components/GamesByReleaseYear.astro";
-import GameModal from "@/components/GameModal.astro";
 import { getAllGames } from "@/lib/rawg";
 import { SOCIAL_MEDIA } from "@/consts";
 import { format } from "date-fns";
@@ -86,7 +85,6 @@ const releaseYearData = Object.entries(gamesByYear)
           allGames.map((game, index) => {
             return (
               <button
-                onclick={`openGameModal('${game.id}')`}
                 class="group block bg-zinc-800/50 rounded-lg overflow-hidden hover:bg-zinc-700/70 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 w-full text-left cursor-pointer"
                 style={`box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 2px 10px rgba(0,0,0,0.1);`}
               >
@@ -154,7 +152,4 @@ const releaseYearData = Object.entries(gamesByYear)
       </div>
     </section>
   </Container>
-
-  <!-- Game Modals -->
-  {allGames.map((game) => <GameModal game={game} />)}
 </Layout>
