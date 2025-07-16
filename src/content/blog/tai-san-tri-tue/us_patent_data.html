@@ -5,21 +5,23 @@
   <script
     charset="utf-8"
     src="https://cdn.plot.ly/plotly-3.0.1.min.js"
+    integrity="sha256-oy6Be7Eh6eiQFs5M7oXuPxxm9qbJXEtTpfSI93dW16Q="
+    crossorigin="anonymous"
   ></script>
   <div
-    id="0d074175-9014-420d-b18c-53cdeec30bfe"
+    id="499aaebf-0c48-48cf-9e57-a5f338feca14"
     class="plotly-graph-div"
     style="height: 100%; width: 100%"
   ></div>
   <script type="text/javascript">
     window.PLOTLYENV = window.PLOTLYENV || {};
-    if (document.getElementById("0d074175-9014-420d-b18c-53cdeec30bfe")) {
+    if (document.getElementById("499aaebf-0c48-48cf-9e57-a5f338feca14")) {
       Plotly.newPlot(
-        "0d074175-9014-420d-b18c-53cdeec30bfe",
+        "499aaebf-0c48-48cf-9e57-a5f338feca14",
         [
           {
             hovertemplate:
-              "Category=%{x}\u003cbr\u003eTotal Number of Patent Registrations=%{y}\u003cextra\u003e\u003c\u002fextra\u003e",
+              "Year=%{x}\u003cbr\u003ePatent Filings=%{y}\u003cextra\u003e\u003c\u002fextra\u003e",
             legendgroup: "",
             line: { color: "#636efa", dash: "solid" },
             marker: { symbol: "circle" },
@@ -27,48 +29,16 @@
             name: "",
             orientation: "v",
             showlegend: false,
-            x: [
-              "1990",
-              "1991",
-              "1992",
-              "1993",
-              "1994",
-              "1995",
-              "1996",
-              "1997",
-              "1998",
-              "1999",
-              "2000",
-              "2001",
-              "2002",
-              "2003",
-              "2004",
-              "2005",
-              "2006",
-              "2007",
-              "2008",
-              "2009",
-              "2010",
-              "2011",
-              "2012",
-              "2013",
-              "2014",
-              "2015",
-              "2016",
-              "2017",
-              "2018",
-              "2019",
-              "2020",
-              "2021",
-              "2022",
-              "2023",
-              "2024*",
-            ],
-            xaxis: "x",
-            y: {
+            x: {
               dtype: "i2",
               bdata:
-                "qwaqB0EIXAl1CjAMGg95EGcZaBwsHgkhtSGbI8QjnSEHKu8kxCQVKAs00DTZOk9C1ksNSrpLU0wXSMZTC1UASnhJ5UtYXA==",
+                "WwdcB10HXgdfB2AHYQdiB2MHZAdlB2YHZwdoB2kHagdrB2wHbQduB28HcAdxB3IHcwd0B3UHdgd3B3gHeQd6B3sHfAd9B34HfweAB4EHggeDB4QHhQeGB4cHiAeJB4oHiweMB40HjgePB5AHkQeSB5MHlAeVB5YHlweYB5kHmgebB5wHnQeeB58HoAehB6IHowekB6UHpgenB6gHqQeqB6sHrAetB64HrwewB7EHsgezB7QHtQe2B7cHuAe5B7oHuwe8B70Hvge\u002fB8AHwQfCB8MHxAfFB8YHxwfIB8kHygfLB8wHzQfOB88H0AfRB9IH0wfUB9UH1gfXB9gH2QfaB9sH3AfdB94H3wfgB+EH4gfjB+QH5QfmB+cH",
+            },
+            xaxis: "x",
+            y: {
+              dtype: "f8",
+              bdata:
+                "AAAAACCj4EAAAAAAALLgQAAAAAAg8eBAAAAAACAr4UAAAAAAwDPhQAAAAAAg8+BAAAAAAOBW40AAAAAAgHnjQAAAAABAP+NAAAAAAEBL40AAAAAAoDXiQAAAAABgD+JAAAAAACAd40AAAAAAoIvkQAAAAACgS+ZAAAAAAGCP4EAAAAAAIAPjQAAAAAAgX+NAAAAAAACH5UAAAAAAAJjnQAAAAAAgEehAAAAAAAD86EAAAAAAQGLqQAAAAACAL+tAAAAAAOAp7EAAAAAAwF3tQAAAAAAAc+9AAAAAAKDn7kAAAAAAMIDwQAAAAABg4PBAAAAAAFCh8EAAAAAA4IvwQAAAAABwcPBAAAAAANCv8EAAAAAAQI\u002fwQAAAAABgAOxAAAAAAFC+8kAAAAAAsA70QAAAAABAa\u002fVAAAAAAHCM9EAAAAAAwLbyQAAAAAAQ1PJAAAAAAKCO80AAAAAAoLLzQAAAAACQX\u002fVAAAAAANBx9UAAAAAAEPf1QAAAAACA7\u002fVAAAAAANCG80AAAAAAQGbwQAAAAADArutAAAAAAEDG60AAAAAAAH3sQAAAAACAou5AAAAAAADx70AAAAAAMFLwQAAAAADAVu9AAAAAAIC07UAAAAAAQGrpQAAAAAAA9+VAAAAAAMDc5UAAAAAAIJHqQAAAAABAnfBAAAAAAKDX80AAAAAAUHnyQAAAAABw0vBAAAAAADCO8EAAAAAAQH7wQAAAAADAn+1AAAAAAODz7kAAAAAAQBPyQAAAAADw6\u002fJAAAAAAODr8kAAAAAAsFzyQAAAAACgI\u002fJAAAAAANDz8kAAAAAAQDfzQAAAAACQdvNAAAAAAEBc9EAAAAAAwMv0QAAAAADQ9vRAAAAAAIBi9UAAAAAAUBr3QAAAAADQnPVAAAAAAECG9UAAAAAA8NH2QAAAAABwwvhAAAAAAHAw+UAAAAAAkJH5QAAAAAAgPvhAAAAAAPBo+UAAAAAAoAj5QAAAAABgqfhAAAAAAID8+EAAAAAAMKT4QAAAAABAo\u002fhAAAAAAOCI+EAAAAAAkHj5QAAAAADQ+vlAAAAAAJDD+kAAAAAAcFH5QAAAAABAK\u002ftAAAAAADAi\u002fEAAAAAAQIX9QAAAAADoFwBBAAAAAOCOAUEAAAAAmF8DQQAAAADY5ARBAAAAAJgCBUEAAAAAmGEGQQAAAAAgfAZBAAAAABjACEEAAAAAcNkLQQAAAABQ3wlBAAAAAIDqCkEAAAAAmO0MQQAAAACMOBBBAAAAAOxDEkEAAAAAqJoUQQAAAADAiBRBAAAAALBPFUEAAAAAJCkWQQAAAACggxhBAAAAAOifGkEAAAAA7GEcQQAAAADsChxBAAAAAJAKG0EAAAAAuKgcQQAAAAB8Sx1BAAAAAPRQH0EAAAAApG0gQQAAAADkiyBBAAAAAA7OIEEAAAAABhghQQAAAACwESFBAAAAADDlIEEAAAAAqJghQQAAAADCCSFBAAAAAHbqIEEAAAAAnAUhQQAAAAAEYyJB",
             },
             yaxis: "y",
             type: "scatter",
@@ -476,16 +446,15 @@
             anchor: "x",
             domain: [0.0, 1.0],
             title: {
-              text: "T\u1ed5ng S\u1ed1 \u0110\u0103ng K\u00fd B\u1eb1ng S\u00e1ng Ch\u1ebf",
+              text: "S\u1ed1 l\u01b0\u1ee3ng b\u1eb1ng s\u00e1ng ch\u1ebf \u0111\u01b0\u1ee3c n\u1ed9p",
             },
           },
           legend: { tracegroupgap: 0 },
           title: {
-            text: "T\u1ed5ng S\u1ed1 \u0110\u0103ng K\u00fd B\u1eb1ng S\u00e1ng Ch\u1ebf\u003cbr\u003eThung L\u0169ng Silicon",
-            x: 0.5,
+            text: "S\u1ed1 l\u01b0\u1ee3ng b\u1eb1ng s\u00e1ng ch\u1ebf \u0111\u01b0\u1ee3c n\u1ed9p t\u1ea1i Mỹ\u003cbr\u003equa c\u00e1c n\u0103m (1883-2023)",
           },
           hoverlabel: { font: { size: 12, color: "black" }, bgcolor: "white" },
-          showlegend: false,
+          hovermode: "x unified",
           plot_bgcolor: "rgba(0,0,0,0)",
           paper_bgcolor: "rgba(0,0,0,0)",
           margin: { r: 20 },
