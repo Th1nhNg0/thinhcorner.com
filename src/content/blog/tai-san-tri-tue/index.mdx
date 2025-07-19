@@ -323,16 +323,7 @@ Lý thuyết này đã được chứng minh bằng thực tế. Trong một th�
 Điều này không chỉ đúng trong lịch sử. Một khảo sát năm 2006 cho thấy một con số đáng kinh ngạc: 88% doanh nghiệp tại Mỹ, châu Âu và Nhật Bản sử dụng thông tin từ các bằng sáng chế đã công bố để định hướng cho hoạt động R&D của mình[^v].
 
 
-<iframe
-  class="w-full aspect-video"
-  src="https://www.youtube.com/embed/E80cMR0G81c?si=xl3ok3Jwt2FxrStv"
-  title="YouTube video player"
-  frameborder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-  referrerpolicy="strict-origin-when-cross-origin"
-  allowfullscreen
-  loading="lazy"
-/>
+
 
 Thomas Edison là minh chứng vĩ đại nhất cho sức mạnh của hệ thống này. Nhiều người lầm tưởng rằng bằng sáng chế của ông về bóng đèn ([US223,898](https://patents.google.com/patent/US223898?oq=No.%2b223%2c898)) đã bóp nghẹt sự cạnh tranh.
 
@@ -413,7 +404,7 @@ Hàng triệu dòng mã được chia sẻ miễn phí trên GitHub. Các thư v
 
 
 
-import USPatentChart from "./us_patent_data.html";
+import USPatentChart from "./patent_data_US.html";
 
 <div class="bg-zinc-800/50 rounded-xl shadow-lg">
 <USPatentChart />
@@ -421,12 +412,163 @@ import USPatentChart from "./us_patent_data.html";
 
 ## Phần 4: Sở hữu Trí tuệ tại Việt Nam
 
+### Nền móng ban đầu và Di sản Lịch sử
 
+Trong xã hội Việt Nam thời kỳ phong kiến, dù chưa tồn tại một hệ thống pháp luật về SHTT theo khái niệm hiện đại, các hình thức bảo hộ sơ khai đối với tri thức và sự sáng tạo đã manh nha hình thành và vận hành thông qua các cơ chế xã hội phi chính thức. Sự tồn tại và phát triển của các làng nghề thủ công truyền thống là minh chứng rõ nét nhất cho điều này. Các làng nghề chuyên biệt về đan lát mây tre, điêu khắc gỗ, làm gốm sứ, dệt vải, hay đúc đồng đã hình thành và phát triển thịnh vượng, trở thành những trung tâm sản xuất thu hút nhiều thợ thủ công tài giỏi.
+
+Cơ chế bảo hộ trong giai đoạn này không dựa trên các văn bản pháp lý do triều đình ban hành mà vận hành ngầm trong cấu trúc xã hội, có thể được xem như một dạng "quyền sở hữu trí tuệ xã hội" thay vì "quyền sở hữu trí tuệ pháp lý". Sự bảo hộ này được thực thi thông qua ba hình thức chính:
+
+- **Bí mật nghề nghiệp**: Các bí quyết kỹ thuật, công thức, hay kỹ năng đặc biệt (know-how) được coi là tài sản quý giá nhất của một gia đình hoặc dòng họ làm nghề. Chúng được bảo vệ nghiêm ngặt và chỉ truyền thụ cho con cháu trong nhà hoặc những người học trò được tin tưởng nhất. Cơ chế này đảm bảo duy trì lợi thế cạnh tranh và tính độc đáo của sản phẩm.
+- **Uy tín và thương hiệu làng nghề**: Danh tiếng của một làng nghề, chẳng hạn như gốm Bát Tràng, lụa Vạn Phúc, hay tranh Đông Hồ, tự nó đã đóng vai trò như một dạng "chỉ dẫn địa lý" hoặc "nhãn hiệu tập thể" sơ khai. Uy tín này được xây dựng qua nhiều thế hệ và được cộng đồng người tiêu dùng công nhận, gắn liền với chất lượng và nguồn gốc xuất xứ của sản phẩm.
+- **Cơ chế phường hội**: Các phường, hội của những người cùng làm một nghề đã thiết lập những quy ước (lệ làng, hương ước) để điều chỉnh hoạt động sản xuất, duy trì tiêu chuẩn chất lượng và đôi khi là ngăn chặn sự sao chép hoặc cạnh tranh không lành mạnh trong nội bộ cộng đồng.
+
+Như vậy, trước khi có sự du nhập của luật pháp phương Tây, xã hội Việt Nam đã có những phương thức riêng để công nhận và bảo vệ giá trị của sự sáng tạo và tri thức kỹ thuật. Các cơ chế này dựa trên nền tảng của lòng tin, quy ước cộng đồng và sự kiểm soát xã hội, chứ không phải là quyền độc quyền được pháp luật thành văn trao cho. Đây là một hình thái "IP xã hội" tiền hiện đại, phản ánh cấu trúc kinh tế-xã hội đặc thù của thời kỳ đó.
+
+### Hệ thống Pháp luật Sở hữu Trí tuệ thời Pháp thuộc (1887-1954)
+
+Giai đoạn Pháp thuộc đánh dấu lần đầu tiên Việt Nam tiếp xúc và được đặt trong một hệ thống pháp luật SHTT chính thức, được pháp điển hóa theo mô hình của luật pháp Pháp. Một cột mốc quan trọng là việc Việt Nam, với tư cách là một phần của Liên bang Đông Dương, đã được Pháp cho gia nhập Công ước Paris về bảo hộ Sở hữu công nghiệp từ ngày 08/03/1949[^ipvietnam]. 
+
+Hệ thống pháp luật này được áp dụng theo nguyên tắc lãnh thổ, một trong những nguyên tắc cơ bản của pháp luật SHTT quốc tế. Điều này có nghĩa là các quyền SHTT như sáng chế, nhãn hiệu, kiểu dáng công nghiệp được đăng ký và bảo hộ theo luật pháp của chính quốc (Pháp) và có hiệu lực pháp lý trên lãnh thổ Đông Dương.
+
+Việc du nhập hệ thống pháp luật SHTT của Pháp không phải là một quá trình phát triển tự thân từ nhu cầu của xã hội Việt Nam, mà là một sự áp đặt từ chính quyền thực dân. Điều này đã tạo ra một hệ thống pháp lý song song và có phần xa lạ với thực tiễn bản địa. Một mặt, hệ thống pháp luật chính thức này chủ yếu phục vụ cho lợi ích thương mại của các công ty và cá nhân người Pháp hoặc châu Âu đang kinh doanh tại thuộc địa. Mặt khác, hệ thống "bảo hộ xã hội" phi chính thức của người Việt, dựa trên bí quyết gia truyền và uy tín làng nghề, vẫn tiếp tục tồn tại và vận hành trong các cộng đồng địa phương.
+
+Di sản của giai đoạn này không chỉ dừng lại ở việc giới thiệu các khái niệm pháp lý hiện đại về SHTT mà còn sâu sắc hơn. Nó đã đặt nền móng cho tư duy pháp lý theo truyền thống Dân luật (Civil Law) trong lĩnh vực này, một ảnh hưởng có thể đã định hình cách các nhà lập pháp Việt Nam xây dựng hệ thống pháp luật SHTT sau này, ngay cả khi bối cảnh chính trị và hệ tư tưởng đã thay đổi hoàn toàn.
+
+### Giai đoạn Kinh tế Kế hoạch hóa và những Quy định Sơ khởi (1954-1986)
+
+Sau năm 1954, miền Bắc Việt Nam bắt đầu xây dựng một mô hình kinh tế hoàn toàn mới: kinh tế kế hoạch hóa tập trung theo định hướng xã hội chủ nghĩa. Trong mô hình này, nhà nước nắm giữ quyền sở hữu đối với toàn bộ tư liệu sản xuất và các nguồn lực kinh tế trọng yếu. Bối cảnh này đã định hình một cách sâu sắc quan niệm về sở hữu trí tuệ. Khái niệm sở hữu tư nhân đối với các tài sản có giá trị kinh tế lớn, bao gồm cả tài sản trí tuệ, về cơ bản không tồn tại.
+
+Hệ thống pháp luật SHTT của Việt Nam trong giai đoạn này chịu ảnh hưởng rõ rệt từ mô hình pháp lý của Liên Xô và các nước xã hội chủ nghĩa Đông Âu. Mục tiêu tối cao của mọi hoạt động sáng tạo, cải tiến kỹ thuật là để phục vụ lợi ích của tập thể, hoàn thành các chỉ tiêu do nhà nước đề ra, và góp phần xây dựng đất nước, chứ không phải để tạo ra lợi nhuận cho cá nhân hay doanh nghiệp. Do đó, pháp luật không nhằm tạo ra độc quyền thương mại mà chủ yếu để ghi nhận công lao và khuyến khích phong trào thi đua lao động sản xuất[^ipvietnam2].
+
+Phản ánh đúng bối cảnh kinh tế-xã hội nêu trên, các văn bản pháp lý đầu tiên về SHTT đã được ban hành. Văn bản mang tính nền tảng và tiêu biểu nhất cho thời kỳ này là **Điều lệ về sáng kiến, cải tiến kỹ thuật - hợp lý hóa sản xuất và sáng chế**, ban hành kèm theo Nghị định số 31/CP ngày 23/01/1981 của Hội đồng Bộ trưởng. Tiếp sau đó là một loạt các văn bản dưới luật khác như Điều lệ về Nhãn hiệu hàng hóa (1982), Điều lệ về Quyền tác giả (1986), Điều lệ về Giải pháp hữu ích (1988), và Điều lệ về Kiểu dáng công nghiệp (1988).   
+
+Một đặc điểm cốt lõi của các quy định này là sự phân biệt rõ ràng giữa quyền nhân thân và quyền tài sản, trong đó pháp luật tập trung bảo hộ "quyền tinh thần" (quyền nhân thân) của người sáng tạo hơn là "quyền sở hữu" (quyền tài sản). Thay vì cấp "bằng độc quyền sáng chế" như ở các nước tư bản, nhà nước Việt Nam áp dụng hình thức "bằng tác giả sáng chế" (author's certificate). Theo cơ chế này:   
+
+- **Quyền nhân thân** của người sáng tạo được ghi nhận. Họ có quyền được đứng tên là tác giả của sáng chế trong văn bằng và các tài liệu liên quan.
+- **Quyền tài sản (quyền khai thác, sử dụng)** không thuộc về người sáng tạo mà thuộc về nhà nước. Nhà nước có toàn quyền quyết định việc áp dụng sáng chế đó tại bất kỳ xí nghiệp quốc doanh nào mà không cần sự cho phép của tác giả.
+- **Người sáng tạo** được nhà nước thưởng một khoản tiền hoặc hưởng một số lợi ích vật chất khác như một sự ghi nhận công lao, nhưng họ không có quyền ngăn cấm người khác sử dụng hay chuyển giao sáng chế của mình để thu lợi nhuận.
+
+Cách tiếp cận này cho thấy rõ bản chất của hệ thống SHTT thời kỳ này. Nó không được coi là một quyền tài sản tư nhân có thể tự do mua bán, chuyển nhượng trên thị trường. Thay vào đó, nó được xem như một công cụ quản lý của nhà nước, một phương tiện để điều hành và thúc đẩy hoạt động khoa học kỹ thuật trong nền kinh tế kế hoạch hóa. Pháp luật SHTT lúc này thực chất là một nhánh của luật hành chính-kinh tế, phục vụ các mục tiêu chính sách công của nhà nước.
+
+Trong bối cảnh đó, việc thành lập **Cục Sáng chế** vào ngày 29/07/1982 theo Nghị định số 125/HĐBT của Hội đồng Bộ trưởng là một sự kiện có ý nghĩa đặc biệt quan trọng. Cục Sáng chế, tiền thân của Cục Sở hữu trí tuệ ngày nay, được thành lập trên cơ sở tổ chức lại Phòng Sáng chế phát minh thuộc Ủy ban Khoa học và Kỹ thuật Nhà nước, trở thành cơ quan chuyên trách độc lập đầu tiên về sở hữu công nghiệp tại Việt Nam.[^ipvietnam3]
+
+Sự ra đời của Cục Sáng chế vào năm 1982, bốn năm trước khi chính sách Đổi Mới được chính thức khởi xướng, là một bước đi nhìn xa trông rộng. Nó cho thấy một tầm nhìn vượt trước cả công cuộc cải cách kinh tế toàn diện. Trong khi nền kinh tế còn khép kín, việc thiết lập một cơ quan chuyên trách về sáng chế theo mô hình quốc tế (dù nội dung bảo hộ vẫn theo mô hình Xô Viết) đã thể hiện một nhận thức sớm về tầm quan trọng của việc quản lý khoa học kỹ thuật một cách có hệ thống và sự cần thiết phải có một đầu mối để tương tác với thế giới bên ngoài. Việt Nam đã tham gia Tổ chức Sở hữu trí tuệ Thế giới (WIPO) từ năm 1976 , và việc thành lập Cục Sáng chế là một bước đi cụ thể hóa ý định hội nhập đó.[^ipvietnam3]
+
+Cơ quan này không chỉ là sản phẩm của thời đại kinh tế kế hoạch hóa mà còn đóng vai trò là hạt nhân, chuẩn bị về mặt thể chế, con người và cơ sở dữ liệu cho sự chuyển đổi sang kinh tế thị trường và hội nhập quốc tế sâu rộng trong các giai đoạn sau này.
+
+### Thời kỳ Đổi Mới (1986-2005)
+
+Đại hội Đảng toàn quốc lần thứ VI năm 1986 đã khởi xướng công cuộc Đổi Mới, đánh dấu một bước ngoặt lịch sử cho Việt Nam. Nền kinh tế bắt đầu chuyển đổi từ mô hình kế hoạch hóa tập trung, bao cấp sang nền kinh tế hàng hóa nhiều thành phần, vận hành theo cơ chế thị trường có sự quản lý của Nhà nước, theo định hướng xã hội chủ nghĩa. Sự thay đổi căn bản về tư duy kinh tế này đã tạo ra một áp lực và nhu cầu cấp bách phải cải cách toàn diện hệ thống pháp luật, trong đó có pháp luật về SHTT.
+
+Sự trỗi dậy của khu vực kinh tế tư nhân, chính sách mở cửa thu hút đầu tư trực tiếp nước ngoài (FDI), và việc khuyến khích hoạt động thương mại đã làm nảy sinh yêu cầu tất yếu phải thừa nhận và bảo vệ quyền sở hữu tư nhân một cách hiệu quả. Đối với các nhà đầu tư nước ngoài, một hệ thống bảo hộ SHTT đáng tin cậy là điều kiện tiên quyết để họ đưa công nghệ, thương hiệu và vốn vào thị trường Việt Nam. Đối với các doanh nghiệp trong nước, việc bảo hộ nhãn hiệu, kiểu dáng công nghiệp là công cụ sống còn để xây dựng vị thế và cạnh tranh. Do đó, hệ thống SHTT dựa trên "bằng tác giả sáng chế" và quyền sở hữu nhà nước đã trở nên lỗi thời và không còn phù hợp.
+
+Để đáp ứng yêu cầu của thực tiễn, một loạt văn bản pháp luật mang tính đột phá đã được ban hành, tạo nên sự chuyển đổi về chất cho toàn bộ hệ thống SHTT.
+
+**Pháp lệnh Bảo hộ Quyền Sở hữu công nghiệp**, được Hội đồng Nhà nước thông qua ngày 28/01/1989, được xem là một "bước ngoặt lớn" và là văn bản quan trọng nhất của thời kỳ này. Pháp lệnh này đã đặt nền móng vững chắc cho việc bảo hộ các đối tượng sở hữu công nghiệp theo cơ chế thị trường, bao gồm sáng chế, giải pháp hữu ích, kiểu dáng công nghiệp và nhãn hiệu hàng hóa. Điểm cải cách mang tính cách mạng và sâu sắc nhất của Pháp lệnh 1989 là **bãi bỏ hoàn toàn hình thức "bằng tác giả sáng chế" và chỉ còn duy nhất hình thức "bằng độc quyền sáng chế"**.
+
+Sự thay đổi này không đơn thuần là về mặt thuật ngữ pháp lý, mà nó đánh dấu một sự chuyển đổi căn bản về hệ tư tưởng - từ "sở hữu nhà nước" sang "sở hữu tư nhân" trong lĩnh vực sáng tạo công nghiệp. Khái niệm "độc quyền" đã chính thức được thừa nhận, trao cho chủ sở hữu văn bằng bảo hộ những quyền tài sản thực sự: quyền độc quyền khai thác, sử dụng; quyền cho phép người khác sử dụng thông qua hợp đồng li-xăng; và quan trọng nhất là quyền ngăn cấm mọi hành vi sử dụng trái phép. Đây là sự công nhận vai trò trung tâm của cá nhân và doanh nghiệp với tư cách là chủ thể sở hữu tài sản, một điều kiện tiên quyết cho sự vận hành của kinh tế thị trường. Pháp lệnh 1989, do đó, không chỉ là một văn bản pháp luật mà còn là một tuyên ngôn về sự thay đổi mô hình kinh tế của Việt Nam.
+
+Tiếp nối thành công đó, Pháp lệnh về bảo hộ Quyền tác giả năm 1994 được ban hành, đã nâng cao đáng kể mức độ và phạm vi bảo hộ đối với các tác phẩm văn học, nghệ thuật và khoa học, thay thế cho các quy định còn sơ sài trước đó.
+
+Một bước tiến quan trọng nữa trong việc củng cố nền tảng pháp lý cho SHTT là việc đưa các quy định này vào các bộ luật gốc của hệ thống pháp luật. **Bộ luật Dân sự năm 1995** (có hiệu lực từ ngày 01/07/1996) đã dành một phần riêng (Phần thứ sáu) để quy định về quyền SHTT và chuyển giao công nghệ. Bộ luật này đã "hệ thống hóa" và thay thế các quy định pháp lý còn nằm rải rác trước đó, bao gồm cả Pháp lệnh năm 1989 và Pháp lệnh năm 1994.
+
+Việc tích hợp các quy định về SHTT vào Bộ luật Dân sự - bộ luật được coi là "luật chung" điều chỉnh các quan hệ tài sản và nhân thân - đã chính thức khẳng định quyền SHTT là một loại quyền dân sự, một dạng tài sản, có vị thế pháp lý ngang hàng với các loại tài sản hữu hình khác như nhà cửa, đất đai. Điều này đã hoàn tất quá trình chuyển đổi SHTT từ một công cụ quản lý hành chính của nhà nước thành một quyền tài sản cơ bản của công dân và tổ chức. Nó tạo ra một cơ chế bảo vệ vững chắc hơn, cho phép các chủ thể quyền khởi kiện ra tòa án dân sự để yêu cầu bồi thường thiệt hại, bên cạnh các biện pháp xử lý hành chính.
+
+Nền tảng này tiếp tục được củng cố trong Bộ luật Dân sự năm 2005, trong đó các quy định chung về SHTT được giữ lại và các đối tượng bảo hộ được mở rộng để bao gồm cả thiết kế bố trí mạch tích hợp bán dẫn, bí mật thương mại và chỉ dẫn địa lý. Sự pháp điển hóa này đã tạo ra một hành lang pháp lý ổn định, minh bạch và đáng tin cậy, là bước đệm không thể thiếu cho các cuộc đàm phán thương mại quan trọng sau này, đặc biệt là Hiệp định Thương mại Việt Nam - Hoa Kỳ (BTA) và quá trình gia nhập Tổ chức Thương mại Thế giới (WTO).
+
+### Hội nhập Quốc tế và sự ra đời của Luật Sở hữu trí tuệ (2005-nay)
+
+Bước sang thế kỷ 21, động lực chính cho việc cải cách và hoàn thiện pháp luật SHTT của Việt Nam đã có sự chuyển dịch rõ rệt. Nếu trong giai đoạn Đổi Mới, cải cách chủ yếu xuất phát từ nhu cầu nội tại của việc chuyển đổi mô hình kinh tế, thì trong giai đoạn này, các cam kết và áp lực từ quá trình **hội nhập kinh tế quốc tế** đã trở thành động lực hàng đầu.
+
+Cột mốc quan trọng nhất là quá trình đàm phán gia nhập Tổ chức Thương mại Thế giới (WTO). Một trong những điều kiện tiên quyết để trở thành thành viên WTO là phải tuân thủ **Hiệp định về các khía cạnh liên quan đến thương mại của quyền sở hữu trí tuệ (TRIPS)**. Hiệp định TRIPS thiết lập các tiêu chuẩn tối thiểu về việc bảo hộ và thực thi quyền SHTT mà tất cả các quốc gia thành viên phải đáp ứng. Vào thời điểm đó, hệ thống pháp luật SHTT của Việt Nam, dù đã có những bước tiến lớn, vẫn còn nằm rải rác trong nhiều văn bản khác nhau và chưa hoàn toàn tương thích với các yêu cầu của TRIPS. Do đó, việc xây dựng một đạo luật SHTT thống nhất, toàn diện và phù hợp với chuẩn mực quốc tế đã trở thành một nhiệm vụ cấp bách[^ipvietnam4].
+
+Sau khi gia nhập WTO vào năm 2007 Việt Nam tiếp tục tham gia vào một loạt các **Hiệp định Thương mại Tự do (FTA) thế hệ mới**, như Hiệp định Đối tác Toàn diện và Tiến bộ xuyên Thái Bình Dương (CPTPP) và Hiệp định Thương mại Tự do Việt Nam - EU (EVFTA). Các hiệp định này không chỉ dừng lại ở các tiêu chuẩn của TRIPS mà còn đặt ra các yêu cầu bảo hộ cao hơn, sâu rộng hơn, thường được gọi là các cam kết "TRIPS-plus". Các cam kết này bao trùm nhiều lĩnh vực phức tạp như bảo hộ dữ liệu thử nghiệm dược phẩm, kéo dài thời hạn bảo hộ quyền tác giả, và các biện pháp thực thi mạnh mẽ hơn trong môi trường số.   
+
+Quá trình này cho thấy pháp luật SHTT Việt Nam hiện đại là một sản phẩm điển hình của sự "nội luật hóa" các tiêu chuẩn quốc tế. Đây là kết quả của một sự đánh đổi chiến lược: Việt Nam chấp nhận áp dụng các tiêu chuẩn bảo hộ SHTT cao hơn và khắt khe hơn để đổi lấy quyền tiếp cận các thị trường xuất khẩu lớn, thu hút đầu tư nước ngoài và tham gia sâu hơn vào chuỗi giá trị toàn cầu. Chính sách thương mại và đối ngoại đã trở thành một trong những động lực chính định hình chính sách pháp luật SHTT của quốc gia.
+
+**Luật Sở hữu trí tuệ 2005 và các lần sửa đổi liên tục**
+
+Đáp ứng yêu cầu của hội nhập, Quốc hội Việt Nam đã ban hành Luật Sở hữu trí tuệ số 50/2005/QH11, có hiệu lực từ ngày 01/07/2006. Đây là văn bản pháp luật đầu tiên thống nhất, pháp điển hóa một cách toàn diện hầu hết các quy định về SHTT, từ quyền tác giả, quyền liên quan đến quyền sở hữu công nghiệp và quyền đối với giống cây trồng, vào trong một đạo luật duy nhất. Sự ra đời của Luật SHTT 2005 đã tạo ra một bộ khung pháp lý vững chắc, minh bạch, đáp ứng phần lớn các nghĩa vụ trong Hiệp định TRIPS và tạo nền tảng cho việc Việt Nam chính thức gia nhập WTO.
+
+Tuy nhiên, do tốc độ phát triển nhanh chóng của công nghệ, sự thay đổi của các mô hình kinh doanh và các cam kết quốc tế ngày càng gia tăng, hệ thống pháp luật SHTT Việt Nam đã bước vào một trạng thái "tiến hóa liên tục". Luật SHTT 2005 đã trải qua ba lần sửa đổi, bổ sung quan trọng:
+
+- **Luật sửa đổi, bổ sung năm 2009**: Lần sửa đổi đầu tiên nhằm khắc phục một số thiếu sót, bất cập bộc lộ sau vài năm thi hành và để đảm bảo sự tương thích tốt hơn với các quy định pháp luật quốc tế.   
+- **Luật sửa đổi, bổ sung năm 2019***: Lần sửa đổi này có mục tiêu chính là nội luật hóa các cam kết về SHTT trong Hiệp định CPTPP, vốn có hiệu lực với Việt Nam từ đầu năm 2019.  
+- **Luật sửa đổi, bổ sung năm 2022**: Đây là lần sửa đổi toàn diện và sâu rộng nhất từ trước đến nay, với 102 điều được sửa đổi, bổ sung. Mục tiêu của lần sửa đổi này không chỉ là để thực thi các cam kết trong các FTA thế hệ mới như EVFTA và RCEP, mà còn để chủ động giải quyết các vấn đề nội tại đã tích tụ, đáp ứng yêu cầu của thực tiễn phát triển kinh tế - xã hội và cuộc Cách mạng công nghiệp lần thứ tư. Các điểm mới đáng chú ý bao gồm quy định rõ hơn về quyền đăng ký đối với sáng chế, kiểu dáng công nghiệp là kết quả của nhiệm vụ khoa học công nghệ sử dụng ngân sách nhà nước; bổ sung bảo hộ cho nhãn hiệu âm thanh; và tăng cường các biện pháp bảo vệ quyền SHTT trên môi trường kỹ thuật số.  
+
+Chu kỳ sửa đổi luật ngày càng ngắn lại cho thấy sự trưởng thành của hệ thống pháp luật SHTT Việt Nam. Nó không chỉ phản ứng một cách bị động trước các yêu cầu từ bên ngoài, mà đã bắt đầu chủ động rà soát, tinh chỉnh và thích ứng để giải quyết các "điểm nghẽn" từ bên trong, hướng tới một hệ thống pháp luật cân bằng và hiệu quả hơn.
+
+**Các Điều ước Quốc tế chính về SHTT và Tác động đến Pháp luật Việt Nam:**
+
+<div class="overflow-x-auto prose-td:min-w-28 md:prose-td:min-w-auto">
+| Tên Điều ước                          | Ngày Việt Nam tham gia/Phê chuẩn | Tác động chính đến pháp luật Việt Nam                                                                 |
+|---------------------------------------|----------------------------------|-------------------------------------------------------------------------------------------------------|
+| Công ước Paris về bảo hộ SHCN         | 08/03/1949                      | Đặt những nền móng đầu tiên về bảo hộ sở hữu công nghiệp theo chuẩn mực quốc tế (áp dụng thời Pháp thuộc). |
+| Công ước thành lập WIPO               | 02/07/1976                      | Thể hiện ý định hội nhập quốc tế về SHTT từ sớm, tạo tiền đề cho việc thành lập Cục Sáng chế.          |
+| Công ước Berne về bảo hộ tác phẩm VHNT| 26/10/2004                      | Nâng cao tiêu chuẩn bảo hộ quyền tác giả, là bước chuẩn bị quan trọng cho việc gia nhập WTO.           |
+| Hiệp định TRIPS (trong khuôn khổ WTO) | 11/01/2007 (ngày gia nhập WTO)  | Là động lực trực tiếp và quan trọng nhất dẫn đến việc ban hành Luật Sở hữu trí tuệ năm 2005 để thống nhất và tương thích hóa hệ thống pháp luật. |
+| Hiệp định CPTPP                       | Có hiệu lực với Việt Nam: 14/01/2019 | Yêu cầu sửa đổi, bổ sung Luật SHTT năm 2019 với các tiêu chuẩn "TRIPS-plus", đặc biệt về thời gian ân hạn cho sáng chế, thực thi quyền. |
+| Hiệp định EVFTA                       | Có hiệu lực với Việt Nam: 01/08/2020 | Là một trong những động lực chính cho lần sửa đổi toàn diện Luật SHTT năm 2022, với các yêu cầu cao về bảo hộ chỉ dẫn địa lý, dược phẩm, và thực thi quyền. |
+</div>
+
+### Thực trạng: Nghịch lý trên sân nhà
+
+
+Hành trình lập pháp kéo dài hàng thập kỷ, từ những quy định sơ khai thời bao cấp đến một hệ thống pháp luật tiệm cận với chuẩn mực quốc tế, đã đưa Việt Nam đến một cột mốc quan trọng. Sân chơi đã được dựng lên. Luật chơi đã được phổ biến. Cánh cửa hội nhập đã mở rộng. Về lý thuyết, mọi thứ đã sẵn sàng để các nhà sáng tạo Việt Nam bước vào cuộc đua toàn cầu và gặt hái thành quả từ trí tuệ của mình.
+
+Để đánh giá thực lực của một quốc gia trong cuộc đua này, không có thước đo nào chính xác hơn bằng sáng chế. Nó không chỉ là một văn bằng pháp lý; nó là xương sống của công nghệ lõi, là chỉ dấu cho năng lực đổi mới, và là tài sản "cứng" quyết định vị thế trên bàn đàm phán quốc tế.
+
+Nhìn vào biểu đồ số đơn đăng ký sáng chế tại Việt Nam, ta thấy một tín hiệu đáng mừng. Đường biểu diễn liên tục đi lên, cho thấy một thị trường ngày càng sôi động và hấp dẫn.
+
+
+import C3 from "./dual_patent_data_vietnam.html"
+
+<div class="bg-zinc-800/50 rounded-xl shadow-lg">
+  <C3 />
+  <p class="text-sm">Source: WIPO Statistics Database</p>
+</div>
+
+Tuy nhiên, đằng sau con số tăng trưởng ấn tượng đó là một nghịch lý cốt lõi, một sự thật phũ phàng khi ta đặt câu hỏi quan trọng nhất:** Ai thực sự đang chơi trên sân này?**
+
+Câu trả lời nằm ở sự chênh lệch khổng lồ giữa hai đường biểu diễn. Đường màu cam (chủ đơn nước ngoài) vút lên mạnh mẽ, trong khi đường màu xanh (chủ đơn Việt Nam) gần như đi ngang và chiếm một tỷ lệ không đáng kể. Gần 90% các phát minh được tìm kiếm bảo hộ tại Việt Nam đến từ các gã khổng lồ nước ngoài. Họ đang biến Việt Nam thành một "pháo đài" pháp lý của họ, trong khi các doanh nghiệp Việt vẫn còn loay hoay ở vạch xuất phát.
+
+Nhưng liệu ~**10.000** đơn đăng ký sáng chế mỗi năm của Việt Nam có thực sự là một con số ấn tượng? Hãy xem thử video sau: 
+
+<iframe
+  class="w-full aspect-video"
+  src="https://www.youtube.com/embed/ylj_5MX8TEs"
+  title="YouTube video player"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  referrerpolicy="strict-origin-when-cross-origin"
+  allowfullscreen
+  loading="lazy"
+/>
+
+Bạn thấy đó, các quốc gia dẫn đầu luôn có số lượng đơn đăng ký sáng chế lên tới hàng trăm nghìn mỗi năm. Trung Quốc, với hơn 1 triệu đơn, đã bắt nhịp và dẫn đầu cuộc chơi này trên toàn cầu, với lợi thế dân số của mình. Từ một quốc gia bị xem là "công xưởng gia công" và "kẻ sao chép công nghệ", họ đã chuyển mình thành một cường quốc sáng tạo. Các tập đoàn như Huawei và BYD không chỉ dẫn đầu thị trường nội địa mà còn đang định hình lại các ngành công nghiệp toàn cầu bằng chính những công nghệ do họ sở hữu.
+
+Câu chuyện của Trung Quốc cho thấy một con đường mà Việt Nam có thể học hỏi, nhưng cũng phơi bày khoảng cách khổng lồ mà chúng ta phải đối mặt. Việc chúng ta có mặt trong top những điểm đến đăng ký sáng chế hàng đầu thế giới là một tin tốt, nhưng nó phản ánh sức hút của thị trường hơn là sức mạnh của nội lực.
+
+Bức tranh này mang hai ý nghĩa trái ngược:
+
+- Một sự thừa nhận: Việc các gã khổng lồ toàn cầu tin tưởng "cắm cờ" pháp lý tại Việt Nam là một bảo chứng cho thấy hệ thống luật pháp của chúng ta đã đủ tin cậy. Đây là thành quả không thể phủ nhận của nỗ lực hội nhập.
+- Một báo động đỏ: Nhưng sâu xa hơn, nó cho thấy một điểm yếu chí mạng. Chúng ta đang trở thành một thị trường tiêu thụ công nghệ sôi động, nhưng lại chưa phải là một quốc gia tạo ra công nghệ. Năng lực đổi mới để tạo ra các tài sản trí tuệ có thể bảo hộ độc quyền của chính người Việt vẫn còn quá khiêm tốn.
+
+
+Nghịch lý này lặp lại chính xác câu chuyện của Kinh Đô và Phúc Long ở tầm vĩ mô. Doanh nghiệp Việt có thể rất giỏi trong việc xây dựng thương hiệu, tối ưu mô hình kinh doanh – những "tài sản mềm". Nhưng trong cuộc chơi về công nghệ lõi – "tài sản cứng" – chúng ta dường như đang vắng mặt trên chính sân nhà của mình.
+
+Điều này đặt ra một câu hỏi mang tính chiến lược: 
+
+**Tại sao nền kinh tế năng động của Việt Nam vẫn chưa thể chuyển hóa thành sức mạnh sáng chế? Các rào cản thực sự đang nằm ở đâu?**
 
 
 
 ## Đọc thêm
 
+[^ipvietnam4]: [Hệ thống pháp luật về sở hữu trí tuệ của Việt Nam](https://tapchicongthuong.vn/he-thong-phap-luat-ve-so-huu-tri-tue-cua-viet-nam-101670.htm)
+[^ipvietnam3]: [WIPO - Vietnam information](https://www.wipo.int/directory/en/details.jsp?country_code=VN)
+[^ipvietnam2]: [Soviet Legacy of Vietnam's Intellectual Property Law: Big Brother is (No Longer) Watching You](https://www.cambridge.org/core/journals/asian-journal-of-comparative-law/article/soviet-legacy-of-vietnams-intellectual-property-law-big-brother-is-no-longer-watching-you/1DE8BE8B8E905141D925E155E5A9B914)
+[^ipvietnam]: [Intellectual Property Rights in Vietnam](https://escholarship.org/uc/item/0fd76876)
 [^wipo]: [What is Intellectual Property?](https://www.wipo.int/publications/en/details.jsp?id=4528)
 [^may2005]: May, C. & Sell, S.K. (2005). _Intellectual Property Rights: A Critical History_
 [^khan2005]: Khan, B.Z. (2005). _The Democratization of Invention: Patents and Copyrights in American Economic Development, 1790-1920_. United Kingdom: Cambridge University Press.
