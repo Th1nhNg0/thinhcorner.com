@@ -8,66 +8,74 @@ import { format } from "date-fns";
 import BitcoinIcon from "@/assets/crypto-icon/bitcoin-btc-logo.svg";
 import EthereumIcon from "@/assets/crypto-icon/ethereum-eth-logo.svg";
 import BnbIcon from "@/assets/crypto-icon/bnb-bnb-logo.svg";
+import SolanaIcon from "@/assets/crypto-icon/solana-sol-logo.svg";
 
 const data = {
   investment_overview: {
-    total_investment_usdt: 857.0,
-    current_portfolio_value_usdt: 1041.82,
+    total_investment_usdt: 1002.0,
+    current_portfolio_value_usdt: 1259.57,
     profit_loss: {
-      absolute_usdt: 184.82,
-      percentage: 21.57,
+      absolute_usdt: 257.57,
+      percentage: 25.71,
     },
   },
   investment_timeline: {
     start_date: "2025-01-15",
-    end_date: "2025-07-12",
-    total_running_days: 179,
-    total_days_with_purchases: 160,
-    purchase_frequency_percentage: 89.39,
+    end_date: "2025-08-07",
+    total_running_days: 205,
+    total_days_with_purchases: 188,
+    purchase_frequency_percentage: 91.71,
   },
   coin_breakdown: {
     BTC: {
-      holdings: 0.006516,
-      current_price_usdt: 117420.0,
-      average_purchase_price_usdt: 56898.4,
-      current_value_usdt: 765.11,
-      roi_percentage: 106.37,
+      holdings: 0.007436,
+      current_price_usdt: 117472.01,
+      average_purchase_price_usdt: 58382.45,
+      current_value_usdt: 873.56,
+      roi_percentage: 101.21,
     },
     ETH: {
-      holdings: 0.059299,
-      current_price_usdt: 2943.28,
-      average_purchase_price_usdt: 6361.86,
-      current_value_usdt: 174.53,
-      roi_percentage: -53.74,
+      holdings: 0.065456,
+      current_price_usdt: 3910.31,
+      average_purchase_price_usdt: 6655.62,
+      current_value_usdt: 255.95,
+      roi_percentage: -41.25,
     },
     BNB: {
-      holdings: 0.14898,
-      current_price_usdt: 685.86,
-      average_purchase_price_usdt: 2394.62,
-      current_value_usdt: 102.18,
-      roi_percentage: -71.36,
+      holdings: 0.176676,
+      current_price_usdt: 769.55,
+      average_purchase_price_usdt: 2406.38,
+      current_value_usdt: 135.96,
+      roi_percentage: -68.02,
+    },
+    SOL: {
+      holdings: 0.02276,
+      current_price_usdt: 175.36,
+      average_purchase_price_usdt: 2379.15,
+      current_value_usdt: 3.99,
+      roi_percentage: -92.63,
     },
   },
   portfolio_performance: {
-    current_roi_percentage: 21.57,
-    maximum_roi_percentage: 22.12,
+    current_roi_percentage: 25.71,
+    maximum_roi_percentage: 29.63,
     minimum_roi_percentage: -18.3,
-    average_roi_percentage: 2.01,
-    roi_volatility_std_dev: 11.23,
-    days_in_profit: 93,
+    average_roi_percentage: 4.92,
+    roi_volatility_std_dev: 13.02,
+    days_in_profit: 119,
     days_in_loss: 86,
-    profit_day_percentage: 51.96,
+    profit_day_percentage: 58.05,
   },
   metadata: {
-    analysis_date: "2025-07-14 11:17:25",
+    analysis_date: "2025-08-11 10:44:02",
     data_source: "Binance Auto-Invest & Convert Transactions",
     price_data_source: "CryptoDataDownload (Binance USDT pairs)",
-    latest_price_data_date: "2025-07-12",
+    latest_price_data_date: "2025-08-07",
   },
 };
 
 const last_updated = new Date(data.metadata.analysis_date);
-const dailyBuyAmount = 10; // Added: Centralize daily buy amount
+const dailyBuyAmount = 5; // Added: Centralize daily buy amount
 
 const dailyBuyPlanData = [
   {
@@ -88,8 +96,8 @@ const dailyBuyPlanData = [
     description: "Smart Contract Platform",
     currentPrice: data.coin_breakdown.ETH.current_price_usdt,
     avgPrice: data.coin_breakdown.ETH.average_purchase_price_usdt,
-    allocation: "15%",
-    usdtValue: dailyBuyAmount * 0.15,
+    allocation: "13%",
+    usdtValue: dailyBuyAmount * 0.13,
     IconComponent: EthereumIcon,
     iconColorClass: "text-indigo-400",
     progressColorClass: "bg-gradient-to-r from-indigo-400 to-indigo-500",
@@ -100,11 +108,23 @@ const dailyBuyPlanData = [
     description: "Exchange Ecosystem Token",
     currentPrice: data.coin_breakdown.BNB.current_price_usdt,
     avgPrice: data.coin_breakdown.BNB.average_purchase_price_usdt,
-    allocation: "15%",
-    usdtValue: dailyBuyAmount * 0.15,
+    allocation: "12%",
+    usdtValue: dailyBuyAmount * 0.12,
     IconComponent: BnbIcon,
     iconColorClass: "text-yellow-400",
     progressColorClass: "bg-gradient-to-r from-yellow-400 to-yellow-500",
+  },
+  {
+    name: "Solana",
+    symbol: "SOL",
+    description: "High-throughput L1",
+    currentPrice: data.coin_breakdown.SOL.current_price_usdt,
+    avgPrice: data.coin_breakdown.SOL.average_purchase_price_usdt,
+    allocation: "5%",
+    usdtValue: dailyBuyAmount * 0.05,
+    IconComponent: SolanaIcon,
+    iconColorClass: "text-[#9945FF]",
+    progressColorClass: "bg-gradient-to-r from-[#9945FF] to-fuchsia-500",
   },
 ];
 ---
@@ -204,7 +224,7 @@ const dailyBuyPlanData = [
           >. The allocation for these daily purchases is as follows:
         </p>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
           {
             dailyBuyPlanData.map((coin) => {
               return (
