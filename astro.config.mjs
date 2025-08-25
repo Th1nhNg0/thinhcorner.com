@@ -12,6 +12,8 @@ import rehypeFigure from "./remark/rehype-figure.mjs";
 import { remarkModifiedTime } from "./remark/remark-modified-time.mjs";
 import { remarkReadingTime } from "./remark/remark-reading-time.mjs";
 
+import react from "@astrojs/react";
+
 export default defineConfig({
   site: "https://thinhcorner.com",
   adapter: vercel({
@@ -24,15 +26,11 @@ export default defineConfig({
     },
     
   }),
-  integrations: [
-    sitemap(),
-    partytown({
-      config: {
-        forward: ["dataLayer.push"],
-      },
-    }),
-    mdx(),
-  ],
+  integrations: [sitemap(), partytown({
+    config: {
+      forward: ["dataLayer.push"],
+    },
+  }), mdx(), react()],
   vite: {
     plugins: [tailwindcss()],
   },
