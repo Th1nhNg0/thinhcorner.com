@@ -1,132 +1,51 @@
 ---
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
-import C1 from "@/components/cryptochart/crypto_allocation_pie_chart.html";
-import C2 from "@/components/cryptochart/daily_usdt_spending.html";
-import C3 from "@/components/cryptochart/roi_over_time.html";
 import { format } from "date-fns";
-import BitcoinIcon from "@/assets/crypto-icon/bitcoin-btc-logo.svg";
-import EthereumIcon from "@/assets/crypto-icon/ethereum-eth-logo.svg";
-import BnbIcon from "@/assets/crypto-icon/bnb-bnb-logo.svg";
-import SolanaIcon from "@/assets/crypto-icon/solana-sol-logo.svg";
+import CryptoPriceTracker from "@/components/CryptoPriceTracker";
 
-const data = {
-  investment_overview: {
-    total_investment_usdt: 1002.0,
-    current_portfolio_value_usdt: 1259.57,
-    profit_loss: {
-      absolute_usdt: 257.57,
-      percentage: 25.71,
+const last_updated = new Date("2025-08-25");
+
+// Portfolio data
+const portfolioData = {
+  totalInvestment: 1092,
+  assets: 4,
+  dailyBuyAmount: 5,
+  holdings: [
+    {
+      symbol: "BTC",
+      name: "Bitcoin",
+      amount: 0.00791405,
+      avgPrice: 99881,
+      invested: 790,
+      allocation: 70,
     },
-  },
-  investment_timeline: {
-    start_date: "2025-01-15",
-    end_date: "2025-08-07",
-    total_running_days: 205,
-    total_days_with_purchases: 188,
-    purchase_frequency_percentage: 91.71,
-  },
-  coin_breakdown: {
-    BTC: {
-      holdings: 0.007436,
-      current_price_usdt: 117472.01,
-      average_purchase_price_usdt: 58382.45,
-      current_value_usdt: 873.56,
-      roi_percentage: 101.21,
+    {
+      symbol: "ETH",
+      name: "Ethereum",
+      amount: 0.06778911,
+      avgPrice: 2434,
+      invested: 165,
+      allocation: 13,
     },
-    ETH: {
-      holdings: 0.065456,
-      current_price_usdt: 3910.31,
-      average_purchase_price_usdt: 6655.62,
-      current_value_usdt: 255.95,
-      roi_percentage: -41.25,
+    {
+      symbol: "BNB",
+      name: "BNB",
+      amount: 0.18800938,
+      avgPrice: 661,
+      invested: 124,
+      allocation: 12,
     },
-    BNB: {
-      holdings: 0.176676,
-      current_price_usdt: 769.55,
-      average_purchase_price_usdt: 2406.38,
-      current_value_usdt: 135.96,
-      roi_percentage: -68.02,
+    {
+      symbol: "SOL",
+      name: "Solana",
+      amount: 0.04375911,
+      avgPrice: 181.89,
+      invested: 7.95,
+      allocation: 5,
     },
-    SOL: {
-      holdings: 0.02276,
-      current_price_usdt: 175.36,
-      average_purchase_price_usdt: 2379.15,
-      current_value_usdt: 3.99,
-      roi_percentage: -92.63,
-    },
-  },
-  portfolio_performance: {
-    current_roi_percentage: 25.71,
-    maximum_roi_percentage: 29.63,
-    minimum_roi_percentage: -18.3,
-    average_roi_percentage: 4.92,
-    roi_volatility_std_dev: 13.02,
-    days_in_profit: 119,
-    days_in_loss: 86,
-    profit_day_percentage: 58.05,
-  },
-  metadata: {
-    analysis_date: "2025-08-11 10:44:02",
-    data_source: "Binance Auto-Invest & Convert Transactions",
-    price_data_source: "CryptoDataDownload (Binance USDT pairs)",
-    latest_price_data_date: "2025-08-07",
-  },
+  ],
 };
-
-const last_updated = new Date(data.metadata.analysis_date);
-const dailyBuyAmount = 5; // Added: Centralize daily buy amount
-
-const dailyBuyPlanData = [
-  {
-    name: "Bitcoin",
-    symbol: "BTC",
-    description: "Dominant Digital Gold",
-    currentPrice: data.coin_breakdown.BTC.current_price_usdt,
-    avgPrice: data.coin_breakdown.BTC.average_purchase_price_usdt,
-    allocation: "70%",
-    usdtValue: dailyBuyAmount * 0.7,
-    IconComponent: BitcoinIcon,
-    iconColorClass: "text-orange-400",
-    progressColorClass: "bg-gradient-to-r from-orange-400 to-orange-500",
-  },
-  {
-    name: "Ethereum",
-    symbol: "ETH",
-    description: "Smart Contract Platform",
-    currentPrice: data.coin_breakdown.ETH.current_price_usdt,
-    avgPrice: data.coin_breakdown.ETH.average_purchase_price_usdt,
-    allocation: "13%",
-    usdtValue: dailyBuyAmount * 0.13,
-    IconComponent: EthereumIcon,
-    iconColorClass: "text-indigo-400",
-    progressColorClass: "bg-gradient-to-r from-indigo-400 to-indigo-500",
-  },
-  {
-    name: "Binance Coin",
-    symbol: "BNB",
-    description: "Exchange Ecosystem Token",
-    currentPrice: data.coin_breakdown.BNB.current_price_usdt,
-    avgPrice: data.coin_breakdown.BNB.average_purchase_price_usdt,
-    allocation: "12%",
-    usdtValue: dailyBuyAmount * 0.12,
-    IconComponent: BnbIcon,
-    iconColorClass: "text-yellow-400",
-    progressColorClass: "bg-gradient-to-r from-yellow-400 to-yellow-500",
-  },
-  {
-    name: "Solana",
-    symbol: "SOL",
-    description: "High-throughput L1",
-    currentPrice: data.coin_breakdown.SOL.current_price_usdt,
-    avgPrice: data.coin_breakdown.SOL.average_purchase_price_usdt,
-    allocation: "5%",
-    usdtValue: dailyBuyAmount * 0.05,
-    IconComponent: SolanaIcon,
-    iconColorClass: "text-[#9945FF]",
-    progressColorClass: "bg-gradient-to-r from-[#9945FF] to-fuchsia-500",
-  },
-];
 ---
 
 <Layout
@@ -154,111 +73,7 @@ const dailyBuyPlanData = [
         Last updated: {format(last_updated, "MMMM d, yyyy")}
       </p>
     </section>
-    <div
-      class="bg-zinc-800/50 rounded-xl shadow-lg mt-6 divide-y-2 divide-zinc-700 mb-12"
-    >
-      <div class="grid p-6 grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <h3 class="text-xl font-semibold mb-2 text-zinc-200">
-            Total Investment
-          </h3>
-          <p class="text-4xl font-bold text-green-400">
-            {data.investment_overview.total_investment_usdt.toFixed(2)} USDT
-          </p>
-          <p class="text-sm text-zinc-400 mt-1">
-            Total USDT invested through the daily automated buying strategy.
-          </p>
-        </div>
-
-        <div>
-          <h3 class="text-xl font-semibold mb-2 text-zinc-200">
-            Current Value
-          </h3>
-          <p class="text-4xl font-bold text-blue-400">
-            {data.investment_overview.current_portfolio_value_usdt.toFixed(2)} USDT
-          </p>
-          <p class="text-sm text-zinc-400 mt-1">
-            Current estimated market value of all cryptocurrency holdings.
-          </p>
-        </div>
-
-        <div>
-          <h3 class="text-xl font-semibold mb-2 text-zinc-200">
-            Profit/Loss Summary
-          </h3>
-          <p class="text-4xl font-bold text-yellow-400">
-            {data.investment_overview.profit_loss.absolute_usdt.toFixed(2)} USDT
-          </p>
-          <p class="text-sm text-zinc-400 mt-1">
-            Total Return on Investment: {
-              data.investment_overview.profit_loss.percentage.toFixed(2)
-            }%.
-          </p>
-        </div>
-
-        <div>
-          <h3 class="text-xl font-semibold mb-2 text-zinc-200">
-            Investment Duration
-          </h3>
-          <p class="text-4xl font-bold text-purple-400">
-            {data.investment_timeline.total_running_days} days
-          </p>
-          <p class="text-sm text-zinc-400 mt-1">
-            Since {
-              format(
-                new Date(data.investment_timeline.start_date),
-                "MMM d, yyyy"
-              )
-            }
-          </p>
-        </div>
-      </div>
-
-      <div class="p-6">
-        <h3 class="text-2xl font-semibold mb-4 text-zinc-200 text-center">
-          Current Daily Buy Plan
-        </h3>
-        <p class="leading-relaxed text-zinc-300">
-          I am currently executing a daily buy plan of <b
-            class="text-yellow-400">{dailyBuyAmount} USDT</b
-          >. The allocation for these daily purchases is as follows:
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
-          {
-            dailyBuyPlanData.map((coin) => {
-              return (
-                <div class="rounded-xl bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 hover:from-zinc-700/80 hover:to-zinc-800/80 transition-colors duration-200 border border-zinc-700/50">
-                  <div class="p-5">
-                    <div class="flex items-center justify-between mb-4">
-                      <div
-                        class={`p-3 rounded-xl ${coin.iconColorClass} bg-zinc-800/60`}
-                      >
-                        <coin.IconComponent class="w-7 h-7" />
-                      </div>
-                      <div class="text-2xl font-bold text-white">
-                        {coin.allocation}
-                      </div>
-                    </div>
-
-                    <div class="space-y-1">
-                      <h4 class="font-bold text-white text-lg leading-tight">
-                        {coin.name}
-                      </h4>
-                      <p class="text-sm text-zinc-400 leading-relaxed">
-                        {coin.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })
-          }
-        </div>
-      </div>
-      <C1 />
-      <C2 />
-      <C3 />
-    </div>
+    <!-- Dynamic Crypto Holdings with Real-time Data -->
+    <CryptoPriceTracker client:load portfolioData={portfolioData} />
   </Container>
 </Layout>
