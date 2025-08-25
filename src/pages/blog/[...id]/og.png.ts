@@ -15,6 +15,7 @@ export const GET: APIRoute<Props> = async ({ props }) => {
   return new ImageResponse(
     {
       type: "div",
+      key: "og-root",
       props: {
         style: {
           height: "100%",
@@ -28,6 +29,7 @@ export const GET: APIRoute<Props> = async ({ props }) => {
         },
         children: {
           type: "p",
+          key: "og-title",
           props: {
             style: {
               fontSize: 48,
