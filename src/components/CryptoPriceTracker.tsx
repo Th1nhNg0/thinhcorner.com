@@ -222,91 +222,87 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
   return (
     <div className="space-y-6">
       {/* Combined Portfolio Performance & Overview */}
-      <div className="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 rounded-2xl p-6">
+      <div className="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 rounded-2xl p-2 md:p-6">
         <div className="flex items-center mb-6">
           <h3 className="text-3xl font-bold gradient-text">
             Portfolio Performance
           </h3>
         </div>
 
-        {/* Portfolio metrics in 2 rows */}
-        <div className="space-y-4">
-          {/* First row - Performance metrics */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <div className="bg-zinc-900/30 rounded-xl p-4 text-center">
-              <p className="text-sm text-zinc-400 mb-1">Current Value</p>
-              {isUpdating ? (
-                <div className="mx-auto h-8 w-36 rounded bg-zinc-700/60 animate-pulse" />
-              ) : (
-                <p className="text-2xl font-bold text-white">
-                  {formatCurrency(totalCurrentValue)}
-                </p>
-              )}
-              <p className="text-xs text-zinc-500 mt-1">Live market value</p>
-            </div>
-            <div className="bg-zinc-900/30 rounded-xl p-4 text-center">
-              <p className="text-sm text-zinc-400 mb-1">Total P&L</p>
-              {isUpdating ? (
-                <div className="mx-auto h-8 w-28 rounded bg-zinc-700/60 animate-pulse" />
-              ) : (
-                <p
-                  className={`text-2xl font-bold ${
-                    totalPnL >= 0 ? "text-green-400" : "text-red-400"
-                  }`}
-                >
-                  {formatCurrency(totalPnL)}
-                </p>
-              )}
-              <p className="text-xs text-zinc-500 mt-1">Profit & Loss</p>
-            </div>
-            <div className="bg-zinc-900/30 rounded-xl p-4 text-center col-span-2 md:col-span-1">
-              <p className="text-sm text-zinc-400 mb-1">Total ROI</p>
-              {isUpdating ? (
-                <div className="mx-auto h-8 w-20 rounded bg-zinc-700/60 animate-pulse" />
-              ) : (
-                <p
-                  className={`text-2xl font-bold ${
-                    totalROI >= 0 ? "text-green-400" : "text-red-400"
-                  }`}
-                >
-                  {formatPercentage(totalROI)}
-                </p>
-              )}
-              <p className="text-xs text-zinc-500 mt-1">Return on investment</p>
-            </div>
+        {/* Portfolio metrics in a responsive grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3  gap-4">
+          <div className="bg-zinc-900/30 rounded-xl p-4 text-center">
+            <p className="text-sm text-zinc-400 mb-1">Current Value</p>
+            {isUpdating ? (
+              <div className="mx-auto h-8 w-36 rounded bg-zinc-700/60 animate-pulse" />
+            ) : (
+              <p className="text-2xl font-bold text-white">
+                {formatCurrency(totalCurrentValue)}
+              </p>
+            )}
+            <p className="text-xs text-zinc-500 mt-1">Live market value</p>
           </div>
 
-          {/* Second row - Portfolio overview */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <div className="bg-zinc-900/30 rounded-xl p-4 text-center">
-              <p className="text-sm text-zinc-400 uppercase tracking-wider mb-2">
-                Total Investment
+          <div className="bg-zinc-900/30 rounded-xl p-4 text-center">
+            <p className="text-sm text-zinc-400 mb-1">Total P&L</p>
+            {isUpdating ? (
+              <div className="mx-auto h-8 w-28 rounded bg-zinc-700/60 animate-pulse" />
+            ) : (
+              <p
+                className={`text-2xl font-bold ${
+                  totalPnL >= 0 ? "text-green-400" : "text-red-400"
+                }`}
+              >
+                {formatCurrency(totalPnL)}
               </p>
-              <p className="text-xl font-bold text-white">
-                ${portfolioData.totalInvestment}
+            )}
+            <p className="text-xs text-zinc-500 mt-1">Profit & Loss</p>
+          </div>
+
+          <div className="bg-zinc-900/30 rounded-xl p-4 text-center">
+            <p className="text-sm text-zinc-400 mb-1">Total ROI</p>
+            {isUpdating ? (
+              <div className="mx-auto h-8 w-20 rounded bg-zinc-700/60 animate-pulse" />
+            ) : (
+              <p
+                className={`text-2xl font-bold ${
+                  totalROI >= 0 ? "text-green-400" : "text-red-400"
+                }`}
+              >
+                {formatPercentage(totalROI)}
               </p>
-              <p className="text-xs text-zinc-500 mt-1">Since January 2025</p>
-            </div>
-            <div className="bg-zinc-900/30 rounded-xl p-4 text-center">
-              <p className="text-sm text-zinc-400 uppercase tracking-wider mb-2">
-                Daily DCA
-              </p>
-              <p className="text-xl font-bold text-white">
-                ${portfolioData.dailyBuyAmount}
-              </p>
-              <p className="text-xs text-zinc-500 mt-1">Automated investing</p>
-            </div>
-            <div className="bg-zinc-900/30 rounded-xl p-4 text-center col-span-2 md:col-span-1">
-              <p className="text-sm text-zinc-400 uppercase tracking-wider mb-2">
-                Assets
-              </p>
-              <p className="text-xl font-bold text-white">
-                {portfolioData.assets}
-              </p>
-              <p className="text-xs text-zinc-500 mt-1">
-                Diversified portfolio
-              </p>
-            </div>
+            )}
+            <p className="text-xs text-zinc-500 mt-1">Return on investment</p>
+          </div>
+
+          <div className="bg-zinc-900/30 rounded-xl p-4 text-center">
+            <p className="text-sm text-zinc-400 uppercase tracking-wider mb-2">
+              Total Investment
+            </p>
+            <p className="text-xl font-bold text-white">
+              ${portfolioData.totalInvestment}
+            </p>
+            <p className="text-xs text-zinc-500 mt-1">Since January 2025</p>
+          </div>
+
+          <div className="bg-zinc-900/30 rounded-xl p-4 text-center">
+            <p className="text-sm text-zinc-400 uppercase tracking-wider mb-2">
+              Daily DCA
+            </p>
+            <p className="text-xl font-bold text-white">
+              ${portfolioData.dailyBuyAmount}
+            </p>
+            <p className="text-xs text-zinc-500 mt-1">Automated investing</p>
+          </div>
+
+          <div className="bg-zinc-900/30 rounded-xl p-4 text-center">
+            <p className="text-sm text-zinc-400 uppercase tracking-wider mb-2">
+              Assets
+            </p>
+            <p className="text-xl font-bold text-white">
+              {portfolioData.assets}
+            </p>
+            <p className="text-xs text-zinc-500 mt-1">Diversified portfolio</p>
           </div>
         </div>
 
@@ -541,10 +537,15 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
         <div className="mt-4 p-4 bg-zinc-900/30 rounded-xl  shadow-sm ring-1 ring-white/5">
           <p className="text-sm text-zinc-300 mb-2">
             Prices are live market prices from{" "}
-            <a href="https://cryptoprices.cc">cryptoprices.cc</a>. The
-            "Potential" column shows a theoretical P&L/ROI using each asset's
-            all-time high. Current prices shown are live at the time the page
-            fetched them;
+            <a
+              href="https://cryptoprices.cc"
+              className="underline text-zinc-400 hover:text-zinc-200 transition-colors"
+            >
+              cryptoprices.cc
+            </a>
+            . The "Potential" column shows a theoretical P&L/ROI using each
+            asset's all-time high. Current prices shown are live at the time the
+            page fetched them;
           </p>
         </div>
       </div>
