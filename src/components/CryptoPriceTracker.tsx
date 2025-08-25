@@ -276,9 +276,7 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
           </div>
 
           <div className="bg-zinc-900/30 rounded-xl p-4 text-center">
-            <p className="text-sm text-zinc-400 uppercase tracking-wider mb-2">
-              Total Investment
-            </p>
+            <p className="text-sm text-zinc-400 mb-1">Total Investment</p>
             <p className="text-xl font-bold text-white">
               ${portfolioData.totalInvestment}
             </p>
@@ -286,9 +284,7 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
           </div>
 
           <div className="bg-zinc-900/30 rounded-xl p-4 text-center">
-            <p className="text-sm text-zinc-400 uppercase tracking-wider mb-2">
-              Daily DCA
-            </p>
+            <p className="text-sm text-zinc-400 mb-1">Daily DCA</p>
             <p className="text-xl font-bold text-white">
               ${portfolioData.dailyBuyAmount}
             </p>
@@ -296,9 +292,7 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
           </div>
 
           <div className="bg-zinc-900/30 rounded-xl p-4 text-center">
-            <p className="text-sm text-zinc-400 uppercase tracking-wider mb-2">
-              Assets
-            </p>
+            <p className="text-sm text-zinc-400 mb-1">Assets</p>
             <p className="text-xl font-bold text-white">
               {portfolioData.assets}
             </p>
