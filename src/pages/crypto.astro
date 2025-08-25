@@ -5,8 +5,6 @@ import { format } from "date-fns";
 import CryptoPriceTracker from "@/components/CryptoPriceTracker";
 
 const last_updated = new Date("2025-08-25");
-
-// Portfolio data
 const portfolioData = {
   totalInvestment: 1092,
   assets: 4,
@@ -53,7 +51,9 @@ const portfolioData = {
   description="A snapshot of my cryptocurrency investments and their distribution."
 >
   <Container>
-    <h1 class="text-5xl mb-8 tracking-tight sm:text-6xl flex gradient-text">
+    <h1
+      class="text-5xl mb-8 tracking-tight sm:text-6xl flex gradient-text font-bold"
+    >
       My crypto portfolio
     </h1>
     <section class="prose max-w-none prose-invert mb-8 prose-a:text-yellow-500">
@@ -61,9 +61,15 @@ const portfolioData = {
         This page provides a transparent overview of my cryptocurrency
         investment journey. I employ an automated daily investment strategy,
         focusing on a
-        <b class="text-yellow-400">long-term, 10-year outlook</b>. This approach
-        commenced at the beginning of 2025, reflecting a commitment to
-        disciplined and patient wealth accumulation in the digital asset space.
+        <b class="text-yellow-400">long-term, 10-year outlook</b>. Read more
+        about the thinking behind this approach in
+        <a
+          href="/blog/why-i-dca-crypto-now"
+          class="text-yellow-400 underline hover:text-yellow-300"
+          >Why I DCA crypto now</a
+        >. This approach commenced at the beginning of 2025, reflecting a
+        commitment to disciplined and patient wealth accumulation in the digital
+        asset space.
       </p>
       <p class="leading-relaxed italic">
         "If you aren't thinking about owning a stock for 10 years, don't even
