@@ -20,7 +20,6 @@ title: string (required)
 description: string (required)
 date: string|Date (required)
 draft: boolean (optional)
-tags: string[] (optional)
 lang: string (optional) # for Vietnamese posts
 ```
 
