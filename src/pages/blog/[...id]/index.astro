@@ -57,6 +57,36 @@ let slug = Array.isArray(Astro.params.id)
   title={post.data.title}
   description={post.data.description}
   image={`/blog/${post.id}/og.png`}
+  type="article"
+  robots={post.data.draft ? "noindex,nofollow" : undefined}
+  lang={post.data.lang ?? "en"}
+  locale={post.data.lang === "vi" ? "vi_VN" : "en_US"}
+  author="Ngô Phú Thịnh"
+  publishedTime={post.data.date.toISOString()}
+  imageAlt={post.data.title}
+  prevUrl={prevPost ? new URL(`/blog/${prevPost.id}`, Astro.site) : undefined}
+  nextUrl={nextPost ? new URL(`/blog/${nextPost.id}`, Astro.site) : undefined}
+  structuredData={{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.data.title,
+    description: post.data.description,
+    image: new URL(`/blog/${post.id}/og.png`, Astro.site).toString(),
+    author: {
+      "@type": "Person",
+      name: "Ngô Phú Thịnh",
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Ngô Phú Thịnh",
+    },
+    datePublished: post.data.date.toISOString(),
+    dateModified: remarkPluginFrontmatter?.lastModified
+      ? new Date(remarkPluginFrontmatter.lastModified).toISOString()
+      : post.data.date.toISOString(),
+    mainEntityOfPage: new URL(`/blog/${post.id}`, Astro.site).toString(),
+    url: new URL(`/blog/${post.id}`, Astro.site).toString(),
+  }}
 >
   <Container>
     {

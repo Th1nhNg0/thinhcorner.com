@@ -9,14 +9,58 @@ type Props = {
   title: string;
   description: string;
   image?: string;
+  lang?: string; // e.g., en or vi
+  // Extended SEO props passthrough
+  type?: "website" | "article";
+  robots?: string;
+  locale?: string;
+  siteName?: string;
+  prevUrl?: string | URL;
+  nextUrl?: string | URL;
+  author?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
+  imageAlt?: string;
+  structuredData?: Record<string, any> | Array<Record<string, any>>;
 };
 
-const { title, description, image } = Astro.props;
+const {
+  title,
+  description,
+  image,
+  lang = "en",
+  type,
+  robots,
+  locale,
+  siteName,
+  prevUrl,
+  nextUrl,
+  author,
+  publishedTime,
+  modifiedTime,
+  imageAlt,
+  structuredData,
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
-  <Head title={title} description={description} image={image} />
+<html lang={lang}>
+  <Head
+    title={title}
+    description={description}
+    image={image}
+    type={type}
+    robots={robots}
+    locale={locale}
+    siteName={siteName}
+    prevUrl={prevUrl}
+    nextUrl={nextUrl}
+    author={author}
+    publishedTime={publishedTime}
+    modifiedTime={modifiedTime}
+    imageAlt={imageAlt}
+    structuredData={structuredData}
+  />
   <body class="bg-zinc-900 text-white">
     <Header />
     <main>
