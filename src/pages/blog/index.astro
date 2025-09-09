@@ -28,6 +28,15 @@ const years = Object.keys(postsByYear)
 <Layout
   description="Read my collection of posts and the things that interest me"
   title="Posts"
+  lang="en"
+  locale="en_US"
+  structuredData={{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Posts",
+    description: "Read my collection of posts and the things that interest me",
+    url: new URL("/blog/", Astro.site).toString(),
+  }}
 >
   <Container>
     <div class="flex items-center justify-between mb-8">

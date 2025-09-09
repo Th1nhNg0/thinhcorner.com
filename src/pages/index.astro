@@ -10,7 +10,27 @@ const blog = (await getCollection("blog"))
   .slice(0, 5);
 ---
 
-<Layout title={SITE.title} description={SITE.description}>
+<Layout
+  title={SITE.title}
+  description={SITE.description}
+  lang="en"
+  locale="en_US"
+  structuredData={[
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: SITE.title,
+      url: new URL("/", Astro.site).toString(),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: SITE.title,
+      description: SITE.description,
+      url: new URL(Astro.url.pathname, Astro.site).toString(),
+    },
+  ]}
+>
   <Container>
     <div class="space-y-8">
       <h1
