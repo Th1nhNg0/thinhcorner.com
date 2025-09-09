@@ -106,21 +106,6 @@ let slug = Array.isArray(Astro.params.id)
           }
         </div> -->
       </div>
-
-      {
-        post.data.tags && post.data.tags?.length > 0 ? (
-          <div class=" flex gap-2 pt-1">
-            {post.data.tags.map((tag) => (
-              <a
-                href={`/tags/${tag}`}
-                class="rounded-sm border border-white/20 px-2 py-1 text-sm transition-colors duration-300 ease-in-out hover:bg-white/5 hover:text-white focus-visible:bg-white/5 focus-visible:text-white"
-              >
-                {tag}
-              </a>
-            ))}
-          </div>
-        ) : null
-      }
     </div>
     <article
       class="prose prose-img:mx-auto max-w-none prose-invert prose-a:text-yellow-500 prose-table:my-auto"
