@@ -1,5 +1,7 @@
 # Personal Blog & Portfolio Site
 
+> My blog tone is curious, analytical, and nerdy-intellectual—mixing computer science depth, systems thinking, and reflective explorations of tech, games, and society in a way that’s both technical and philosophical.
+
 This is a personal website built with [Astro](https://astro.build/), featuring a blog, project showcases (implied, common use case), and integrations with external services like Spotify and Goodreads.
 
 ## ✨ Features
