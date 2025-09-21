@@ -60,22 +60,55 @@ This is a personal website built with [Astro](https://astro.build/), featuring a
     ```
     This will create a `dist/` directory with the optimized static files.
 
-## 📁 Project Structure
+## � Creating Blog Posts
 
-- `public/`: Static assets (images, fonts, etc.).
-- `src/`: Main source code.
-  - `components/`: Reusable Astro/UI components (Assumed - standard practice).
-  - `content/`: Markdown/MDX content collections (e.g., `blog/`).
-    - `blog/`: Contains individual blog post entries.
-  - `layouts/`: Base page layouts (Assumed - standard practice).
-  - `lib/`: Utility functions and API integrations (e.g., `spotify.ts`, `goodread.ts`).
-  - `pages/`: Astro pages and API endpoints (e.g., `rss.xml.ts`, `robots.txt.ts`).
-  - `styles/`: CSS files (e.g., `global.css`).
-  - `consts.ts`: Site-wide constants.
-  - `env.d.ts`: TypeScript definitions for environment variables.
-- `astro.config.mjs`: Astro configuration file.
-- `package.json`: Project dependencies and scripts.
-- `tsconfig.json`: TypeScript configuration.
+To create a new blog post, add a new folder under `src/content/blog/` with an `index.md` or `index.mdx` file. Use the following template:
+
+````markdown
+---
+title: "Your Blog Post Title"
+description: "A brief description of your post for SEO and previews"
+date: "YYYY-MM-DD"
+lang: "en" # Optional: language code (e.g., "en", "vi")
+---
+
+Your blog post content goes here. You can use Markdown formatting.
+
+## Section Header
+
+- List item
+- Another item
+
+> Blockquote example
+
+![Image alt text](path/to/image.jpg)
+
+Code example:
+
+```javascript
+console.log("Hello, world!");
+```
+````
+
+```
+
+### File Structure
+```
+
+src/content/blog/
+your-post-slug/
+index.md # Main content file
+image1.jpg # Optional: images/assets
+chart.html # Optional: embedded HTML content
+
+```
+
+### Tips
+- Use descriptive folder names (URL slugs)
+- Include relevant images in the post folder
+- For MDX files, you can use JSX components
+- Dates should be in YYYY-MM-DD format
+- Keep descriptions under 160 characters for SEO
 
 ## ☁️ Deployment
 
@@ -93,3 +126,4 @@ Refer to the [Astro Deployment Guides](https://docs.astro.build/en/guides/deploy
 ## 🤝 Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request if you have suggestions or improvements. (You can remove or modify this section as needed).
+```
