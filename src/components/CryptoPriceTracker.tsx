@@ -11,7 +11,6 @@ interface CryptoHolding {
   name: string;
   amount: number;
   avgPrice: number;
-  invested: number;
   allocation: number;
 }
 
@@ -110,16 +109,18 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
           console.warn(`Failed to fetch ATH for ${holding.symbol}`, e);
         }
         const currentValue = holding.amount * currentPrice;
-        const pnl = currentValue - holding.invested;
-        const roi = (pnl / holding.invested) * 100;
+        const pnl = currentValue - holding.amount * holding.avgPrice;
+        const roi = (pnl / (holding.amount * holding.avgPrice)) * 100;
 
         let potentialCurrentValue: number | undefined = undefined;
         let potentialPnl: number | undefined = undefined;
         let potentialRoi: number | undefined = undefined;
         if (athPrice && athPrice > 0) {
           potentialCurrentValue = holding.amount * athPrice;
-          potentialPnl = potentialCurrentValue - holding.invested;
-          potentialRoi = (potentialPnl / holding.invested) * 100;
+          potentialPnl =
+            potentialCurrentValue - holding.amount * holding.avgPrice;
+          potentialRoi =
+            (potentialPnl / (holding.amount * holding.avgPrice)) * 100;
         }
 
         newPriceData[holding.symbol] = {
@@ -160,13 +161,14 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
   }, []);
 
   const totalInvested = portfolioData.holdings.reduce(
-    (sum: number, holding: CryptoHolding) => sum + holding.invested,
+    (sum: number, holding: CryptoHolding) =>
+      sum + holding.amount * holding.avgPrice,
     0
   );
   const totalCurrentValue = portfolioData.holdings.reduce(
     (sum: number, holding: CryptoHolding) => {
       const data = priceData[holding.symbol];
-      return sum + (data?.currentValue || holding.invested);
+      return sum + (data?.currentValue || holding.amount * holding.avgPrice);
     },
     0
   );
@@ -181,6 +183,15 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
       currency: "USD",
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
+    }).format(amount);
+  };
+
+  const formatCurrencyWhole = (amount: number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
     }).format(amount);
   };
 
@@ -315,13 +326,7 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
                     P&L
                   </th>
                   <th className="text-right p-2 text-sm font-semibold text-zinc-300 uppercase tracking-wider">
-                    Daily Buy
-                  </th>
-                  <th className="text-right p-2 text-sm font-semibold text-zinc-300 uppercase tracking-wider">
                     Amount
-                  </th>
-                  <th className="text-right p-2 text-sm font-semibold text-zinc-300 uppercase tracking-wider">
-                    Invested
                   </th>
                   <th className="text-right p-2 text-sm font-semibold text-zinc-300 uppercase tracking-wider">
                     Avg Price
@@ -329,14 +334,11 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
                   <th className="text-right p-2 text-sm font-semibold text-zinc-300 uppercase tracking-wider">
                     Current Price
                   </th>
-                  <th className="pr-4 text-right p-2 text-sm font-semibold text-zinc-300 uppercase tracking-wider">
-                    Current Value
-                  </th>
-                  <th className="text-right p-2 text-sm font-semibold text-purple-400 uppercase tracking-wider">
+                  <th className="pr-4 text-right p-2 text-sm font-semibold text-purple-400 uppercase tracking-wider">
                     ATH Price
                   </th>
                   <th className="text-right p-2 text-sm font-semibold text-purple-400 uppercase tracking-wider">
-                    Potential
+                    Potential PNL
                   </th>
                 </tr>
               </thead>
@@ -358,19 +360,37 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
                         {/* Asset Info */}
                         <td className="p-2">
                           <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full overflow-hidden">
+                            <div className="w-12 h-12 rounded-full overflow-hidden">
                               <img
                                 src={icon.src}
                                 alt={holding.name}
                                 className="w-full h-full object-contain"
                               />
                             </div>
-                            <div>
+                            <div className="flex-1">
                               <p className={`font-semibold ${colors.text}`}>
                                 {holding.name}
                               </p>
                               <p className="text-sm text-zinc-400">
                                 {holding.symbol}
+                              </p>
+                              <p
+                                className="text-xs text-zinc-500"
+                                title={`Allocation: ${
+                                  holding.allocation
+                                }% of daily DCA budget (${(
+                                  (portfolioData.dailyBuyAmount *
+                                    holding.allocation) /
+                                  100
+                                ).toFixed(2)}/day)`}
+                              >
+                                {holding.allocation}% ($
+                                {(
+                                  (portfolioData.dailyBuyAmount *
+                                    holding.allocation) /
+                                  100
+                                ).toFixed(2)}
+                                )
                               </p>
                             </div>
                           </div>
@@ -409,39 +429,17 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
                           )}
                         </td>
 
-                        {/* Daily Buy */}
-                        <td className="p-2 text-right">
-                          <span className="font-bold text-white">
-                            {holding.allocation}% ($
-                            {(
-                              (portfolioData.dailyBuyAmount *
-                                holding.allocation) /
-                              100
-                            ).toFixed(2)}
-                            )
-                          </span>
-                        </td>
-
                         {/* Amount */}
                         <td className="p-2 text-right">
                           <p className="font-semibold text-white">
-                            {holding.amount.toFixed(
-                              holding.symbol === "BTC" ? 8 : 4
-                            )}
-                          </p>
-                        </td>
-
-                        {/* Invested */}
-                        <td className="p-2 text-right">
-                          <p className="font-semibold text-white">
-                            {formatCurrency(holding.invested)}
+                            {holding.amount.toFixed(5)}
                           </p>
                         </td>
 
                         {/* Avg Price */}
                         <td className="p-2 text-right">
                           <p className="font-semibold text-white">
-                            {formatCurrency(holding.avgPrice)}
+                            {formatCurrencyWhole(holding.avgPrice)}
                           </p>
                         </td>
 
@@ -456,25 +454,8 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
                           ) : (
                             <p className="font-semibold text-white">
                               {data
-                                ? formatCurrency(data.currentPrice)
-                                : formatCurrency(holding.avgPrice)}
-                            </p>
-                          )}
-                        </td>
-
-                        {/* Current Value */}
-                        <td className="p-2 text-right">
-                          {data?.loading ? (
-                            <div className="animate-pulse">
-                              <div className="h-5 bg-zinc-600 rounded w-16 ml-auto"></div>
-                            </div>
-                          ) : data?.error ? (
-                            <p className="text-sm text-red-400">Error</p>
-                          ) : (
-                            <p className="font-semibold text-white">
-                              {data
-                                ? formatCurrency(data.currentValue)
-                                : formatCurrency(holding.invested)}
+                                ? formatCurrencyWhole(data.currentPrice)
+                                : formatCurrencyWhole(holding.avgPrice)}
                             </p>
                           )}
                         </td>
@@ -489,7 +470,7 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
                             <p className="text-sm text-red-400">Error</p>
                           ) : data?.athPrice ? (
                             <p className="font-semibold text-purple-300">
-                              {formatCurrency(data.athPrice)}
+                              {formatCurrencyWhole(data.athPrice)}
                             </p>
                           ) : (
                             <p className="text-sm text-zinc-500">N/A</p>
