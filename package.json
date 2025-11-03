@@ -15,36 +15,30 @@
     "@astrojs/rss": "^4.0.13",
     "@astrojs/sitemap": "^3.6.0",
     "@astrojs/vercel": "^9.0.0",
-    "@fontsource-variable/genos": "^5.2.5",
-    "@fontsource-variable/lexend": "^5.2.6",
-    "@tailwindcss/vite": "^4.0.4",
-    "@types/react": "^19.1.11",
-    "@types/react-dom": "^19.1.7",
-    "@vercel/og": "^0.6.5",
+    "@fontsource-variable/genos": "^5.2.8",
+    "@fontsource-variable/lexend": "^5.2.11",
+    "@tailwindcss/vite": "^4.1.16",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vercel/og": "^0.8.5",
     "@vercel/speed-insights": "^1.2.0",
+    "@yeskunall/astro-umami": "^0.0.7",
     "astro": "^5.15.3",
-    "cheerio": "^1.0.0",
+    "cheerio": "^1.1.2",
     "date-fns": "^4.1.0",
-    "katex": "^0.16.21",
+    "katex": "^0.16.25",
     "mdast-util-to-string": "^4.0.0",
     "medium-zoom": "^1.1.0",
-    "pnpm": "^10.2.1",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "reading-time": "^1.5.0",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
-    "sharp": "^0.33.5",
-    "tailwindcss": "^4.0.4",
+    "sharp": "^0.34.4",
+    "tailwindcss": "^4.1.16",
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.16"
-  },
-  "packageManager": "pnpm@10.6.2+sha512.47870716bea1572b53df34ad8647b42962bc790ce2bf4562ba0f643237d7302a3d6a8ecef9e4bdfc01d23af1969aa90485d4cebb0b9638fa5ef1daef656f6c1b",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@vercel/speed-insights"
-    ]
+    "@tailwindcss/typography": "^0.5.19"
   }
 }
