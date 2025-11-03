@@ -14,6 +14,8 @@ import { remarkReadingTime } from "./remark/remark-reading-time.mjs";
 
 import react from "@astrojs/react";
 
+import yeskunallumami from "@yeskunall/astro-umami";
+
 export default defineConfig({
   site: "https://thinhcorner.com",
   adapter: vercel({
@@ -24,13 +26,22 @@ export default defineConfig({
     webAnalytics: {
       enabled: true,
     },
-    
   }),
-  integrations: [sitemap(), partytown({
-    config: {
-      forward: ["dataLayer.push"],
-    },
-  }), mdx(), react()],
+  integrations: [
+    sitemap(),
+    partytown({
+      config: {
+        forward: ["dataLayer.push"],
+      },
+    }),
+    mdx(),
+    react(),
+    yeskunallumami({
+      id: process.env.PUBLIC_UMAMI_ID || "",
+      hostUrl: process.env.PUBLIC_UMAMI_HOST_URL || "",
+      withPartytown: true,
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },
