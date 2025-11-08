@@ -2,7 +2,10 @@
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
 import { format } from "date-fns";
-import CryptoPriceTracker from "@/components/CryptoPriceTracker";
+import BitcoinIcon from "@/assets/crypto-icon/bitcoin-btc-logo.svg?url";
+import BnbIcon from "@/assets/crypto-icon/bnb-bnb-logo.svg?url";
+import EthereumIcon from "@/assets/crypto-icon/ethereum-eth-logo.svg?url";
+import SolanaIcon from "@/assets/crypto-icon/solana-sol-logo.svg?url";
 
 export const prerender = false;
 
@@ -112,6 +115,94 @@ const priceResults = await Promise.all(pricePromises);
 const priceData = Object.fromEntries(
   priceResults.map((result) => [result.symbol, result])
 );
+
+const iconMap = {
+  BTC: BitcoinIcon,
+  ETH: EthereumIcon,
+  BNB: BnbIcon,
+  SOL: SolanaIcon,
+} as const;
+
+const getIconForSymbol = (symbol: string) => {
+  const icon = iconMap[symbol as keyof typeof iconMap];
+  return icon ?? BitcoinIcon;
+};
+
+const colorMap = {
+  BTC: "orange",
+  ETH: "blue",
+  BNB: "yellow",
+  SOL: "purple",
+} as const;
+
+const getColorForSymbol = (symbol: string) => {
+  const color = colorMap[symbol as keyof typeof colorMap];
+  return color ?? "orange";
+};
+
+const getColorClasses = (color: string) => {
+  const colors = {
+    orange: {
+      bg: "from-orange-900/20 to-zinc-900/80",
+      border: "border-orange-500/20 hover:border-orange-500/50",
+      text: "text-orange-400",
+      accent: "bg-orange-500",
+    },
+    blue: {
+      bg: "from-blue-900/20 to-zinc-900/80",
+      border: "border-blue-500/20 hover:border-blue-500/50",
+      text: "text-blue-400",
+      accent: "bg-blue-500",
+    },
+    yellow: {
+      bg: "from-yellow-900/20 to-zinc-900/80",
+      border: "border-yellow-500/20 hover:border-yellow-500/50",
+      text: "text-yellow-400",
+      accent: "bg-yellow-500",
+    },
+    purple: {
+      bg: "from-purple-900/20 to-zinc-900/80",
+      border: "border-purple-500/20 hover:border-purple-500/50",
+      text: "text-purple-400",
+      accent: "bg-purple-500",
+    },
+  };
+  return colors[color as keyof typeof colors] ?? colors.orange;
+};
+
+const formatCurrency = (amount: number) => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+};
+
+const formatCurrencyWhole = (amount: number) => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+};
+
+const formatPercentage = (percentage: number) => {
+  const sign = percentage >= 0 ? "+" : "";
+  return `${sign}${percentage.toFixed(2)}%`;
+};
+
+const totalInvested = portfolioData.holdings.reduce(
+  (sum: number, holding) => sum + holding.amount * holding.avgPrice,
+  0
+);
+const totalCurrentValue = portfolioData.holdings.reduce((sum, holding) => {
+  const data = priceData[holding.symbol];
+  return sum + (data?.currentValue ?? holding.amount * holding.avgPrice);
+}, 0);
+const totalPnL = totalCurrentValue - totalInvested;
+const totalROI = (totalPnL / totalInvested) * 100;
 ---
 
 <Layout
@@ -147,11 +238,231 @@ const priceData = Object.fromEntries(
         Last updated: {format(last_updated, "MMMM d, yyyy")}
       </p>
     </section>
-    <!-- Dynamic Crypto Holdings with Real-time Data -->
-    <CryptoPriceTracker
-      client:load
-      portfolioData={portfolioData}
-      priceData={priceData}
-    />
+
+    <div class="space-y-6">
+      <div class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 rounded-2xl p-2 md:p-6">
+        <div class="flex items-center mb-6">
+          <h3 class="text-3xl font-bold font-heading">Portfolio Performance</h3>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div class="bg-zinc-900/30 rounded-xl p-4 text-center">
+            <p class="text-sm text-zinc-400 mb-1">Current Value</p>
+            <p class="text-2xl font-bold text-white">
+              {formatCurrency(totalCurrentValue)}
+            </p>
+            <p class="text-xs text-zinc-500 mt-1">Live market value</p>
+          </div>
+
+          <div class="bg-zinc-900/30 rounded-xl p-4 text-center">
+            <p class="text-sm text-zinc-400 mb-1">Total P&L</p>
+            <p
+              class={`text-2xl font-bold ${
+                totalPnL >= 0 ? "text-green-400" : "text-red-400"
+              }`}
+            >
+              {formatCurrency(totalPnL)}
+            </p>
+            <p class="text-xs text-zinc-500 mt-1">Profit & Loss</p>
+          </div>
+
+          <div class="bg-zinc-900/30 rounded-xl p-4 text-center">
+            <p class="text-sm text-zinc-400 mb-1">Total ROI</p>
+            <p
+              class={`text-2xl font-bold ${
+                totalROI >= 0 ? "text-green-400" : "text-red-400"
+              }`}
+            >
+              {formatPercentage(totalROI)}
+            </p>
+            <p class="text-xs text-zinc-500 mt-1">Return on investment</p>
+          </div>
+
+          <div class="bg-zinc-900/30 rounded-xl p-4 text-center">
+            <p class="text-sm text-zinc-400 mb-1">Total Investment</p>
+            <p class="text-xl font-bold text-white">
+              ${portfolioData.totalInvestment}
+            </p>
+            <p class="text-xs text-zinc-500 mt-1">Since January 2025</p>
+          </div>
+
+          <div class="bg-zinc-900/30 rounded-xl p-4 text-center">
+            <p class="text-sm text-zinc-400 mb-1">Daily DCA</p>
+            <p class="text-xl font-bold text-white">
+              ${portfolioData.dailyBuyAmount}
+            </p>
+            <p class="text-xs text-zinc-500 mt-1">Automated investing</p>
+          </div>
+
+          <div class="bg-zinc-900/30 rounded-xl p-4 text-center">
+            <p class="text-sm text-zinc-400 mb-1">Assets</p>
+            <p class="text-xl font-bold text-white">{portfolioData.assets}</p>
+            <p class="text-xs text-zinc-500 mt-1">Diversified portfolio</p>
+          </div>
+        </div>
+
+        <div class="mt-6 bg-zinc-900/30 rounded-xl shadow-sm ring-1 ring-white/5">
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead class="bg-zinc-900/50">
+                <tr>
+                  <th class="pl-4 text-left p-2 text-sm font-semibold text-zinc-300 uppercase tracking-wider">
+                    Asset
+                  </th>
+                  <th class="text-right p-2 text-sm font-semibold text-zinc-300 uppercase tracking-wider">
+                    P&L
+                  </th>
+                  <th class="text-right p-2 text-sm font-semibold text-zinc-300 uppercase tracking-wider">
+                    Amount
+                  </th>
+                  <th class="text-right p-2 text-sm font-semibold text-zinc-300 uppercase tracking-wider">
+                    Avg Price
+                  </th>
+                  <th class="text-right p-2 text-sm font-semibold text-zinc-300 uppercase tracking-wider">
+                    Current Price
+                  </th>
+                  <th class="pr-4 text-right p-2 text-sm font-semibold text-purple-400 uppercase tracking-wider">
+                    ATH Price
+                  </th>
+                  <th class="text-right p-2 text-sm font-semibold text-purple-400 uppercase tracking-wider">
+                    Potential PNL
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-zinc-700/30">
+                {portfolioData.holdings.map((holding) => {
+                  const data = priceData[holding.symbol];
+                  const color = getColorForSymbol(holding.symbol);
+                  const colors = getColorClasses(color);
+                  const icon = getIconForSymbol(holding.symbol);
+                  const dailyAllocation =
+                    (portfolioData.dailyBuyAmount * holding.allocation) / 100;
+
+                  return (
+                    <tr class="hover:bg-zinc-800/30 transition-colors">
+                      <td class="p-2">
+                        <div class="flex items-center gap-2">
+                          <div class="w-12 h-12 rounded-full overflow-hidden">
+                            <img
+                              src={icon}
+                              alt={holding.name}
+                              class="w-full h-full object-contain"
+                            />
+                          </div>
+                          <div class="flex-1">
+                            <p class={`font-semibold ${colors.text}`}>
+                              {holding.name}
+                            </p>
+                            <p class="text-sm text-zinc-400">{holding.symbol}</p>
+                            <p
+                              class="text-xs text-zinc-500"
+                              title={`Allocation: ${holding.allocation}% of daily DCA budget (${dailyAllocation.toFixed(
+                                2
+                              )}/day)`}
+                            >
+                              {holding.allocation}% (${dailyAllocation.toFixed(
+                                2
+                              )})
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td class="p-2 text-right">
+                        {data?.error ? (
+                          <p class="text-sm text-red-400">Error</p>
+                        ) : (
+                          <div>
+                            <p
+                              class={`font-semibold ${
+                                (data?.pnl || 0) >= 0
+                                  ? "text-green-400"
+                                  : "text-red-400"
+                              }`}
+                            >
+                              {data ? formatCurrency(data.pnl) : "$0.00"}
+                            </p>
+                            <p
+                              class={`text-sm ${
+                                (data?.roi || 0) >= 0
+                                  ? "text-green-400"
+                                  : "text-red-400"
+                              }`}
+                            >
+                              {data ? formatPercentage(data.roi) : "0.00%"}
+                            </p>
+                          </div>
+                        )}
+                      </td>
+
+                      <td class="p-2 text-right">
+                        <p class="font-semibold text-white">
+                          {holding.amount.toFixed(5)}
+                        </p>
+                      </td>
+
+                      <td class="p-2 text-right">
+                        <p class="font-semibold text-white">
+                          {formatCurrencyWhole(holding.avgPrice)}
+                        </p>
+                      </td>
+
+                      <td class="p-2 text-right">
+                        {data?.error ? (
+                          <p class="text-sm text-red-400">Error</p>
+                        ) : (
+                          <p class="font-semibold text-white">
+                            {data
+                              ? formatCurrencyWhole(data.currentPrice)
+                              : formatCurrencyWhole(holding.avgPrice)}
+                          </p>
+                        )}
+                      </td>
+
+                      <td class="p-2 text-right">
+                        {data?.error ? (
+                          <p class="text-sm text-red-400">Error</p>
+                        ) : data?.athPrice ? (
+                          <p class="font-semibold text-purple-300">
+                            {formatCurrencyWhole(data.athPrice)}
+                          </p>
+                        ) : (
+                          <p class="text-sm text-zinc-500">N/A</p>
+                        )}
+                      </td>
+
+                      <td class="p-2 text-right">
+                        {data?.error ? (
+                          <p class="text-sm text-red-400">Error</p>
+                        ) : data?.potentialPnl !== undefined ? (
+                          <div class="text-right">
+                            <p class="font-semibold text-purple-300">
+                              {formatCurrency(data.potentialPnl ?? 0)}
+                            </p>
+                            <p class="text-xs text-purple-200">
+                              {data.potentialRoi !== undefined
+                                ? formatPercentage(data.potentialRoi)
+                                : "N/A"}
+                            </p>
+                          </div>
+                        ) : (
+                          <p class="text-sm text-zinc-500">N/A</p>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="mt-4 p-4 bg-zinc-900/30 rounded-xl shadow-sm ring-1 ring-white/5">
+          <p class="text-sm text-zinc-300 mb-2">
+            Prices are fetched live from <a href="https://cryptoprices.cc" class="underline text-zinc-400 hover:text-zinc-200 transition-colors">cryptoprices.cc</a> when you visit this page. The "Potential" column shows a theoretical P&L/ROI using each asset's all-time high. Refresh the page to get the latest prices.
+          </p>
+        </div>
+      </div>
+    </div>
   </Container>
 </Layout>
