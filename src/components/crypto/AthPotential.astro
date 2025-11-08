@@ -1,0 +1,278 @@
+---
+import type { HoldingMetrics } from "@/lib/crypto";
+import type { PriceResult } from "@/lib/crypto";
+import { formatCurrency, formatCurrencyWhole } from "@/lib/format";
+
+interface Props {
+  holdings: HoldingMetrics[];
+  priceData: Record<string, PriceResult>;
+  currentTotalValue: number;
+}
+
+const { holdings, priceData, currentTotalValue } = Astro.props as Props;
+
+// Calculate ATH potential
+const athCalculations = holdings.map((holding) => {
+  const price = priceData[holding.symbol];
+  return {
+    symbol: holding.symbol,
+    name: holding.name,
+    imageUrl: holding.imageUrl,
+    currentValue: holding.currentValue,
+    currentPrice: holding.currentPrice,
+    athPrice: holding.athPrice,
+    discountFromAth: holding.discountFromAth,
+    athValue: price?.potentialCurrentValue ?? null,
+    athPnl: price?.potentialPnl ?? null,
+    athRoi: price?.potentialRoi ?? null,
+    hasAth: price?.athPrice !== undefined && price?.athPrice > 0,
+  };
+});
+
+const totalAthValue = athCalculations.reduce(
+  (sum, calc) => sum + (calc.athValue ?? calc.currentValue),
+  0
+);
+const athGainFromCurrent = totalAthValue - currentTotalValue;
+const athGainPercent =
+  currentTotalValue > 0 ? (athGainFromCurrent / currentTotalValue) * 100 : 0;
+
+const hasAnyAthData = athCalculations.some((calc) => calc.hasAth);
+
+const rankedAssets = [...athCalculations]
+  .filter((calc) => calc.hasAth && calc.discountFromAth !== undefined)
+  .sort((a, b) => (b.discountFromAth ?? 0) - (a.discountFromAth ?? 0));
+
+const assetsWithoutAth = athCalculations.filter((calc) => !calc.hasAth);
+
+const colorMap = {
+  BTC: "orange",
+  ETH: "blue",
+  BNB: "yellow",
+  SOL: "purple",
+} as const;
+
+const getColorForSymbol = (symbol: string) => {
+  const color = colorMap[symbol as keyof typeof colorMap];
+  return color ?? "orange";
+};
+
+const getColorClasses = (color: string) => {
+  const colors = {
+    orange: {
+      text: "text-orange-400",
+      accent: "bg-orange-500",
+    },
+    blue: {
+      text: "text-blue-400",
+      accent: "bg-blue-500",
+    },
+    yellow: {
+      text: "text-yellow-400",
+      accent: "bg-yellow-500",
+    },
+    purple: {
+      text: "text-purple-400",
+      accent: "bg-purple-500",
+    },
+  };
+  return colors[color as keyof typeof colors] ?? colors.orange;
+};
+---
+
+<div
+  class="mt-6 bg-zinc-900/30 rounded-xl border border-white/5 p-5 shadow-sm ring-1 ring-white/10"
+>
+  <div class="flex flex-col gap-1 mb-4">
+    <p class="text-xs uppercase tracking-wider text-zinc-500">
+      ATH analysis & opportunity
+    </p>
+    <h4 class="text-2xl font-semibold">Market potential & DCA opportunities</h4>
+  </div>
+
+  {
+    hasAnyAthData ? (
+      <>
+        {/* ATH Portfolio Summary */}
+        <div class="rounded-xl border border-zinc-700/30 bg-zinc-900/40 px-4 py-4 mb-5">
+          <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div>
+              <p class="text-[10px] uppercase tracking-widest text-zinc-500">
+                Current value
+              </p>
+              <p class="text-lg font-semibold text-zinc-100">
+                {formatCurrency(currentTotalValue)}
+              </p>
+            </div>
+            <div>
+              <p class="text-[10px] uppercase tracking-widest text-zinc-500">
+                At all-time highs
+              </p>
+              <p class="text-lg font-semibold text-purple-200">
+                {formatCurrency(totalAthValue)}
+              </p>
+            </div>
+            <div>
+              <p class="text-[10px] uppercase tracking-widest text-zinc-500">
+                Potential upside
+              </p>
+              <p class="text-lg font-semibold text-green-400">
+                +{formatCurrency(athGainFromCurrent)}
+              </p>
+              <p class="text-[11px] text-zinc-400">
+                +{athGainPercent.toFixed(1)}% from current
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Combined DCA Opportunity & ATH Breakdown */}
+        <div>
+          <div class="flex flex-col gap-1 mb-3 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p class="text-xs uppercase tracking-wider text-zinc-500">
+                DCA opportunity & ATH outlook
+              </p>
+              <h5 class="text-lg font-semibold">
+                Ranked upside by discount from all-time highs
+              </h5>
+            </div>
+            <p class="text-xs text-zinc-400">
+              Each card blends current discount, upside, and value projections
+            </p>
+          </div>
+
+          <div class="space-y-2">
+            {rankedAssets.map((asset, index) => {
+              const color = getColorForSymbol(asset.symbol);
+              const colors = getColorClasses(color);
+              const athProgress =
+                asset.athPrice && asset.athPrice > 0
+                  ? Math.min(
+                      100,
+                      Math.max(0, (asset.currentPrice / asset.athPrice) * 100)
+                    )
+                  : 0;
+              const gain =
+                (asset.athValue ?? asset.currentValue) - asset.currentValue;
+              const gainPercent =
+                asset.currentValue > 0 ? (gain / asset.currentValue) * 100 : 0;
+
+              return (
+                <div class="rounded-lg border border-zinc-700/30 bg-zinc-900/40 px-3 py-3 sm:px-4">
+                  <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                    <div class="flex items-center gap-3">
+                      <span class="text-[11px] font-semibold text-zinc-500">
+                        #{index + 1}
+                      </span>
+                      {asset.imageUrl ? (
+                        <img
+                          src={asset.imageUrl}
+                          alt={`${asset.name} logo`}
+                          width="28"
+                          height="28"
+                          loading="lazy"
+                          class="h-7 w-7 rounded-full border border-white/10 bg-white/5 object-cover"
+                        />
+                      ) : (
+                        <div
+                          class="h-7 w-7 rounded-full border border-dashed border-zinc-700 text-[10px] font-semibold uppercase text-zinc-400 flex items-center justify-center"
+                          aria-hidden="true"
+                        >
+                          {asset.symbol}
+                        </div>
+                      )}
+                      <div class="flex flex-col leading-tight">
+                        <span class={`text-sm font-semibold ${colors.text}`}>
+                          {asset.name}
+                        </span>
+                        <span class="text-[11px] text-zinc-500">
+                          {formatCurrencyWhole(asset.currentPrice)}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="text-right text-[11px] sm:text-xs">
+                      <p class="font-semibold text-red-400">
+                        {asset.discountFromAth?.toFixed(1)}% below ATH
+                      </p>
+                      <p class="text-green-400">
+                        +{formatCurrencyWhole(gain)} ({gainPercent.toFixed(1)}%)
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="mt-2 h-1.5 rounded-full bg-zinc-800">
+                    <div
+                      class={`h-full ${colors.accent}`}
+                      style={`width: ${athProgress}%`}
+                    />
+                  </div>
+
+                  <div class="mt-3 grid grid-cols-1 gap-2 text-[11px] text-zinc-400 sm:grid-cols-4">
+                    <div>
+                      <p class="uppercase tracking-wider text-[10px] text-zinc-500">
+                        Current value
+                      </p>
+                      <p class="font-semibold text-zinc-200">
+                        {formatCurrencyWhole(asset.currentValue)}
+                      </p>
+                    </div>
+                    <div>
+                      <p class="uppercase tracking-wider text-[10px] text-zinc-500">
+                        At ATH
+                      </p>
+                      <p class="font-semibold text-green-300">
+                        {formatCurrencyWhole(asset.athValue ?? 0)}
+                      </p>
+                    </div>
+                    <div>
+                      <p class="uppercase tracking-wider text-[10px] text-zinc-500">
+                        ATH price
+                      </p>
+                      <p class="font-semibold text-zinc-200">
+                        {asset.athPrice
+                          ? formatCurrencyWhole(asset.athPrice)
+                          : "N/A"}
+                      </p>
+                    </div>
+                    <div>
+                      <p class="uppercase tracking-wider text-[10px] text-zinc-500">
+                        Upside multiple
+                      </p>
+                      <p class="font-semibold text-zinc-200">
+                        {asset.currentPrice > 0 && asset.athPrice
+                          ? (asset.athPrice / asset.currentPrice).toFixed(2) +
+                            "x"
+                          : "—"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {assetsWithoutAth.length > 0 && (
+            <div class="mt-3 rounded-lg border border-dashed border-zinc-700/40 bg-zinc-900/40 px-3 py-3 text-[11px] text-zinc-400">
+              <p class="mb-1 font-semibold text-zinc-300">
+                Assets awaiting ATH data
+              </p>
+              <p>
+                {assetsWithoutAth.map((asset) => asset.name).join(", ")}{" "}
+                currently lack reliable ATH data. Refresh later to populate
+                their upside view.
+              </p>
+            </div>
+          )}
+        </div>
+      </>
+    ) : (
+      <div class="bg-zinc-800/30 rounded-lg p-6 border border-zinc-700/20 text-center">
+        <p class="text-zinc-400">
+          ATH data is currently unavailable. Please refresh the page to fetch
+          the latest market data.
+        </p>
+      </div>
+    )
+  }
+</div>
