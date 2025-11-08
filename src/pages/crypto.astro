@@ -4,7 +4,6 @@ import Layout from "@/layouts/Layout.astro";
 import GoalProgressCard from "@/components/crypto/GoalProgressCard.astro";
 import AllocationPanel from "@/components/crypto/AllocationPanel.astro";
 import PortfolioSummary from "@/components/crypto/PortfolioSummary.astro";
-import AthPotential from "@/components/crypto/AthPotential.astro";
 import { loadCryptoPageData } from "@/lib/crypto";
 
 export const prerender = false;
@@ -40,7 +39,7 @@ const { goalStats, pieChartData, totals, holdingsWithMetrics, priceData } =
       </p>
     </section>
 
-    <div class="space-y-6">
+    <div class="space-y-6 pb-6">
       <div
         class="bg-linear-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 rounded-2xl p-2 md:p-6"
       >
@@ -55,11 +54,6 @@ const { goalStats, pieChartData, totals, holdingsWithMetrics, priceData } =
 
         <PortfolioSummary totals={totals} />
         <AllocationPanel pieChartData={pieChartData} />
-        <AthPotential
-          holdings={holdingsWithMetrics}
-          priceData={priceData}
-          currentTotalValue={totals.currentValue}
-        />
         <GoalProgressCard stats={goalStats} />
       </div>
     </div>
