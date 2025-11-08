@@ -1,0 +1,84 @@
+---
+import type { CryptoTotals } from "@/lib/crypto";
+import { formatCurrency } from "@/lib/format";
+
+interface Props {
+  totals: CryptoTotals;
+}
+
+const { totals } = Astro.props as Props;
+
+const roiColor =
+  totals.roi > 0
+    ? "text-green-400"
+    : totals.roi < 0
+      ? "text-red-400"
+      : "text-zinc-400";
+
+const pnlColor =
+  totals.pnl > 0
+    ? "text-green-400"
+    : totals.pnl < 0
+      ? "text-red-400"
+      : "text-zinc-400";
+
+const roiSign = totals.roi > 0 ? "+" : "";
+const pnlSign = totals.pnl > 0 ? "+" : "";
+---
+
+<div
+  class="bg-zinc-900/30 rounded-xl border border-white/5 p-5 shadow-sm ring-1 ring-white/10"
+>
+  <div class="flex flex-col gap-1 mb-4">
+    <p class="text-xs uppercase tracking-wider text-zinc-500">
+      Portfolio overview
+    </p>
+    <h4 class="text-2xl font-semibold">Total performance</h4>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div
+      class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700/30 hover:border-zinc-600/50 transition-colors"
+    >
+      <p class="text-xs uppercase tracking-wider text-zinc-500 mb-1">
+        Total invested
+      </p>
+      <p class="text-2xl font-bold text-zinc-100">
+        {formatCurrency(totals.invested)}
+      </p>
+      <p class="text-xs text-zinc-400 mt-1">Cost basis</p>
+    </div>
+    <div
+      class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700/30 hover:border-zinc-600/50 transition-colors"
+    >
+      <p class="text-xs uppercase tracking-wider text-zinc-500 mb-1">
+        Current value
+      </p>
+      <p class="text-2xl font-bold text-zinc-100">
+        {formatCurrency(totals.currentValue)}
+      </p>
+      <p class="text-xs text-zinc-400 mt-1">Live market value</p>
+    </div>
+    <div
+      class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700/30 hover:border-zinc-600/50 transition-colors"
+    >
+      <p class="text-xs uppercase tracking-wider text-zinc-500 mb-1">
+        Total P&L
+      </p>
+      <p class={`text-2xl font-bold ${pnlColor}`}>
+        {pnlSign}{formatCurrency(Math.abs(totals.pnl))}
+      </p>
+      <p class="text-xs text-zinc-400 mt-1">Profit & loss</p>
+    </div>
+    <div
+      class="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700/30 hover:border-zinc-600/50 transition-colors"
+    >
+      <p class="text-xs uppercase tracking-wider text-zinc-500 mb-1">
+        Total ROI
+      </p>
+      <p class={`text-2xl font-bold ${roiColor}`}>
+        {roiSign}{totals.roi.toFixed(2)}%
+      </p>
+      <p class="text-xs text-zinc-400 mt-1">Return on investment</p>
+    </div>
+  </div>
+</div>
