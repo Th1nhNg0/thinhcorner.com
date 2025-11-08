@@ -62,8 +62,6 @@ export type PriceResult = {
   currentValue: number;
   pnl: number;
   roi: number;
-  loading: boolean;
-  error: string | null;
 };
 
 export type PieChartSlice = {
@@ -84,11 +82,7 @@ export type PieChartSlice = {
 
 export type HoldingMetrics = PortfolioHolding & {
   currentPrice: number;
-  currentValue: number;
-  pnl: number;
-  roi: number;
   athPrice?: number;
-  discountFromAth?: number;
   imageUrl: string | null;
 };
 
@@ -111,7 +105,6 @@ export type MarketPotential = {
   potentialPortfolioValue: number;
   additionalValue: number;
   upsidePercent: number;
-  assets: MarketPotentialAsset[];
   topAssets: MarketPotentialAsset[];
 };
 
@@ -124,10 +117,7 @@ export type CryptoTotals = {
 
 export type CryptoPageData = {
   portfolioData: typeof portfolioData;
-  priceData: Record<string, PriceResult>;
   pieChartData: PieChartSlice[];
-  holdingsWithMetrics: HoldingMetrics[];
-  opportunityList: HoldingMetrics[];
   totals: CryptoTotals;
   marketPotential: MarketPotential;
 };
@@ -237,8 +227,6 @@ const buildPriceData = (
       currentValue,
       pnl,
       roi,
-      loading: false,
-      error: null,
     };
   });
 
@@ -291,41 +279,17 @@ const buildHoldingsWithMetrics = (
   holdings.map((holding) => {
     const data = priceData[holding.symbol];
     const snapshot = marketData[holding.symbol];
-    const costBasis = holding.amount * holding.avgPrice;
     const currentPrice = data?.currentPrice ?? holding.avgPrice;
-    const currentValue = data?.currentValue ?? costBasis;
-    const pnl = data?.pnl ?? currentValue - costBasis;
-    const roi = data?.roi ?? (costBasis > 0 ? (pnl / costBasis) * 100 : 0);
     const athPrice = data?.athPrice;
-    const discountFromAth =
-      athPrice && athPrice > 0
-        ? ((athPrice - currentPrice) / athPrice) * 100
-        : undefined;
     const imageUrl = snapshot?.imageUrl ?? null;
 
     return {
       ...holding,
       currentPrice,
-      currentValue,
-      pnl,
-      roi,
       athPrice,
-      discountFromAth,
       imageUrl,
     };
   });
-
-const buildOpportunityList = (holdings: HoldingMetrics[]) => {
-  const candidates = holdings.filter(
-    (asset) => typeof asset.discountFromAth === "number"
-  );
-  const source = candidates.length ? candidates : holdings;
-
-  return source
-    .slice()
-    .sort((a, b) => (b.discountFromAth ?? 0) - (a.discountFromAth ?? 0))
-    .slice(0, 4);
-};
 
 const buildMarketPotential = (
   holdings: readonly HoldingMetrics[],
@@ -390,7 +354,6 @@ const buildMarketPotential = (
     potentialPortfolioValue,
     additionalValue,
     upsidePercent,
-    assets,
     topAssets,
   };
 };
@@ -416,15 +379,11 @@ export const loadCryptoPageData = async (): Promise<CryptoPageData> => {
     priceData,
     marketData
   );
-  const opportunityList = buildOpportunityList(holdingsWithMetrics);
   const marketPotential = buildMarketPotential(holdingsWithMetrics, priceData);
 
   return {
     portfolioData,
-    priceData,
     pieChartData,
-    holdingsWithMetrics,
-    opportunityList,
     totals: {
       invested: totalInvested,
       currentValue: totalCurrentValue,
