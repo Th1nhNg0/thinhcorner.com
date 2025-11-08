@@ -1,15 +1,13 @@
 ---
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
-import GoalProgressCard from "@/components/crypto/GoalProgressCard.astro";
 import AllocationPanel from "@/components/crypto/AllocationPanel.astro";
-import PortfolioSummary from "@/components/crypto/PortfolioSummary.astro";
+
 import { loadCryptoPageData } from "@/lib/crypto";
 
 export const prerender = false;
 
-const { goalStats, pieChartData, totals, holdingsWithMetrics, priceData } =
-  await loadCryptoPageData();
+const { pieChartData } = await loadCryptoPageData();
 ---
 
 <Layout
@@ -52,9 +50,7 @@ const { goalStats, pieChartData, totals, holdingsWithMetrics, priceData } =
           Refresh anytime you want to pull a new live readout.
         </p>
 
-        <PortfolioSummary totals={totals} />
         <AllocationPanel pieChartData={pieChartData} />
-        <GoalProgressCard stats={goalStats} />
       </div>
     </div>
   </Container>
