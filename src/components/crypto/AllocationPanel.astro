@@ -12,7 +12,7 @@ const chartId = "crypto-pie-chart";
 ---
 
 <div
-  class="mt-6 bg-zinc-900/30 rounded-xl border border-white/5 p-5 shadow-sm ring-1 ring-white/10"
+  class="mt-6 rounded-2xl border border-zinc-700/50 bg-zinc-900/60 p-5 shadow-sm"
 >
   <div
     class="flex flex-col gap-1 mb-4 md:flex-row md:items-center md:justify-between"
@@ -26,12 +26,7 @@ const chartId = "crypto-pie-chart";
     <p class="text-xs text-zinc-400">Based on the latest fetch</p>
   </div>
   <div class="h-64 sm:h-72">
-    <div
-      id={chartId}
-      data-chart={chartData}
-      class="h-full w-full rounded-xl bg-linear-to-b from-zinc-900/60 via-zinc-900/20 to-zinc-900/80"
-    >
-    </div>
+    <div id={chartId} data-chart={chartData} class="h-full w-full"></div>
   </div>
   <p class="mt-3 text-xs text-zinc-400">
     Slices represent each asset's current value share of the total portfolio.
@@ -70,13 +65,10 @@ const chartId = "crypto-pie-chart";
         const data = params.data;
         const meta = data.meta;
         const percent = params.percent.toFixed(2);
-        const value = preciseCurrencyFormatter.format(params.value);
-
         // Format amounts with dynamic decimals
         const decimals = meta.amount < 1 ? 6 : meta.amount < 100 ? 4 : 2;
         const amount = meta.amount.toFixed(decimals);
         const avgPrice = preciseCurrencyFormatter.format(meta.avgPrice);
-        const dailyDca = preciseCurrencyFormatter.format(meta.dailyDca);
         const pnl = preciseCurrencyFormatter.format(meta.pnl);
         const roi = meta.roi.toFixed(2);
 
@@ -92,10 +84,6 @@ const chartId = "crypto-pie-chart";
         return `<div class="p-3 min-w-[240px] font-normal">
           <div class="font-bold text-base mb-2 text-zinc-50 border-b border-zinc-700 pb-2">
             ${params.name}
-          </div>
-          <div class="flex justify-between mb-1.5 text-sm">
-            <span class="text-zinc-400">Current Value:</span>
-            <span class="text-zinc-50 font-semibold">${value}</span>
           </div>
           <div class="flex justify-between mb-1.5 text-sm">
             <span class="text-zinc-400">Portfolio Share:</span>
@@ -119,12 +107,6 @@ const chartId = "crypto-pie-chart";
               <span class="${roiColorClass} font-bold text-base">${roiSign}${roi}%</span>
             </div>
           </div>
-          <div class="border-t border-zinc-700 my-2 pt-2">
-            <div class="flex justify-between text-sm">
-              <span class="text-zinc-400">Daily DCA:</span>
-              <span class="text-zinc-200 font-medium">${dailyDca}</span>
-            </div>
-          </div>
         </div>`;
       },
       backgroundColor: "rgba(24, 24, 27, 0.98)",
@@ -137,11 +119,7 @@ const chartId = "crypto-pie-chart";
       confine: true,
     },
     legend: {
-      orient: "vertical",
-      right: 10,
-      top: 20,
-      bottom: 20,
-      type: "scroll",
+      bottom: 0,
       textStyle: { color: "#E4E4E7", fontSize: 12, fontFamily: "Iosevka Aile" },
       pageTextStyle: { color: "#A1A1AA" },
       pageIconColor: "#71717A",
@@ -151,7 +129,6 @@ const chartId = "crypto-pie-chart";
       {
         type: "pie",
         radius: "70%",
-        center: ["40%", "50%"],
         avoidLabelOverlap: true,
         itemStyle: {
           borderRadius: 8,

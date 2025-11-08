@@ -1,7 +1,6 @@
 export const portfolioData = {
+  lastUpdated: "2025-11-09",
   totalInvestment: 1460,
-  assets: 4,
-  dailyBuyAmount: 5,
   holdings: [
     {
       symbol: "BTC",
@@ -78,7 +77,6 @@ export type PieChartSlice = {
     amount: number;
     allocationTarget: number;
     avgPrice: number;
-    dailyDca: number;
     roi: number;
     pnl: number;
   };
@@ -94,15 +92,27 @@ export type HoldingMetrics = PortfolioHolding & {
   imageUrl: string | null;
 };
 
-export type GoalStats = {
-  longTermGoal: number;
-  totalCurrentValue: number;
-  goalProgressPercent: number;
-  remainingToGoal: number;
-  monthlyContribution: number;
-  yearlyContribution: number;
-  projectedYearEndValue: number;
-  daysInvested: number;
+export type MarketPotentialAsset = {
+  symbol: string;
+  label: string;
+  currentValue: number;
+  potentialValue: number;
+  additionalValue: number;
+  upsidePercent: number;
+  potentialRoi: number;
+  potentialPnl: number;
+  currentPnl: number;
+  currentPrice: number;
+  athPrice?: number;
+  imageUrl: string | null;
+};
+
+export type MarketPotential = {
+  potentialPortfolioValue: number;
+  additionalValue: number;
+  upsidePercent: number;
+  assets: MarketPotentialAsset[];
+  topAssets: MarketPotentialAsset[];
 };
 
 export type CryptoTotals = {
@@ -119,7 +129,7 @@ export type CryptoPageData = {
   holdingsWithMetrics: HoldingMetrics[];
   opportunityList: HoldingMetrics[];
   totals: CryptoTotals;
-  goalStats: GoalStats;
+  marketPotential: MarketPotential;
 };
 
 const fetchMarketData = async (
@@ -241,8 +251,7 @@ const pieChartColorMap = {
 
 const buildPieChartData = (
   holdings: readonly PortfolioHolding[],
-  priceData: Record<string, PriceResult>,
-  dailyBuyAmount: number
+  priceData: Record<string, PriceResult>
 ): PieChartSlice[] =>
   holdings.map((holding) => {
     const data = priceData[holding.symbol];
@@ -250,7 +259,6 @@ const buildPieChartData = (
     const rawValue = data?.currentValue ?? fallbackValue;
     const sanitizedValue = Number.isFinite(rawValue) ? rawValue : fallbackValue;
     const roundedValue = Number(sanitizedValue.toFixed(2));
-    const dailyDca = (dailyBuyAmount * holding.allocation) / 100 || 0;
 
     const invested = holding.amount * holding.avgPrice;
     const pnl = roundedValue - invested;
@@ -269,7 +277,6 @@ const buildPieChartData = (
         amount: holding.amount,
         allocationTarget: holding.allocation,
         avgPrice: holding.avgPrice,
-        dailyDca,
         roi,
         pnl,
       },
@@ -320,35 +327,71 @@ const buildOpportunityList = (holdings: HoldingMetrics[]) => {
     .slice(0, 4);
 };
 
-const buildGoalStats = (
-  dailyBuyAmount: number,
-  totalCurrentValue: number
-): GoalStats => {
-  const strategyStartDate = new Date("2025-01-01");
-  const now = new Date();
-  const daysInvested = Math.max(
-    0,
-    Math.floor(
-      (now.getTime() - strategyStartDate.getTime()) / (1000 * 60 * 60 * 24)
-    )
+const buildMarketPotential = (
+  holdings: readonly HoldingMetrics[],
+  priceData: Record<string, PriceResult>
+): MarketPotential => {
+  const assets: MarketPotentialAsset[] = holdings.map((holding) => {
+    const data = priceData[holding.symbol];
+    const fallbackCurrentValue = holding.amount * holding.avgPrice;
+    const currentValue = data?.currentValue ?? fallbackCurrentValue;
+    const potentialValue = data?.potentialCurrentValue ?? currentValue;
+    const additionalValue = Math.max(potentialValue - currentValue, 0);
+    const upsidePercent =
+      currentValue > 0 ? (additionalValue / currentValue) * 100 : 0;
+    const potentialRoi = data?.potentialRoi ?? data?.roi ?? 0;
+    const currentPrice = holding.currentPrice;
+    const athPrice = holding.athPrice ?? data?.athPrice;
+    const costBasis = holding.amount * holding.avgPrice;
+    const potentialPnl =
+      data?.potentialPnl ??
+      potentialValue - (Number.isFinite(costBasis) ? costBasis : 0);
+    const currentPnl =
+      data?.pnl ?? currentValue - (Number.isFinite(costBasis) ? costBasis : 0);
+
+    return {
+      symbol: holding.symbol,
+      label: holding.name,
+      currentValue,
+      potentialValue,
+      additionalValue,
+      upsidePercent,
+      potentialRoi,
+      potentialPnl,
+      currentPnl,
+      currentPrice,
+      athPrice,
+      imageUrl: holding.imageUrl ?? null,
+    };
+  });
+
+  const potentialPortfolioValue = assets.reduce(
+    (sum, asset) => sum + asset.potentialValue,
+    0
   );
-  const monthlyContribution = dailyBuyAmount * 30;
-  const yearlyContribution = dailyBuyAmount * 365;
-  const projectedYearEndValue = totalCurrentValue + yearlyContribution;
-  const longTermGoal = 25000;
-  const goalProgress = Math.min(totalCurrentValue / longTermGoal, 1);
-  const remainingToGoal = Math.max(longTermGoal - totalCurrentValue, 0);
-  const goalProgressPercent = goalProgress * 100;
+  const currentPortfolioValue = assets.reduce(
+    (sum, asset) => sum + asset.currentValue,
+    0
+  );
+  const additionalValue = Math.max(
+    potentialPortfolioValue - currentPortfolioValue,
+    0
+  );
+  const upsidePercent =
+    currentPortfolioValue > 0
+      ? (additionalValue / currentPortfolioValue) * 100
+      : 0;
+
+  const topAssets = assets
+    .filter((asset) => asset.additionalValue > 0)
+    .sort((a, b) => b.upsidePercent - a.upsidePercent);
 
   return {
-    longTermGoal,
-    totalCurrentValue,
-    goalProgressPercent,
-    remainingToGoal,
-    monthlyContribution,
-    yearlyContribution,
-    projectedYearEndValue,
-    daysInvested,
+    potentialPortfolioValue,
+    additionalValue,
+    upsidePercent,
+    assets,
+    topAssets,
   };
 };
 
@@ -367,21 +410,14 @@ export const loadCryptoPageData = async (): Promise<CryptoPageData> => {
   const totalPnL = totalCurrentValue - totalInvested;
   const totalROI = totalInvested > 0 ? (totalPnL / totalInvested) * 100 : 0;
 
-  const pieChartData = buildPieChartData(
-    portfolioData.holdings,
-    priceData,
-    portfolioData.dailyBuyAmount
-  );
+  const pieChartData = buildPieChartData(portfolioData.holdings, priceData);
   const holdingsWithMetrics = buildHoldingsWithMetrics(
     portfolioData.holdings,
     priceData,
     marketData
   );
   const opportunityList = buildOpportunityList(holdingsWithMetrics);
-  const goalStats = buildGoalStats(
-    portfolioData.dailyBuyAmount,
-    totalCurrentValue
-  );
+  const marketPotential = buildMarketPotential(holdingsWithMetrics, priceData);
 
   return {
     portfolioData,
@@ -395,6 +431,6 @@ export const loadCryptoPageData = async (): Promise<CryptoPageData> => {
       pnl: totalPnL,
       roi: totalROI,
     },
-    goalStats,
+    marketPotential,
   };
 };
