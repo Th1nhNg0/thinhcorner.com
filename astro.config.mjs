@@ -12,8 +12,6 @@ import rehypeFigure from "./remark/rehype-figure.mjs";
 import { remarkModifiedTime } from "./remark/remark-modified-time.mjs";
 import { remarkReadingTime } from "./remark/remark-reading-time.mjs";
 
-import react from "@astrojs/react";
-
 import yeskunallumami from "@yeskunall/astro-umami";
 
 export default defineConfig({
@@ -35,7 +33,6 @@ export default defineConfig({
       },
     }),
     mdx(),
-    react(),
     yeskunallumami({
       id: process.env.PUBLIC_UMAMI_ID || "",
       hostUrl: process.env.PUBLIC_UMAMI_HOST_URL || "",
