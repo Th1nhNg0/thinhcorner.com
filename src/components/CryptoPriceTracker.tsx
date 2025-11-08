@@ -235,7 +235,7 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
       {/* Combined Portfolio Performance & Overview */}
       <div className="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 rounded-2xl p-2 md:p-6">
         <div className="flex items-center mb-6">
-          <h3 className="text-3xl font-bold gradient-text">
+          <h3 className="text-3xl font-bold font-heading">
             Portfolio Performance
           </h3>
         </div>
