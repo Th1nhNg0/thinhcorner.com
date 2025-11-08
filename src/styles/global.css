@@ -4,7 +4,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-genos: "Genos Variable", sans-serif;
+  --font-heading: "Iosevka Etoile", sans-serif;
 }
 
 html {
@@ -12,14 +12,10 @@ html {
 }
 
 body {
-  font-family: "Lexend Variable", sans-serif;
+  font-family: "Iosevka Aile", sans-serif;
 }
 
-@layer components {
-  .gradient-text {
-    @apply font-genos bg-gradient-to-b from-white via-white to-transparent text-transparent bg-clip-text;
-  }
-}
+
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .scrollbar-hide::-webkit-scrollbar {
