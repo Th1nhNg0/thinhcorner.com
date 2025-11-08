@@ -69,6 +69,7 @@ const chartId = "crypto-pie-chart";
         const decimals = meta.amount < 1 ? 6 : meta.amount < 100 ? 4 : 2;
         const amount = meta.amount.toFixed(decimals);
         const avgPrice = preciseCurrencyFormatter.format(meta.avgPrice);
+        const currentValue = preciseCurrencyFormatter.format(params.value);
         const pnl = preciseCurrencyFormatter.format(meta.pnl);
         const roi = meta.roi.toFixed(2);
 
@@ -88,6 +89,10 @@ const chartId = "crypto-pie-chart";
           <div class="flex justify-between mb-1.5 text-sm">
             <span class="text-zinc-400">Portfolio Share:</span>
             <span class="text-zinc-200">${percent}%</span>
+          </div>
+          <div class="flex justify-between mb-1.5 text-sm">
+            <span class="text-zinc-400">Current Value:</span>
+            <span class="text-zinc-200">${currentValue}</span>
           </div>
           <div class="flex justify-between mb-1.5 text-sm">
             <span class="text-zinc-400">Amount:</span>
