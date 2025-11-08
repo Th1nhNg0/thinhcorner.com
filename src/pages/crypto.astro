@@ -4,42 +4,114 @@ import Layout from "@/layouts/Layout.astro";
 import { format } from "date-fns";
 import CryptoPriceTracker from "@/components/CryptoPriceTracker";
 
+export const prerender = false;
+
 const last_updated = new Date("2025-08-25");
 const portfolioData = {
-  totalInvestment: 1316,
+  totalInvestment: 1460,
   assets: 4,
   dailyBuyAmount: 5,
   holdings: [
     {
       symbol: "BTC",
       name: "Bitcoin",
-      amount: 0.0093146,
-      avgPrice: 102047,
+      amount: 0.01023962,
+      avgPrice: 102685,
       allocation: 70,
     },
     {
       symbol: "ETH",
       name: "Ethereum",
-      amount: 0.07458388,
-      avgPrice: 2611,
+      amount: 0.07948071,
+      avgPrice: 2686,
       allocation: 13,
     },
     {
       symbol: "BNB",
       name: "BNB",
-      amount: 0.21642009,
-      avgPrice: 701,
+      amount: 0.23229521,
+      avgPrice: 727,
       allocation: 12,
     },
     {
       symbol: "SOL",
       name: "Solana",
-      amount: 0.09622969,
-      avgPrice: 201,
+      amount: 0.13551047,
+      avgPrice: 161,
       allocation: 5,
     },
   ],
 };
+
+// Fetch prices on the server
+const fetchPrice = async (symbol: string): Promise<number> => {
+  try {
+    const response = await fetch(`https://cryptoprices.cc/${symbol}/`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const priceText = await response.text();
+    return parseFloat(priceText.trim());
+  } catch (error) {
+    console.error(`Error fetching ${symbol} price:`, error);
+    return 0;
+  }
+};
+
+const fetchATH = async (symbol: string): Promise<number | undefined> => {
+  try {
+    const response = await fetch(`https://cryptoprices.cc/${symbol}/ATH/`);
+    if (!response.ok) {
+      return undefined;
+    }
+    const athText = await response.text();
+    return parseFloat(athText.trim());
+  } catch (error) {
+    console.warn(`Failed to fetch ATH for ${symbol}`, error);
+    return undefined;
+  }
+};
+
+// Fetch all prices in parallel
+const pricePromises = portfolioData.holdings.map(async (holding) => {
+  const [currentPrice, athPrice] = await Promise.all([
+    fetchPrice(holding.symbol),
+    fetchATH(holding.symbol),
+  ]);
+
+  const currentValue = holding.amount * currentPrice;
+  const pnl = currentValue - holding.amount * holding.avgPrice;
+  const roi = (pnl / (holding.amount * holding.avgPrice)) * 100;
+
+  let potentialCurrentValue: number | undefined = undefined;
+  let potentialPnl: number | undefined = undefined;
+  let potentialRoi: number | undefined = undefined;
+
+  if (athPrice && athPrice > 0) {
+    potentialCurrentValue = holding.amount * athPrice;
+    potentialPnl = potentialCurrentValue - holding.amount * holding.avgPrice;
+    potentialRoi = (potentialPnl / (holding.amount * holding.avgPrice)) * 100;
+  }
+
+  return {
+    symbol: holding.symbol,
+    currentPrice,
+    athPrice,
+    potentialCurrentValue,
+    potentialPnl,
+    potentialRoi,
+    currentValue,
+    pnl,
+    roi,
+    loading: false,
+    error: null,
+  };
+});
+
+const priceResults = await Promise.all(pricePromises);
+const priceData = Object.fromEntries(
+  priceResults.map((result) => [result.symbol, result])
+);
 ---
 
 <Layout
@@ -76,6 +148,10 @@ const portfolioData = {
       </p>
     </section>
     <!-- Dynamic Crypto Holdings with Real-time Data -->
-    <CryptoPriceTracker client:load portfolioData={portfolioData} />
+    <CryptoPriceTracker
+      client:load
+      portfolioData={portfolioData}
+      priceData={priceData}
+    />
   </Container>
 </Layout>
