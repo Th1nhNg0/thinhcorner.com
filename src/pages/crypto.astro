@@ -4,15 +4,80 @@ import Layout from "@/layouts/Layout.astro";
 import AllocationPanel from "@/components/crypto/AllocationPanel.astro";
 
 import { loadCryptoPageData } from "@/lib/crypto";
+import { formatCurrency, formatPercentage } from "@/lib/format";
+import { format } from "date-fns";
 
 export const prerender = false;
 
-const { pieChartData } = await loadCryptoPageData();
+const { pieChartData, totals, marketPotential, portfolioData } =
+  await loadCryptoPageData();
+const parsedLastUpdated = new Date(portfolioData.lastUpdated);
+const lastUpdated = Number.isNaN(parsedLastUpdated.getTime())
+  ? new Date()
+  : parsedLastUpdated;
+
+const formatMoneyNoDecimals = (value: number) =>
+  formatCurrency(value, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+
+const formatPrice = (value?: number) =>
+  typeof value === "number" && Number.isFinite(value)
+    ? formatCurrency(value, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+    : "—";
+
+const overviewStats = [
+  {
+    label: "Current value",
+    value: formatMoneyNoDecimals(totals.currentValue),
+  },
+  {
+    label: "Invested value",
+    value: formatMoneyNoDecimals(totals.invested),
+  },
+  {
+    label: "ROI",
+    value: formatPercentage(totals.roi, 2, true),
+    accent: totals.roi >= 0 ? "text-emerald-400" : "text-rose-400",
+  },
+  {
+    label: "PnL",
+    value: formatMoneyNoDecimals(totals.pnl),
+    accent: totals.pnl >= 0 ? "text-emerald-400" : "text-rose-400",
+  },
+];
+
+const marketPotentialSummary = [
+  {
+    label: "Potential P/L",
+    value: formatMoneyNoDecimals(marketPotential.additionalValue),
+    accent:
+      marketPotential.additionalValue >= 0
+        ? "text-emerald-400"
+        : "text-rose-400",
+  },
+  {
+    label: "Potential ROI",
+    value: formatPercentage(marketPotential.upsidePercent, 1, true),
+    accent:
+      marketPotential.upsidePercent >= 0 ? "text-emerald-400" : "text-rose-400",
+  },
+  {
+    label: "Potential value",
+    value: formatMoneyNoDecimals(marketPotential.potentialPortfolioValue),
+  },
+];
+
+const topPotentialAssets = marketPotential.topAssets;
 ---
 
 <Layout
   title="Crypto Portfolio"
-  description="A snapshot of my cryptocurrency investments and their distribution."
+  description="Daily-updated look at my long-term DCA crypto portfolio, allocations, performance, and upside projections."
 >
   <Container>
     <h1
@@ -22,35 +87,206 @@ const { pieChartData } = await loadCryptoPageData();
     </h1>
     <section class="prose max-w-none prose-invert mb-8 prose-a:text-yellow-500">
       <p class="leading-relaxed">
-        This page provides a transparent overview of my cryptocurrency
-        investment journey. I employ an automated daily investment strategy,
-        focusing on a
-        <b class="text-yellow-400">long-term, 10-year outlook</b>. Read more
-        about the thinking behind this approach in
+        This dashboard chronicles my automated daily dollar-cost averaging
+        routine: where fresh capital lands, how allocations drift versus target,
+        and whether performance tracks the milestones I set. Every contribution
+        follows a rules-driven
+        <b class="text-yellow-400">10-year mandate</b> with unemotional rebalancing
+        triggers. For the full thesis behind the program, read
         <a
           href="/blog/why-i-dca-crypto-now"
           class="text-yellow-400 underline hover:text-yellow-300"
           >Why I DCA crypto now</a
-        >. This approach commenced at the beginning of 2025, reflecting a
-        commitment to disciplined and patient wealth accumulation in the digital
-        asset space.
+        >. I launched this project in January 2025 and treat it as a disciplined
+        digital-asset wealth lab.
+      </p>
+      <p class="leading-relaxed italic text-zinc-300">
+        "If you aren't thinking about owning a stock for 10 years, don't even
+        think about owning it for 10 minutes." — Warren Buffett
+      </p>
+      <p class="text-sm text-zinc-500 mt-4 text-right">
+        Last updated:
+        <time
+          datetime={lastUpdated.toISOString()}
+          title={lastUpdated.toISOString()}
+        >
+          {format(lastUpdated, "MMMM d, yyyy")}
+        </time>
       </p>
     </section>
 
     <div class="space-y-6 pb-6">
       <div
-        class="bg-linear-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 rounded-2xl p-2 md:p-6"
+        class="bg-linear-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 rounded-2xl p-6"
       >
-        <div class="flex items-center mb-6">
-          <h3 class="text-3xl font-bold font-heading">Portfolio Performance</h3>
+        <div
+          class="flex flex-col gap-2 mb-6 sm:flex-row sm:items-end sm:justify-between"
+        >
+          <div>
+            <p class="text-xs tracking-[0.3em] uppercase text-zinc-500">
+              Overview
+            </p>
+            <h3 class="text-2xl font-heading font-semibold text-white">
+              Key totals at a glance
+            </h3>
+          </div>
+          <p class="text-sm text-zinc-500">
+            Captured the moment you opened this page.
+          </p>
         </div>
 
-        <p class="text-sm text-zinc-400 mb-6">
-          Figures below reflect the snapshot captured when you opened the page.
-          Refresh anytime you want to pull a new live readout.
-        </p>
+        <div class="grid gap-4 mb-6 sm:grid-cols-2">
+          {
+            overviewStats.map((stat) => (
+              <div class="rounded-2xl border border-zinc-700/50 bg-zinc-900/60 p-4 md:p-5">
+                <p class="text-sm uppercase tracking-wide text-zinc-400">
+                  {stat.label}
+                </p>
+                <p
+                  class:list={[
+                    "mt-3 text-3xl font-semibold tracking-tight",
+                    stat.accent ?? "text-white",
+                  ]}
+                >
+                  {stat.value}
+                </p>
+              </div>
+            ))
+          }
+        </div>
 
         <AllocationPanel pieChartData={pieChartData} />
+      </div>
+
+      <div
+        class="bg-linear-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 rounded-2xl p-2 md:p-6"
+      >
+        <div
+          class="flex flex-col gap-2 mb-6 sm:flex-row sm:items-end sm:justify-between"
+        >
+          <div>
+            <p class="text-xs tracking-[0.3em] uppercase text-zinc-500">
+              Market potential
+            </p>
+            <h3 class="text-2xl font-heading font-semibold text-white">
+              Upside if everything retests prior highs
+            </h3>
+          </div>
+          <p class="text-sm text-zinc-500">
+            Derived from CoinGecko all-time high readings.
+          </p>
+        </div>
+
+        <div class="grid gap-4 mb-8 sm:grid-cols-3">
+          {
+            marketPotentialSummary.map((stat) => (
+              <div class="rounded-2xl border border-zinc-700/50 bg-zinc-900/60 p-4 md:p-5">
+                <p class="text-sm uppercase tracking-wide text-zinc-400">
+                  {stat.label}
+                </p>
+                <p
+                  class:list={[
+                    "mt-3 text-3xl font-semibold tracking-tight",
+                    stat.accent ?? "text-white",
+                  ]}
+                >
+                  {stat.value}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+
+        <div>
+          <p class="text-xs tracking-[0.3em] uppercase text-zinc-500">
+            Upside plays (sorted by gap to ATH)
+          </p>
+
+          {
+            topPotentialAssets.length ? (
+              <div class="mt-4 overflow-x-auto rounded-2xl border border-zinc-700/50 bg-zinc-900/60">
+                <table class="w-full min-w-[640px] text-[0.8rem] text-zinc-300">
+                  <thead class="text-[0.65rem] uppercase tracking-[0.2em] text-zinc-500">
+                    <tr>
+                      <th class="px-3 py-3 text-left font-medium">Asset</th>
+                      <th class="px-3 py-3 text-right font-medium">Current</th>
+                      <th class="px-3 py-3 text-right font-medium">ATH</th>
+                      <th class="px-3 py-3 text-right font-medium">
+                        Current P&amp;L
+                      </th>
+                      <th class="px-3 py-3 text-right font-medium">
+                        Potential P&amp;L
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {topPotentialAssets.map((asset) => (
+                      <tr class="border-t border-zinc-800/60">
+                        <td class="px-3 py-3">
+                          <div class="flex items-center gap-3">
+                            {asset.imageUrl ? (
+                              <img
+                                src={asset.imageUrl}
+                                alt={`${asset.label} logo`}
+                                width="36"
+                                height="36"
+                                loading="lazy"
+                                class="h-9 w-9 rounded-full border border-white/10 bg-white/5 object-contain"
+                              />
+                            ) : (
+                              <div class="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-zinc-800 text-xs font-semibold text-white">
+                                {asset.symbol.slice(0, 1)}
+                              </div>
+                            )}
+                            <div>
+                              <p class="text-white font-semibold text-sm">
+                                {asset.symbol}
+                              </p>
+                              <p class="text-[0.6rem] uppercase tracking-[0.2em] text-zinc-500">
+                                {asset.label}
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="px-3 py-3 text-right text-white font-semibold">
+                          {formatPrice(asset.currentPrice)}
+                        </td>
+                        <td class="px-3 py-3 text-right text-white font-semibold">
+                          {formatPrice(asset.athPrice)}
+                        </td>
+                        <td
+                          class:list={[
+                            "px-3 py-3 text-right font-semibold",
+                            asset.currentPnl >= 0
+                              ? "text-emerald-400"
+                              : "text-rose-400",
+                          ]}
+                        >
+                          {formatMoneyNoDecimals(asset.currentPnl)}
+                        </td>
+                        <td
+                          class:list={[
+                            "px-3 py-3 text-right font-semibold",
+                            asset.potentialPnl >= 0
+                              ? "text-emerald-400"
+                              : "text-rose-400",
+                          ]}
+                        >
+                          {formatMoneyNoDecimals(asset.potentialPnl)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p class="mt-4 text-sm text-zinc-500">
+                Holdings are already near or above their previous all-time
+                highs, leaving minimal upside to highlight.
+              </p>
+            )
+          }
+        </div>
       </div>
     </div>
   </Container>
