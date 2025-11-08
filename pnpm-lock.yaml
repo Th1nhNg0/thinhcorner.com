@@ -26,12 +26,12 @@ importers:
       '@astrojs/vercel':
         specifier: ^9.0.0
         version: 9.0.0(astro@5.15.3(@types/node@24.10.0)(@vercel/functions@2.2.13)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.52.5)(typescript@5.7.3)(yaml@2.7.0))(react@19.2.0)(rollup@4.52.5)
-      '@fontsource-variable/genos':
-        specifier: ^5.2.8
-        version: 5.2.8
-      '@fontsource-variable/lexend':
-        specifier: ^5.2.11
-        version: 5.2.11
+      '@fontsource/iosevka-aile':
+        specifier: ^5.2.5
+        version: 5.2.5
+      '@fontsource/iosevka-etoile':
+        specifier: ^5.2.5
+        version: 5.2.5
       '@tailwindcss/vite':
         specifier: ^4.1.16
         version: 4.1.16(vite@6.4.1(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(yaml@2.7.0))
@@ -391,11 +391,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@fontsource-variable/genos@5.2.8':
-    resolution: {integrity: sha512-FAzogMiZ7tgvM6N6e8iDvIVQUy/o+o59OX0QGyNIjABAeMTdcjpUvLK8TzRKg4MVgyLFVCKrXhbQ4vroDDUk7g==}
+  '@fontsource/iosevka-aile@5.2.5':
+    resolution: {integrity: sha512-K9EwsSxfWPWjvrYM+NkgHaImpHgaVgC67l6uWf6W+4taeca6LKMJn/U11mQiRwLlecoI0PP2Q9o/8iIPaLOSgg==}
 
-  '@fontsource-variable/lexend@5.2.11':
-    resolution: {integrity: sha512-0hgEQ4O7Nh8fxL/WWmspJf0BErbocRkZwtLRGey/V4mUUqxfF7QUwqhcdzwpjom3NYCniY4uzQ5wYD7r9/92tQ==}
+  '@fontsource/iosevka-etoile@5.2.5':
+    resolution: {integrity: sha512-DaqaNB1G6qhGh+D+WxZUrln0UJmrM7qXgJgdeXm3U1ekcIph2aWPAcmI1edDj9FLkuGl2ZU9TYywIvzVF6lz0Q==}
 
   '@img/colour@1.0.0':
     resolution: {integrity: sha512-A5P/LfWGFSl6nsckYtjw9da+19jB8hkJ6ACTGcDfEJ0aE+l2n2El7dsVM7UVHZQ9s2lmYMWlrS21YLy2IR1LUw==}
@@ -2904,9 +2904,9 @@ snapshots:
   '@esbuild/win32-x64@0.25.12':
     optional: true
 
-  '@fontsource-variable/genos@5.2.8': {}
+  '@fontsource/iosevka-aile@5.2.5': {}
 
-  '@fontsource-variable/lexend@5.2.11': {}
+  '@fontsource/iosevka-etoile@5.2.5': {}
 
   '@img/colour@1.0.0': {}
 
