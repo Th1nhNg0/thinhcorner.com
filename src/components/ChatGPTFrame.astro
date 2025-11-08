@@ -19,7 +19,7 @@ const {
 ---
 
 <div
-  class="chatgpt-frame bg-[#212121] border border-[#ffffff0d] rounded-md overflow-hidden text-sm text-gray-300"
+  class="bg-[#212121] border border-[#ffffff0d] rounded-md overflow-hidden text-sm text-gray-300"
 >
   {
     (title || date || model) && (
@@ -47,20 +47,6 @@ const {
 
 <style>
   /* Removed @reference to global.css as it's not needed for scoped styles */
-
-  .chatgpt-frame {
-    font-family:
-      ui-sans-serif,
-      -apple-system,
-      system-ui,
-      "Segoe UI",
-      Helvetica,
-      "Apple Color Emoji",
-      Arial,
-      sans-serif,
-      "Segoe UI Emoji",
-      "Segoe UI Symbol";
-  }
 
   /* Use scoped CSS instead of :global() selectors */
   .chat-content :is(table) {
