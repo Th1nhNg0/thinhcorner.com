@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 // Import crypto icons
 import BitcoinIcon from "@/assets/crypto-icon/bitcoin-btc-logo.svg";
 import BnbIcon from "@/assets/crypto-icon/bnb-bnb-logo.svg";
@@ -36,12 +34,13 @@ interface PriceData {
 
 interface Props {
   portfolioData: PortfolioData;
+  priceData: Record<string, PriceData>;
 }
 
-export default function CryptoPriceTracker({ portfolioData }: Props) {
-  const [priceData, setPriceData] = useState<Record<string, PriceData>>({});
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-
+export default function CryptoPriceTracker({
+  portfolioData,
+  priceData,
+}: Props) {
   // Add icon mapping for each crypto
   const getIconForSymbol = (symbol: string) => {
     const iconMap = {
@@ -64,102 +63,6 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
     return colorMap[symbol as keyof typeof colorMap] || "orange";
   };
 
-  // Note: ATH will be fetched from cryptoprices.cc by appending /ATH/ to the symbol URL
-
-  const fetchPrice = async (symbol: string): Promise<number> => {
-    try {
-      const response = await fetch(`https://cryptoprices.cc/${symbol}/`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const priceText = await response.text();
-      return parseFloat(priceText.trim());
-    } catch (error) {
-      console.error(`Error fetching ${symbol} price:`, error);
-      throw error;
-    }
-  };
-
-  const updatePrices = async () => {
-    const newPriceData: Record<string, PriceData> = {};
-
-    for (const holding of portfolioData.holdings) {
-      newPriceData[holding.symbol] = {
-        ...priceData[holding.symbol],
-        loading: true,
-        error: null,
-      };
-    }
-    setPriceData(newPriceData);
-
-    for (const holding of portfolioData.holdings) {
-      try {
-        const currentPrice = await fetchPrice(holding.symbol);
-        // Fetch ATH from cryptoprices.cc by appending /ATH/ to the symbol URL
-        let athPrice: number | undefined = undefined;
-        try {
-          const resAth = await fetch(
-            `https://cryptoprices.cc/${holding.symbol}/ATH/`
-          );
-          if (resAth.ok) {
-            const athText = await resAth.text();
-            athPrice = parseFloat(athText.trim());
-          }
-        } catch (e) {
-          console.warn(`Failed to fetch ATH for ${holding.symbol}`, e);
-        }
-        const currentValue = holding.amount * currentPrice;
-        const pnl = currentValue - holding.amount * holding.avgPrice;
-        const roi = (pnl / (holding.amount * holding.avgPrice)) * 100;
-
-        let potentialCurrentValue: number | undefined = undefined;
-        let potentialPnl: number | undefined = undefined;
-        let potentialRoi: number | undefined = undefined;
-        if (athPrice && athPrice > 0) {
-          potentialCurrentValue = holding.amount * athPrice;
-          potentialPnl =
-            potentialCurrentValue - holding.amount * holding.avgPrice;
-          potentialRoi =
-            (potentialPnl / (holding.amount * holding.avgPrice)) * 100;
-        }
-
-        newPriceData[holding.symbol] = {
-          currentPrice,
-          athPrice,
-          potentialCurrentValue,
-          potentialPnl,
-          potentialRoi,
-          currentValue,
-          pnl,
-          roi,
-          loading: false,
-          error: null,
-        };
-      } catch (error) {
-        newPriceData[holding.symbol] = {
-          currentPrice: 0,
-          athPrice: undefined,
-          potentialCurrentValue: undefined,
-          potentialPnl: undefined,
-          potentialRoi: undefined,
-          currentValue: 0,
-          pnl: 0,
-          roi: 0,
-          loading: false,
-          error: error instanceof Error ? error.message : "Unknown error",
-        };
-      }
-    }
-
-    setPriceData(newPriceData);
-    setLastUpdated(new Date());
-  };
-
-  useEffect(() => {
-    // Fetch prices once on mount. No automatic refresh.
-    updatePrices();
-  }, []);
-
   const totalInvested = portfolioData.holdings.reduce(
     (sum: number, holding: CryptoHolding) =>
       sum + holding.amount * holding.avgPrice,
@@ -175,7 +78,7 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
   const totalPnL = totalCurrentValue - totalInvested;
   const totalROI = (totalPnL / totalInvested) * 100;
 
-  const isUpdating = Object.values(priceData).some((d) => d?.loading);
+  const isUpdating = false; // No loading state since prices are fetched on server
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -511,16 +414,16 @@ export default function CryptoPriceTracker({ portfolioData }: Props) {
 
         <div className="mt-4 p-4 bg-zinc-900/30 rounded-xl  shadow-sm ring-1 ring-white/5">
           <p className="text-sm text-zinc-300 mb-2">
-            Prices are live market prices from{" "}
+            Prices are fetched live from{" "}
             <a
               href="https://cryptoprices.cc"
               className="underline text-zinc-400 hover:text-zinc-200 transition-colors"
             >
               cryptoprices.cc
-            </a>
-            . The "Potential" column shows a theoretical P&L/ROI using each
-            asset's all-time high. Current prices shown are live at the time the
-            page fetched them;
+            </a>{" "}
+            when you visit this page. The "Potential" column shows a theoretical
+            P&L/ROI using each asset's all-time high. Refresh the page to get
+            the latest prices.
           </p>
         </div>
       </div>
