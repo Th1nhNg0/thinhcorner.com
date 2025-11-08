@@ -100,7 +100,9 @@ let slug = Array.isArray(Astro.params.id)
       )
     }
     <div class="mb-10 space-y-1">
-      <h1 class="text-5xl font-semibold text-white font-heading">
+      <h1
+        class="text-5xl font-semibold text-white font-heading leading-relaxed"
+      >
         {post.data.title}
       </h1>
       <div class="flex flex-col md:flex-row gap-2 md:items-center">

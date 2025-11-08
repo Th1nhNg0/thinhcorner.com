@@ -22,7 +22,7 @@ const formattedTime = !isNaN(Date.parse(time))
   </span>
   <div class="flex flex-col gap-2 translate-y-[-12px]">
     <time class="text-sm font-mono text-zinc-400">{formattedTime}</time>
-    <h3 class="text-lg font-medium text-zinc-100 leading-tight">{title}</h3>
+    <h3 class="text-lg font-medium text-zinc-100">{title}</h3>
     <div class="prose-a:text-yellow-500 transition-colors">
       <slot />
     </div>
