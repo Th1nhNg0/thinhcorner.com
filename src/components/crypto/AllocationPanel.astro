@@ -1,0 +1,213 @@
+---
+import type { PieChartSlice } from "@/lib/crypto";
+
+interface Props {
+  pieChartData: PieChartSlice[];
+}
+
+const { pieChartData } = Astro.props as Props;
+
+const chartData = JSON.stringify(pieChartData);
+const chartId = "crypto-pie-chart";
+---
+
+<div
+  class="mt-6 bg-zinc-900/30 rounded-xl border border-white/5 p-5 shadow-sm ring-1 ring-white/10"
+>
+  <div
+    class="flex flex-col gap-1 mb-4 md:flex-row md:items-center md:justify-between"
+  >
+    <div>
+      <p class="text-xs uppercase tracking-wider text-zinc-500">
+        Live allocation
+      </p>
+      <h4 class="text-2xl font-semibold">Portfolio allocation</h4>
+    </div>
+    <p class="text-xs text-zinc-400">Based on the latest fetch</p>
+  </div>
+  <div class="h-64 sm:h-72">
+    <div
+      id={chartId}
+      data-chart={chartData}
+      class="h-full w-full rounded-xl bg-linear-to-b from-zinc-900/60 via-zinc-900/20 to-zinc-900/80"
+    >
+    </div>
+  </div>
+  <p class="mt-3 text-xs text-zinc-400">
+    Slices represent each asset's current value share of the total portfolio.
+  </p>
+</div>
+
+<script>
+  import * as echarts from "echarts/core";
+  import { PieChart } from "echarts/charts";
+  import { CanvasRenderer } from "echarts/renderers";
+  import { TooltipComponent, LegendComponent } from "echarts/components";
+
+  echarts.use([PieChart, TooltipComponent, LegendComponent, CanvasRenderer]);
+
+  const container = document.getElementById("crypto-pie-chart")!;
+
+  const rawData = container.dataset.chart!;
+  let parsedData = [];
+  try {
+    parsedData = JSON.parse(rawData);
+  } catch (error) {
+    console.error("Unable to parse crypto pie chart data", error);
+  }
+
+  const chartInstance = echarts.init(container);
+  const preciseCurrencyFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 2,
+  });
+
+  chartInstance.setOption({
+    tooltip: {
+      trigger: "item",
+      formatter: function (params: any) {
+        const data = params.data;
+        const meta = data.meta;
+        const percent = params.percent.toFixed(2);
+        const value = preciseCurrencyFormatter.format(params.value);
+
+        // Format amounts with dynamic decimals
+        const decimals = meta.amount < 1 ? 6 : meta.amount < 100 ? 4 : 2;
+        const amount = meta.amount.toFixed(decimals);
+        const avgPrice = preciseCurrencyFormatter.format(meta.avgPrice);
+        const dailyDca = preciseCurrencyFormatter.format(meta.dailyDca);
+        const pnl = preciseCurrencyFormatter.format(meta.pnl);
+        const roi = meta.roi.toFixed(2);
+
+        // ROI color classes
+        const roiColorClass =
+          meta.roi > 0
+            ? "text-green-500"
+            : meta.roi < 0
+              ? "text-red-500"
+              : "text-zinc-400";
+        const roiSign = meta.roi > 0 ? "+" : "";
+
+        return `<div class="p-3 min-w-[240px] font-normal">
+          <div class="font-bold text-base mb-2 text-zinc-50 border-b border-zinc-700 pb-2">
+            ${params.name}
+          </div>
+          <div class="flex justify-between mb-1.5 text-sm">
+            <span class="text-zinc-400">Current Value:</span>
+            <span class="text-zinc-50 font-semibold">${value}</span>
+          </div>
+          <div class="flex justify-between mb-1.5 text-sm">
+            <span class="text-zinc-400">Portfolio Share:</span>
+            <span class="text-zinc-200">${percent}%</span>
+          </div>
+          <div class="flex justify-between mb-1.5 text-sm">
+            <span class="text-zinc-400">Amount:</span>
+            <span class="text-zinc-200">${amount} ${meta.label}</span>
+          </div>
+          <div class="flex justify-between mb-1.5 text-sm">
+            <span class="text-zinc-400">Avg Price:</span>
+            <span class="text-zinc-200">${avgPrice}</span>
+          </div>
+          <div class="border-t border-zinc-700 my-2 pt-2">
+            <div class="flex justify-between mb-1.5 text-sm">
+              <span class="text-zinc-400">P&L:</span>
+              <span class="${roiColorClass} font-semibold">${pnl}</span>
+            </div>
+            <div class="flex justify-between mb-1.5">
+              <span class="text-zinc-400 text-sm">ROI:</span>
+              <span class="${roiColorClass} font-bold text-base">${roiSign}${roi}%</span>
+            </div>
+          </div>
+          <div class="border-t border-zinc-700 my-2 pt-2">
+            <div class="flex justify-between text-sm">
+              <span class="text-zinc-400">Daily DCA:</span>
+              <span class="text-zinc-200 font-medium">${dailyDca}</span>
+            </div>
+          </div>
+        </div>`;
+      },
+      backgroundColor: "rgba(24, 24, 27, 0.98)",
+      borderColor: "#52525b",
+      borderWidth: 1,
+      textStyle: {
+        color: "#fafafa",
+      },
+      padding: 0,
+      confine: true,
+    },
+    legend: {
+      orient: "vertical",
+      right: 10,
+      top: 20,
+      bottom: 20,
+      type: "scroll",
+      textStyle: { color: "#E4E4E7", fontSize: 12, fontFamily: "Iosevka Aile" },
+      pageTextStyle: { color: "#A1A1AA" },
+      pageIconColor: "#71717A",
+      pageIconInactiveColor: "#3F3F46",
+    },
+    series: [
+      {
+        type: "pie",
+        radius: "70%",
+        center: ["40%", "50%"],
+        avoidLabelOverlap: true,
+        itemStyle: {
+          borderRadius: 8,
+          borderColor: "#18181b",
+          borderWidth: 2,
+        },
+        label: {
+          show: true,
+          position: "outside",
+          formatter: "{b}\n{d}%",
+          fontSize: 11,
+          color: "#E4E4E7",
+          fontFamily: "Iosevka Aile",
+          lineHeight: 16,
+        },
+        labelLine: {
+          show: true,
+          length: 15,
+          length2: 10,
+          smooth: true,
+          lineStyle: {
+            color: "#52525b",
+            width: 1,
+          },
+        },
+        emphasis: {
+          scale: true,
+          scaleSize: 10,
+          itemStyle: {
+            shadowBlur: 20,
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+            shadowColor: "rgba(0, 0, 0, 0.5)",
+          },
+          label: {
+            show: true,
+            fontSize: 13,
+            fontWeight: "bold",
+            color: "#fafafa",
+          },
+        },
+        animationType: "expansion",
+        animationEasing: "elasticOut",
+        animationDelay: function (idx: number) {
+          return idx * 80;
+        },
+        data: parsedData,
+      },
+    ],
+  });
+
+  const resizeHandler = () => chartInstance.resize();
+  window.addEventListener("resize", resizeHandler);
+
+  window.addEventListener("beforeunload", () => {
+    window.removeEventListener("resize", resizeHandler);
+    chartInstance.dispose();
+  });
+</script>
