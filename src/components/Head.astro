@@ -1,6 +1,10 @@
 ---
 import { SITE, GOOGLE_ANALYTICS_ID, GOOGLE_ANALYTICS_URL } from "@/consts";
 import "@/styles/global.css";
+import "@fontsource/iosevka-etoile";
+import "@fontsource/iosevka-aile";
+import iosevkaEtoile400Woff2 from "@fontsource/iosevka-etoile/files/iosevka-etoile-latin-400-normal.woff2?url";
+import iosevkaAile400Woff2 from "@fontsource/iosevka-aile/files/iosevka-aile-latin-400-normal.woff2?url";
 
 interface Props {
   title: string;
@@ -44,6 +48,20 @@ const {
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="generator" content={Astro.generator} />
+  <link
+    rel="preload"
+    as="font"
+    type="font/woff2"
+    href={iosevkaEtoile400Woff2}
+    crossorigin="anonymous"
+  />
+  <link
+    rel="preload"
+    as="font"
+    type="font/woff2"
+    href={iosevkaAile400Woff2}
+    crossorigin="anonymous"
+  />
 
   <!-- Canonical URL -->
   <link rel="canonical" href={canonicalURL} />
