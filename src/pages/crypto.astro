@@ -161,19 +161,24 @@ const topPotentialAssets = marketPotential.topAssets;
       <div
         class="bg-linear-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 rounded-2xl p-6"
       >
-        <div
-          class="flex flex-col gap-2 mb-6 sm:flex-row sm:items-end sm:justify-between"
-        >
-          <div>
-            <p class="text-xs tracking-[0.3em] uppercase text-zinc-500">
-              Market potential
-            </p>
-            <h3 class="text-2xl font-heading font-semibold text-white">
-              Upside if everything retests prior highs
-            </h3>
+        <div class="mb-6">
+          <div
+            class="flex flex-col gap-2 mb-3 sm:flex-row sm:items-end sm:justify-between"
+          >
+            <div>
+              <p class="text-xs tracking-[0.3em] uppercase text-zinc-500">
+                Market potential
+              </p>
+              <h3 class="text-2xl font-heading font-semibold text-white">
+                Upside if everything retests prior highs
+              </h3>
+            </div>
           </div>
-          <p class="text-sm text-zinc-500">
-            Derived from CoinGecko all-time high readings.
+          <p class="text-sm text-zinc-400 leading-relaxed">
+            This analysis shows the potential upside if each asset returns to
+            its all-time high price. The progress bars indicate how close each
+            asset is to its ATH, helping you identify opportunities with the
+            most room for growth.
           </p>
         </div>
 
@@ -244,7 +249,7 @@ const topPotentialAssets = marketPotential.topAssets;
                             </div>
                           )}
                           <div class="flex-1">
-                            <div class="flex flex-wrap items-center gap-2">
+                            <div class="flex items-start justify-between gap-2">
                               <div>
                                 <p class="text-base font-semibold tracking-tight text-white">
                                   {asset.symbol}
@@ -253,19 +258,25 @@ const topPotentialAssets = marketPotential.topAssets;
                                   {asset.label}
                                 </p>
                               </div>
-                              <span class="ml-auto rounded-full border border-white/10 px-3 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.3em] text-amber-300 whitespace-nowrap">
-                                {formatPercentage(asset.upsidePercent, 0, true)}{" "}
-                                to ATH
-                              </span>
-                            </div>
-                            <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[0.7rem] text-zinc-400">
-                              <span>Now {formatPrice(asset.currentPrice)}</span>
-                              <span>
-                                ATH{" "}
-                                {asset.athPrice
-                                  ? formatPrice(asset.athPrice)
-                                  : "—"}
-                              </span>
+                              <div class="flex flex-col items-end gap-y-0.5 text-[0.7rem] text-zinc-400">
+                                <span>
+                                  Now {formatPrice(asset.currentPrice)}
+                                </span>
+                                <span>
+                                  ATH{" "}
+                                  {asset.athPrice
+                                    ? formatPrice(asset.athPrice)
+                                    : "—"}
+                                </span>
+                                <span>
+                                  {formatPercentage(
+                                    asset.upsidePercent,
+                                    0,
+                                    true
+                                  )}{" "}
+                                  to ATH
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
