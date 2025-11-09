@@ -177,7 +177,7 @@ const topPotentialAssets = marketPotential.topAssets;
           </p>
         </div>
 
-        <div class="grid gap-4 mb-8 sm:grid-cols-3">
+        <div class="grid gap-4 mb-6 sm:grid-cols-3">
           {
             marketPotentialSummary.map((stat) => (
               <div class="rounded-2xl border border-zinc-700/50 bg-zinc-900/60 p-4 md:p-5">
@@ -198,86 +198,147 @@ const topPotentialAssets = marketPotential.topAssets;
         </div>
 
         <div>
-          <p class="text-xs tracking-[0.3em] uppercase text-zinc-500">
-            Upside plays (sorted by gap to ATH)
-          </p>
-
           {
             topPotentialAssets.length ? (
-              <div class="mt-4 overflow-x-auto rounded-2xl border border-zinc-700/50 bg-zinc-900/60">
-                <table class="w-full min-w-[640px] text-[0.8rem] text-zinc-300">
-                  <thead class="text-[0.65rem] uppercase tracking-[0.2em] text-zinc-500">
-                    <tr>
-                      <th class="px-3 py-3 text-left font-medium">Asset</th>
-                      <th class="px-3 py-3 text-right font-medium">Current</th>
-                      <th class="px-3 py-3 text-right font-medium">ATH</th>
-                      <th class="px-3 py-3 text-right font-medium">
-                        Current P&amp;L
-                      </th>
-                      <th class="px-3 py-3 text-right font-medium">
-                        Potential P&amp;L
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {topPotentialAssets.map((asset) => (
-                      <tr class="border-t border-zinc-800/60">
-                        <td class="px-3 py-3">
-                          <div class="flex items-center gap-3">
-                            {asset.imageUrl ? (
-                              <img
-                                src={asset.imageUrl}
-                                alt={`${asset.label} logo`}
-                                width="36"
-                                height="36"
-                                loading="lazy"
-                                class="h-9 w-9 rounded-full border border-white/10 bg-white/5 object-contain"
-                              />
-                            ) : (
-                              <div class="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-zinc-800 text-xs font-semibold text-white">
-                                {asset.symbol.slice(0, 1)}
+              <div class="mt-4 space-y-4">
+                <div class="grid gap-4 md:grid-cols-2">
+                  {topPotentialAssets.map((asset) => {
+                    const progressToAth =
+                      asset.athPrice && asset.athPrice > 0
+                        ? Math.min(
+                            Math.max(
+                              (asset.currentPrice ?? 0) / asset.athPrice,
+                              0
+                            ),
+                            1
+                          )
+                        : null;
+                    const progressPercentValue =
+                      progressToAth !== null
+                        ? Math.round(progressToAth * 100)
+                        : null;
+                    const progressBarWidth =
+                      progressPercentValue !== null
+                        ? `${progressPercentValue}%`
+                        : null;
+                    const potentialRoiDisplay =
+                      typeof asset.potentialRoi === "number"
+                        ? formatPercentage(asset.potentialRoi, 1, true)
+                        : formatPercentage(asset.upsidePercent, 1, true);
+
+                    return (
+                      <article class="h-full rounded-2xl border border-zinc-700/60 bg-zinc-900/60 p-4">
+                        <div class="flex items-start gap-3">
+                          {asset.imageUrl ? (
+                            <img
+                              src={asset.imageUrl}
+                              alt={`${asset.label} logo`}
+                              width="40"
+                              height="40"
+                              loading="lazy"
+                              class="h-10 w-10 rounded-full border border-white/10 bg-white/5 object-contain"
+                            />
+                          ) : (
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-zinc-800 text-sm font-semibold text-white">
+                              {asset.symbol.slice(0, 1)}
+                            </div>
+                          )}
+                          <div class="flex-1">
+                            <div class="flex flex-wrap items-center gap-2">
+                              <div>
+                                <p class="text-base font-semibold tracking-tight text-white">
+                                  {asset.symbol}
+                                </p>
+                                <p class="text-[0.55rem] uppercase tracking-[0.3em] text-zinc-500">
+                                  {asset.label}
+                                </p>
                               </div>
-                            )}
-                            <div>
-                              <p class="text-white font-semibold text-sm">
-                                {asset.symbol}
-                              </p>
-                              <p class="text-[0.6rem] uppercase tracking-[0.2em] text-zinc-500">
-                                {asset.label}
-                              </p>
+                              <span class="ml-auto rounded-full border border-white/10 px-3 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.3em] text-amber-300 whitespace-nowrap">
+                                {formatPercentage(asset.upsidePercent, 0, true)}{" "}
+                                to ATH
+                              </span>
+                            </div>
+                            <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[0.7rem] text-zinc-400">
+                              <span>Now {formatPrice(asset.currentPrice)}</span>
+                              <span>
+                                ATH{" "}
+                                {asset.athPrice
+                                  ? formatPrice(asset.athPrice)
+                                  : "—"}
+                              </span>
                             </div>
                           </div>
-                        </td>
-                        <td class="px-3 py-3 text-right text-white font-semibold">
-                          {formatPrice(asset.currentPrice)}
-                        </td>
-                        <td class="px-3 py-3 text-right text-white font-semibold">
-                          {formatPrice(asset.athPrice)}
-                        </td>
-                        <td
-                          class:list={[
-                            "px-3 py-3 text-right font-semibold",
-                            asset.currentPnl >= 0
-                              ? "text-emerald-400"
-                              : "text-rose-400",
-                          ]}
-                        >
-                          {formatMoneyNoDecimals(asset.currentPnl)}
-                        </td>
-                        <td
-                          class:list={[
-                            "px-3 py-3 text-right font-semibold",
-                            asset.potentialPnl >= 0
-                              ? "text-emerald-400"
-                              : "text-rose-400",
-                          ]}
-                        >
-                          {formatMoneyNoDecimals(asset.potentialPnl)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                        </div>
+                        {progressBarWidth ? (
+                          <div class="mt-3">
+                            <div class="h-1.5 rounded-full bg-white/5">
+                              <div
+                                class="h-full rounded-full bg-linear-to-r from-amber-400 via-yellow-300 to-emerald-400"
+                                style={`width: ${progressBarWidth}`}
+                              />
+                            </div>
+                            {progressPercentValue !== null && (
+                              <p class="mt-1 text-[0.6rem] uppercase tracking-[0.3em] text-zinc-500">
+                                {progressPercentValue}% of prior peak
+                              </p>
+                            )}
+                          </div>
+                        ) : (
+                          <p class="mt-3 text-[0.65rem] text-zinc-500">
+                            ATH data unavailable for this asset.
+                          </p>
+                        )}
+                        <div class="mt-4 grid gap-2 text-[0.8rem] text-zinc-200 sm:grid-cols-2">
+                          <div
+                            class:list={[
+                              "rounded-xl border px-3 py-2.5",
+                              asset.currentPnl >= 0
+                                ? "border-emerald-400/40 bg-emerald-400/5"
+                                : "border-rose-400/40 bg-rose-400/5",
+                            ]}
+                          >
+                            <p class="text-[0.55rem] uppercase tracking-[0.25em] text-zinc-500">
+                              Current P&amp;L
+                            </p>
+                            <p
+                              class:list={[
+                                "mt-1 text-base font-semibold",
+                                asset.currentPnl >= 0
+                                  ? "text-emerald-300"
+                                  : "text-rose-300",
+                              ]}
+                            >
+                              {formatMoneyNoDecimals(asset.currentPnl)}
+                            </p>
+                          </div>
+                          <div class="rounded-xl border border-white/10 bg-white/5 px-3 py-2.5">
+                            <p class="text-[0.55rem] uppercase tracking-[0.25em] text-zinc-500">
+                              If ATH returns
+                            </p>
+                            <p
+                              class:list={[
+                                "mt-1 text-base font-semibold",
+                                asset.potentialPnl >= 0
+                                  ? "text-emerald-300"
+                                  : "text-rose-300",
+                              ]}
+                            >
+                              {formatMoneyNoDecimals(asset.potentialPnl)}
+                            </p>
+                            <p class="text-[0.65rem] text-zinc-400">
+                              ROI {potentialRoiDisplay}
+                            </p>
+                          </div>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+                <p class="text-[0.7rem] leading-relaxed text-zinc-500">
+                  Projections assume every coin simply revisits its last
+                  CoinGecko all-time high without factoring in fresh capital,
+                  staking rewards, or new token emissions.
+                </p>
               </div>
             ) : (
               <p class="mt-4 text-sm text-zinc-500">
