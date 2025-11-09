@@ -52,6 +52,11 @@ type MarketSnapshot = {
   imageUrl?: string | null;
 };
 
+type MarketDataResult = {
+  data: Record<string, MarketSnapshot>;
+  didError: boolean;
+};
+
 export type PriceResult = {
   symbol: string;
   currentPrice: number;
@@ -120,11 +125,12 @@ export type CryptoPageData = {
   pieChartData: PieChartSlice[];
   totals: CryptoTotals;
   marketPotential: MarketPotential;
+  didCoinGeckoFail: boolean;
 };
 
 const fetchMarketData = async (
   holdings: readonly PortfolioHolding[]
-): Promise<Record<string, MarketSnapshot>> => {
+): Promise<MarketDataResult> => {
   const ids = Array.from(
     new Set(
       holdings
@@ -137,7 +143,10 @@ const fetchMarketData = async (
   );
 
   if (!ids.length) {
-    return {};
+    return {
+      data: {},
+      didError: false,
+    };
   }
 
   const searchParams = new URLSearchParams({
@@ -169,7 +178,7 @@ const fetchMarketData = async (
       ath: number | null;
     }>;
 
-    return coins.reduce<Record<string, MarketSnapshot>>((acc, coin) => {
+    const data = coins.reduce<Record<string, MarketSnapshot>>((acc, coin) => {
       const symbol =
         coingeckoIdToSymbolMap[coin.id] ??
         coin.symbol?.toUpperCase() ??
@@ -189,9 +198,17 @@ const fetchMarketData = async (
 
       return acc;
     }, {});
+
+    return {
+      data,
+      didError: false,
+    };
   } catch (error) {
     console.error("Error fetching market data from CoinGecko", error);
-    return {};
+    return {
+      data: {},
+      didError: true,
+    };
   }
 };
 
@@ -359,7 +376,9 @@ const buildMarketPotential = (
 };
 
 export const loadCryptoPageData = async (): Promise<CryptoPageData> => {
-  const marketData = await fetchMarketData(portfolioData.holdings);
+  const { data: marketData, didError: didCoinGeckoFail } = await fetchMarketData(
+    portfolioData.holdings
+  );
   const priceResults = buildPriceData(portfolioData.holdings, marketData);
   const priceData = Object.fromEntries(
     priceResults.map((result) => [result.symbol, result])
@@ -391,5 +410,6 @@ export const loadCryptoPageData = async (): Promise<CryptoPageData> => {
       roi: totalROI,
     },
     marketPotential,
+    didCoinGeckoFail,
   };
 };
