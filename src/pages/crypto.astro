@@ -122,7 +122,7 @@ const topPotentialAssets = marketPotential.topAssets;
 
     {
       didCoinGeckoFail ? (
-        <div class="rounded-2xl border border-amber-400/20 bg-amber-400/5 p-6 text-amber-100">
+        <div class="rounded-surface border border-amber-400/20 bg-amber-400/5 p-6 text-amber-100">
           <p class="text-xs tracking-[0.3em] uppercase text-amber-200/70">
             Live data temporarily unavailable
           </p>
@@ -137,7 +137,7 @@ const topPotentialAssets = marketPotential.topAssets;
         </div>
       ) : (
         <div class="space-y-6 pb-6">
-          <div class="bg-linear-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 rounded-2xl p-6">
+          <div class="bg-linear-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-6">
             <div class="flex flex-col gap-2 mb-6 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p class="text-xs tracking-[0.3em] uppercase text-zinc-500">
@@ -154,7 +154,7 @@ const topPotentialAssets = marketPotential.topAssets;
 
             <div class="grid gap-4 mb-6 sm:grid-cols-2">
               {overviewStats.map((stat) => (
-                <div class="rounded-2xl border border-zinc-700/50 bg-zinc-900/60 p-4 md:p-5">
+                <div class="rounded-surface border border-zinc-700/50 bg-zinc-900/60 p-4 md:p-5">
                   <p class="text-sm uppercase tracking-wide text-zinc-400">
                     {stat.label}
                   </p>
@@ -173,7 +173,7 @@ const topPotentialAssets = marketPotential.topAssets;
             <AllocationPanel pieChartData={pieChartData} />
           </div>
 
-          <div class="bg-linear-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 rounded-2xl p-6">
+          <div class="bg-linear-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-6">
             <div class="mb-6">
               <div class="flex flex-col gap-2 mb-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
@@ -195,7 +195,7 @@ const topPotentialAssets = marketPotential.topAssets;
 
             <div class="grid gap-4 mb-6 sm:grid-cols-3">
               {marketPotentialSummary.map((stat) => (
-                <div class="rounded-2xl border border-zinc-700/50 bg-zinc-900/60 p-4 md:p-5">
+                <div class="rounded-surface border border-zinc-700/50 bg-zinc-900/60 p-4 md:p-5">
                   <p class="text-sm uppercase tracking-wide text-zinc-400">
                     {stat.label}
                   </p>
@@ -240,7 +240,7 @@ const topPotentialAssets = marketPotential.topAssets;
                           : formatPercentage(asset.upsidePercent, 1, true);
 
                       return (
-                        <article class="h-full rounded-2xl border border-zinc-700/60 bg-zinc-900/60 p-4">
+                        <article class="h-full rounded-surface border border-zinc-700/60 bg-zinc-900/60 p-4">
                           <div class="flex items-start gap-3">
                             {asset.imageUrl ? (
                               <img
@@ -310,7 +310,7 @@ const topPotentialAssets = marketPotential.topAssets;
                           <div class="mt-4 grid gap-2 text-[0.8rem] text-zinc-200 sm:grid-cols-2">
                             <div
                               class:list={[
-                                "rounded-xl border px-3 py-2.5",
+                                "rounded-surface border px-3 py-2.5",
                                 asset.currentPnl >= 0
                                   ? "border-emerald-400/40 bg-emerald-400/5"
                                   : "border-rose-400/40 bg-rose-400/5",
@@ -330,7 +330,7 @@ const topPotentialAssets = marketPotential.topAssets;
                                 {formatMoneyNoDecimals(asset.currentPnl)}
                               </p>
                             </div>
-                            <div class="rounded-xl border border-white/10 bg-white/5 px-3 py-2.5">
+                            <div class="rounded-surface border border-white/10 bg-white/5 px-3 py-2.5">
                               <p class="text-[0.55rem] uppercase tracking-[0.25em] text-zinc-500">
                                 If ATH returns
                               </p>

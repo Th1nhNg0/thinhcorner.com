@@ -1,12 +1,14 @@
 ---
 // This component renders an 'Edit on GitHub' button for the current blog post.
 // It expects a 'slug' prop that represents the folder name of the blog post content.
-import { GITHUB_CONTENT_SOURCE } from '@/consts';
+import { GITHUB_CONTENT_SOURCE } from "@/consts";
 
 const { slug } = Astro.props;
 ---
 
-<div class="mt-16 mb-16  border border-zinc-700/50 bg-zinc-900/50 p-8 backdrop-blur-sm">
+<div
+  class="mt-16 mb-4 rounded-surface border border-zinc-700/50 bg-zinc-900/50 p-8 backdrop-blur-sm"
+>
   <div class="space-y-5">
     <div class="space-y-3">
       <h3 class="text-lg font-medium text-gray-100 flex items-center gap-2">
@@ -14,20 +16,29 @@ const { slug } = Astro.props;
         <span>Join the conversation!</span>
       </h3>
       <p class="text-sm leading-relaxed text-gray-400">
-        Found something interesting? Spotted a typo? Or maybe you have a different take? I'd love to hear from you! Together we can make this content even better.
+        Found something interesting? Spotted a typo? Or maybe you have a
+        different take? I'd love to hear from you! Together we can make this
+        content even better.
       </p>
     </div>
     <div class="flex justify-end">
-    <a 
-      href={`${GITHUB_CONTENT_SOURCE}/${slug}`} 
-      target="_blank" 
-      rel="noopener noreferrer"
-      class="inline-flex  items-center px-5 py-2.5 text-sm font-medium text-gray-100 transition-all duration-300 ease-in-out border border-zinc-700/50 hover:bg-zinc-800/30 hover:border-zinc-600/80 hover:text-white hover:-translate-y-0.5 hover:shadow-lg hover:shadow-zinc-800/10 active:translate-y-0 group"
-    >
-      <svg class="w-4 h-4 mr-2.5 text-gray-400 group-hover:text-gray-300 transition-colors" viewBox="0 0 16 16" fill="currentColor">
-        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-      </svg>
-      Edit on GitHub
-    </a></div>
+      <a
+        href={`${GITHUB_CONTENT_SOURCE}/${slug}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex rounded-surface items-center px-5 py-2.5 text-sm font-medium text-gray-100 transition-all duration-300 ease-in-out border border-zinc-700/50 hover:bg-zinc-800/30 hover:border-zinc-600/80 hover:text-white hover:-translate-y-0.5 hover:shadow-lg hover:shadow-zinc-800/10 active:translate-y-0 group"
+      >
+        <svg
+          class="w-4 h-4 mr-2.5 text-gray-400 group-hover:text-gray-300 transition-colors"
+          viewBox="0 0 16 16"
+          fill="currentColor"
+        >
+          <path
+            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
+          ></path>
+        </svg>
+        Edit on GitHub
+      </a>
+    </div>
   </div>
 </div>
