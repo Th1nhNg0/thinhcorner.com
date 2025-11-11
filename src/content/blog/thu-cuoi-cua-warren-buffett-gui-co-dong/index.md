@@ -1,5 +1,5 @@
 ---
-title: Warren Buffett gửi lời tạm biệt qua thông điệp Lễ Tạ ơn 2025
+title: "Thư cuối cùng của Warren Buffett gửi cổ đông"
 date: "2025-11-11"
 description: Bản dịch tiếng Việt thông cáo báo chí Berkshire Hathaway ngày 10/11/2025 và thông điệp Lễ Tạ ơn của Warren Buffett.
 lang: "vi"
