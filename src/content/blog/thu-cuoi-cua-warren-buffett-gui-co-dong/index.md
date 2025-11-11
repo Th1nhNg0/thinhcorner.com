@@ -5,195 +5,193 @@ description: Bản dịch tiếng Việt thông cáo báo chí Berkshire Hathawa
 lang: "vi"
 ---
 
-*Bản dịch tiếng Việt từ thông cáo báo chí do Berkshire Hathaway công bố ngày 10/11/2025. Nguyên văn tiếng Anh có tại [berkshirehathaway.com](https://berkshirehathaway.com/news/nov1025.pdf). Bản dịch đã được đối chiếu với tệp PDF gốc để đảm bảo đầy đủ nội dung.*
+*Bản dịch tiếng Việt từ thông cáo báo chí do Berkshire Hathaway công bố ngày 10/11/2025. Nguyên văn tiếng Anh có tại [berkshirehathaway.com](https://berkshirehathaway.com/news/nov1025.pdf). Bản dịch này được cập nhật dựa trên tệp PDF gốc.*
 
 ## Thông cáo báo chí Berkshire Hathaway
 
 **BERKSHIRE HATHAWAY INC.**  
 **THÔNG CÁO BÁO CHÍ**  
-**ĐỂ PHÁT HÀNH NGAY**  
-Ngày 10 tháng 11 năm 2025  
-Omaha, NE (BRK.A; BRK.B)
+**PHÁT HÀNH NGAY** – Ngày 10 tháng 11 năm 2025  
+Omaha, Nebraska (BRK.A; BRK.B)
 
-Hôm nay, ông Warren E. Buffett đã chuyển đổi 1.800 cổ phiếu loại A thành 2.700.000 cổ phiếu loại B để tặng số cổ phiếu B này cho bốn quỹ gia đình: 1.500.000 cổ phiếu cho Quỹ Susan Thompson Buffett và 400.000 cổ phiếu cho mỗi quỹ: Quỹ Sherwood, Quỹ Howard G. Buffett và Quỹ NoVo. Các khoản quyên góp này đã được chuyển giao ngay trong hôm nay.
+Hôm nay, Warren E. Buffett đã chuyển đổi 1.800 cổ phiếu hạng A thành 2.700.000 cổ phiếu hạng B để tặng số cổ phiếu này cho bốn quỹ gia đình: 1.500.000 cổ phiếu cho Quỹ Susan Thompson Buffett và 400.000 cổ phiếu cho mỗi quỹ Sherwood, Howard G. Buffett và NoVo. Các khoản hiến tặng được hoàn tất trong ngày.
 
-Sau đây là bình luận của ông Buffett gửi đến các cổ đông đồng nghiệp của mình:
+Sau đây là lời nhắn của ông Buffett gửi tới những người bạn đồng hành cổ đông:
 
 ---
 
 ## Thư gửi cổ đông của Warren Buffett
 
-**Gửi các cổ đông đồng nghiệp của tôi:**
+**Gửi các cổ đông thân mến,**
 
-Tôi sẽ không còn viết báo cáo thường niên của Berkshire hay nói không ngừng nghỉ tại cuộc họp thường niên nữa. Như người Anh thường nói, tôi sẽ "im hơi lặng tiếng".
+Tôi sẽ không còn viết báo cáo thường niên của Berkshire hay thao thao bất tuyệt tại đại hội cổ đông nữa. Như người Anh vẫn nói, tôi sẽ “im tiếng”.
 
-Cũng gần như vậy.
+Cũng gần như vậy thôi.
 
-Greg Abel sẽ trở thành CEO vào cuối năm nay. Anh ấy là một nhà quản lý tuyệt vời, một người làm việc không mệt mỏi và một người giao tiếp trung thực. Chúc anh ấy có một nhiệm kỳ kéo dài.
+Greg Abel sẽ nắm quyền điều hành vào cuối năm nay. Anh ấy là một nhà quản lý tuyệt vời, làm việc không ngơi nghỉ và luôn giao tiếp trung thực. Hãy chúc anh ấy có một nhiệm kỳ thật dài.
 
-Tôi sẽ tiếp tục nói chuyện với các bạn và các con tôi về Berkshire thông qua thông điệp Lễ Tạ ơn hàng năm của mình. Các cổ đông cá nhân của Berkshire là một nhóm rất đặc biệt, những người cực kỳ hào phóng trong việc chia sẻ lợi nhuận của họ với những người kém may mắn hơn. Tôi tận hưởng cơ hội được giữ liên lạc với các bạn. Hãy chiều tôi năm nay khi tôi hồi tưởng một chút. Sau đó, tôi sẽ thảo luận về các kế hoạch phân phối cổ phiếu Berkshire của mình. Cuối cùng, tôi sẽ đưa ra một vài quan sát về kinh doanh và cá nhân.
-
-***
-
-Khi Lễ Tạ ơn đến gần, tôi cảm thấy biết ơn và ngạc nhiên về sự may mắn của mình khi vẫn còn sống ở tuổi 95. Khi tôi còn trẻ, kết quả này có vẻ không phải là một vụ cá cược tốt. Thuở ban đầu, tôi đã suýt chết.
-
-Đó là năm 1938 và các bệnh viện ở Omaha lúc đó được người dân coi là Công giáo hoặc Tin lành, một sự phân loại có vẻ tự nhiên vào thời điểm đó.
-
-Bác sĩ gia đình của chúng tôi, Harley Hotz, là một người Công giáo thân thiện, thường đến khám tại nhà với một chiếc túi đen. Bác sĩ Hotz gọi tôi là Skipper và không bao giờ lấy nhiều tiền cho những lần thăm khám của mình. Khi tôi bị đau bụng dữ dội vào năm 1938, bác sĩ Hotz đã ghé qua và sau khi thăm khám một chút, ông bảo tôi sẽ ổn vào sáng hôm sau.
-
-Sau đó, ông về nhà, ăn tối và chơi một chút bài bridge. Tuy nhiên, bác sĩ Hotz không thể gạt bỏ các triệu chứng có phần kỳ lạ của tôi ra khỏi tâm trí và cuối đêm đó, ông đã đưa tôi đến Bệnh viện St. Catherine để phẫu thuật ruột thừa khẩn cấp. Trong ba tuần tiếp theo, tôi cảm thấy như mình đang ở trong một tu viện, và bắt đầu tận hưởng "bục diễn thuyết" mới của mình. Tôi thích nói chuyện - vâng, ngay cả khi đó - và các nữ tu đã chào đón tôi.
-
-Tuyệt vời nhất là, cô Madsen, giáo viên lớp ba của tôi, đã bảo 30 bạn cùng lớp mỗi người viết cho tôi một lá thư. Tôi có thể đã vứt những lá thư của các bạn nam nhưng đã đọc đi đọc lại những lá thư của các bạn nữ; việc nằm viện cũng có phần thưởng của nó.
-
-Điểm nhấn trong quá trình hồi phục của tôi - mà thực sự là khá nguy hiểm trong phần lớn tuần đầu tiên - là món quà từ người dì tuyệt vời của tôi, dì Edie. Dì mang cho tôi một bộ lấy dấu vân tay trông rất chuyên nghiệp, và tôi nhanh chóng lấy dấu vân tay của tất cả các nữ tu chăm sóc mình. (Tôi có lẽ là đứa trẻ Tin lành đầu tiên họ thấy ở St. Catherine và họ không biết phải mong đợi điều gì.)
-
-Giả thuyết của tôi - tất nhiên là hoàn toàn điên rồ - là một ngày nào đó một nữ tu sẽ trở nên xấu xa và FBI sẽ phát hiện ra rằng họ đã sơ suất không lấy dấu vân tay các nữ tu. FBI và giám đốc của nó, J. Edgar Hoover, đã được người Mỹ tôn kính trong những năm 1930, và tôi đã hình dung chính ông Hoover sẽ đến Omaha để kiểm tra bộ sưu tập vô giá của tôi. Tôi còn ảo tưởng rằng J. Edgar và tôi sẽ nhanh chóng xác định và bắt giữ nữ tu lầm lỡ. Danh tiếng toàn quốc dường như là chắc chắn.
-
-Rõ ràng, ảo tưởng của tôi không bao giờ thành hiện thực. Nhưng, trớ trêu thay, vài năm sau, rõ ràng là lẽ ra tôi nên lấy dấu vân tay của chính J. Edgar vì ông ta đã bị thất sủng vì lạm dụng chức vụ của mình.
-
-Chà, đó là Omaha vào những năm 1930, khi một chiếc xe trượt tuyết, một chiếc xe đạp, một chiếc găng tay bóng chày và một đoàn tàu điện là những thứ mà tôi và bạn bè khao khát. Chúng ta hãy nhìn vào một vài đứa trẻ khác từ thời đại đó, những người lớn lên rất gần và ảnh hưởng lớn đến cuộc đời tôi nhưng tôi đã không biết đến trong một thời gian dài.
-
-Tôi sẽ bắt đầu với Charlie Munger, người bạn thân nhất của tôi trong 64 năm. Vào những năm 1930, Charlie sống cách ngôi nhà tôi sở hữu và ở từ năm 1958 một dãy nhà.
-
-Ngay từ đầu, tôi đã suýt nữa thì kết bạn với Charlie. Charlie, lớn hơn tôi 6 năm 8 tháng, làm việc vào mùa hè năm 1940 tại cửa hàng tạp hóa của ông tôi, kiếm được 2 đô la cho 10 giờ làm việc. (Sự tiết kiệm đã ăn sâu vào máu nhà Buffett.) Năm sau, tôi cũng làm công việc tương tự tại cửa hàng, nhưng tôi chưa bao giờ gặp Charlie cho đến năm 1959 khi ông ấy 35 tuổi và tôi 28 tuổi.
-
-Sau khi phục vụ trong Thế chiến thứ hai, Charlie tốt nghiệp trường Luật Harvard và sau đó chuyển đến California vĩnh viễn. Tuy nhiên, Charlie mãi mãi nói về những năm đầu của mình ở Omaha như là những năm định hình.
-
-Trong hơn 60 năm, Charlie đã có ảnh hưởng rất lớn đến tôi và không thể là một giáo viên và một "người anh lớn" bảo vệ tốt hơn. Chúng tôi có những bất đồng nhưng chưa bao giờ cãi nhau. “Tôi đã nói rồi mà” không có trong từ vựng của ông ấy.
-
-Năm 1958, tôi mua ngôi nhà đầu tiên và duy nhất của mình. Tất nhiên, nó ở Omaha, nằm cách nơi tôi lớn lên (được định nghĩa một cách tương đối) khoảng hai dặm, cách nhà bố mẹ vợ tôi chưa đầy hai dãy nhà, cách cửa hàng tạp hóa Buffett khoảng sáu dãy nhà và cách tòa nhà văn phòng nơi tôi đã làm việc 64 năm 6-7 phút lái xe.
-
-Chúng ta hãy chuyển sang một người Omaha khác, Stan Lipsey. Stan đã bán tờ Omaha Sun Newspapers (báo tuần) cho Berkshire vào năm 1968 và một thập kỷ sau đó chuyển đến Buffalo theo yêu cầu của tôi. Tờ Buffalo Evening News, thuộc sở hữu của một công ty liên kết của Berkshire, lúc đó đang bị khóa trong một cuộc chiến sinh tử với đối thủ buổi sáng, người xuất bản tờ báo Chủ nhật duy nhất của Buffalo. Và chúng tôi đang thua.
-
-Stan cuối cùng đã xây dựng sản phẩm Chủ nhật mới của chúng tôi, và trong một số năm, tờ báo của chúng tôi - trước đây từng thua lỗ nặng nề - đã kiếm được hơn 100% hàng năm (trước thuế) trên khoản đầu tư 33 triệu đô la của chúng tôi. Đây là số tiền quan trọng đối với Berkshire vào đầu những năm 1980.
-
-Stan lớn lên cách nhà tôi khoảng năm dãy nhà. Một trong những người hàng xóm của Stan là Walter Scott, Jr.
-
-Walter, các bạn sẽ nhớ, đã mang MidAmerican Energy đến Berkshire vào năm 1999. Ông cũng là một giám đốc đáng kính của Berkshire cho đến khi qua đời vào năm 2021 và là một người bạn rất thân. Walter là nhà lãnh đạo từ thiện của Nebraska trong nhiều thập kỷ và cả Omaha và tiểu bang đều mang dấu ấn của ông.
-
-Walter học tại trường trung học Benson, nơi tôi cũng dự kiến sẽ theo học - cho đến khi bố tôi gây ngạc nhiên cho mọi người vào năm 1942 bằng cách đánh bại một nghị sĩ đương nhiệm bốn nhiệm kỳ trong một cuộc đua vào Quốc hội. Cuộc sống đầy bất ngờ.
-
-Đợi đã, còn nữa.
-
-Năm 1959, Don Keough và gia đình trẻ của ông sống trong một ngôi nhà nằm ngay đối diện đường với nhà tôi và cách nơi gia đình Munger từng sống khoảng 100 thước. Don lúc đó là một nhân viên bán cà phê nhưng đã định mệnh trở thành chủ tịch của Coca-Cola cũng như một giám đốc tận tụy của Berkshire.
-
-Khi tôi gặp Don, ông ấy đang kiếm được 12.000 đô la một năm trong khi ông và vợ Mickie đang nuôi năm người con, tất cả đều học trường Công giáo (với yêu cầu học phí).
-
-Gia đình chúng tôi trở thành bạn bè nhanh chóng. Don xuất thân từ một trang trại ở tây bắc Iowa và tốt nghiệp Đại học Creighton của Omaha. Ngay từ sớm, ông đã kết hôn với Mickie, một cô gái Omaha. Sau khi gia nhập Coke, Don đã trở thành huyền thoại trên toàn cầu.
-
-Năm 1985, khi Don là chủ tịch của Coke, công ty đã tung ra sản phẩm New Coke yểu mệnh của mình.
-
-Don đã có một bài phát biểu nổi tiếng trong đó ông xin lỗi công chúng và khôi phục lại "Old" Coke. Sự thay đổi quyết định này diễn ra sau khi Don giải thích rằng thư gửi đến Coke có đề "Tên ngốc tối cao" đã được chuyển ngay đến bàn làm việc của ông. Bài phát biểu "rút lui" của ông là một tác phẩm kinh điển và có thể được xem trên YouTube. Ông vui vẻ thừa nhận rằng, trên thực tế, sản phẩm Coca-Cola thuộc về công chúng chứ không phải của công ty. Doanh số sau đó tăng vọt.
-
-Bạn có thể xem Don trên CharlieRose.com trong một cuộc phỏng vấn tuyệt vời. (Tom Murphy và Kay Graham cũng có một vài viên ngọc quý.) Giống như Charlie Munger, Don mãi mãi vẫn là một chàng trai Trung Tây, nhiệt tình, thân thiện và là một người Mỹ cốt lõi.
-
-Cuối cùng, Ajit Jain, sinh ra và lớn lên ở Ấn Độ, cũng như Greg Abel, CEO tương lai người Canada của chúng ta, mỗi người đều sống ở Omaha trong vài năm vào cuối thế kỷ 20. Thật vậy, trong những năm 1990, Greg sống cách tôi chỉ vài dãy nhà trên Phố Farnam, mặc dù chúng tôi chưa bao giờ gặp nhau vào thời điểm đó.
-
-Phải chăng có một thành phần ma thuật nào đó trong nguồn nước của Omaha?
+Tôi sẽ tiếp tục trò chuyện với các bạn và với các con mình về Berkshire qua thông điệp Lễ Tạ ơn hằng năm. Cổ đông cá nhân của Berkshire là một nhóm rất đặc biệt: họ hào phóng khác thường khi chia sẻ thành quả với những người kém may mắn. Tôi trân trọng cơ hội được giữ liên lạc với các bạn. Năm nay, mong các bạn cho phép tôi hồi tưởng đôi chút; sau đó tôi sẽ trình bày kế hoạch phân phối cổ phiếu Berkshire của mình và kết lại bằng vài suy nghĩ về kinh doanh lẫn đời sống cá nhân.
 
 ***
 
-Tôi đã sống vài năm thiếu niên ở Washington, DC (khi bố tôi ở trong Quốc hội) và vào năm 1954, tôi nhận một công việc mà tôi nghĩ là lâu dài ở Manhattan. Ở đó, tôi được Ben Graham và Jerry Newman đối xử tuyệt vời và có nhiều người bạn suốt đời. New York có những tài sản độc đáo - và vẫn còn. Tuy nhiên, vào năm 1956, chỉ sau 1 năm rưỡi, tôi trở lại Omaha, không bao giờ lang thang nữa.
+Khi Lễ Tạ ơn đến gần, tôi vừa biết ơn vừa ngạc nhiên trước vận may của mình: còn sống ở tuổi 95. Hồi trẻ, đó chẳng phải là một cửa cược sáng sủa. Thuở đầu đời, tôi đã suýt chết.
 
-Sau đó, ba đứa con của tôi, cũng như vài đứa cháu, đã lớn lên ở Omaha. Các con tôi luôn học trường công (tốt nghiệp cùng trường trung học đã giáo dục bố tôi (khóa 1921), người vợ đầu tiên của tôi, Susie (khóa 1950) cũng như Charlie, Stan Lipsey, Irv và Ron Blumkin, những người chủ chốt trong việc phát triển Nebraska Furniture Mart, và Jack Ringwalt (khóa 1923), người đã thành lập National Indemnity và bán nó cho Berkshire vào năm 1967, nơi nó trở thành nền tảng mà trên đó hoạt động bảo hiểm phi nhân thọ (P/C) khổng lồ của chúng tôi được xây dựng.
+Đó là năm 1938, và người dân Omaha khi ấy xem các bệnh viện là của Công giáo hay của Tin Lành – một cách phân loại nghe rất tự nhiên vào thời điểm đó.
 
-Đất nước chúng ta có nhiều công ty lớn, trường học lớn, cơ sở y tế lớn và mỗi nơi chắc chắn đều có những lợi thế đặc biệt riêng cùng với những người tài năng. Nhưng tôi cảm thấy rất may mắn khi có cơ hội kết bạn với nhiều người bạn suốt đời, gặp cả hai người vợ của mình, nhận được một khởi đầu giáo dục tuyệt vời tại các trường công, gặp gỡ nhiều người Omaha trưởng thành thú vị và thân thiện khi tôi còn rất trẻ, và kết bạn với nhiều người trong Lực lượng Vệ binh Quốc gia Nebraska. Tóm lại, Nebraska đã là nhà.
+Bác sĩ gia đình chúng tôi, Harley Hotz, là một người Công giáo thân thiện, thường xách chiếc túi đen đi khám tại nhà. Ông gọi tôi là Skipper và hiếm khi lấy nhiều tiền. Khi tôi đau bụng dữ dội năm 1938, bác sĩ Hotz ghé qua, thăm khám đôi chút rồi bảo tôi sáng mai sẽ ổn.
 
-Nhìn lại, tôi cảm thấy rằng cả Berkshire và tôi đều đã làm tốt hơn nhờ có trụ sở ở Omaha so với việc tôi cư trú ở bất kỳ nơi nào khác. Trung tâm của Hoa Kỳ là một nơi rất tốt để sinh ra, nuôi dạy gia đình và xây dựng doanh nghiệp. Nhờ may mắn trời cho, tôi đã rút được một lá thăm cực kỳ may mắn ngay từ khi sinh ra.
+Sau đó ông về nhà, ăn tối và chơi vài ván bridge. Nhưng những triệu chứng có phần kỳ lạ của tôi cứ ám ảnh ông, và cuối đêm ấy ông đưa tôi tới Bệnh viện St. Catherine để mổ ruột thừa khẩn cấp. Ba tuần tiếp theo tôi có cảm giác như đang ở trong tu viện và bắt đầu tận hưởng “bục diễn thuyết” mới. Tôi thích nói chuyện – vâng, ngay khi ấy cũng vậy – và các nữ tu đã ôm lấy tôi.
 
-Bây giờ chúng ta hãy chuyển sang tuổi già của tôi. Gen của tôi không đặc biệt hữu ích - kỷ lục sống lâu nhất của gia đình (phải thừa nhận là hồ sơ gia đình trở nên mờ nhạt khi bạn lùi lại) là 92 tuổi cho đến khi tôi xuất hiện. Nhưng tôi đã có những bác sĩ Omaha khôn ngoan, thân thiện và tận tâm, bắt đầu từ Harley Hotz, và tiếp tục cho đến ngày nay. Ít nhất ba lần, mạng sống của tôi đã được cứu, mỗi lần đều nhờ các bác sĩ ở cách nhà tôi vài dặm. (Tuy nhiên, tôi đã từ bỏ việc lấy dấu vân tay các y tá. Bạn có thể thoát khỏi nhiều hành vi lập dị ở tuổi 95... nhưng có những giới hạn.)
+Để mọi thứ thêm phần thú vị, cô giáo lớp ba của tôi, cô Madsen, bảo 30 bạn cùng lớp mỗi người viết cho tôi một lá thư. Có lẽ tôi đã bỏ đi thư của các bạn nam nhưng cứ đọc đi đọc lại thư của các bạn nữ; hóa ra nằm viện cũng có phần thưởng.
 
-Những người đạt đến tuổi già cần một liều may mắn rất lớn, hàng ngày thoát khỏi vỏ chuối, thảm họa tự nhiên, tài xế say rượu hoặc mất tập trung, sét đánh, bạn cứ kể tên ra.
+Điểm nhấn của quá trình hồi phục – thật ra khá nguy hiểm trong phần lớn tuần đầu tiên – là món quà từ dì Edie tuyệt vời của tôi. Dì mang đến một bộ lăn dấu vân tay trông hết sức chuyên nghiệp, và tôi liền lấy dấu tất cả các nữ tu đang chăm sóc. (Có lẽ tôi là đứa trẻ Tin Lành đầu tiên họ gặp ở St. Catherine nên họ không biết phải trông đợi điều gì.)
 
-Nhưng Quý bà May Mắn rất hay thay đổi và - không có thuật ngữ nào khác phù hợp - cực kỳ không công bằng. Trong nhiều trường hợp, các nhà lãnh đạo của chúng ta và những người giàu có đã nhận được nhiều hơn phần may mắn của họ - điều mà, quá thường xuyên, người nhận lại không muốn thừa nhận. Những người thừa kế theo triều đại đã đạt được sự độc lập tài chính suốt đời ngay từ khi họ chui ra khỏi bụng mẹ, trong khi những người khác sinh ra, phải đối mặt với một cuộc sống địa ngục trong thời kỳ đầu đời hoặc, tệ hơn, những bệnh tật về thể chất hoặc tinh thần làm họ mất đi những gì tôi đã coi là điều hiển nhiên. Ở nhiều nơi đông dân trên thế giới, tôi có thể đã có một cuộc sống khốn khổ và các chị gái tôi còn có một cuộc sống tồi tệ hơn.
+Giả thuyết của tôi – dĩ nhiên hoàn toàn điên rồ – là sẽ có một nữ tu nào đó trở nên hư hỏng và FBI phát hiện ra họ đã lơ là chuyện lấy dấu vân tay. Trong thập niên 1930, FBI và Giám đốc J. Edgar Hoover được người Mỹ tôn vinh, và tôi hình dung chính ông Hoover sẽ đến Omaha để xem bộ sưu tập vô giá của mình. Tôi còn mơ rằng tôi và J. Edgar sẽ mau chóng nhận diện rồi bắt được vị nữ tu lầm đường. Danh tiếng toàn quốc xem ra nằm trong tầm tay.
 
-Tôi sinh năm 1930, khỏe mạnh, thông minh vừa phải, da trắng, nam giới và ở Mỹ. Chà! Cảm ơn, Quý bà May Mắn. Các chị gái tôi có trí thông minh tương đương và tính cách tốt hơn tôi nhưng phải đối mặt với một viễn cảnh khác hẳn. Quý bà May Mắn tiếp tục ghé qua trong phần lớn cuộc đời tôi, nhưng bà ấy có nhiều việc tốt hơn để làm thay vì bận tâm đến những người ở tuổi 90. May mắn có giới hạn của nó.
+Dĩ nhiên, viễn cảnh ấy chẳng bao giờ thành hiện thực. Mỉa mai thay, vài năm sau tôi mới hiểu ra lẽ ra mình phải lấy dấu chính J. Edgar, vì ông bị thất sủng do lạm dụng chức vụ.
 
-Ngược lại, Cha Thời Gian bây giờ thấy tôi thú vị hơn khi tôi già đi. Và ông ấy là bất bại; đối với ông, mọi người đều kết thúc trên bảng điểm của ông với tư cách là "chiến thắng". Khi sự thăng bằng, thị lực, thính giác và trí nhớ đều đang trên đà dốc xuống không ngừng, bạn biết Cha Thời Gian đang ở gần.
+Đó là Omaha của những năm 1930, khi một chiếc xe trượt tuyết, một chiếc xe đạp, găng tay bóng chày và tàu điện là những thứ tôi cùng bạn bè hằng ao ước. Hãy nhìn sang vài đứa trẻ khác cùng thời, lớn lên ngay gần đó và ảnh hưởng sâu sắc đến đời tôi dù tôi phải rất lâu sau mới biết.
 
-Tôi già muộn - sự khởi đầu của nó thay đổi rõ rệt - nhưng một khi nó xuất hiện, không thể phủ nhận được.
+Tôi sẽ bắt đầu với Charlie Munger, người bạn thân 64 năm của tôi. Những năm 1930, Charlie sống cách ngôi nhà tôi mua và ở từ năm 1958 đúng một dãy nhà.
 
-Trước sự ngạc nhiên của mình, tôi thường cảm thấy tốt. Mặc dù tôi di chuyển chậm và đọc ngày càng khó khăn, tôi vẫn ở văn phòng năm ngày một tuần, nơi tôi làm việc với những người tuyệt vời. Thỉnh thoảng, tôi có một ý tưởng hữu ích hoặc được tiếp cận với một lời đề nghị mà chúng tôi có thể không nhận được. Do quy mô của Berkshire và do mức độ thị trường, ý tưởng rất ít - nhưng không phải là không có.
+Thuở ấy, tôi đã suýt làm bạn với Charlie. Charlie hơn tôi 6 năm 8 tháng, từng làm việc hè năm 1940 tại cửa hàng tạp hóa của ông ngoại tôi, kiếm 2 đô la cho một ca 10 tiếng. (Đức tính tiết kiệm ăn sâu vào huyết quản nhà Buffett.) Năm sau tôi cũng làm việc tương tự ở cửa hàng, nhưng mãi tới năm 1959, khi Charlie 35 tuổi và tôi 28, chúng tôi mới gặp nhau.
 
-Tuy nhiên, tuổi thọ bất ngờ của tôi có những hệ quả không thể tránh khỏi, có tầm quan trọng lớn đối với gia đình tôi và việc đạt được các mục tiêu từ thiện của tôi.
+Sau khi phục vụ trong Thế chiến II, Charlie tốt nghiệp Luật Harvard rồi chuyển hẳn tới California. Tuy vậy, ông luôn xem những năm tháng đầu đời ở Omaha là nền tảng. Hơn 60 năm qua, Charlie có ảnh hưởng khổng lồ đến tôi và không thể là một người thầy, một “người anh lớn” bảo bọc nào tốt hơn. Chúng tôi có bất đồng nhưng chưa bao giờ cãi nhau. Từ “tôi đã nói rồi mà” không nằm trong từ điển của ông.
 
-Hãy khám phá chúng.
+Năm 1958, tôi mua ngôi nhà đầu tiên và duy nhất của mình. Tất nhiên vẫn ở Omaha, cách nơi tôi lớn lên (nếu định nghĩa rộng) khoảng hai dặm, chưa đầy hai dãy nhà với bố mẹ vợ, chừng sáu dãy nhà với cửa hàng tạp hóa Buffett và chỉ mất 6–7 phút lái xe tới tòa nhà văn phòng nơi tôi đã làm việc suốt 64 năm.
+
+Chuyển sang một người con Omaha khác: Stan Lipsey. Năm 1968, Stan bán chuỗi tuần báo Omaha Sun cho Berkshire và một thập kỷ sau chuyển tới Buffalo theo đề nghị của tôi. Khi ấy, tờ Buffalo Evening News do một công ty liên kết của Berkshire sở hữu đang kẹt trong cuộc chiến sinh tử với đối thủ xuất bản tờ báo buổi sáng – đơn vị nắm độc quyền ấn phẩm Chủ nhật của Buffalo. Và chúng tôi đang thua.
+
+Cuối cùng, Stan xây dựng được ấn phẩm Chủ nhật mới. Trong vài năm, tờ báo vốn trước đó chảy máu tiền mặt đã mang về hơn 100% lợi nhuận (trước thuế) mỗi năm trên khoản đầu tư 33 triệu đô la của chúng tôi – một khoản tiền cực kỳ quan trọng với Berkshire đầu thập niên 1980.
+
+Stan lớn lên cách nhà tôi khoảng năm dãy nhà. Một trong những hàng xóm của Stan là Walter Scott, Jr. Walter – hẳn các bạn còn nhớ – đã đưa MidAmerican Energy về với Berkshire năm 1999. Ông cũng là một thành viên hội đồng quản trị đáng quý của Berkshire cho đến khi qua đời năm 2021 và là một người bạn rất thân. Walter là thủ lĩnh từ thiện của Nebraska trong nhiều thập kỷ, và cả Omaha lẫn tiểu bang này đều mang dấu ấn của ông.
+
+Walter học tại trường trung học Benson – nơi tôi cũng đáng ra theo học – cho tới khi bố tôi khiến mọi người ngỡ ngàng vào năm 1942 bằng việc đánh bại một nghị sĩ đương nhiệm bốn nhiệm kỳ trong cuộc đua vào Quốc hội. Cuộc đời đầy bất ngờ là vậy.
+
+Đợi đã, vẫn còn nữa.
+
+Năm 1959, Don Keough và gia đình trẻ của ông sống ngay đối diện nhà tôi và chỉ cách nơi gia đình Munger từng ở khoảng 100 thước. Khi ấy Don là nhân viên bán cà phê, nhưng định mệnh đã đưa ông trở thành Chủ tịch Coca-Cola và một thành viên hội đồng tận tụy của Berkshire.
+
+Khi tôi gặp Don, ông kiếm 12.000 đô la mỗi năm trong lúc cùng vợ là Mickie nuôi năm đứa con – tất cả đều học trường Công giáo (dĩ nhiên phải đóng học phí).
+
+Gia đình chúng tôi trở thành bạn bè rất nhanh. Don xuất thân từ một trang trại ở tây bắc Iowa và tốt nghiệp Đại học Creighton tại Omaha. Sớm thôi, ông kết hôn với Mickie, một cô gái Omaha. Sau khi gia nhập Coke, Don trở thành huyền thoại toàn cầu.
+
+Năm 1985, khi Don là Chủ tịch Coke, công ty tung ra New Coke – một sản phẩm yểu mệnh. Don đã có bài phát biểu nổi tiếng xin lỗi công chúng và đưa “Coke cũ” trở lại. Quyết định này đến sau khi Don kể rằng những bức thư gửi cho Coke với dòng đề “Kẻ ngốc tối cao” được chuyển thẳng tới bàn làm việc của ông. Bài diễn văn “thu binh” ấy là một kiệt tác và bạn có thể xem trên YouTube. Ông vui vẻ thừa nhận rằng trên thực tế, Coca-Cola thuộc về người tiêu dùng chứ không phải công ty. Doanh số sau đó bùng nổ.
+
+Bạn có thể xem Don trên CharlieRose.com trong một cuộc phỏng vấn tuyệt vời (Tom Murphy và Kay Graham cũng có vài đoạn quý giá). Giống như Charlie Munger, Don mãi mãi là chàng trai Trung Tây: nhiệt thành, thân thiện và rất Mỹ.
+
+Cuối cùng, Ajit Jain – sinh ra và lớn lên ở Ấn Độ – cũng như Greg Abel, CEO tương lai người Canada của chúng ta, đều từng sống ở Omaha vài năm vào cuối thế kỷ 20. Thực tế, những năm 1990, Greg sống cách tôi chỉ vài dãy nhà trên phố Farnam, dù khi ấy chúng tôi chưa từng gặp.
+
+Có lẽ trong nguồn nước Omaha có thành phần kỳ diệu nào đó chăng?
 
 ***
+
+Tôi đã sống vài năm tuổi thiếu niên ở Washington, D.C. (khi bố tôi phục vụ trong Quốc hội) và năm 1954 tôi nhận một công việc mà mình tưởng sẽ gắn bó lâu dài ở Manhattan. Tại đó, Ben Graham và Jerry Newman đối xử với tôi hết mực, và tôi kết được nhiều bạn tri kỷ. New York có những lợi thế độc nhất – và tới giờ vẫn vậy. Thế nhưng năm 1956, chỉ sau 1 năm rưỡi, tôi quay về Omaha và không còn lang bạt nữa.
+
+Sau đó, ba người con của tôi cùng vài đứa cháu đều lớn lên ở Omaha. Bọn trẻ luôn học trường công (tốt nghiệp cùng ngôi trường trung học đã dạy bố tôi – khóa 1921, người vợ đầu tiên của tôi, Susie – khóa 1950, cũng như Charlie, Stan Lipsey, Irv và Ron Blumkin – những người đóng vai trò chủ chốt trong việc phát triển Nebraska Furniture Mart – và Jack Ringwalt – khóa 1923 – người sáng lập National Indemnity và bán công ty cho Berkshire năm 1967, qua đó tạo nền móng cho hoạt động bảo hiểm phi nhân thọ khổng lồ của chúng tôi).
+
+***
+
+Đất nước chúng ta có nhiều doanh nghiệp lớn, trường học lớn, cơ sở y tế lớn; mỗi nơi đều có lợi thế riêng cùng những con người tài năng. Nhưng tôi cảm thấy may mắn vô cùng vì đã kết được nhiều bạn bè tri kỷ, gặp cả hai người vợ của mình, được khởi đầu giáo dục tuyệt vời từ hệ thống trường công, được quen biết nhiều người Omaha thú vị và thân thiện khi còn rất trẻ, và có thêm vô số bạn trong Lực lượng Vệ binh Quốc gia Nebraska. Tóm lại, Nebraska chính là nhà.
+
+Nhìn lại, tôi tin rằng cả Berkshire lẫn bản thân tôi đều làm tốt hơn nhờ đặt đại bản doanh ở Omaha thay vì bất cứ đâu khác. Trung tâm nước Mỹ là nơi tuyệt vời để chào đời, nuôi dưỡng gia đình và gây dựng sự nghiệp. Nhờ may mắn trời cho, tôi đã rút được một lá thăm dài kỳ quặc ngay từ khi sinh ra.
+
+***
+
+Giờ hãy nói về tuổi già của tôi. Gen gia đình không giúp ích nhiều – kỷ lục sống thọ nhất (dù hồ sơ gia đình mờ dần khi lần ngược) là 92 tuổi cho tới khi tôi xuất hiện. Nhưng tôi đã gặp các bác sĩ Omaha khôn ngoan, thân thiện và tận tâm – bắt đầu từ Harley Hotz và kéo dài đến tận ngày nay. Ít nhất ba lần, mạng sống tôi được cứu, và mỗi lần đều nhờ các bác sĩ cách nhà chỉ vài dặm. (Dù vậy tôi đã thôi lấy dấu vân tay các y tá. Ở tuổi 95 bạn có thể được tha thứ cho nhiều trò lập dị... nhưng cũng có giới hạn.)
+
+***
+
+Ai sống thọ cũng cần rất nhiều may mắn, ngày ngày tránh được vỏ chuối, thiên tai, tài xế say xỉn hay mất tập trung, sét đánh – bạn kể tên đi.
+
+Nhưng Quý bà May mắn vốn thất thường và – không có từ nào chuẩn hơn – vô cùng bất công. Không ít trường hợp, giới lãnh đạo và người giàu có nhận nhiều hơn phần may mắn đáng có – điều mà người hưởng lợi thường không muốn thừa nhận. Những người thừa kế theo kiểu triều đại có được tự do tài chính trọn đời ngay từ lúc chào đời, trong khi nhiều người khác mở mắt đã thấy địa ngục trong tuổi thơ, hoặc tệ hơn, mang bệnh tật thể chất hay tinh thần khiến họ mất đi những điều tôi vẫn xem là hiển nhiên. Ở nhiều nơi đông dân trên thế giới, có lẽ tôi sẽ sống một cuộc đời khốn khổ và các chị tôi còn tệ hơn.
+
+Tôi sinh năm 1930, khỏe mạnh, đủ thông minh, da trắng, nam giới và ở nước Mỹ. Tuyệt vời! Cảm ơn Quý bà May mắn. Các chị tôi thông minh ngang tôi và tính cách còn tốt hơn nhưng phải đối mặt với viễn cảnh rất khác. Quý bà May mắn ghé qua suốt phần lớn cuộc đời tôi, nhưng bà ấy còn nhiều việc đáng làm hơn là chăm sóc những người đã ở tuổi 90. May mắn nào cũng có hạn.
+
+Ngược lại, Cha Thời gian dường như ngày càng để mắt đến tôi khi tôi già đi. Và ông ấy chưa từng thua; ai rồi cũng trở thành “chiến thắng” trong sổ điểm của ông. Khi thăng bằng, thị lực, thính lực và trí nhớ đồng loạt thoái trào không ngừng, bạn biết Cha Thời gian đang lảng vảng quanh đây.
+
+Tôi bước vào tuổi già khá muộn – thời điểm đó khác nhau ở mỗi người – nhưng một khi nó đến thì không thể phủ nhận.
+
+Điều khiến tôi ngạc nhiên là nhìn chung tôi vẫn cảm thấy khỏe. Dù di chuyển chậm và việc đọc khó dần, tôi vẫn đến văn phòng năm ngày mỗi tuần và làm việc với những cộng sự tuyệt vời. Thỉnh thoảng tôi có một ý tưởng hữu ích hoặc nhận được lời đề nghị mà lẽ ra chúng tôi không có. Vì quy mô của Berkshire và mặt bằng định giá thị trường, ý tưởng hiếm hoi – nhưng không phải là không có.
+
+***
+
+Thế nhưng việc sống lâu ngoài dự tính lại kéo theo những hệ quả không thể tránh, rất quan trọng đối với gia đình tôi và các mục tiêu thiện nguyện của tôi.
+
+Hãy cùng xem chúng là gì.
 
 ### Điều gì đến tiếp theo
 
-Các con tôi đều đã qua tuổi nghỉ hưu thông thường, đã đến tuổi 72, 70 và 67. Sẽ là một sai lầm nếu cá cược rằng cả ba - hiện đang ở đỉnh cao về nhiều mặt - sẽ được hưởng may mắn đặc biệt của tôi trong việc trì hoãn lão hóa. Để cải thiện xác suất họ sẽ phân bổ toàn bộ tài sản của tôi trước khi những người được ủy thác thay thế họ, tôi cần tăng tốc độ quà tặng trọn đời cho ba quỹ của họ. Các con tôi hiện đang ở thời kỳ đỉnh cao về kinh nghiệm và trí tuệ nhưng vẫn chưa bước vào tuổi già. Giai đoạn "trăng mật" đó sẽ không kéo dài mãi.
+Các con tôi đều đã qua tuổi nghỉ hưu thông thường, nay đã 72, 70 và 67. Sẽ là sai lầm nếu cá cược rằng cả ba – đang ở phong độ đỉnh cao trên nhiều phương diện – sẽ được hưởng vận may trì hoãn lão hóa như tôi. Để tăng khả năng họ sẽ phân bổ gần như toàn bộ tài sản của tôi trước khi các ủy thác thay thế được chỉ định, tôi cần đẩy nhanh tốc độ tặng cho ba quỹ của họ ngay khi tôi còn sống. Các con tôi đang ở giai đoạn sung sức nhất về trải nghiệm và sự minh triết nhưng vẫn chưa bước vào tuổi già. “Tuần trăng mật” đó sẽ không kéo dài mãi.
 
-May mắn thay, việc điều chỉnh hướng đi rất dễ thực hiện. Tuy nhiên, có một yếu tố bổ sung cần xem xét: Tôi muốn giữ một lượng đáng kể cổ phiếu "A" cho đến khi các cổ đông của Berkshire phát triển sự thoải mái với Greg mà Charlie và tôi đã có từ lâu. Mức độ tin cậy đó sẽ không mất nhiều thời gian. Các con tôi đã 100% ủng hộ Greg cũng như các giám đốc của Berkshire.
+May thay, điều chỉnh lộ trình rất dễ thực hiện. Tuy nhiên còn một yếu tố nữa: tôi muốn giữ lại một lượng đáng kể cổ phiếu hạng A cho đến khi các cổ đông Berkshire đạt được sự tin cậy với Greg giống như Charlie và tôi từ lâu đã dành cho anh. Mức độ tin tưởng ấy sẽ không mất nhiều thời gian. Các con tôi đã ủng hộ Greg 100%, cũng như các thành viên hội đồng Berkshire.
 
-Cả ba đứa con giờ đây đều có sự trưởng thành, trí não, năng lượng và bản năng để giải ngân một tài sản lớn. Họ cũng sẽ có lợi thế là còn sống khi tôi đã đi xa và, nếu cần, có thể áp dụng các chính sách vừa đoán trước vừa phản ứng với các chính sách thuế của liên bang hoặc các diễn biến khác ảnh hưởng đến hoạt động từ thiện. Họ rất có thể cần phải thích nghi với một thế giới đang thay đổi đáng kể xung quanh họ. Việc "chỉ đạo từ dưới mồ" không có một thành tích tốt, và tôi chưa bao giờ có ý định làm như vậy.
+Cả ba đứa giờ đây có đủ chín chắn, trí tuệ, năng lượng và bản năng để giải ngân một tài sản lớn. Chúng cũng sẽ có lợi thế là vẫn còn sống khi tôi đã đi xa và, nếu cần, có thể điều chỉnh cả chính sách dự phòng lẫn phản ứng trước thuế liên bang hoặc những diễn biến khác ảnh hưởng đến hoạt động thiện nguyện. Chúng rất có thể sẽ phải thích ứng với một thế giới thay đổi chóng mặt xung quanh mình. Điều hành từ dưới mồ chưa từng có thành tích tốt, và tôi chẳng hề muốn làm vậy.
 
-May mắn thay, cả ba đứa con đều nhận được liều lượng gen trội từ mẹ của chúng.
+May mắn thay, cả ba đều thừa hưởng phần gen trội từ mẹ chúng. Khi nhiều thập kỷ trôi qua, tôi cũng dần trở thành một hình mẫu tốt hơn cho cách chúng suy nghĩ và cư xử. Nhưng tôi sẽ chẳng bao giờ đạt tới phẩm chất của mẹ chúng.
 
-Khi nhiều thập kỷ trôi qua, tôi cũng đã trở thành một hình mẫu tốt hơn cho suy nghĩ và hành vi của chúng. Tuy nhiên, tôi sẽ không bao giờ đạt được sự ngang bằng với mẹ của chúng.
+Các con tôi có ba người được ủy thác thay thế, phòng khi xảy ra tử vong hoặc mất năng lực sớm. Những người này không được xếp hạng hay gắn với đứa con nào cụ thể. Cả ba đều là những con người tuyệt vời, hiểu đời và không có xung đột lợi ích.
 
-Các con tôi có ba người được ủy thác thay thế trong trường hợp có bất kỳ trường hợp tử vong hoặc mất khả năng nào sớm. Những người thay thế không được xếp hạng hoặc gắn liền với một đứa trẻ cụ thể. Cả ba đều là những con người đặc biệt và khôn ngoan trong các đường lối của thế giới. Họ không có động cơ xung đột.
+Tôi đã trấn an các con rằng chúng không cần tạo ra phép màu, cũng đừng sợ thất bại hay nỗi thất vọng. Những điều ấy là tất yếu, và bản thân tôi cũng trải qua đủ rồi. Chúng chỉ cần làm tốt hơn đôi chút so với những gì nhà nước và/hoặc các tổ chức thiện nguyện tư nhân thường đạt được, đồng thời nhận thức rằng những phương thức phân phối lại của cải khác cũng có nhược điểm.
 
-Tôi đã đảm bảo với các con tôi rằng chúng không cần phải thực hiện phép màu cũng như không sợ hãi thất bại hay thất vọng. Đây là những điều không thể tránh khỏi, và tôi đã có phần của mình. Chúng chỉ cần cải thiện phần nào những gì thường đạt được bởi các hoạt động của chính phủ và/hoặc hoạt động từ thiện tư nhân, nhận ra rằng các phương pháp phân phối lại của cải khác cũng có những thiếu sót.
+Thuở đầu, tôi từng nghĩ về đủ kiểu kế hoạch từ thiện hoành tráng. Dù khá bướng bỉnh, tôi vẫn phải thừa nhận chúng không khả thi. Trong nhiều năm, tôi cũng chứng kiến những vụ chuyển giao tài sản thiếu suy nghĩ của đám chính trị gia bất tài, các lựa chọn mang màu sắc dòng tộc, và vâng, cả những nhà từ thiện vụng về hoặc lập dị.
 
-Ban đầu, tôi đã dự tính nhiều kế hoạch từ thiện lớn lao khác nhau. Mặc dù tôi bướng bỉnh, nhưng chúng không khả thi. Trong nhiều năm của mình, tôi cũng đã chứng kiến các vụ chuyển giao tài sản thiếu cân nhắc bởi các chính trị gia bất tài, các lựa chọn theo kiểu triều đại, và vâng, cả những nhà từ thiện kém cỏi hoặc kỳ quặc.
+Nếu các con tôi chỉ cần làm một công việc tử tế, chúng có thể chắc chắn rằng mẹ chúng và tôi sẽ hài lòng. Bản năng của chúng rất tốt, mỗi đứa đã có nhiều năm thực hành với những khoản tiền rất nhỏ ban đầu rồi được nâng lên không đều đặn đến hơn 500 triệu đô la mỗi năm.
 
-Nếu các con tôi chỉ cần làm một công việc tử tế, chúng có thể chắc chắn rằng mẹ chúng và tôi sẽ hài lòng. Bản năng của chúng rất tốt và mỗi đứa đã có nhiều năm thực hành với số tiền rất nhỏ ban đầu và đã được tăng lên không đều đặn lên hơn 500 triệu đô la hàng năm.
-
-Cả ba đều thích làm việc nhiều giờ để giúp đỡ người khác, mỗi người theo cách riêng của mình.
-
-Việc tăng tốc quà tặng trọn đời của tôi cho các quỹ của các con tôi không phản ánh bất kỳ thay đổi nào trong quan điểm của tôi về triển vọng của Berkshire. Greg Abel đã làm tốt hơn cả những kỳ vọng cao mà tôi đã dành cho anh ấy khi tôi lần đầu tiên nghĩ rằng anh ấy nên là CEO tiếp theo của Berkshire. Anh ấy hiểu rõ nhiều doanh nghiệp và nhân sự của chúng ta hơn tôi bây giờ, và anh ấy là một người học rất nhanh về những vấn đề mà nhiều CEO thậm chí không xem xét. Tôi không thể nghĩ ra một CEO, một nhà tư vấn quản lý, một học giả, một thành viên chính phủ - bạn cứ kể tên ra - mà tôi sẽ chọn thay vì Greg để xử lý tiền tiết kiệm của bạn và của tôi.
-
-Greg hiểu, ví dụ, rõ hơn về cả tiềm năng tăng trưởng và những nguy hiểm của mảng kinh doanh bảo hiểm P/C (Phi nhân thọ) của chúng ta hơn là rất nhiều giám đốc điều hành P/C lâu năm. Hy vọng của tôi là sức khỏe của anh ấy vẫn tốt trong vài thập kỷ. Với một chút may mắn, Berkshire chỉ cần năm hoặc sáu CEO trong thế kỷ tới. Công ty nên đặc biệt tránh những người có mục tiêu nghỉ hưu ở tuổi 65, trở nên giàu có kiểu "hãy nhìn tôi đây" hoặc bắt đầu một triều đại.
-
-Một thực tế khó chịu: Thỉnh thoảng, một CEO tuyệt vời và trung thành của công ty mẹ hoặc công ty con sẽ mắc phải chứng mất trí, Alzheimer hoặc một căn bệnh suy nhược và lâu dài khác.
-
-Charlie và tôi đã gặp phải vấn đề này nhiều lần và đã không hành động. Sự thiếu sót này có thể là một sai lầm lớn. Hội đồng quản trị phải cảnh giác với khả năng này ở cấp độ CEO và CEO phải cảnh giác với khả năng này ở các công ty con. Điều này nói dễ hơn làm; tôi có thể kể ra một vài ví dụ trong quá khứ tại các công ty lớn. Các giám đốc (thành viên HĐQT) nên cảnh giác và lên tiếng là tất cả những gì tôi có thể khuyên.
-
-Trong suốt cuộc đời tôi, những nhà cải cách đã tìm cách làm bẽ mặt các CEO bằng cách yêu cầu tiết lộ mức lương của sếp so với mức lương được trả cho nhân viên trung bình. Các hồ sơ đại hội cổ đông (Proxy statements) nhanh chóng phình to lên hơn 100 trang so với 20 trang hoặc ít hơn trước đó.
-
-Nhưng những ý định tốt đẹp đã không hiệu quả; thay vào đó chúng đã phản tác dụng. Dựa trên phần lớn các quan sát của tôi - CEO của công ty "A" nhìn đối thủ của mình ở công ty "B" và ngầm truyền đạt với hội đồng quản trị của mình rằng ông ta xứng đáng được hưởng nhiều hơn. Tất nhiên, ông ta cũng tăng lương cho các giám đốc và cẩn thận về người ông ta đặt vào ủy ban lương thưởng. Các quy tắc mới tạo ra sự đố kỵ, không phải là sự điều độ.
-
-Sự leo thang (lương thưởng) đã có một cuộc sống riêng của nó. Điều thường làm phiền các CEO rất giàu có - rốt cuộc họ cũng là con người - là các CEO khác đang trở nên giàu có hơn. Sự đố kỵ và lòng tham luôn song hành. Và nhà tư vấn nào đã từng đề nghị cắt giảm nghiêm túc lương CEO hoặc các khoản thanh toán của hội đồng quản trị?
-
-Tổng hợp lại, các doanh nghiệp của Berkshire có triển vọng cao hơn mức trung bình một chút, được dẫn dắt bởi một vài viên ngọc quý không tương quan và có quy mô lớn. Tuy nhiên, một hoặc hai thập kỷ nữa, sẽ có nhiều công ty làm tốt hơn Berkshire; quy mô của chúng ta là một gánh nặng.
+Cả ba đều thích làm việc nhiều giờ để giúp đỡ người khác, mỗi người theo cách riêng.
 
 ***
 
-Berkshire có ít khả năng xảy ra thảm họa tàn khốc hơn bất kỳ doanh nghiệp nào tôi biết. Và, Berkshire có một ban quản lý và hội đồng quản trị có ý thức về cổ đông hơn hầu hết các công ty mà tôi biết (và tôi đã thấy rất nhiều). Cuối cùng, Berkshire sẽ luôn được quản lý theo cách mà sự tồn tại của nó là một tài sản đối với Hợp chủng quốc Hoa Kỳ và né tránh các hoạt động có thể khiến công ty trở thành một kẻ cầu xin (sự giúp đỡ). Theo thời gian, các nhà quản lý của chúng ta sẽ trở nên khá giàu có - họ có trách nhiệm quan trọng - nhưng không có mong muốn về sự giàu có theo kiểu triều đại hoặc "hãy nhìn tôi đây".
+Việc tăng tốc các khoản tặng cho con tôi hoàn toàn không phản ánh bất kỳ thay đổi nào trong quan điểm của tôi về triển vọng Berkshire. Greg Abel đã vượt xa kỳ vọng rất cao mà tôi dành cho anh khi lần đầu nghĩ rằng anh nên là CEO kế nhiệm. Anh hiểu nhiều doanh nghiệp và con người của chúng tôi rõ hơn cả tôi bây giờ và học rất nhanh về những điều mà nhiều CEO khác thậm chí chẳng hề nghĩ tới. Tôi không thể tưởng tượng được một CEO, một tư vấn quản trị, một học giả hay quan chức nào – bạn cứ nêu tên – mà tôi muốn giao phó tiền tiết kiệm của các bạn và của tôi hơn Greg.
 
-Giá cổ phiếu của chúng ta sẽ biến động thất thường, thỉnh thoảng giảm 50% hoặc hơn như đã xảy ra ba lần trong 60 năm dưới sự quản lý hiện tại. Đừng tuyệt vọng; nước Mỹ sẽ trở lại và cổ phiếu Berkshire cũng vậy.
+Ví dụ, Greg hiểu rõ cả tiềm năng lẫn rủi ro của mảng bảo hiểm phi nhân thọ của chúng ta hơn rất nhiều lãnh đạo dày dạn trong ngành. Tôi hy vọng anh ấy sẽ khỏe mạnh thêm vài thập kỷ nữa. Nếu thuận lợi, Berkshire chỉ cần năm hoặc sáu CEO trong thế kỷ tới. Công ty đặc biệt nên tránh những người đặt mục tiêu nghỉ hưu ở tuổi 65, thích khoe sự giàu có hay muốn lập nên một triều đại.
 
-### Một vài suy nghĩ cuối cùng
+Một thực tế khó chịu: đôi khi một CEO tuyệt vời và trung thành của công ty mẹ hay công ty con sẽ mắc chứng mất trí, Alzheimer hoặc một căn bệnh suy nhược kéo dài.
 
-Một quan sát có lẽ là tự phục vụ bản thân. Tôi vui mừng khi nói rằng tôi cảm thấy tốt hơn về nửa sau của cuộc đời mình so với nửa đầu. Lời khuyên của tôi: Đừng tự dằn vặt mình vì những sai lầm trong quá khứ - hãy học ít nhất một chút từ chúng và bước tiếp. Không bao giờ là quá muộn để cải thiện. Hãy tìm đúng hình mẫu và noi gương họ. Bạn có thể bắt đầu với Tom Murphy; ông ấy là người giỏi nhất.
+Charlie và tôi từng gặp vấn đề này vài lần và đã không hành động. Việc chần chừ ấy có thể là sai lầm lớn. Hội đồng quản trị phải cảnh giác với nguy cơ này ở cấp CEO, và CEO cũng phải cảnh giác với nguy cơ ấy ở các công ty con. Nói thì dễ hơn làm; tôi có thể kể vài ví dụ trong quá khứ ở các tập đoàn lớn. Lời khuyên duy nhất của tôi là các giám đốc hãy tỉnh táo và lên tiếng.
 
-Hãy nhớ Alfred Nobel, người sau này nổi tiếng với giải Nobel, người - được cho là - đã đọc cáo phó của chính mình bị in nhầm khi anh trai ông qua đời và một tờ báo bị nhầm lẫn. Ông đã kinh hoàng trước những gì mình đọc được và nhận ra mình nên thay đổi hành vi.
+Trong suốt đời tôi, nhiều nhà cải cách đã cố bêu xấu CEO bằng cách buộc công bố mức lương của sếp so với lương trung bình của nhân viên. Hệ thống proxy lập tức phình ra hơn 100 trang, so với 20 trang hoặc ít hơn trước đây.
 
-Đừng trông chờ vào một sự nhầm lẫn của phòng tin tức: Hãy quyết định xem bạn muốn cáo phó của mình nói điều gì và hãy sống cuộc đời xứng đáng với điều đó.
+Nhưng ý định tốt đẹp ấy không hiệu quả; trái lại còn phản tác dụng. Theo phần lớn những gì tôi chứng kiến, CEO của công ty “A” nhìn sang đối thủ ở công ty “B” rồi khéo léo ám chỉ với hội đồng rằng mình xứng đáng được trả cao hơn. Tất nhiên, ông ta cũng tăng thù lao cho các giám đốc và cực kỳ cẩn trọng khi chọn người ngồi trong ủy ban lương thưởng. Những quy định mới tạo ra lòng đố kỵ, chứ không phải sự tiết chế.
 
-Sự vĩ đại không đến từ việc tích lũy số tiền lớn, sự nổi tiếng lớn hay quyền lực lớn trong chính phủ. Khi bạn giúp đỡ ai đó bằng bất kỳ cách nào trong hàng ngàn cách, bạn đang giúp đỡ thế giới. Lòng tốt là miễn phí nhưng cũng là vô giá. Dù bạn có tôn giáo hay không, khó có gì vượt qua được Quy tắc Vàng như một kim chỉ nam cho hành vi.
-
-Tôi viết điều này với tư cách là một người đã vô tâm vô số lần và mắc nhiều sai lầm nhưng cũng rất may mắn khi học được từ một số người bạn tuyệt vời cách cư xử tốt hơn (tuy nhiên vẫn còn xa mới hoàn hảo). Hãy nhớ rằng người phụ nữ dọn dẹp cũng là một con người như Chủ tịch.
+Việc leo thang đó tự vận hành theo quán tính riêng. Điều thường khiến các CEO giàu có bực bội – rốt cuộc họ cũng là con người – là các CEO khác còn giàu nhanh hơn. Đố kỵ và tham lam luôn đi cùng nhau. Và đã có cố vấn nào từng nghiêm túc đề xuất cắt giảm mạnh lương CEO hay thù lao hội đồng chưa?
 
 ***
 
-Tôi chúc tất cả những người đọc điều này một Lễ Tạ ơn thật hạnh phúc. Vâng, ngay cả những kẻ đáng ghét; không bao giờ là quá muộn để thay đổi. Hãy nhớ cảm ơn nước Mỹ vì đã tối đa hóa cơ hội của bạn. Nhưng nó - một cách không thể tránh khỏi - thất thường và đôi khi hám lợi trong việc phân phối phần thưởng của mình.
+Tổng hợp lại, các doanh nghiệp của Berkshire có triển vọng cao hơn mức trung bình đôi chút, dẫn dắt bởi vài viên ngọc quý lớn mà không tương quan. Dù vậy, trong một hai thập kỷ tới sẽ có nhiều công ty làm tốt hơn Berkshire; quy mô của chúng ta là một gánh nặng.
 
-Hãy chọn hình mẫu của bạn một cách cẩn thận và sau đó noi gương họ. Bạn sẽ không bao giờ hoàn hảo, nhưng bạn luôn có thể trở nên tốt hơn.
+Berkshire có ít khả năng gặp thảm họa mang tính hủy diệt hơn bất kỳ doanh nghiệp nào tôi biết. Công ty cũng có ban điều hành và hội đồng quản trị chú trọng cổ đông hơn hầu hết doanh nghiệp mà tôi quen (và tôi đã thấy rất nhiều). Cuối cùng, Berkshire sẽ luôn được điều hành theo cách biến sự tồn tại của mình thành tài sản của Hợp chủng quốc Hoa Kỳ và tránh xa những hoạt động có thể khiến công ty phải cầu cạnh. Theo thời gian, các nhà quản lý của chúng ta sẽ trở nên giàu có – họ gánh trách nhiệm lớn – nhưng họ không theo đuổi sự giàu sang kiểu triều đại hay khoe mẽ.
+
+Giá cổ phiếu của chúng ta sẽ biến động thất thường, đôi lúc giảm 50% hoặc hơn – điều đã xảy ra ba lần trong 60 năm dưới sự điều hành hiện tại. Đừng tuyệt vọng; nước Mỹ sẽ trở lại, và cổ phiếu Berkshire cũng vậy.
+
+### Vài suy nghĩ cuối cùng
+
+Một nhận xét có lẽ hơi thiên vị bản thân: tôi thấy nửa sau cuộc đời mình tốt đẹp hơn nửa đầu. Lời khuyên của tôi: đừng tự giày vò vì những sai lầm đã qua – hãy học được chút gì đó từ chúng rồi bước tiếp. Chẳng bao giờ là quá muộn để tiến bộ. Hãy chọn đúng hình mẫu và học theo họ. Bạn có thể bắt đầu với Tom Murphy; ông ấy là người giỏi nhất.
+
+Hãy nhớ Alfred Nobel – người sau này nổi tiếng với giải Nobel – được cho là đã đọc cáo phó của chính mình khi một tờ báo nhầm lẫn lúc anh trai ông mất. Ông kinh hãi với những gì đọc được và nhận ra mình cần thay đổi cách sống.
+
+Đừng chờ một cú nhầm lẫn của phòng tin: hãy quyết định bạn muốn cáo phó của mình viết gì và sống một cuộc đời xứng đáng với điều đó.
+
+Sự vĩ đại không đến từ việc chất đống tiền bạc, danh tiếng hay quyền lực chính trị. Khi bạn giúp ai đó theo bất kỳ trong hàng nghìn cách, bạn đang giúp cả thế giới. Lòng tốt không tốn tiền nhưng lại vô giá. Dù bạn có tín ngưỡng hay không, thật khó có chuẩn mực nào vượt qua Quy tắc Vàng để dẫn lối hành vi.
+
+Tôi viết điều này với tư cách một người đã vô tâm vô số lần và mắc nhiều sai lầm, nhưng cũng may mắn học được từ những người bạn tuyệt vời cách cư xử tốt hơn (dù tôi vẫn còn xa mới hoàn hảo). Hãy nhớ rằng người phụ nữ dọn dẹp cũng là một con người như vị Chủ tịch.
+
+***
+
+Tôi chúc tất cả những ai đọc những dòng này một mùa Lễ Tạ ơn thật hạnh phúc. Vâng, cả những người khó ưa; chẳng bao giờ là quá muộn để thay đổi. Hãy nhớ cảm ơn nước Mỹ vì đã tối đa hóa cơ hội cho bạn. Nhưng đất nước này – như một lẽ tự nhiên – cũng thất thường và đôi lúc vị lợi khi phân phát phần thưởng.
+
+Hãy chọn hình mẫu của bạn thật cẩn thận rồi noi theo họ. Bạn sẽ chẳng bao giờ hoàn hảo, nhưng bạn luôn có thể trở nên tốt hơn.
 
 ---
 
 ## Về Berkshire Hathaway
 
-Berkshire Hathaway và các công ty con của mình tham gia vào các hoạt động kinh doanh đa dạng bao gồm bảo hiểm và tái bảo hiểm, tiện ích và năng lượng, vận tải hàng hóa đường sắt, sản xuất, dịch vụ và bán lẻ.
+Berkshire Hathaway và các công ty con của mình tham gia vào các lĩnh vực kinh doanh đa dạng bao gồm bảo hiểm và tái bảo hiểm, tiện ích và năng lượng, vận tải đường sắt, sản xuất, dịch vụ và bán lẻ.
 
-Cổ phiếu phổ thông của công ty được niêm yết trên Sàn giao dịch chứng khoán New York, với các mã giao dịch BRK.A và BRK.B.
+Cổ phiếu phổ thông của công ty được niêm yết trên Sở Giao dịch Chứng khoán New York với mã BRK.A và BRK.B.
 
 **– Hết –**
 
 Liên hệ: Marc D. Hamburg – 402-346-1400
 
 ---
-
