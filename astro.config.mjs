@@ -12,8 +12,6 @@ import rehypeFigure from "./remark/rehype-figure.mjs";
 import { remarkModifiedTime } from "./remark/remark-modified-time.mjs";
 import { remarkReadingTime } from "./remark/remark-reading-time.mjs";
 
-import yeskunallumami from "@yeskunall/astro-umami";
-
 export default defineConfig({
   site: "https://thinhcorner.com",
   adapter: vercel({
@@ -33,11 +31,6 @@ export default defineConfig({
       },
     }),
     mdx(),
-    yeskunallumami({
-      id: process.env.PUBLIC_UMAMI_ID || "",
-      hostUrl: process.env.PUBLIC_UMAMI_HOST_URL || "",
-      withPartytown: true,
-    }),
   ],
   vite: {
     plugins: [tailwindcss()],
