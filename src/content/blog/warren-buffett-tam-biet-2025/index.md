@@ -1,7 +1,7 @@
 ---
 title: Warren Buffett gửi lời tạm biệt qua thông điệp Lễ Tạ ơn 2025
 date: "2025-11-11"
-description: Bản dịch tiếng Việt thông cáo báo chí Berkshire Hathaway ngày 10/11/2025 cùng một vài bình luận nổi bật từ cộng đồng Hacker News.
+description: Bản dịch tiếng Việt thông cáo báo chí Berkshire Hathaway ngày 10/11/2025 và thông điệp Lễ Tạ ơn của Warren Buffett.
 lang: "vi"
 ---
 
@@ -197,13 +197,3 @@ Liên hệ: Marc D. Hamburg – 402-346-1400
 
 ---
 
-## Bình luận nổi bật từ cộng đồng Hacker News
-
-Bài đăng "Warren Buffett's final shareholder letter" đã thu hút hơn 100 bình luận chỉ trong vài giờ. Một số luồng trao đổi đáng chú ý:
-
-- Nhiều độc giả bày tỏ sự xúc động trước thông điệp lấy lòng tốt làm trung tâm, gọi Buffett là "Oracle of Omaha" và cảm ơn ông vì đã khuyên mọi người chọn hình mẫu sống đúng mực.
-- Một số ý kiến phản biện nhắc lại rằng đằng sau hình tượng giản dị, Buffett vẫn là một nhà tư bản sắt đá, với các thương vụ tái cấu trúc khắc nghiệt và lợi thế gần như độc quyền trong lĩnh vực đường sắt và bảo hiểm.
-- Nhiều người khác bảo vệ Buffett bằng cách nhấn mạnh cam kết từ thiện hàng trăm tỷ USD của ông, đồng thời cho rằng cần nhìn toàn cảnh đóng góp của ông thay vì chỉ trích những quyết định cụ thể.
-- Cuộc tranh luận tiếp tục xoay quanh câu hỏi liệu các khoản quyên góp lớn có tương xứng với số thuế mà ông tiết kiệm được, dẫn đến các liên kết tới những cuộc điều tra về cách tầng lớp siêu giàu tối ưu hoá nghĩa vụ thuế.
-
-Bạn có thể đọc toàn bộ thảo luận tại [Hacker News](https://news.ycombinator.com/item?id=45882837).
