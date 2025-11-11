@@ -8,6 +8,14 @@
   --font-normal: "Iosevka Aile", sans-serif;
 }
 
+:root {
+  --radius-surface: 1rem;
+}
+
+.rounded-surface {
+  border-radius: var(--radius-surface);
+}
+
 html {
   scrollbar-gutter: stable both-edges;
 }
