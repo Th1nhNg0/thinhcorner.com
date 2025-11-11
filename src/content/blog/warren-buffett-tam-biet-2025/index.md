@@ -5,7 +5,7 @@ description: Bản dịch tiếng Việt thông cáo báo chí Berkshire Hathawa
 lang: "vi"
 ---
 
-*Bản dịch tiếng Việt từ thông cáo báo chí do Berkshire Hathaway công bố ngày 10/11/2025. Nguyên văn tiếng Anh có tại [berkshirehathaway.com](https://berkshirehathaway.com/news/nov1025.pdf).*
+*Bản dịch tiếng Việt từ thông cáo báo chí do Berkshire Hathaway công bố ngày 10/11/2025. Nguyên văn tiếng Anh có tại [berkshirehathaway.com](https://berkshirehathaway.com/news/nov1025.pdf). Bản dịch đã được đối chiếu với tệp PDF gốc để đảm bảo đầy đủ nội dung.*
 
 ## Thông cáo báo chí Berkshire Hathaway
 
@@ -29,9 +29,11 @@ Tôi sẽ không còn viết báo cáo thường niên của Berkshire hay nói 
 
 Cũng gần như vậy.
 
-Greg Abel sẽ trở thành sếp vào cuối năm nay. Anh ấy là một nhà quản lý tuyệt vời, một người làm việc không mệt mỏi và một người giao tiếp trung thực. Chúc anh ấy có một nhiệm kỳ kéo dài.
+Greg Abel sẽ trở thành CEO vào cuối năm nay. Anh ấy là một nhà quản lý tuyệt vời, một người làm việc không mệt mỏi và một người giao tiếp trung thực. Chúc anh ấy có một nhiệm kỳ kéo dài.
 
 Tôi sẽ tiếp tục nói chuyện với các bạn và các con tôi về Berkshire thông qua thông điệp Lễ Tạ ơn hàng năm của mình. Các cổ đông cá nhân của Berkshire là một nhóm rất đặc biệt, những người cực kỳ hào phóng trong việc chia sẻ lợi nhuận của họ với những người kém may mắn hơn. Tôi tận hưởng cơ hội được giữ liên lạc với các bạn. Hãy chiều tôi năm nay khi tôi hồi tưởng một chút. Sau đó, tôi sẽ thảo luận về các kế hoạch phân phối cổ phiếu Berkshire của mình. Cuối cùng, tôi sẽ đưa ra một vài quan sát về kinh doanh và cá nhân.
+
+***
 
 Khi Lễ Tạ ơn đến gần, tôi cảm thấy biết ơn và ngạc nhiên về sự may mắn của mình khi vẫn còn sống ở tuổi 95. Khi tôi còn trẻ, kết quả này có vẻ không phải là một vụ cá cược tốt. Thuở ban đầu, tôi đã suýt chết.
 
@@ -121,7 +123,7 @@ Hãy khám phá chúng.
 
 ### Điều gì đến tiếp theo
 
-Các con tôi đều đã qua tuổi nghỉ hưu thông thường, đã đến tuổi 72, 70 và 67. Sẽ là một sai lầm nếu cá cược rằng cả ba - hiện đang ở đỉnh cao về nhiều mặt - sẽ được hưởng may mắn đặc biệt của tôi trong việc trì hoãn lão hóa. Để cải thiện xác suất họ sẽ phân bổ toàn bộ tài sản của tôi trước khi những người được ủy thác thay thế thay thế họ, tôi cần tăng tốc độ quà tặng trọn đời cho ba quỹ của họ. Các con tôi hiện đang ở thời kỳ đỉnh cao về kinh nghiệm và trí tuệ nhưng vẫn chưa bước vào tuổi già. Giai đoạn "trăng mật" đó sẽ không kéo dài mãi.
+Các con tôi đều đã qua tuổi nghỉ hưu thông thường, đã đến tuổi 72, 70 và 67. Sẽ là một sai lầm nếu cá cược rằng cả ba - hiện đang ở đỉnh cao về nhiều mặt - sẽ được hưởng may mắn đặc biệt của tôi trong việc trì hoãn lão hóa. Để cải thiện xác suất họ sẽ phân bổ toàn bộ tài sản của tôi trước khi những người được ủy thác thay thế họ, tôi cần tăng tốc độ quà tặng trọn đời cho ba quỹ của họ. Các con tôi hiện đang ở thời kỳ đỉnh cao về kinh nghiệm và trí tuệ nhưng vẫn chưa bước vào tuổi già. Giai đoạn "trăng mật" đó sẽ không kéo dài mãi.
 
 May mắn thay, việc điều chỉnh hướng đi rất dễ thực hiện. Tuy nhiên, có một yếu tố bổ sung cần xem xét: Tôi muốn giữ một lượng đáng kể cổ phiếu "A" cho đến khi các cổ đông của Berkshire phát triển sự thoải mái với Greg mà Charlie và tôi đã có từ lâu. Mức độ tin cậy đó sẽ không mất nhiều thời gian. Các con tôi đã 100% ủng hộ Greg cũng như các giám đốc của Berkshire.
 
@@ -157,6 +159,8 @@ Sự leo thang (lương thưởng) đã có một cuộc sống riêng của nó
 
 Tổng hợp lại, các doanh nghiệp của Berkshire có triển vọng cao hơn mức trung bình một chút, được dẫn dắt bởi một vài viên ngọc quý không tương quan và có quy mô lớn. Tuy nhiên, một hoặc hai thập kỷ nữa, sẽ có nhiều công ty làm tốt hơn Berkshire; quy mô của chúng ta là một gánh nặng.
 
+***
+
 Berkshire có ít khả năng xảy ra thảm họa tàn khốc hơn bất kỳ doanh nghiệp nào tôi biết. Và, Berkshire có một ban quản lý và hội đồng quản trị có ý thức về cổ đông hơn hầu hết các công ty mà tôi biết (và tôi đã thấy rất nhiều). Cuối cùng, Berkshire sẽ luôn được quản lý theo cách mà sự tồn tại của nó là một tài sản đối với Hợp chủng quốc Hoa Kỳ và né tránh các hoạt động có thể khiến công ty trở thành một kẻ cầu xin (sự giúp đỡ). Theo thời gian, các nhà quản lý của chúng ta sẽ trở nên khá giàu có - họ có trách nhiệm quan trọng - nhưng không có mong muốn về sự giàu có theo kiểu triều đại hoặc "hãy nhìn tôi đây".
 
 Giá cổ phiếu của chúng ta sẽ biến động thất thường, thỉnh thoảng giảm 50% hoặc hơn như đã xảy ra ba lần trong 60 năm dưới sự quản lý hiện tại. Đừng tuyệt vọng; nước Mỹ sẽ trở lại và cổ phiếu Berkshire cũng vậy.
@@ -172,6 +176,8 @@ Hãy nhớ Alfred Nobel, người sau này nổi tiếng với giải Nobel, ng�
 Sự vĩ đại không đến từ việc tích lũy số tiền lớn, sự nổi tiếng lớn hay quyền lực lớn trong chính phủ. Khi bạn giúp đỡ ai đó bằng bất kỳ cách nào trong hàng ngàn cách, bạn đang giúp đỡ thế giới. Lòng tốt là miễn phí nhưng cũng là vô giá. Dù bạn có tôn giáo hay không, khó có gì vượt qua được Quy tắc Vàng như một kim chỉ nam cho hành vi.
 
 Tôi viết điều này với tư cách là một người đã vô tâm vô số lần và mắc nhiều sai lầm nhưng cũng rất may mắn khi học được từ một số người bạn tuyệt vời cách cư xử tốt hơn (tuy nhiên vẫn còn xa mới hoàn hảo). Hãy nhớ rằng người phụ nữ dọn dẹp cũng là một con người như Chủ tịch.
+
+***
 
 Tôi chúc tất cả những người đọc điều này một Lễ Tạ ơn thật hạnh phúc. Vâng, ngay cả những kẻ đáng ghét; không bao giờ là quá muộn để thay đổi. Hãy nhớ cảm ơn nước Mỹ vì đã tối đa hóa cơ hội của bạn. Nhưng nó - một cách không thể tránh khỏi - thất thường và đôi khi hám lợi trong việc phân phối phần thưởng của mình.
 
