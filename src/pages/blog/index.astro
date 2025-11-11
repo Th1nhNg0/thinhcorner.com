@@ -101,13 +101,13 @@ const years = Object.keys(postsByYear)
             <ul class="space-y-4" role="list">
               {postsByYear[year].map((post) => (
                 <li
-                  class="grid gap-2 sm:grid-cols-[auto_1fr]"
+                  class="grid gap-2 sm:grid-cols-[auto_1fr] items-start"
                   data-lang={post.data.lang || "en"}
                 >
                   <time
                     datetime={post.data.date.toISOString()}
                     title={post.data.date.toISOString()}
-                    class="min-w-30 font-semibold font-mono text-zinc-400 pt-1"
+                    class="min-w-30 font-semibold font-mono text-zinc-400"
                   >
                     {format(new Date(post.data.date), "dd MMM y")}
                   </time>
