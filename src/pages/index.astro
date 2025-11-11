@@ -42,114 +42,19 @@ const blog = (await getCollection("blog"))
         <p class="leading-relaxed">
           Hello! I'm Ngô Phú Thịnh, an enthusiastic indie hacker exploring the
           entrepreneurial path right here in Ho Chi Minh City, Vietnam. My world
-          revolves around technology and the joy of learning new things. I'm
-          currently pouring my energy into some exciting projects that I hope
-          will make a positive impact!
+          revolves around technology and the joy of learning new things.
         </p>
         <p class="leading-relaxed">
-          When I step away from the keyboard, I love listening to music and
-          getting lost in a good book. If you happen to be in Ho Chi Minh City,
-          I'd welcome the chance to connect for coffee or discuss working
-          together. Feel free to reach out!
+          I am currently researching economics and politics around the world,
+          diving deep into how different systems shape societies and influence
+          daily life. I'm fascinated by the intersection of economic policies
+          and political structures, and how they create both opportunities and
+          challenges for individuals and communities. Through this exploration,
+          I aim to better understand the forces that drive global change and how
+          we can build more sustainable and equitable systems for the future.
         </p>
-        <p class="font-medium text-zinc-200">Find me on</p>
       </div>
-
-      <div class="not-prose flex flex-wrap gap-3">
-        {
-          SOCIAL_MEDIA.facebook && (
-            <a
-              href={SOCIAL_MEDIA.facebook}
-              target="_blank"
-              class="flex items-center space-x-2 px-4 py-2 bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 rounded-2xl transition-colors duration-200 hover:from-zinc-700/80 hover:to-zinc-800/80"
-              aria-label="Facebook Profile"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="1em"
-                height="1em"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  fill="currentColor"
-                  d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95"
-                />
-              </svg>
-              <span>Facebook</span>
-            </a>
-          )
-        }
-        {
-          SOCIAL_MEDIA.github && (
-            <a
-              href={SOCIAL_MEDIA.github}
-              target="_blank"
-              class="flex items-center space-x-2 px-4 py-2 bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 rounded-2xl transition-colors duration-200 hover:from-zinc-700/80 hover:to-zinc-800/80"
-              aria-label="GitHub Profile"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="1em"
-                height="1em"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  fill="currentColor"
-                  d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"
-                />
-              </svg>
-              <span>Github</span>
-            </a>
-          )
-        }
-        {
-          SOCIAL_MEDIA.spotify && (
-            <a
-              href={SOCIAL_MEDIA.spotify}
-              target="_blank"
-              class="flex items-center space-x-2 px-4 py-2 bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 rounded-2xl transition-colors duration-200 hover:from-zinc-700/80 hover:to-zinc-800/80"
-              aria-label="Spotify Profile"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="1em"
-                height="1em"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <g fill="none">
-                  <>
-                    <g clip-path="url(#akarIconsSpotifyFill0)">
-                      <path
-                        fill="currentColor"
-                        d="M11.995 0C5.381 0 0 5.382 0 11.996C0 18.616 5.381 24 11.995 24C18.615 24 24 18.615 24 11.996C24 5.382 18.615 0 11.995 0M5.908 16.404a14.6 14.6 0 0 1 4.238-.638c2.414 0 4.797.612 6.892 1.77c.125.068.238.292.29.572c.05.28.03.567-.052.716a.61.61 0 0 1-.834.24A13.1 13.1 0 0 0 6.277 18.03a.61.61 0 0 1-.771-.402c-.107-.35.114-1.13.402-1.224m-.523-4.42a18.2 18.2 0 0 1 4.76-.635c2.894 0 5.767.7 8.31 2.026c.179.09.31.244.37.432a.75.75 0 0 1-.052.578c-.227.444-.493.743-.66.743a.8.8 0 0 1-.35-.086a16.3 16.3 0 0 0-7.617-1.854a16.3 16.3 0 0 0-4.366.585a.75.75 0 0 1-.92-.525c-.112-.422.145-1.16.525-1.264M5.25 9.098a.88.88 0 0 1-1.073-.641c-.123-.498.188-1.076.64-1.19a22.4 22.4 0 0 1 5.328-.649c3.45 0 6.756.776 9.824 2.307a.89.89 0 0 1 .4 1.19c-.143.288-.453.598-.795.598a.9.9 0 0 1-.388-.087A20 20 0 0 0 10.145 8.5c-1.635 0-3.282.201-4.895.598"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="akarIconsSpotifyFill0">
-                        <path fill="#fff" d="M0 0h24v24H0z" />
-                      </clipPath>
-                    </defs>
-                  </>
-                </g>
-              </svg>
-              <span>Spotify</span>
-            </a>
-          )
-        }
-      </div>
-      <p class="text-zinc-400">
-        Or mail me at{" "}
-        <a
-          href="mailto:thinhngow@gmail.com"
-          class="font-medium text-zinc-200 hover:underline"
-        >
-          thinhngow@gmail.com
-        </a>.
-      </p>
-      <section class="my-16">
+      <section class="mb-16">
         <h2 class="text-accent mb-6 text-xl text-zinc-200">
           <a href="/blog/">Posts</a>
         </h2>
@@ -177,6 +82,32 @@ const blog = (await getCollection("blog"))
           }
         </ul>
       </section>
+      <footer
+        class="mt-20 border-t border-zinc-800 pt-8 pb-12 text-sm text-zinc-400 text-right"
+      >
+        <div
+          class="flex flex-col gap-3 text-base text-zinc-200 sm:flex-row sm:items-center sm:justify-end sm:gap-6"
+        >
+          <a
+            href="mailto:thinhngow@gmail.com"
+            class="transition-colors duration-200 hover:text-white"
+          >
+            thinhngow@gmail.com
+          </a>
+          {
+            SOCIAL_MEDIA.github && (
+              <a
+                href={SOCIAL_MEDIA.github}
+                target="_blank"
+                class="transition-colors duration-200 hover:text-white"
+                aria-label="GitHub Profile"
+              >
+                GitHub
+              </a>
+            )
+          }
+        </div>
+      </footer>
     </div>
   </Container>
 </Layout>
