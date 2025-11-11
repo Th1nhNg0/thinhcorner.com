@@ -91,7 +91,7 @@ let slug = Array.isArray(Astro.params.id)
   <Container>
     {
       post.data.draft && (
-        <div class="mb-8 rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-yellow-500">
+        <div class="mb-8 rounded-surface border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-yellow-500">
           <p class="text-sm font-medium">
             ⚠️ This is a draft post. It may be incomplete or contain incorrect
             information.
@@ -138,19 +138,19 @@ let slug = Array.isArray(Astro.params.id)
       </div>
     </div>
     <article
-      class="prose prose-h2:font-heading prose-h3:font-heading prose-h4:font-heading prose-code:bg-[#24292e] prose-code:p-0.5 prose-code:rounded prose-code:before:content-[''] prose-code:after:content-[''] prose-img:mx-auto max-w-none prose-invert prose-a:text-yellow-500 prose-table:my-auto"
+      class="prose prose-h2:font-heading prose-h3:font-heading prose-hr:border-zinc-700 prose-h4:font-heading prose-code:bg-[#24292e] prose-code:p-0.5 prose-code:rounded prose-code:before:content-[''] prose-code:after:content-[''] prose-img:mx-auto max-w-none prose-invert prose-a:text-yellow-500 prose-table:my-auto"
     >
       <Content />
     </article>
 
     <EditOnGithub slug={slug} />
 
-    <nav class="my-8 flex flex-col gap-4 border-t border-zinc-700/50 pt-8">
+    <nav class="pb-4 flex flex-col gap-4">
       {
         prevPost && (
           <a
             href={`/blog/${prevPost.id}`}
-            class="group relative  border border-zinc-700/50 p-4 transition-colors hover:border-gray-600"
+            class="group relative rounded-surface border border-zinc-700/50 p-4 transition-colors hover:border-gray-600"
           >
             <div class="mb-2 text-sm text-gray-400">← Previous Article</div>
             <div class="line-clamp-2 font-medium text-gray-100 group-hover:text-white">
@@ -164,7 +164,7 @@ let slug = Array.isArray(Astro.params.id)
         nextPost && (
           <a
             href={`/blog/${nextPost.id}`}
-            class="group relative border border-zinc-700/50 p-4 transition-colors hover:border-gray-600"
+            class="group relative rounded-surface border border-zinc-700/50 p-4 transition-colors hover:border-gray-600"
           >
             <div class="mb-2 text-sm text-gray-400">Next Article →</div>
             <div class="line-clamp-2 font-medium text-gray-100 group-hover:text-white">
