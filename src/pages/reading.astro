@@ -83,7 +83,7 @@ const now = new Date();
             </h2>
             <ul class="grid grid-cols-1 md:grid-cols-2 gap-4" role="list">
               {readByYear[year].map((book) => (
-                <li class="flex gap-4 bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm border border-zinc-700/50 rounded-2xl p-4">
+                <li class="flex gap-4 bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4">
                   {book.cover && (
                     <img
                       src={book.cover}

@@ -3,6 +3,7 @@ import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
 import TimelineItem from "@/components/TimelineItem.astro";
 import { Image } from "astro:assets";
+import { YouTube } from "astro-embed";
 ---
 
 <Layout title="Now" description="What I'm up to now.">
@@ -198,14 +199,11 @@ import { Image } from "astro:assets";
         <p class="text-zinc-500 italic">
           A long time ago in a galaxy far, far away...
         </p>
-        <iframe
+        <YouTube
+          id="UcgV4OFRS-w"
           class="w-full aspect-video"
-          src="https://www.youtube.com/embed/UcgV4OFRS-w?si=dTA3vlZNwvSmBMLo"
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen
-          loading="lazy"></iframe>
+          title="Big Bang - The Beginning of Everything video"
+        />
       </TimelineItem>
     </ol>
   </Container>

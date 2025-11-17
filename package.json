@@ -20,6 +20,7 @@
     "@vercel/og": "^0.8.5",
     "@vercel/speed-insights": "^1.2.0",
     "astro": "^5.15.3",
+    "astro-embed": "^0.9.1",
     "cheerio": "^1.1.2",
     "date-fns": "^4.1.0",
     "echarts": "^6.0.0",
