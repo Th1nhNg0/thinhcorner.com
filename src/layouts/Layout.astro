@@ -64,17 +64,6 @@ const {
     <main>
       <slot />
     </main>
-    <script>
-      const imageSelectors = [
-        ...document.querySelectorAll("article.prose img"),
-        ...document.querySelectorAll("[data-zoomable]"),
-      ] as HTMLElement[];
-
-      import mediumZoom from "medium-zoom";
-      mediumZoom(imageSelectors, {
-        background: "var(--color-zinc-950)",
-      });
-    </script>
     <SpeedInsights />
   </body>
 </html>
