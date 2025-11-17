@@ -178,21 +178,6 @@ const getRecentlyPlayed = async () => {
   return tracks;
 };
 
-interface SavedTracksResponse {
-  total: number;
-}
-
-const getTotalSavedTracks = async () => {
-  const { access_token } = await getAccessToken();
-  const response = await fetch(SAVED_TRACKS_ENDPOINT, {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
-  });
-  const data: SavedTracksResponse = await response.json();
-  return data.total;
-};
-
 export interface TopArtist {
   external_urls: {
     spotify: string;
@@ -223,7 +208,6 @@ const getTopArtists = async () => {
       Authorization: `Bearer ${access_token}`,
     },
   }).then((res) => res.json());
-
   const artists: TopArtist[] =
     items?.map((artist: any) => ({
       external_urls: artist.external_urls,
@@ -240,10 +224,4 @@ const getTopArtists = async () => {
   return artists;
 };
 
-export {
-  getNowPlaying,
-  getTopTracks,
-  getRecentlyPlayed,
-  getTotalSavedTracks,
-  getTopArtists,
-};
+export { getNowPlaying, getTopTracks, getRecentlyPlayed, getTopArtists };

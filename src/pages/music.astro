@@ -2,19 +2,13 @@
 export const prerender = false;
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
-import {
-  getRecentlyPlayed,
-  getTopArtists,
-  getTopTracks,
-  // getTotalSavedTracks,
-} from "@/lib/spotify";
+import { getRecentlyPlayed, getTopArtists, getTopTracks } from "@/lib/spotify";
 import { SOCIAL_MEDIA } from "@/consts";
-import { format } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 
 const topTracks = await getTopTracks();
 const recentlyPlayed = await getRecentlyPlayed();
 const topArtists = await getTopArtists();
-// const totalSaveTracks = await getTotalSavedTracks();
 const now = new Date();
 ---
 
@@ -92,10 +86,10 @@ const now = new Date();
                   {track.artist.map((a) => a.name).join(", ")}
                 </p>
                 <p class="text-zinc-500 text-xs mt-0.5">
-                  {format(
-                    new Date(track.played_at),
-                    "hh:mm a, dd MMM yyyy (zzz)"
-                  )}
+                  Played{" "}
+                  {formatDistanceToNow(new Date(track.played_at), {
+                    addSuffix: true,
+                  })}
                 </p>
               </div>
             </a>
@@ -177,11 +171,6 @@ const now = new Date();
                 <h3 class="text-xl font-bold text-white mb-1 drop-shadow-sm">
                   {artist.name}
                 </h3>
-                <p class="text-zinc-200 text-sm mb-2 line-clamp-1">
-                  {artist.genres.length > 0
-                    ? artist.genres.slice(0, 3).join(" · ")
-                    : "Artist"}
-                </p>
                 <div class="flex items-center gap-3 text-xs text-zinc-300">
                   <div class="flex items-center gap-1">
                     <svg
