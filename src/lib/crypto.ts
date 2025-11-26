@@ -1,33 +1,33 @@
 export const portfolioData = {
-  lastUpdated: "2025-11-09",
-  totalInvestment: 1460,
+  lastUpdated: "2025-11-26",
+  totalInvestment: 1579,
   holdings: [
     {
       symbol: "BTC",
       name: "Bitcoin",
-      amount: 0.01023962,
-      avgPrice: 102685,
+      amount: 0.01115031,
+      avgPrice: 101785,
       allocation: 70,
     },
     {
       symbol: "ETH",
       name: "Ethereum",
-      amount: 0.07948071,
-      avgPrice: 2686,
+      amount: 0.08459274,
+      avgPrice: 2707,
       allocation: 13,
     },
     {
       symbol: "BNB",
       name: "BNB",
-      amount: 0.23229521,
-      avgPrice: 727,
+      amount: 0.248298,
+      avgPrice: 738,
       allocation: 12,
     },
     {
       symbol: "SOL",
       name: "Solana",
-      amount: 0.13551047,
-      avgPrice: 161,
+      amount: 0.17822121,
+      avgPrice: 182,
       allocation: 5,
     },
   ],
@@ -376,9 +376,8 @@ const buildMarketPotential = (
 };
 
 export const loadCryptoPageData = async (): Promise<CryptoPageData> => {
-  const { data: marketData, didError: didCoinGeckoFail } = await fetchMarketData(
-    portfolioData.holdings
-  );
+  const { data: marketData, didError: didCoinGeckoFail } =
+    await fetchMarketData(portfolioData.holdings);
   const priceResults = buildPriceData(portfolioData.holdings, marketData);
   const priceData = Object.fromEntries(
     priceResults.map((result) => [result.symbol, result])
