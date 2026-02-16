@@ -239,15 +239,15 @@ This comprehensive approach allows us to build a statistical picture of how DCA 
 First up, let's look at some high-level summary statistics. This table gives us a quick snapshot of how Dollar-Cost Averaging into Bitcoin might have performed across different investment horizons, from 1 week all the way to 2 years.
 
 <div class="overflow-x-auto">
-|                     | 1 week   | 1 month  | 3 months | 6 months | 1 year   | 2 years   |
-|:--------------------|:---------|:---------|:---------|:---------|:---------|:----------|
-| samples             | 2828     | 2805     | 2745     | 2655     | 2470     | 2105      |
-| mean_roi_pct        | 0.73%    | 2.98%    | 9.42%    | 17.61%   | 40.99%   | 100.87%   |
-| median_roi_pct      | 0.42%    | 1.26%    | 3.26%    | 7.80%    | 28.51%   | 72.34%    |
-| std_dev_pct         | 6.24%    | 13.49%   | 29.16%   | 44.62%   | 75.89%   | 120.85%   |
-| min_roi_pct         | -42.69%  | -47.64%  | -44.75%  | -49.52%  | -55.99%  | -51.85%   |
-| max_roi_pct         | 47.37%   | 100.74%  | 208.05%  | 240.52%  | 407.36%  | 545.99%   |
-| pct_positive        | 54.24%   | 54.30%   | 56.79%   | 57.70%   | 71.82%   | 80.05%    |
+  | | 1 week | 1 month | 3 months | 6 months | 1 year | 2 years |
+  |:--------------------|:---------|:---------|:---------|:---------|:---------|:----------|
+  | samples | 2828 | 2805 | 2745 | 2655 | 2470 | 2105 | | mean_roi_pct | 0.73% |
+  2.98% | 9.42% | 17.61% | 40.99% | 100.87% | | median_roi_pct | 0.42% | 1.26% |
+  3.26% | 7.80% | 28.51% | 72.34% | | std_dev_pct | 6.24% | 13.49% | 29.16% |
+  44.62% | 75.89% | 120.85% | | min_roi_pct | -42.69% | -47.64% | -44.75% |
+  -49.52% | -55.99% | -51.85% | | max_roi_pct | 47.37% | 100.74% | 208.05% |
+  240.52% | 407.36% | 545.99% | | pct_positive | 54.24% | 54.30% | 56.79% |
+  57.70% | 71.82% | 80.05% |
 </div>
 
 Where:
@@ -309,14 +309,12 @@ So, what's the next step? Should you stop investing and simply hope for a market
 It turns out that by continuing with DCA, your investment horizon naturally extends. A one-week period effectively becomes one month, one month becomes three, and so on. Remarkably, with continued discipline, you could find yourself back in a profitable position sooner than expected. Here is the data I've compiled to support this:
 
 <div class="overflow-x-auto w-full">
-|                 | 1 week | 1 month | 3 months | 6 months | 1 year | 2 years |
-| :-------------- | -----: | ------: | -------: | -------: | -----: | ------: |
-| samples         |   1294 |    1282 |     1186 |     1123 |    696 |     420 |
-| recovered_count |   1294 |    1282 |     1186 |     1123 |    696 |     420 |
-| mean_dtr        |     12 |      35 |       62 |       98 |    135 |     114 |
-| median_dtr      |      4 |      14 |       31 |       48 |    122 |   141.5 |
-| min_dtr         |      1 |       1 |        1 |        1 |      1 |       1 |
-| max_dtr         |    290 |     485 |      441 |      368 |    369 |     244 |
+  | | 1 week | 1 month | 3 months | 6 months | 1 year | 2 years | |
+  :-------------- | -----: | ------: | -------: | -------: | -----: | ------: |
+  | samples | 1294 | 1282 | 1186 | 1123 | 696 | 420 | | recovered_count | 1294 |
+  1282 | 1186 | 1123 | 696 | 420 | | mean_dtr | 12 | 35 | 62 | 98 | 135 | 114 |
+  | median_dtr | 4 | 14 | 31 | 48 | 122 | 141.5 | | min_dtr | 1 | 1 | 1 | 1 | 1
+  | 1 | | max_dtr | 290 | 485 | 441 | 368 | 369 | 244 |
 </div>
 
 _Note: "dtr" is shorthand for day-to-recovery._
@@ -343,7 +341,6 @@ Okay, so that's the data dump! Impressive stats, for sure. But maybe a part of y
 
 Well, I'm not just about theory – I like to see things in action! So, I've been 'playing with my own luck' (if you can call disciplined DCA 'luck' 😉) on my personal Bitcoin journey. I started Dollar-Cost Averaging (DCA) back on January 14th, 2025. As of this post (May 21st, 2025), it’s been just over four months. The chart below tracks the Return on Investment (ROI) specifically from my DCA strategy during this time. Ready to peek at my own numbers and see how it’s actually going? Let's dive in:
 
-
 import Chart5 from "./charts/btc_roi_over_time.html";
 
 <div class="bg-zinc-800/50 rounded-xl shadow-lg">
@@ -354,27 +351,44 @@ Well, the chart speaks for itself, doesn't it? My conclusion after these first f
 
 And the best part? No nerve-wracking attempts to time the market, no agonizing over big investment calls. I just set my disciplined DCA plan and let it do its thing. It’s proof that you don’t need a huge bankroll to start investing; you can begin with small, regular amounts and build steadily from there.
 
-I’ll be keeping you updated on my DCA journey! You can follow my progress and see how this strategy continues to perform right [here](/crypto). I'll be posting fresh updates regularly.
+I’ll be keeping you updated on my DCA journey with fresh updates regularly.
 
 > **Disclaimer:** This is not financial advice. Always do your own research before making any investment decisions. The past performance of Bitcoin or any other asset does not guarantee future results. Investing in cryptocurrencies carries risks, and you should only invest what you can afford to lose.
 
 ## Read more
 
 [^1]: [Nhiều hàng hóa tăng giá - báo VNEXPRESS](https://vnexpress.net/nhieu-hang-hoa-tang-gia-4876851.html#:~:text=n%C3%A2ng%20gi%C3%A1%20m%E1%BB%97i%20chi%E1%BA%BFc%20b%C3%A1nh)
+
 [^2]: [The National Assembly raises GDP growth target to at least 8 per cent for 2025](https://vneconomy.vn/the-national-assembly-raises-gdp-growth-target-to-at-least-8-per-cent-for-2025.htm)
+
 [^3]: [Điểm những vụ án lớn, điển hình về hàng giả trong 4 tháng năm 2025](https://thanhtra.com.vn/an-ninh-trat-tu-D718A18CA/diem-nhung-vu-an-lon-dien-hinh-ve-hang-gia-trong-4-thang-nam-2025-50859b5f4.html)
+
 [^4]: [Vietnam's Party leader urges revolution to streamline political system](https://e.vnexpress.net/news/news/politics/vietnam-s-party-leader-urges-revolution-to-streamline-political-system-4812532.html)
+
 [^5]: [Quốc hội chốt bổ sung 44.000 tỷ đồng chi cho sắp xếp bộ máy](https://vnexpress.net/quoc-hoi-chot-bo-sung-44-000-ty-dong-chi-cho-sap-xep-bo-may-4887112.html)
+
 [^6]: [Chính sách giảm thuế GTGT trong 6 tháng đầu năm 2025 theo Nghị quyết 174/2024/QH15 của Quốc hội](https://www.mof.gov.vn/webcenter/portal/thanhtrabtc/pages_r/l/chi-tiet-tin-thanh-tra-btc?dDocName=MOFUCM340222)
+
 [^7]: [Trình Quốc hội giảm thuế VAT đến hết 2026, dự kiến giảm thu khoảng 121.740 tỉ đồng](https://tuoitre.vn/trinh-quoc-hoi-giam-thue-vat-den-het-2026-du-kien-giam-thu-khoang-121-740-ti-dong-20250513113940732.htm)
+
 [^9]: [Trade ministry says Trump's 46% reciprocal tariff on Vietnam 'unfair'](https://e.vnexpress.net/news/business/economy/trade-ministry-says-trump-s-46-reciprocal-tariff-on-vietnam-unfair-4869746.html)
+
 [^10]: [Cabinet convenes meeting following Trump administration’s announcement of newest tariffs](https://en.baochinhphu.vn/cabinet-convenes-meeting-following-trump-administrations-announcement-of-newest-tariffs-111250403141937313.htm)
+
 [^11]: [Vietnamese Party chief holds phone talks with US President](https://e.vnexpress.net/news/business/economy/vietnamese-party-chief-holds-phone-talks-with-us-president-4870254.html)
+
 [^12]: [Trump praises Vietnam's offer of '0%' tariff on American goods](https://truthsocial.com/@realDonaldTrump/posts/114280292618523684)
+
 [^13]: [PM urges accelerated disbursement of public investment](https://en.vietnamplus.vn/pm-urges-accelerated-disbursement-of-public-investment-post319508.vnp)
+
 [^14]: [Government workers' base salary to be hiked by 30%](https://e.vnexpress.net/news/news/government-workers-base-salary-to-be-hiked-by-30-4761023.html)
+
 [^15]: [Vietnam to consider Vinspeed proposal to build high-speed railway](https://www.reuters.com/markets/emerging/vietnam-consider-vinspeed-proposal-build-high-speed-railway-2025-05-15)
+
 [^16]: [High-speed rail project spurs call for domestic supply chain development: Forum | Vietnam+ (VietnamPlus)](https://en.vietnamplus.vn/high-speed-rail-project-spurs-call-for-domestic-supply-chain-development-forum-post319283.vnp)
+
 [^17]: [Machinery and equipment import markets in first 8 months of 2024](https://asemconnectvietnam.gov.vn/default.aspx?ID1=2&ID8=139252&ZID1=8)
+
 [^18]: [Trump’s Crypto Revolution: Promises Kept And Controversies Ignited](https://www.forbes.com/sites/digital-assets/2025/04/16/trumps-crypto-revolution-promises-kept-and-controversies-ignited/)
+
 [^19]: [ESTABLISHMENT OF THE STRATEGIC BITCOIN RESERVE AND UNITED STATES DIGITAL ASSET STOCKPILE](https://www.whitehouse.gov/presidential-actions/2025/03/establishment-of-the-strategic-bitcoin-reserve-and-united-states-digital-asset-stockpile/)
