@@ -1,16 +1,49 @@
 ---
 import Container from "./Container.astro";
+
+const pathname = Astro.url.pathname;
+function isActive(href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname.startsWith(href);
+}
+const navLinks = [
+  { href: "/", label: "home" },
+  { href: "/now", label: "now" },
+  { href: "/blog", label: "blog" },
+  { href: "/reading", label: "reading" },
+  { href: "/music", label: "music" },
+];
 ---
 
+<a
+  href="#main-content"
+  class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:bg-zinc-800 focus:text-white focus:px-4 focus:py-2 focus:rounded"
+>
+  Skip to content
+</a>
 <header transition:persist>
   <Container>
     <div class="py-8 md:py-20">
-      <nav class="flex flex-wrap gap-3 md:gap-5 uppercase">
-        <a href="/" class="text-gray-300 hover:text-white">home</a>
-        <a href="/now" class="text-gray-300 hover:text-white">now</a>
-        <a href="/blog" class="text-gray-300 hover:text-white">blog</a>
-        <a href="/reading" class="text-gray-300 hover:text-white">reading</a>
-        <a href="/music" class="text-gray-300 hover:text-white">music</a>
+      <nav
+        class="flex flex-wrap gap-3 md:gap-5 uppercase"
+        aria-label="Main navigation"
+      >
+        {
+          navLinks.map((link) => (
+            <a
+              href={link.href}
+              class:list={[
+                "transition-colors duration-200",
+                isActive(link.href)
+                  ? "text-white font-semibold"
+                  : "text-gray-300 hover:text-white",
+              ]}
+              aria-current={isActive(link.href) ? "page" : undefined}
+            >
+              {link.label}
+            </a>
+          ))
+        }
       </nav>
     </div>
   </Container>

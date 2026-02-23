@@ -8,6 +8,16 @@
   --font-normal: "Iosevka Aile", sans-serif;
 }
 
+/* Ensure font-display: swap for better CLS/LCP */
+@font-face {
+  font-family: "Iosevka Etoile";
+  font-display: swap;
+}
+@font-face {
+  font-family: "Iosevka Aile";
+  font-display: swap;
+}
+
 :root {
   --radius-surface: 1rem;
 }
@@ -24,8 +34,6 @@ body {
   font-family: "Iosevka Aile", sans-serif;
 }
 
-
-
 /* Hide scrollbar for Chrome, Safari and Opera */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
@@ -37,4 +45,3 @@ body {
   -ms-overflow-x: hidden; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
-
