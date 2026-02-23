@@ -24,14 +24,24 @@ const readByYear = read.reduce(
     acc[year].push(post);
     return acc;
   },
-  {} as Record<string, any[]>
+  {} as Record<string, any[]>,
 );
 
 const years = Object.keys(readByYear).sort((a, b) => Number(b) - Number(a));
 const now = new Date();
 ---
 
-<Layout title="Reading" description="A list of books I've read and recommend.">
+<Layout
+  title="Reading"
+  description="A list of books I've read and recommend."
+  structuredData={{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Reading",
+    description: "A list of books I've read and recommend.",
+    url: new URL("/reading", Astro.site).toString(),
+  }}
+>
   <Container>
     <section class="prose max-w-none prose-invert prose-a:text-yellow-500">
       <h1

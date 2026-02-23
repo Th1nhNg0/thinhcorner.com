@@ -14,6 +14,7 @@ import { remarkReadingTime } from "./remark/remark-reading-time.mjs";
 
 export default defineConfig({
   site: "https://thinhcorner.com",
+  trailingSlash: "never",
   adapter: vercel({
     imageService: true,
     isr: {
