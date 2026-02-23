@@ -22,6 +22,7 @@ interface Props {
   modifiedTime?: string; // ISO
   imageAlt?: string;
   structuredData?: Record<string, any> | Array<Record<string, any>>;
+  keywords?: string[];
 }
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
@@ -40,12 +41,14 @@ const {
   modifiedTime,
   imageAlt,
   structuredData,
+  keywords,
 } = Astro.props;
 ---
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#18181b" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="generator" content={Astro.generator} />
   <link
@@ -72,6 +75,7 @@ const {
   <meta name="description" content={description} />
   {author && <meta name="author" content={author} />}
   {robots && <meta name="robots" content={robots} />}
+  {keywords && keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content={type} />
@@ -79,6 +83,8 @@ const {
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:image" content={new URL(image, Astro.site)} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   {imageAlt && <meta property="og:image:alt" content={imageAlt} />}
   <meta property="og:site_name" content={siteName} />
   {locale && <meta property="og:locale" content={locale} />}
@@ -90,6 +96,11 @@ const {
   {
     type === "article" && modifiedTime && (
       <meta property="article:modified_time" content={modifiedTime} />
+    )
+  }
+  {
+    type === "article" && author && (
+      <meta property="article:author" content={author} />
     )
   }
 

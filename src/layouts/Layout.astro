@@ -20,6 +20,7 @@ type Props = {
   modifiedTime?: string;
   imageAlt?: string;
   structuredData?: Record<string, any> | Array<Record<string, any>>;
+  keywords?: string[];
 };
 
 const {
@@ -38,6 +39,7 @@ const {
   modifiedTime,
   imageAlt,
   structuredData,
+  keywords,
 } = Astro.props;
 ---
 
@@ -58,6 +60,7 @@ const {
     modifiedTime={modifiedTime}
     imageAlt={imageAlt}
     structuredData={structuredData}
+    keywords={keywords}
   />
   <body class="bg-zinc-900 text-white">
     <Header />

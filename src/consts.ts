@@ -12,7 +12,8 @@ const PERSONAL_SOCIAL_PROFILES: {
 // Core website metadata for SEO and display
 const WEBSITE_CONFIG = {
   title: "Thinh's Corner",
-  description: "Ngô Phú Thịnh's personal blog",
+  description:
+    "Ngô Phú Thịnh — indie hacker from Ho Chi Minh City writing about technology, startups, and the things that spark curiosity.",
 };
 
 // Google Analytics (gtag) configuration

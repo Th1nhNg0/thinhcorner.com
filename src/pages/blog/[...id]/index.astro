@@ -4,7 +4,7 @@ import Layout from "@/layouts/Layout.astro";
 import type { CollectionEntry } from "astro:content";
 import { getCollection, render } from "astro:content";
 import { format } from "date-fns";
-import "katex/dist/katex.min.css";
+import katexCssUrl from "katex/dist/katex.min.css?url";
 import EditOnGithub from "../../../components/EditOnGithub.astro";
 
 export async function getStaticPaths() {
@@ -22,31 +22,13 @@ const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
 
-function getNextPost() {
-  let postIndex;
-  for (const post of posts) {
-    if (post.id === Astro.params.id) {
-      postIndex = posts.indexOf(post);
-      return posts[postIndex + 1];
-    }
-  }
-}
-
-function getPrevPost() {
-  let postIndex;
-  for (const post of posts) {
-    if (post.id === Astro.params.id) {
-      postIndex = posts.indexOf(post);
-      return posts[postIndex - 1];
-    }
-  }
-}
-
-const nextPost = getNextPost();
-const prevPost = getPrevPost();
+const currentIndex = posts.findIndex((p) => p.id === Astro.params.id);
+const prevPost = currentIndex > 0 ? posts[currentIndex - 1] : undefined;
+const nextPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : undefined;
 
 const post = Astro.props;
 const { Content, remarkPluginFrontmatter } = await render(post);
+const hasMath = /\$\$[\s\S]*?\$\$|\$[^$\n]+\$/.test(post.body ?? "");
 
 let slug = Array.isArray(Astro.params.id)
   ? Astro.params.id[0]
@@ -63,7 +45,9 @@ let slug = Array.isArray(Astro.params.id)
   locale={post.data.lang === "vi" ? "vi_VN" : "en_US"}
   author="Ngô Phú Thịnh"
   publishedTime={post.data.date.toISOString()}
+  modifiedTime={remarkPluginFrontmatter?.lastModified ? new Date(remarkPluginFrontmatter.lastModified).toISOString() : undefined}
   imageAlt={post.data.title}
+  keywords={post.data.tags}
   prevUrl={prevPost ? new URL(`/blog/${prevPost.id}`, Astro.site) : undefined}
   nextUrl={nextPost ? new URL(`/blog/${nextPost.id}`, Astro.site) : undefined}
   structuredData={{
@@ -86,8 +70,10 @@ let slug = Array.isArray(Astro.params.id)
       : post.data.date.toISOString(),
     mainEntityOfPage: new URL(`/blog/${post.id}`, Astro.site).toString(),
     url: new URL(`/blog/${post.id}`, Astro.site).toString(),
+    ...(post.data.tags && { keywords: post.data.tags.join(", ") }),
   }}
 >
+  {hasMath && <link rel="stylesheet" href={katexCssUrl} />}
   <Container>
     {
       post.data.draft && (

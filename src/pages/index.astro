@@ -29,6 +29,22 @@ const blog = (await getCollection("blog"))
       description: SITE.description,
       url: new URL(Astro.url.pathname, Astro.site).toString(),
     },
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: "Ngô Phú Thịnh",
+      url: new URL("/", Astro.site).toString(),
+      jobTitle: "Indie Hacker",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Ho Chi Minh City",
+        addressCountry: "VN",
+      },
+      sameAs: [
+        SOCIAL_MEDIA.github,
+        SOCIAL_MEDIA.facebook,
+      ].filter(Boolean),
+    },
   ]}
 >
   <Container>
