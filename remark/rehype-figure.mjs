@@ -3,7 +3,7 @@ import { visit } from "unist-util-visit";
 /**
  * Custom Rehype plugin to wrap images with titles in <figure> and <figcaption>.
  *
- * @returns {import('unified').Transformer}
+ * @type {import('unified').Plugin<[], import('hast').Root>}
  */
 function rehypeFigure() {
   // All unified plugins return a transformer function
