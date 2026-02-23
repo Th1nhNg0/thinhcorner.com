@@ -6,7 +6,17 @@ import { Image } from "astro:assets";
 import { YouTube } from "astro-embed";
 ---
 
-<Layout title="Now" description="What I'm up to now.">
+<Layout
+  title="Now"
+  description="What I'm up to now."
+  structuredData={{
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    name: "Now",
+    description: "What I'm up to now.",
+    url: new URL("/now", Astro.site).toString(),
+  }}
+>
   <Container>
     <h1
       class="text-4xl mb-8 font-bold tracking-tight sm:text-6xl inline-block font-heading"
