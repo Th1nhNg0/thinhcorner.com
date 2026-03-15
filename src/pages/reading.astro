@@ -30,6 +30,64 @@ const readByYear = read.reduce(
 
 const years = Object.keys(readByYear).sort((a, b) => Number(b) - Number(a));
 const now = new Date();
+const currentYear = now.getFullYear();
+
+// --- Stats ---
+const booksThisYear = readByYear[currentYear]?.length ?? 0;
+const totalPages = read.reduce(
+  (sum, b) => sum + (parseInt(b.num_pages || "0") || 0),
+  0,
+);
+const totalMinutes = Math.round(totalPages * 1.5);
+const totalHours = Math.round(totalMinutes / 60);
+
+// --- Year-over-year chart data ---
+const numericYears = years
+  .filter((y) => y !== "Long time ago")
+  .map(Number)
+  .sort((a, b) => a - b);
+const booksPerYear = numericYears.map((y) => ({
+  year: y,
+  count: readByYear[y]?.length ?? 0,
+}));
+const maxBooksInYear = Math.max(...booksPerYear.map((d) => d.count), 1);
+
+// --- Monthly chart data (current year) ---
+const monthNames = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+const booksPerMonthThisYear = Array(12).fill(0);
+(readByYear[currentYear] ?? []).forEach((book) => {
+  if (book.user_read_at) {
+    const month = new Date(book.user_read_at).getMonth();
+    booksPerMonthThisYear[month]++;
+  }
+});
+const maxMonthly = Math.max(...booksPerMonthThisYear, 1);
+
+// --- Monthly chart data (all years combined) ---
+const booksPerMonthAllYears = Array(12).fill(0);
+read.forEach((book) => {
+  if (book.user_read_at) {
+    const month = new Date(book.user_read_at).getMonth();
+    booksPerMonthAllYears[month]++;
+  }
+});
+const maxMonthlyAll = Math.max(...booksPerMonthAllYears, 1);
+
+// Combined max for toggle chart (so bars scale the same in both views)
+const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
 ---
 
 <Layout
@@ -44,86 +102,274 @@ const now = new Date();
   }}
 >
   <Container>
-    <section class="prose max-w-none prose-invert prose-a:text-yellow-500">
+    <!-- Header -->
+    <section class="mb-6">
       <h1
-        class="text-4xl font-bold not-prose tracking-tight sm:text-6xl inline-block font-heading"
+        class="text-4xl font-bold tracking-tight sm:text-6xl font-heading mb-4"
       >
         My bookshelf
       </h1>
-      <p>
-        This is a collection of what I’ve read over the past years,
-        automatically generated from my
-        <a href={GOODREADS_USER_URL}>Goodreads profile.</a>
-      </p>
-      <p>
-        I've read <b>{read.length}</b> books in total.
-      </p>
-      <p>
-        I'm currently reading: {
-          books.current_reads.map((book, index) => (
-            <>
-              <a href={book.url}>{book.title}</a> by {book.author}
-              {index === books.current_reads.length - 2
-                ? " and "
-                : index < books.current_reads.length - 2
-                  ? ", "
-                  : ""}
-            </>
-          ))
-        }
-      </p>
-      <p class="leading-relaxed italic">
-        "Books gives a soul to the universe, wings to the mind, flight to the
-        imagination, and life to everything." — Plato
-      </p>
-      <p class="text-sm text-zinc-400 mt-4 text-right">
-        Last updated: <time
-          datetime={now.toISOString()}
-          title={now.toISOString()}
-        >
-          {format(now, "MMMM d, yyyy 'at' h:mm a")}
-        </time>
+      <p class="text-zinc-400 leading-relaxed max-w-2xl">
+        A collection of what I've read over the years, synced from my
+        <a
+          href={GOODREADS_USER_URL}
+          class="text-yellow-500 hover:text-yellow-400 transition-colors"
+          >Goodreads profile</a
+        >.
       </p>
     </section>
-    <section class="mt-8" id="blogPosts">
+
+    <!-- Quote -->
+    <p
+      class="text-zinc-500 italic text-sm mb-8 border-l-2 border-zinc-700 pl-4"
+    >
+      "Books gives a soul to the universe, wings to the mind, flight to the
+      imagination, and life to everything." — Plato
+    </p>
+
+    <!-- Stats Bar -->
+    <section class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+      <div
+        class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4"
+      >
+        <div class="text-2xl font-bold font-heading text-yellow-500">
+          {read.length}
+        </div>
+        <div class="text-xs text-zinc-500 font-mono mt-1">books total</div>
+      </div>
+      <div
+        class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4"
+      >
+        <div class="text-2xl font-bold font-heading text-yellow-500">
+          {booksThisYear}
+        </div>
+        <div class="text-xs text-zinc-500 font-mono mt-1">
+          books in {currentYear}
+        </div>
+      </div>
+      <div
+        class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4"
+      >
+        <div class="text-2xl font-bold font-heading text-yellow-500">
+          {totalPages.toLocaleString()}
+        </div>
+        <div class="text-xs text-zinc-500 font-mono mt-1">pages read</div>
+      </div>
+      <div
+        class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4"
+      >
+        <div class="text-2xl font-bold font-heading text-yellow-500">
+          ~{totalHours.toLocaleString()}h
+        </div>
+        <div class="text-xs text-zinc-500 font-mono mt-1">time spent</div>
+      </div>
+    </section>
+
+    <!-- Currently Reading -->
+    {
+      books.current_reads.length > 0 && (
+        <section class="mb-8 bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-5">
+          <h2 class="text-sm font-mono text-zinc-500 uppercase tracking-wider mb-3">
+            Currently reading
+          </h2>
+          <div class="flex flex-wrap gap-2">
+            {books.current_reads.map((book) => (
+              <a
+                href={book.url}
+                class="inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-yellow-500 transition-colors"
+              >
+                <span class="text-yellow-500/60">&#9656;</span>
+                <span class="font-medium">{book.title}</span>
+                <span class="text-zinc-600">by {book.author}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Charts Section -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+      <!-- Year-over-year chart -->
+      <div
+        class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-5"
+      >
+        <h3
+          class="text-sm font-mono text-zinc-500 uppercase tracking-wider mb-4"
+        >
+          Books per year
+        </h3>
+        <div class="flex items-end gap-1" style="height: 7rem;">
+          {
+            booksPerYear.map((d) => {
+              const barH = Math.max((d.count / maxBooksInYear) * 5, 0.25);
+              return (
+                <div
+                  class="flex-1 flex flex-col items-center justify-end gap-1 group"
+                  style="height: 100%;"
+                >
+                  <span class="text-[10px] font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {d.count}
+                  </span>
+                  <div
+                    class="w-full rounded-sm bg-yellow-500/80 hover:bg-yellow-500 transition-colors"
+                    style={`height: ${barH}rem;`}
+                    title={`${d.year}: ${d.count} books`}
+                  />
+                  <span class="text-[10px] font-mono text-zinc-600">
+                    {String(d.year).slice(-2)}
+                  </span>
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+
+      <!-- Monthly chart with toggle -->
+      <div
+        class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-5"
+        id="monthly-chart"
+      >
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-sm font-mono text-zinc-500 uppercase tracking-wider">
+            Monthly
+          </h3>
+          <div
+            class="flex bg-zinc-800 rounded-full p-0.5 border border-zinc-700/50"
+          >
+            <button
+              id="btn-this-year"
+              class="px-3 py-0.5 text-[11px] font-mono rounded-full transition-colors bg-yellow-500/20 text-yellow-500"
+              type="button"
+            >
+              {currentYear}
+            </button>
+            <button
+              id="btn-all-years"
+              class="px-3 py-0.5 text-[11px] font-mono rounded-full transition-colors text-zinc-500 hover:text-zinc-400"
+              type="button"
+            >
+              All
+            </button>
+          </div>
+        </div>
+        <!-- This year view -->
+        <div
+          id="chart-this-year"
+          class="flex items-end gap-1"
+          style="height: 7rem;"
+        >
+          {
+            monthNames.map((m, i) => {
+              const count = booksPerMonthThisYear[i];
+              const barH = Math.max((count / maxMonthlyBoth) * 5, 0.25);
+              const isFuture = i > now.getMonth();
+              return (
+                <div
+                  class="flex-1 flex flex-col items-center justify-end gap-1 group"
+                  style="height: 100%;"
+                >
+                  <span class="text-[10px] font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {count}
+                  </span>
+                  <div
+                    class:list={[
+                      "w-full rounded-sm transition-colors",
+                      isFuture
+                        ? "bg-zinc-700/30"
+                        : count > 0
+                          ? "bg-yellow-500/80 hover:bg-yellow-500"
+                          : "bg-zinc-700/50",
+                    ]}
+                    style={`height: ${isFuture ? 0.25 : barH}rem;`}
+                    title={`${m}: ${count} books`}
+                  />
+                  <span class="text-[10px] font-mono text-zinc-600">{m}</span>
+                </div>
+              );
+            })
+          }
+        </div>
+        <!-- All years view (hidden by default) -->
+        <div
+          id="chart-all-years"
+          class="hidden flex items-end gap-1"
+          style="height: 7rem;"
+        >
+          {
+            monthNames.map((m, i) => {
+              const count = booksPerMonthAllYears[i];
+              const barH = Math.max((count / maxMonthlyBoth) * 5, 0.25);
+              return (
+                <div
+                  class="flex-1 flex flex-col items-center justify-end gap-1 group"
+                  style="height: 100%;"
+                >
+                  <span class="text-[10px] font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {count}
+                  </span>
+                  <div
+                    class="w-full rounded-sm bg-yellow-500/60 hover:bg-yellow-500 transition-colors"
+                    style={`height: ${barH}rem;`}
+                    title={`${m}: ${count} books`}
+                  />
+                  <span class="text-[10px] font-mono text-zinc-600">{m}</span>
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Book List -->
+    <section id="blogPosts">
       {
         years.map((year) => (
-          <div class="mb-10" data-year={year}>
-            <h2 class="text-accent mb-6 text-2xl text-zinc-200 font-mono font-bold">
-              {year}
-            </h2>
-            <ul class="grid grid-cols-1 md:grid-cols-2 gap-4" role="list">
+          <div class="mb-12" data-year={year}>
+            <div class="flex items-center gap-3 mb-5">
+              <h2 class="text-xl text-zinc-200 font-mono font-bold">{year}</h2>
+              <div class="flex-1 h-px bg-zinc-800" />
+              <span class="text-xs font-mono text-zinc-500 whitespace-nowrap">
+                {readByYear[year].length}{" "}
+                {readByYear[year].length === 1 ? "book" : "books"}
+              </span>
+            </div>
+            <ul class="grid grid-cols-1 md:grid-cols-2 gap-3" role="list">
               {readByYear[year].map((book) => (
-                <li class="flex gap-4 bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4">
-                  {book.cover && (
+                <li class="group relative flex gap-4 bg-gradient-to-br from-zinc-800/60 to-zinc-900/60 backdrop-blur-sm rounded-surface border border-zinc-700/40 p-3 hover:border-zinc-600/60 hover:from-zinc-800/80 transition-all overflow-hidden">
+                  {book.cover ? (
                     <img
                       src={book.cover}
                       alt={`Cover of ${book.title}`}
-                      class="w-24 h-36 object-cover rounded-md"
+                      class="w-[72px] h-[108px] shrink-0 object-cover rounded-md shadow-lg"
+                      loading="lazy"
                     />
+                  ) : (
+                    <div class="w-[72px] h-[108px] shrink-0 bg-zinc-800 rounded-md flex items-center justify-center text-[10px] font-mono text-zinc-600 uppercase tracking-wide">
+                      No cover
+                    </div>
                   )}
-                  <div class="flex flex-col flex-1">
+                  <div class="flex flex-col flex-1 min-w-0 py-0.5">
                     <a
                       href={book.url}
-                      class="text-zinc-100 font-medium hover:text-accent transition-colors line-clamp-3"
+                      class="text-zinc-100 font-medium hover:text-yellow-500 transition-colors line-clamp-2 text-[13px] leading-snug"
                     >
                       {book.title}
                     </a>
-                    <p class="text-sm text-zinc-400">by {book.author}</p>
-                    <div class="flex flex-col gap-1 mt-2 text-sm text-zinc-500">
-                      <div>
-                        My rating:{" "}
-                        <span class="text-yellow-500">
-                          {"★".repeat(Math.round(book.rating))}
-                          {"☆".repeat(5 - Math.round(book.rating))}
-                        </span>
-                      </div>
-                      <div>{book.num_pages} pages</div>
+                    <p class="text-xs text-zinc-500 mt-1">{book.author}</p>
+                    {book.rating > 0 && (
+                      <span class="text-yellow-500 text-[11px] tracking-wide mt-1.5">
+                        {"★".repeat(Math.round(book.rating))}
+                      </span>
+                    )}
+                    <div class="mt-auto pt-2 flex items-center gap-2 text-[11px] text-zinc-600 font-mono">
+                      {book.num_pages && <span>Pages: {book.num_pages}</span>}
                       {book.user_read_at && (
-                        <div>
-                          Finished:{" "}
-                          {new Date(book.user_read_at).toLocaleDateString()}
-                        </div>
+                        <span class="ml-auto">
+                          Read: {format(new Date(book.user_read_at), "MMM d")}
+                        </span>
                       )}
                     </div>
                   </div>
@@ -134,5 +380,41 @@ const now = new Date();
         ))
       }
     </section>
+
+    <!-- Footer -->
+    <p class="text-xs text-zinc-600 font-mono text-right mt-4 mb-8">
+      Last updated: {format(now, "MMM d, yyyy 'at' h:mm a")}
+    </p>
   </Container>
 </Layout>
+
+<script>
+  const btnThisYear = document.getElementById("btn-this-year");
+  const btnAllYears = document.getElementById("btn-all-years");
+  const chartThisYear = document.getElementById("chart-this-year");
+  const chartAllYears = document.getElementById("chart-all-years");
+
+  if (btnThisYear && btnAllYears && chartThisYear && chartAllYears) {
+    btnThisYear.addEventListener("click", () => {
+      chartThisYear.classList.remove("hidden");
+      chartThisYear.classList.add("flex");
+      chartAllYears.classList.add("hidden");
+      chartAllYears.classList.remove("flex");
+      btnThisYear.classList.add("bg-yellow-500/20", "text-yellow-500");
+      btnThisYear.classList.remove("text-zinc-500", "hover:text-zinc-400");
+      btnAllYears.classList.remove("bg-yellow-500/20", "text-yellow-500");
+      btnAllYears.classList.add("text-zinc-500", "hover:text-zinc-400");
+    });
+
+    btnAllYears.addEventListener("click", () => {
+      chartAllYears.classList.remove("hidden");
+      chartAllYears.classList.add("flex");
+      chartThisYear.classList.add("hidden");
+      chartThisYear.classList.remove("flex");
+      btnAllYears.classList.add("bg-yellow-500/20", "text-yellow-500");
+      btnAllYears.classList.remove("text-zinc-500", "hover:text-zinc-400");
+      btnThisYear.classList.remove("bg-yellow-500/20", "text-yellow-500");
+      btnThisYear.classList.add("text-zinc-500", "hover:text-zinc-400");
+    });
+  }
+</script>
