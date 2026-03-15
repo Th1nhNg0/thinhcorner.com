@@ -30,6 +30,46 @@ const readByYear = read.reduce(
 
 const years = Object.keys(readByYear).sort((a, b) => Number(b) - Number(a));
 const now = new Date();
+const currentYear = now.getFullYear();
+
+// --- Stats computation ---
+const booksThisYear = read.filter(
+  (b) => b.user_read_at && new Date(b.user_read_at).getFullYear() === currentYear
+).length;
+
+const totalPages = read.reduce((sum, b) => sum + (parseInt(b.num_pages || "0") || 0), 0);
+
+const ratedBooks = read.filter((b) => b.rating > 0);
+const avgRating = ratedBooks.length > 0
+  ? (ratedBooks.reduce((sum, b) => sum + b.rating, 0) / ratedBooks.length).toFixed(1)
+  : "—";
+
+// Most-read month
+const monthCounts: Record<string, number> = {};
+read.forEach((b) => {
+  if (b.user_read_at) {
+    const month = format(new Date(b.user_read_at), "MMMM");
+    monthCounts[month] = (monthCounts[month] || 0) + 1;
+  }
+});
+const mostReadMonth = Object.entries(monthCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || "—";
+
+// --- Year-over-year chart data (exclude "Long time ago") ---
+const numericYears = years.filter((y) => y !== "Long time ago").map(Number).sort((a, b) => a - b);
+const yearCounts = numericYears.map((y) => ({ year: y, count: readByYear[y]?.length || 0 }));
+const maxCount = Math.max(...yearCounts.map((y) => y.count), 1);
+const chartBarWidth = 32;
+const chartGap = 8;
+const chartHeight = 80;
+const chartPadBottom = 20;
+const chartWidth = yearCounts.length * (chartBarWidth + chartGap) - chartGap;
+
+// --- Collect all shelves for genre pills ---
+const allShelves = new Set<string>();
+read.forEach((b) => {
+  b.user_shelves?.forEach((s) => allShelves.add(s));
+});
+const shelfList = Array.from(allShelves).sort();
 ---
 
 <Layout
@@ -51,12 +91,9 @@ const now = new Date();
         My bookshelf
       </h1>
       <p>
-        This is a collection of what I’ve read over the past years,
+        This is a collection of what I've read over the past years,
         automatically generated from my
         <a href={GOODREADS_USER_URL}>Goodreads profile.</a>
-      </p>
-      <p>
-        I've read <b>{read.length}</b> books in total.
       </p>
       <p>
         I'm currently reading: {
@@ -76,56 +113,158 @@ const now = new Date();
         "Books gives a soul to the universe, wings to the mind, flight to the
         imagination, and life to everything." — Plato
       </p>
-      <p class="text-sm text-zinc-400 mt-4 text-right">
-        Last updated: <time
-          datetime={now.toISOString()}
-          title={now.toISOString()}
-        >
-          {format(now, "MMMM d, yyyy 'at' h:mm a")}
-        </time>
-      </p>
     </section>
-    <section class="mt-8" id="blogPosts">
+
+    {/* --- Stats bar --- */}
+    <section class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4 text-center">
+        <div class="text-2xl font-bold font-heading text-zinc-100">{booksThisYear}</div>
+        <div class="text-xs text-zinc-400 mt-1">books in {currentYear}</div>
+      </div>
+      <div class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4 text-center">
+        <div class="text-2xl font-bold font-heading text-zinc-100">{totalPages.toLocaleString()}</div>
+        <div class="text-xs text-zinc-400 mt-1">pages total</div>
+      </div>
+      <div class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4 text-center">
+        <div class="text-2xl font-bold font-heading text-zinc-100">{avgRating}</div>
+        <div class="text-xs text-zinc-400 mt-1">avg rating</div>
+      </div>
+      <div class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4 text-center">
+        <div class="text-2xl font-bold font-heading text-zinc-100">{mostReadMonth}</div>
+        <div class="text-xs text-zinc-400 mt-1">most-read month</div>
+      </div>
+    </section>
+
+    {/* --- Year-over-year chart --- */}
+    {yearCounts.length > 1 && (
+      <section class="mt-6 bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-5">
+        <h2 class="text-sm font-medium text-zinc-400 mb-3">Books per year</h2>
+        <div class="overflow-x-auto">
+          <svg
+            width={Math.max(chartWidth, 200)}
+            height={chartHeight + chartPadBottom}
+            viewBox={`0 0 ${Math.max(chartWidth, 200)} ${chartHeight + chartPadBottom}`}
+            class="mx-auto block"
+            role="img"
+            aria-label="Books read per year bar chart"
+          >
+            {yearCounts.map((item, i) => {
+              const barH = (item.count / maxCount) * chartHeight;
+              const x = i * (chartBarWidth + chartGap);
+              const y = chartHeight - barH;
+              return (
+                <g>
+                  <rect
+                    x={x}
+                    y={y}
+                    width={chartBarWidth}
+                    height={barH}
+                    rx="4"
+                    class="fill-yellow-500/80"
+                  />
+                  <text
+                    x={x + chartBarWidth / 2}
+                    y={y - 4}
+                    text-anchor="middle"
+                    class="fill-zinc-300 text-[10px]"
+                    font-size="10"
+                  >
+                    {item.count}
+                  </text>
+                  <text
+                    x={x + chartBarWidth / 2}
+                    y={chartHeight + 14}
+                    text-anchor="middle"
+                    class="fill-zinc-500 text-[10px]"
+                    font-size="10"
+                  >
+                    {String(item.year).slice(-2)}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+      </section>
+    )}
+
+    {/* --- Genre/shelf filter pills --- */}
+    {shelfList.length > 0 && (
+      <section class="mt-6" id="shelf-filters">
+        <div class="flex flex-wrap gap-2">
+          <button
+            class="shelf-pill active px-3 py-1 text-xs rounded-full border border-zinc-600 bg-zinc-700 text-zinc-200 transition-colors cursor-pointer hover:border-yellow-500/60"
+            data-shelf="all"
+          >
+            All
+          </button>
+          {shelfList.map((shelf) => (
+            <button
+              class="shelf-pill px-3 py-1 text-xs rounded-full border border-zinc-700/50 text-zinc-400 transition-colors cursor-pointer hover:border-yellow-500/60 hover:text-zinc-200"
+              data-shelf={shelf}
+            >
+              {shelf}
+            </button>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="mt-8" id="bookList">
       {
         years.map((year) => (
           <div class="mb-10" data-year={year}>
             <h2 class="text-accent mb-6 text-2xl text-zinc-200 font-mono font-bold">
               {year}
+              <span class="text-sm font-normal text-zinc-500 ml-2">
+                ({readByYear[year].length} {readByYear[year].length === 1 ? "book" : "books"})
+              </span>
             </h2>
             <ul class="grid grid-cols-1 md:grid-cols-2 gap-4" role="list">
               {readByYear[year].map((book) => (
-                <li class="flex gap-4 bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4">
+                <li
+                  class="book-card flex gap-4 bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4 transition-all duration-200 hover:border-zinc-600/80"
+                  data-shelves={book.user_shelves?.join(",") || ""}
+                >
                   {book.cover && (
                     <img
                       src={book.cover}
                       alt={`Cover of ${book.title}`}
-                      class="w-24 h-36 object-cover rounded-md"
+                      class="w-20 h-[7.5rem] object-cover rounded-md shadow-md flex-shrink-0"
                     />
                   )}
-                  <div class="flex flex-col flex-1">
+                  <div class="flex flex-col flex-1 min-w-0">
                     <a
                       href={book.url}
-                      class="text-zinc-100 font-medium hover:text-accent transition-colors line-clamp-3"
+                      class="text-zinc-100 font-medium hover:text-yellow-500 transition-colors line-clamp-2"
                     >
                       {book.title}
                     </a>
-                    <p class="text-sm text-zinc-400">by {book.author}</p>
-                    <div class="flex flex-col gap-1 mt-2 text-sm text-zinc-500">
-                      <div>
-                        My rating:{" "}
-                        <span class="text-yellow-500">
-                          {"★".repeat(Math.round(book.rating))}
-                          {"☆".repeat(5 - Math.round(book.rating))}
+                    <p class="text-sm text-zinc-400 mt-0.5">by {book.author}</p>
+                    <div class="flex items-center gap-3 mt-auto pt-2 text-sm text-zinc-500">
+                      {book.rating > 0 && (
+                        <span class="text-yellow-500 tracking-wider" title={`${book.rating}/5`}>
+                          {"★".repeat(book.rating)}
                         </span>
-                      </div>
-                      <div>{book.num_pages} pages</div>
+                      )}
+                      {book.num_pages && (
+                        <span>{book.num_pages}p</span>
+                      )}
                       {book.user_read_at && (
-                        <div>
-                          Finished:{" "}
-                          {new Date(book.user_read_at).toLocaleDateString()}
-                        </div>
+                        <span>
+                          {format(new Date(book.user_read_at), "MMM yyyy")}
+                        </span>
                       )}
                     </div>
+                    {book.user_shelves && book.user_shelves.length > 0 && (
+                      <div class="flex flex-wrap gap-1 mt-1.5">
+                        {book.user_shelves.map((shelf: string) => (
+                          <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-zinc-700/60 text-zinc-400">
+                            {shelf}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </li>
               ))}
@@ -134,5 +273,50 @@ const now = new Date();
         ))
       }
     </section>
+
+    <p class="text-sm text-zinc-500 mt-4 text-right">
+      {read.length} books total &middot; Last updated: <time
+        datetime={now.toISOString()}
+        title={now.toISOString()}
+      >
+        {format(now, "MMM d, yyyy")}
+      </time>
+    </p>
   </Container>
 </Layout>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const pills = document.querySelectorAll<HTMLButtonElement>(".shelf-pill");
+    const cards = document.querySelectorAll<HTMLElement>(".book-card");
+    const yearSections = document.querySelectorAll<HTMLElement>("[data-year]");
+
+    pills.forEach((pill) => {
+      pill.addEventListener("click", () => {
+        const shelf = pill.dataset.shelf;
+
+        pills.forEach((p) => {
+          p.classList.remove("active", "bg-zinc-700", "text-zinc-200", "border-zinc-600");
+          p.classList.add("text-zinc-400", "border-zinc-700/50");
+        });
+        pill.classList.add("active", "bg-zinc-700", "text-zinc-200", "border-zinc-600");
+        pill.classList.remove("text-zinc-400", "border-zinc-700/50");
+
+        cards.forEach((card) => {
+          const shelves = card.dataset.shelves || "";
+          if (shelf === "all" || shelves.split(",").includes(shelf!)) {
+            card.style.display = "";
+          } else {
+            card.style.display = "none";
+          }
+        });
+
+        // Hide year sections with no visible books
+        yearSections.forEach((section) => {
+          const visibleCards = section.querySelectorAll<HTMLElement>(".book-card:not([style*='display: none'])");
+          section.style.display = visibleCards.length > 0 ? "" : "none";
+        });
+      });
+    });
+  });
+</script>

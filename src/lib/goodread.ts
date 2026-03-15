@@ -9,6 +9,7 @@ export interface Book {
   num_pages?: string;
   book_published?: string;
   user_read_at?: string;
+  user_shelves?: string[];
 }
 
 export async function get_book() {
@@ -41,6 +42,10 @@ async function crawl_book(url: string) {
     const num_pages = $(el).find("num_pages").text();
     const book_published = $(el).find("book_published").text();
     const user_read_at = $(el).find("user_read_at").text();
+    const user_shelves_raw = $(el).find("user_shelves").text();
+    const user_shelves = user_shelves_raw
+      ? user_shelves_raw.split(",").map((s) => s.trim()).filter(Boolean)
+      : [];
     books.push({
       title,
       url,
@@ -50,6 +55,7 @@ async function crawl_book(url: string) {
       num_pages,
       book_published,
       user_read_at,
+      user_shelves,
     });
   });
   books.sort((a, b) => {
