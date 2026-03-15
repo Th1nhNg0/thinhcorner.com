@@ -110,14 +110,15 @@ const now = new Date();
                       {book.title}
                     </a>
                     <p class="text-sm text-zinc-400">by {book.author}</p>
-                    <div class="flex flex-col gap-1 mt-2 text-sm text-zinc-500">
-                      <div>
-                        My rating:{" "}
-                        <span class="text-yellow-500">
-                          {"★".repeat(Math.round(book.rating))}
-                          {"☆".repeat(5 - Math.round(book.rating))}
-                        </span>
-                      </div>
+                    <div class="flex flex-col gap-1 mt-auto text-sm text-zinc-500">
+                      {book.rating > 0 && (
+                        <div class="flex items-center gap-1.5">
+                          <span class="text-yellow-500/90 tracking-wide text-xs">
+                            {"★".repeat(Math.round(book.rating))}
+                          </span>
+                          <span class="text-zinc-500 text-xs">{book.rating}/5</span>
+                        </div>
+                      )}
                       <div>{book.num_pages} pages</div>
                       {book.user_read_at && (
                         <div>
