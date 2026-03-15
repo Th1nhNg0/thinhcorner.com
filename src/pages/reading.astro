@@ -43,7 +43,7 @@ const now = new Date();
     url: new URL("/reading", Astro.site).toString(),
   }}
 >
-  <Container>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
     <section class="prose max-w-none prose-invert prose-a:text-yellow-500">
       <h1
         class="text-4xl font-bold not-prose tracking-tight sm:text-6xl inline-block font-heading"
@@ -51,83 +51,77 @@ const now = new Date();
         My bookshelf
       </h1>
       <p>
-        This is a collection of what I’ve read over the past years,
-        automatically generated from my
-        <a href={GOODREADS_USER_URL}>Goodreads profile.</a>
+        A collection of what I’ve read over the years, from my
+        <a href={GOODREADS_USER_URL}>Goodreads</a>.
+        <span class="text-zinc-400">{read.length} books and counting.</span>
       </p>
-      <p>
-        I've read <b>{read.length}</b> books in total.
-      </p>
-      <p>
-        I'm currently reading: {
-          books.current_reads.map((book, index) => (
-            <>
-              <a href={book.url}>{book.title}</a> by {book.author}
-              {index === books.current_reads.length - 2
-                ? " and "
-                : index < books.current_reads.length - 2
-                  ? ", "
-                  : ""}
-            </>
-          ))
-        }
-      </p>
-      <p class="leading-relaxed italic">
-        "Books gives a soul to the universe, wings to the mind, flight to the
+      {books.current_reads.length > 0 && (
+        <p>
+          Currently reading: {
+            books.current_reads.map((book, index) => (
+              <>
+                <a href={book.url}>{book.title}</a>
+                {index === books.current_reads.length - 2
+                  ? " and "
+                  : index < books.current_reads.length - 2
+                    ? ", "
+                    : ""}
+              </>
+            ))
+          }
+        </p>
+      )}
+      <p class="leading-relaxed italic text-zinc-500 border-l-2 border-zinc-700 pl-4">
+        "Books give a soul to the universe, wings to the mind, flight to the
         imagination, and life to everything." — Plato
       </p>
-      <p class="text-sm text-zinc-400 mt-4 text-right">
-        Last updated: <time
-          datetime={now.toISOString()}
-          title={now.toISOString()}
-        >
-          {format(now, "MMMM d, yyyy 'at' h:mm a")}
-        </time>
+      <p class="text-xs text-zinc-600 mt-4 text-right not-prose">
+        Updated {format(now, "MMM d, yyyy")}
       </p>
     </section>
-    <section class="mt-8" id="blogPosts">
+    <section class="mt-10" id="blogPosts">
       {
         years.map((year) => (
-          <div class="mb-10" data-year={year}>
-            <h2 class="text-accent mb-6 text-2xl text-zinc-200 font-mono font-bold">
-              {year}
-            </h2>
-            <ul class="grid grid-cols-1 md:grid-cols-2 gap-4" role="list">
+          <div class="mb-12" data-year={year}>
+            <div class="flex items-baseline gap-3 mb-6">
+              <h2 class="text-2xl text-zinc-200 font-mono font-bold">
+                {year}
+              </h2>
+              <span class="text-sm text-zinc-600 font-mono">
+                {readByYear[year].length} {readByYear[year].length === 1 ? "book" : "books"}
+              </span>
+            </div>
+            <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-5" role="list">
               {readByYear[year].map((book) => (
-                <li class="flex gap-4 bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4">
-                  {book.cover && (
-                    <img
-                      src={book.cover}
-                      alt={`Cover of ${book.title}`}
-                      class="w-24 h-36 object-cover rounded-md"
-                    />
-                  )}
-                  <div class="flex flex-col flex-1">
-                    <a
-                      href={book.url}
-                      class="text-zinc-100 font-medium hover:text-accent transition-colors line-clamp-3"
-                    >
-                      {book.title}
-                    </a>
-                    <p class="text-sm text-zinc-400">by {book.author}</p>
-                    <div class="flex flex-col gap-1 mt-auto text-sm text-zinc-500">
-                      {book.rating > 0 && (
-                        <div class="flex items-center gap-1.5">
-                          <span class="text-yellow-500/90 tracking-wide text-xs">
-                            {"★".repeat(Math.round(book.rating))}
-                          </span>
-                          <span class="text-zinc-500 text-xs">{book.rating}/5</span>
-                        </div>
-                      )}
-                      <div>{book.num_pages} pages</div>
-                      {book.user_read_at && (
-                        <div>
-                          Finished:{" "}
-                          {new Date(book.user_read_at).toLocaleDateString()}
-                        </div>
-                      )}
+                <li class="group flex flex-col">
+                  <a href={book.url} class="block relative aspect-[2/3] mb-2.5 overflow-hidden rounded-lg bg-zinc-800 border border-zinc-800 hover:border-zinc-600 transition-all duration-200">
+                    {book.cover ? (
+                      <img
+                        src={book.cover}
+                        alt={`Cover of ${book.title}`}
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div class="w-full h-full flex items-center justify-center p-3 text-center">
+                        <span class="text-xs text-zinc-500 line-clamp-4">{book.title}</span>
+                      </div>
+                    )}
+                  </a>
+                  <a
+                    href={book.url}
+                    class="text-sm text-zinc-300 font-medium leading-snug hover:text-white transition-colors line-clamp-2"
+                  >
+                    {book.title}
+                  </a>
+                  <p class="text-xs text-zinc-600 mt-0.5 line-clamp-1">{book.author}</p>
+                  {book.rating > 0 && (
+                    <div class="flex items-center gap-1 mt-1">
+                      <span class="text-yellow-500/80 text-[10px] tracking-wider">
+                        {"★".repeat(Math.round(book.rating))}
+                      </span>
                     </div>
-                  </div>
+                  )}
                 </li>
               ))}
             </ul>
@@ -135,5 +129,5 @@ const now = new Date();
         ))
       }
     </section>
-  </Container>
+  </div>
 </Layout>
