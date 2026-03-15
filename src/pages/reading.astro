@@ -43,26 +43,47 @@ const totalPages = read.reduce((sum, b) => sum + (parseInt(b.num_pages || "0") |
 const numericYears = years.filter((y) => y !== "Long time ago").map(Number).sort((a, b) => a - b);
 const yearCounts = numericYears.map((y) => ({ year: y, count: readByYear[y]?.length || 0 }));
 const maxYearCount = Math.max(...yearCounts.map((y) => y.count), 1);
+const barMaxH = 96; // px
+const yearBars = yearCounts.map((item) => ({
+  year: item.year,
+  count: item.count,
+  label: String(item.year).slice(-2),
+  barH: Math.max(Math.round((item.count / maxYearCount) * barMaxH), 4),
+}));
 
-// --- Books per month chart (current year) ---
+// --- Books per month chart (this year + all time) ---
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const monthCounts = new Array(12).fill(0);
+const currentMonth = now.getMonth();
+
+const monthCountsThisYear = new Array(12).fill(0);
+const monthCountsAllTime = new Array(12).fill(0);
 read.forEach((b) => {
   if (b.user_read_at) {
     const d = new Date(b.user_read_at);
+    monthCountsAllTime[d.getMonth()]++;
     if (d.getFullYear() === currentYear) {
-      monthCounts[d.getMonth()]++;
+      monthCountsThisYear[d.getMonth()]++;
     }
   }
 });
-const maxMonthCount = Math.max(...monthCounts, 1);
-const currentMonth = now.getMonth();
-const monthBars = monthCounts.map((count, i) => ({
+
+const maxMonthThisYear = Math.max(...monthCountsThisYear, 1);
+const maxMonthAllTime = Math.max(...monthCountsAllTime, 1);
+
+const monthBarsThisYear = monthCountsThisYear.map((count, i) => ({
   count,
   label: monthNames[i],
-  pct: (count / maxMonthCount) * 100,
-  colorClass: count > 0 ? "bg-yellow-500/80" : i <= currentMonth ? "bg-zinc-700/60" : "bg-zinc-800/40",
-  heightStyle: `height: ${count > 0 ? Math.max((count / maxMonthCount) * 100, 8) : 3}%`,
+  barH: count > 0 ? Math.max(Math.round((count / maxMonthThisYear) * barMaxH), 4) : 0,
+  isEmpty: count === 0,
+  isFuture: i > currentMonth,
+}));
+
+const monthBarsAllTime = monthCountsAllTime.map((count, i) => ({
+  count,
+  label: monthNames[i],
+  barH: count > 0 ? Math.max(Math.round((count / maxMonthAllTime) * barMaxH), 4) : 0,
+  isEmpty: count === 0,
+  isFuture: false,
 }));
 ---
 
@@ -124,37 +145,58 @@ const monthBars = monthCounts.map((count, i) => ({
     {/* --- Charts side by side --- */}
     <section class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
       {/* Books per year */}
-      {yearCounts.length > 1 && (
+      {yearBars.length > 1 && (
         <div class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-5">
           <h2 class="text-sm font-medium text-zinc-400 mb-4">Books per year</h2>
-          <div class="flex items-end gap-1 h-20">
-            {yearCounts.map((item) => {
-              const pct = (item.count / maxYearCount) * 100;
-              return (
-                <div class="flex-1 flex flex-col items-center gap-1">
-                  <span class="text-[10px] text-zinc-400">{item.count}</span>
-                  <div
-                    class="w-full rounded-sm bg-yellow-500/80 min-h-[2px] transition-all"
-                    style={`height: ${Math.max(pct, 3)}%`}
-                  />
-                  <span class="text-[9px] text-zinc-500">{String(item.year).slice(-2)}</span>
-                </div>
-              );
-            })}
+          <div class="flex items-end gap-1" style="height: 120px">
+            {yearBars.map((bar) => (
+              <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end">
+                <span class="text-[10px] text-zinc-400">{bar.count}</span>
+                <div
+                  class="w-full rounded-sm bg-yellow-500/80"
+                  style={`height: ${bar.barH}px`}
+                />
+                <span class="text-[9px] text-zinc-500">{bar.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       )}
 
-      {/* Books per month (current year) */}
+      {/* Books per month with toggle */}
       <div class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-5">
-        <h2 class="text-sm font-medium text-zinc-400 mb-4">{currentYear} by month</h2>
-        <div class="flex items-end gap-1 h-20">
-          {monthBars.map((bar) => (
-            <div class="flex-1 flex flex-col items-center gap-1">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-sm font-medium text-zinc-400">By month</h2>
+          <div class="flex gap-1 text-[11px]">
+            <button class="month-toggle active px-2 py-0.5 rounded-full bg-zinc-700 text-zinc-200 border border-zinc-600 cursor-pointer transition-colors" data-mode="thisyear">
+              {currentYear}
+            </button>
+            <button class="month-toggle px-2 py-0.5 rounded-full text-zinc-500 border border-zinc-700/50 cursor-pointer transition-colors hover:text-zinc-300" data-mode="alltime">
+              All time
+            </button>
+          </div>
+        </div>
+        {/* This year bars */}
+        <div id="month-thisyear" class="flex items-end gap-1" style="height: 120px">
+          {monthBarsThisYear.map((bar) => (
+            <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end">
               {bar.count > 0 && <span class="text-[10px] text-zinc-400">{bar.count}</span>}
               <div
-                class={`w-full rounded-sm min-h-[2px] transition-all ${bar.colorClass}`}
-                style={bar.heightStyle}
+                class={`w-full rounded-sm ${bar.isEmpty ? (bar.isFuture ? "bg-zinc-800/40" : "bg-zinc-700/40") : "bg-yellow-500/80"}`}
+                style={`height: ${bar.isEmpty ? 3 : bar.barH}px`}
+              />
+              <span class="text-[9px] text-zinc-500">{bar.label}</span>
+            </div>
+          ))}
+        </div>
+        {/* All time bars */}
+        <div id="month-alltime" class="flex items-end gap-1 hidden" style="height: 120px">
+          {monthBarsAllTime.map((bar) => (
+            <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end">
+              {bar.count > 0 && <span class="text-[10px] text-zinc-400">{bar.count}</span>}
+              <div
+                class={`w-full rounded-sm ${bar.isEmpty ? "bg-zinc-700/40" : "bg-yellow-500/80"}`}
+                style={`height: ${bar.isEmpty ? 3 : bar.barH}px`}
               />
               <span class="text-[9px] text-zinc-500">{bar.label}</span>
             </div>
@@ -225,3 +267,31 @@ const monthBars = monthCounts.map((count, i) => ({
     </p>
   </Container>
 </Layout>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const toggles = document.querySelectorAll<HTMLButtonElement>(".month-toggle");
+    const thisYearChart = document.getElementById("month-thisyear");
+    const allTimeChart = document.getElementById("month-alltime");
+    if (!thisYearChart || !allTimeChart) return;
+
+    toggles.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        toggles.forEach((b) => {
+          b.classList.remove("active", "bg-zinc-700", "text-zinc-200", "border-zinc-600");
+          b.classList.add("text-zinc-500", "border-zinc-700/50");
+        });
+        btn.classList.add("active", "bg-zinc-700", "text-zinc-200", "border-zinc-600");
+        btn.classList.remove("text-zinc-500", "border-zinc-700/50");
+
+        if (btn.dataset.mode === "thisyear") {
+          thisYearChart.classList.remove("hidden");
+          allTimeChart.classList.add("hidden");
+        } else {
+          thisYearChart.classList.add("hidden");
+          allTimeChart.classList.remove("hidden");
+        }
+      });
+    });
+  });
+</script>
