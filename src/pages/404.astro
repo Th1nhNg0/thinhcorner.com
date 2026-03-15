@@ -10,9 +10,8 @@ import Layout from "@/layouts/Layout.astro";
 >
   <Container>
     <div class="space-y-8 text-center py-16">
-      <!-- Large 404 Number -->
       <div class="space-y-4">
-        <h1 class="text-8xl sm:text-9xl font-heading font-bold font-heading">
+        <h1 class="text-8xl sm:text-9xl font-heading font-bold">
           404
         </h1>
         <h2 class="text-2xl sm:text-3xl font-medium text-zinc-200">
@@ -20,25 +19,23 @@ import Layout from "@/layouts/Layout.astro";
         </h2>
       </div>
 
-      <!-- Description -->
       <div class="space-y-4 max-w-lg mx-auto">
         <p class="text-lg text-zinc-400 leading-relaxed">
           Oops! The page you're looking for seems to have wandered off into the
           digital void.
         </p>
-        <p class="text-zinc-400">
+        <p class="text-zinc-500 text-sm">
           Don't worry though, even the best explorers sometimes take a wrong
           turn.
         </p>
       </div>
 
-      <!-- Action Buttons -->
       <div
-        class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8"
+        class="flex flex-col sm:flex-row gap-3 justify-center items-center pt-8"
       >
         <a
           href="/"
-          class="flex items-center space-x-2 px-6 py-3 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition-colors duration-200 font-medium text-zinc-200"
+          class="flex items-center gap-2 px-5 py-2.5 rounded-surface bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 border border-zinc-700/50 hover:border-zinc-600/60 transition-all text-sm font-medium text-zinc-200 hover:text-yellow-500"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -55,7 +52,7 @@ import Layout from "@/layouts/Layout.astro";
 
         <a
           href="/blog"
-          class="flex items-center rounded-surface space-x-2 px-6 py-3 border border-zinc-700 hover:bg-zinc-800 transition-colors duration-200 font-medium text-zinc-200"
+          class="flex items-center gap-2 px-5 py-2.5 rounded-surface bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 border border-zinc-700/50 hover:border-zinc-600/60 transition-all text-sm font-medium text-zinc-200 hover:text-yellow-500"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -73,9 +70,8 @@ import Layout from "@/layouts/Layout.astro";
         </a>
       </div>
 
-      <!-- Fun Fact -->
       <div class="pt-12 border-t border-zinc-800">
-        <p class="text-sm text-zinc-500 italic">
+        <p class="text-xs text-zinc-600 italic font-mono">
           Fun fact: The HTTP 404 error was named after room 404 at CERN where
           the World Wide Web was invented!
         </p>
