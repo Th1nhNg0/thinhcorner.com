@@ -29,37 +29,28 @@ const now = new Date();
   }}
 >
   <Container>
-    <section class="prose max-w-none prose-invert prose-a:text-yellow-500">
+    <section class="mb-6">
       <h1
-        class="font-bold not-prose text-4xl tracking-tight sm:text-6xl inline-block font-heading"
+        class="text-4xl font-bold tracking-tight sm:text-6xl font-heading mb-4"
       >
         My music library
       </h1>
-      <p>
-        This is a collection of what I've listened to over the past 4 weeks,
+      <p class="text-zinc-400 leading-relaxed max-w-2xl">
+        A collection of what I've listened to over the past 4 weeks,
         automatically generated from my
-        <a href={SOCIAL_MEDIA.spotify} class="text-zinc-200 hover:text-white"
-          >Spotify profile.</a
-        >
-      </p>
-
-      <p class="leading-relaxed italic">
-        "Music is that voice that tells us that the human race is greater than
-        it knows." — Napoleon Bonaparte
-      </p>
-      <p class="text-sm text-zinc-400 mt-4 text-right">
-        Last updated: <time
-          datetime={now.toISOString()}
-          title={now.toISOString()}
-        >
-          {format(now, "MMMM d, yyyy 'at' h:mm a")}
-        </time>
+        <a href={SOCIAL_MEDIA.spotify} class="text-yellow-500 hover:text-yellow-400 transition-colors"
+          >Spotify profile</a
+        >.
       </p>
     </section>
 
-    <section class="my-8">
-      <h2 class="text-xl font-semibold mb-3">Recently Played</h2>
-      <p class="text-zinc-400 text-sm mb-4">My latest music adventures</p>
+    <p class="text-zinc-500 italic text-sm mb-8 border-l-2 border-zinc-700 pl-4">
+      "Music is that voice that tells us that the human race is greater than
+      it knows." — Napoleon Bonaparte
+    </p>
+
+    <section class="mb-8">
+      <h2 class="text-sm font-mono text-zinc-500 uppercase tracking-wider mb-4">Recently Played</h2>
       <div class="space-y-2">
         {
           recentlyPlayed.map((track) => (
@@ -111,10 +102,7 @@ const now = new Date();
     </section>
 
     <section class="mb-8">
-      <h2 class="text-xl font-semibold mb-3">Top Tracks</h2>
-      <p class="text-zinc-400 text-sm mb-4">
-        My most played songs over the past 4 weeks
-      </p>
+      <h2 class="text-sm font-mono text-zinc-500 uppercase tracking-wider mb-4">Top Tracks</h2>
       <div class="grid grid-cols-3 md:grid-cols-5 gap-3">
         {
           topTracks.map((track) => (
@@ -160,10 +148,7 @@ const now = new Date();
     </section>
 
     <section class="mb-8">
-      <h2 class="text-xl font-semibold mb-3">Top Artists</h2>
-      <p class="text-zinc-400 text-sm mb-4">
-        My most listened artists over the past 4 weeks
-      </p>
+      <h2 class="text-sm font-mono text-zinc-500 uppercase tracking-wider mb-4">Top Artists</h2>
       <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
         {
           topArtists.map((artist) => (
@@ -213,5 +198,9 @@ const now = new Date();
         }
       </div>
     </section>
+
+    <p class="text-xs text-zinc-600 font-mono text-right mt-4 mb-8">
+      Last updated: {format(now, "MMM d, yyyy 'at' h:mm a")}
+    </p>
   </Container>
 </Layout>
