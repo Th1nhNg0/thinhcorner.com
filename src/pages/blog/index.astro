@@ -5,7 +5,7 @@ import { getCollection } from "astro:content";
 import { format } from "date-fns";
 
 const blog = (await getCollection("blog")).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 
 const postsByYear = blog.reduce(
@@ -17,7 +17,7 @@ const postsByYear = blog.reduce(
     acc[year].push(post);
     return acc;
   },
-  {} as Record<number, typeof blog>
+  {} as Record<number, typeof blog>,
 );
 
 const years = Object.keys(postsByYear)
@@ -39,85 +39,101 @@ const years = Object.keys(postsByYear)
   }}
 >
   <Container>
-    <div class="flex items-center justify-between mb-8">
-      <h1
-        class="font-bold text-4xl tracking-tight sm:text-6xl inline-flex items-baseline gap-3 font-heading"
-      >
-        <span> Posts </span>
-        <a href="/rss.xml" aria-label="RSS feed" title="RSS feed">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
-            viewBox="0 0 24 24"
-            class="text-yellow-500"
-            ><circle cx="5" cy="19" r="0" fill="currentColor"
-              ><animate fill="freeze" attributeName="r" dur="0.2s" values="0;2"
-              ></animate></circle
-            ><g
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              ><path
-                stroke-dasharray="16"
-                stroke-dashoffset="16"
-                d="M4 11c2.39 0 4.68 0.95 6.36 2.64c1.69 1.68 2.64 3.97 2.64 6.36"
+    <section class="mb-8">
+      <div class="flex items-center justify-between">
+        <h1
+          class="font-bold text-4xl tracking-tight sm:text-6xl inline-flex items-baseline gap-3 font-heading"
+        >
+          <span>Posts</span>
+          <a href="/rss.xml" aria-label="RSS feed" title="RSS feed">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              class="text-yellow-500"
+              ><circle cx="5" cy="19" r="0" fill="currentColor"
                 ><animate
                   fill="freeze"
-                  attributeName="stroke-dashoffset"
-                  begin="0.2s"
-                  dur="0.3s"
-                  values="16;0"></animate></path
-              ><path
-                stroke-dasharray="28"
-                stroke-dashoffset="28"
-                d="M4 4c4.24 0 8.31 1.69 11.31 4.69c3 3 4.69 7.07 4.69 11.31"
-                ><animate
-                  fill="freeze"
-                  attributeName="stroke-dashoffset"
-                  begin="0.6s"
-                  dur="0.4s"
-                  values="28;0"></animate></path
-              ></g
-            ></svg
-          >
-        </a>
-      </h1>
-      <label class="flex items-center gap-2 text-zinc-200 cursor-pointer">
-        <input type="checkbox" id="englishOnly" class="accent-green-500" />
-        English only
-      </label>
-    </div>
+                  attributeName="r"
+                  dur="0.2s"
+                  values="0;2"></animate></circle
+              ><g
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                ><path
+                  stroke-dasharray="16"
+                  stroke-dashoffset="16"
+                  d="M4 11c2.39 0 4.68 0.95 6.36 2.64c1.69 1.68 2.64 3.97 2.64 6.36"
+                  ><animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    begin="0.2s"
+                    dur="0.3s"
+                    values="16;0"></animate></path
+                ><path
+                  stroke-dasharray="28"
+                  stroke-dashoffset="28"
+                  d="M4 4c4.24 0 8.31 1.69 11.31 4.69c3 3 4.69 7.07 4.69 11.31"
+                  ><animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    begin="0.6s"
+                    dur="0.4s"
+                    values="28;0"></animate></path
+                ></g
+              ></svg
+            >
+          </a>
+        </h1>
+        <label
+          class="flex items-center gap-2 text-sm text-zinc-400 cursor-pointer select-none"
+        >
+          <input type="checkbox" id="englishOnly" class="accent-yellow-500" />
+          English only
+        </label>
+      </div>
+    </section>
 
     <section id="blogPosts">
       {
         years.map((year) => (
           <div class="mb-10" data-year={year}>
-            <h2 class="text-accent mb-6 text-2xl text-zinc-200 font-mono font-bold">
-              {year}
-            </h2>
-            <ul class="space-y-4" role="list">
+            <div class="flex items-center gap-3 mb-5">
+              <h2 class="text-xl text-zinc-200 font-mono font-bold">{year}</h2>
+              <div class="flex-1 h-px bg-zinc-800" />
+              <span class="text-xs font-mono text-zinc-500 whitespace-nowrap">
+                {postsByYear[year].length}{" "}
+                {postsByYear[year].length === 1 ? "post" : "posts"}
+              </span>
+            </div>
+            <ul class="space-y-2" role="list">
               {postsByYear[year].map((post) => (
                 <li
-                  class="grid gap-2 sm:grid-cols-[auto_1fr] items-start"
+                  class="group flex items-baseline gap-4 py-2 px-3 -mx-3 rounded-lg hover:bg-zinc-800/40 transition-colors"
                   data-lang={post.data.lang || "en"}
                 >
                   <time
                     datetime={post.data.date.toISOString()}
                     title={post.data.date.toISOString()}
-                    class="min-w-30 font-semibold font-mono text-zinc-400"
+                    class="shrink-0 text-xs font-mono text-zinc-600 min-w-[5.5rem]"
                   >
                     {format(new Date(post.data.date), "dd MMM y")}
                   </time>
-                  <div class="text-zinc-200">
+                  <div class="text-zinc-300 group-hover:text-zinc-100 transition-colors text-sm">
                     {post.data.draft && (
-                      <span class="text-yellow-400 font-bold mr-2">
+                      <span class="text-yellow-500 font-bold mr-2 text-xs">
                         [Draft]
                       </span>
                     )}
-                    <a data-astro-prefetch href={`/blog/${post.id}`}>
+                    <a
+                      data-astro-prefetch
+                      href={`/blog/${post.id}`}
+                      class="hover:text-yellow-500 transition-colors"
+                    >
                       {post.data.title}
                     </a>
                   </div>
@@ -156,7 +172,7 @@ const years = Object.keys(postsByYear)
       const section = yearSection as HTMLElement;
       const postsInYear = section.querySelectorAll("li[data-lang]");
       const hasVisiblePosts = Array.from(postsInYear).some(
-        (post) => (post as HTMLLIElement).style.display !== "none"
+        (post) => (post as HTMLLIElement).style.display !== "none",
       );
 
       section.style.display = hasVisiblePosts ? "" : "none";
