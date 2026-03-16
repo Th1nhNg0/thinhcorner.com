@@ -6,10 +6,7 @@ import { getRecentlyPlayed, getTopArtists, getTopTracks } from "@/lib/spotify";
 import { SOCIAL_MEDIA } from "@/consts";
 import { format, formatDistanceToNow } from "date-fns";
 
-Astro.response.headers.set(
-  "Cache-Control",
-  "s-maxage=1, stale-while-revalidate=86400"
-);
+Astro.cache.set({ maxAge: 1, swr: 86400 });
 
 const topTracks = await getTopTracks();
 const recentlyPlayed = await getRecentlyPlayed();
