@@ -39,6 +39,7 @@ const blog = (await getCollection("blog"))
         SOCIAL_MEDIA.github,
         SOCIAL_MEDIA.facebook,
         SOCIAL_MEDIA.spotify,
+        SOCIAL_MEDIA.linkedin,
       ].filter(Boolean),
     },
   ]}
@@ -62,7 +63,7 @@ const blog = (await getCollection("blog"))
           <h2 class="text-xl text-zinc-200 font-mono font-bold">
             <a href="/blog/">Posts</a>
           </h2>
-          <div class="flex-1 h-px bg-zinc-800" />
+          <div class="flex-1 h-px bg-zinc-800"></div>
         </div>
         <ul class="space-y-2" role="list">
           {
@@ -77,9 +78,15 @@ const blog = (await getCollection("blog"))
                 </time>
                 <div class="text-zinc-300 group-hover:text-zinc-100 transition-colors text-sm">
                   {post.data.draft && (
-                    <span class="text-yellow-500 font-bold mr-2 text-xs">[Draft]</span>
+                    <span class="text-yellow-500 font-bold mr-2 text-xs">
+                      [Draft]
+                    </span>
                   )}
-                  <a data-astro-prefetch="" href={`/blog/${post.id}`} class="hover:text-yellow-500 transition-colors">
+                  <a
+                    data-astro-prefetch=""
+                    href={`/blog/${post.id}`}
+                    class="hover:text-yellow-500 transition-colors"
+                  >
                     {post.data.title}
                   </a>
                 </div>
@@ -109,6 +116,18 @@ const blog = (await getCollection("blog"))
                 aria-label="GitHub Profile"
               >
                 GitHub
+              </a>
+            )
+          }
+          {
+            SOCIAL_MEDIA.linkedin && (
+              <a
+                href={SOCIAL_MEDIA.linkedin}
+                target="_blank"
+                class="transition-colors duration-200 hover:text-yellow-500"
+                aria-label="LinkedIn Profile"
+              >
+                LinkedIn
               </a>
             )
           }
