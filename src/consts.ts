@@ -3,10 +3,12 @@ const PERSONAL_SOCIAL_PROFILES: {
   github?: string;
   facebook?: string;
   spotify?: string;
+  linkedin?: string;
 } = {
   github: "https://github.com/th1nhng0",
   facebook: "https://www.facebook.com/Th1nhNg0",
   spotify: "https://open.spotify.com/user/21acs5sngq2xkehugtvqkwmuy",
+  linkedin: "https://www.linkedin.com/in/th1nhng0/",
 };
 
 // Core website metadata for SEO and display
