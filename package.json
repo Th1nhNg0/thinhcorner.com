@@ -36,5 +36,8 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.19"
+  },
+  "overrides": {
+    "estree-walker": "2.0.2"
   }
 }
