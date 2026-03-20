@@ -1,269 +1,269 @@
 ---
-title: "500,000 văn bản pháp luật — lịch sử Việt Nam nhìn qua dữ liệu"
-description: "Phân tích bộ dữ liệu hơn nửa triệu văn bản pháp luật Việt Nam từ 1924 đến 2025: ai ban hành, ban hành lúc nào, và ưu tiên của đất nước thay đổi ra sao qua từng thập kỷ."
+title: "500,000 văn bản pháp luật — Lịch sử Việt Nam nhìn qua dữ liệu"
+description: "Phân tích bộ dữ liệu hơn nửa triệu văn bản pháp luật Việt Nam từ 1924 đến 2025: ai ban hành, ban hành khi nào, và ưu tiên của đất nước thay đổi ra sao qua từng thập kỷ."
 date: "2026-03-20"
 draft: true
 lang: "vi"
 ---
 
-Mỗi quyết định, thông tư, nghị quyết là một mảnh ghép nhỏ của lịch sử. Gộp lại hơn nửa triệu mảnh ghép đó lại, ta có thể thấy một bức tranh rất khác về cách Việt Nam vận hành — không qua lời kể, mà qua dữ liệu.
+Mỗi quyết định, thông tư hay nghị quyết đều là một mảnh ghép nhỏ của lịch sử. Khi ghép hơn nửa triệu mảnh ghép ấy lại, ta sẽ thấy một bức tranh hoàn toàn khác về cách thức vận hành của Việt Nam — không chỉ qua những lời kể, mà hiển hiện rành rọt qua ngôn ngữ dữ liệu.
 
-Bài phân tích này dựa trên bộ dữ liệu do mình tổng hợp và công bố tại [HuggingFace](https://huggingface.co/datasets/th1nhng0/thuvienphapluat).
+Bài viết này là đúc kết từ quá trình phân tích bộ dữ liệu do mình tổng hợp và công bố công khai trên [HuggingFace](https://huggingface.co/datasets/th1nhng0/thuvienphapluat).
 
-Bộ dữ liệu mình phân tích gồm **515,253 văn bản pháp luật**, trải dài từ năm 1924 đến 2025.
+Trọng tâm của bộ dữ liệu phân tích bao gồm **515.253 văn bản pháp luật**, trải dài nguyên một thế kỷ từ năm 1924 đến 2025.
 
 ---
 
-## Dòng thời gian: Lịch sử qua từng văn bản
+## Dòng thời gian: Lịch sử đằng sau những con số
 
 ![Dòng thời gian văn bản pháp luật Việt Nam (1945–2025)](./timeline_annotated.png)
 
-Biểu đồ trên kể một câu chuyện quen thuộc bằng ngôn ngữ rất lạ: số lượng văn bản pháp luật.
+Biểu đồ trên kể lại một tiến trình lịch sử quen thuộc nhưng bằng một ngôn ngữ rất mới mẻ: quy mô số lượng văn bản pháp luật.
 
-Trước **Đổi Mới 1986**, bộ máy nhà nước ban hành rất ít văn bản — vài trăm đến vài nghìn mỗi năm. Nhưng kể từ khi nền kinh tế mở cửa, con số này tăng liên tục, không ngừng nghỉ. Đến **Hiến pháp 1992**, đà tăng càng rõ hơn khi khuôn khổ pháp lý cho nền kinh tế thị trường định hướng xã hội chủ nghĩa bắt đầu được xây dựng.
+Trước thời đại **Đổi Mới (1986)**, bộ máy nhà nước ban hành khá ít văn bản — chỉ dao động từ vài trăm đến vài nghìn đầu mục mỗi năm. Tuy nhiên, kể từ thời điểm mở cửa nền kinh tế, con số này liên tục bật tăng không ngừng nghỉ. Cho đến **Hiến pháp 1992**, đà tăng trưởng càng bứt phá mạnh mẽ hơn khi khuôn khổ pháp lý cho nền kinh tế thị trường định hướng xã hội chủ nghĩa bắt đầu định hình rõ nét.
 
-Bước ngoặt lớn nhất là giai đoạn **gia nhập WTO 2007** — hàng loạt luật, nghị định, thông tư phải được ban hành để tương thích với cam kết quốc tế. Năm 2010, lần đầu tiên số văn bản vượt mốc 15,000/năm.
+Bước ngoặt lớn nhất có lẽ là ở giai đoạn **Việt Nam gia nhập WTO (2007)** — hàng loạt đạo luật, nghị định và thông tư được gấp rút chuẩn bị nhằm nội luật hoá các cam kết quốc tế. Nhờ đó, năm 2010 đã ghi nhận cột mốc lần đầu tiên số lượng văn bản vượt ngưỡng 15.000/năm.
 
-**COVID-19 năm 2020** tạo ra một nhịp giảm đáng chú ý, nhưng chỉ tạm thời. Đến 2025, sản lượng pháp lý đạt đỉnh mới với gần **35,000 văn bản trong một năm**.
+Đại dịch **COVID-19 cuối năm 2020** có gây ra một nhịp chững lại, song đó chỉ là điểm thắt nút tạm thời. Đến năm 2025, "sản lượng" hệ thống văn bản pháp lý tiếp tục dò đỉnh và thiết lập kỷ lục mới với gần **35.000 văn bản chỉ trong một năm duy nhất**.
 
 ---
 
-## Tăng trưởng theo thập kỷ: Bước nhảy vọt của những năm 2000
+## Tăng trưởng thập kỷ: Cú nhảy vọt của những năm 2000
 
 ![Tổng số văn bản theo thập kỷ](./decade_growth.png)
 
-Nhìn vào con số theo thập kỷ, mức tăng trưởng thực sự gây choáng:
+Khi gom nhóm dữ liệu mở rộng theo từng thập kỷ, mức độ tăng trưởng thực sự gây choáng ngợp:
 
-- **Thập niên 2000s**: tăng **717%** so với thập niên 1990s — từ 10,699 lên 87,421 văn bản
-- **Thập niên 2010s**: tiếp tục tăng **155%**, đạt đỉnh **222,772 văn bản**
-- **Thập niên 2020s** (chưa kết thúc): 185,012 văn bản, giảm nhẹ 17% so với thập niên trước
+- **Thập niên 2000s**: Tăng vọt **717%** so với giai đoạn 1990s — bứt phá từ 10.699 lên 87.421 văn bản.
+- **Thập niên 2010s**: Tiếp tục giữ đà tăng **155%**, thiết lập kỷ lục **222.772 văn bản**.
+- **Thập niên 2020s** (tính đến thời điểm hiện tại): Đạt 185.012 văn bản, sụt giảm nhẹ 17% so với "đỉnh cao" ở thập kỷ trước.
 
-Thập niên 1970s là giai đoạn duy nhất có tăng trưởng âm (-14%) — thời kỳ đất nước vừa thống nhất, bộ máy đang tái cơ cấu sau chiến tranh.
+Đáng chú ý, thập niên 1970s lại là giai đoạn duy nhất ghi nhận tăng trưởng âm (-14%). Đây là chặng lịch sử đất nước mới thống nhất, hệ thống hành chính hai miền đang chuyển giao và tái cơ cấu khốc liệt sau chiến tranh.
 
 ---
 
-## Trung ương vs. Địa phương: Ai ban hành nhiều hơn?
+## Trung ương vs. Địa phương: Ai nắm giữ "bút sa"?
 
-Một trong những cuộc tranh luận lâu dài trong quản trị nhà nước là: quyền lực nên tập trung hay phân cấp? Dữ liệu cho thấy câu trả lời thực tế.
+Một trong những chủ đề kinh điển trong khoa học quản trị quản lý nhà nước là: Quyền lực nên được tập trung hay nên phân cấp? Dữ liệu đã mang đến đáp án vô cùng chân thực.
 
 ![Tỷ lệ văn bản Trung ương vs Địa phương](./central_vs_provincial.png)
 
-Tính tổng thể, **Trung ương chiếm 47.6%** và **Địa phương chiếm 52.4%** tổng số văn bản. Gần như ngang bằng — nhưng xu hướng theo thời gian mới thú vị.
+Xét trên tổng dung lượng, khối **Trung ương chiếm 47,6%** trong khi khối **Địa phương chiếm 52,4%** tổng số văn bản. Tỷ lệ này tưởng chừng rất cân bằng, nhưng sự xoay trục theo dòng thời gian mới chính là điểm nhấn thú vị.
 
-Nhìn vào biểu đồ diện tích từ 1986 đến 2025: ban đầu văn bản trung ương chiếm ưu thế rõ rệt, nhưng kể từ đầu những năm 2000, địa phương liên tục vươn lên và ngày càng mở rộng khoảng cách. Phân cấp quản lý không chỉ là chủ trương — nó hiện rõ trong dữ liệu.
+Nhìn sâu vào biểu đồ diện tích từ năm 1986 đến 2025: Thời kỳ đầu, thiết chế Trung ương là người chơi giữ ưu thế vượt bậc. Thế nhưng, kể từ đầu thềm thiên niên kỷ 2000, khối Địa phương liên tục phất cờ vươn lên, dần dần phủ lấp biểu đồ và nới rộng tỷ trọng. Có thể thấy, chiến lược phân cấp phân quyền không chỉ tồn tại dưới dạng chủ trương — nó đã hiện diện rất rõ dưới dạng số liệu pháp lý.
 
 ---
 
-## Top 20 cơ quan ban hành văn bản nhiều nhất
+## Top 20 cơ quan ban hành văn bản năng suất nhất
 
 ![Top 20 cơ quan ban hành văn bản](./top_authorities.png)
 
-Hai cơ quan dẫn đầu khá bất ngờ: **Tổng cục Hải quan** (27,483 văn bản) và **Tổng cục Thuế** (23,668 văn bản) — vượt cả **Thủ tướng Chính phủ** (18,065 văn bản).
+Bất ngờ thay, nắm giữ hai vị trí dẫn đầu không phải là những cơ quan vĩ mô: **Tổng cục Hải quan** (27.483 văn bản) và **Tổng cục Thuế** (23.668 văn bản) — bỏ xa cả cơ quan hành pháp quyền lực nhất là **Thủ tướng Chính phủ** (18.065 văn bản).
 
-Điều này phản ánh đặc thù nghiệp vụ: hải quan và thuế phải xử lý hàng triệu giao dịch mỗi ngày, cần ban hành liên tục các công văn hướng dẫn, trả lời vướng mắc cụ thể.
+Thực tế, điều này lại lột tả đúng tính chất đặc thù về mặt nghiệp vụ: Khối hải quan và thuế đóng vai trò là mạch máu lớn của nền kinh tế, phải giải quyết lượng lớn nghiệp vụ và hàng triệu giao dịch mỗi ngày. Do đó, các cơ quan này liên tục phải ban hành công văn để hướng dẫn tháo gỡ khó khăn trực tiếp cho người nộp thuế và doanh nghiệp.
 
-Trong số địa phương, **TP. Hồ Chí Minh** (11,651) và **TP. Hà Nội** (11,505) dẫn đầu tuyệt đối — hai đầu tàu kinh tế cũng là hai cỗ máy ban hành văn bản chạy hết công suất.
+Ở cấp khu vực, đại diện **TP. Hồ Chí Minh** (11.651) và **TP. Hà Nội** (11.505) chắc suất vị trí độc tôn. Hai siêu đô thị đầu tàu của cả nước đồng thời diễn một vai trò khác — hai "cỗ máy" chế xuất văn bản hoạt động hết công suất.
 
 ---
 
-## Nhịp đập của bộ máy: Mùa vụ ban hành văn bản
+## Nhịp đập bộ máy: Tính "mùa vụ" trong ban hành văn bản
 
 ![Số văn bản ban hành theo tháng](./monthly_patterns.png)
 
-Bộ máy nhà nước có nhịp điệu riêng, và dữ liệu vạch rõ nhịp đó.
+Hệ thống hành chính nhà nước vận động theo nhịp điệu sinh học riêng của nó, và dữ liệu đã làm lộ diện biểu đồ nhịp sinh học này.
 
-**Tháng 12 là tháng bận rộn nhất** với 69,277 văn bản — gần gấp đôi tháng thấp nhất. Cuối năm là lúc tổng kết, ban hành quyết định ngân sách, phê duyệt kế hoạch, chốt các chỉ tiêu còn dang dở.
+**Tháng 12 dứt khoát là khoảng thời gian bận rộn nhất** với 69.277 văn bản được chắp bút — gấp đôi thông lượng của tháng có sản lượng thấp nhất. Cuối năm là thời khắc cao trào chốt sổ tổng kết báo cáo, rà soát lại nguồn ngân sách nhà nước, phê duyệt dự án mới và chốt sổ các chỉ tiêu kinh tế-xã hội còn đang dang dở.
 
-**Tháng 2 là tháng yên tĩnh nhất** (28,521 văn bản) — Tết Nguyên Đán đặt bộ máy vào trạng thái nghỉ ngơi.
+Ngược lại, **Tháng 2 là quãng nghĩ yên bình nhất** trong năm (28.521 văn bản) — do trùng khớp với kỳ nghỉ Tết Nguyên Đán, đã đặt phần đông bộ máy vào chế độ nghỉ ngơi dưỡng sức.
 
-**Tháng 7** đứng thứ hai (48,205) — giữa năm là thời điểm sơ kết, điều chỉnh kế hoạch và triển khai các chính sách ban hành đầu năm.
+**Tháng 7** chen chân ở vị trí thứ hai (48.205 văn bản). Trọng tâm giữa năm đi liền với việc rà soát và sơ kết 6 tháng đầu năm, điều chỉnh lại kế hoạch nhà nước cũng như đôn đốc triển khai các chỉ lệnh.
 
-Mapa nhiệt bên phải cho thấy xu hướng này ổn định qua từng năm từ 2010 đến 2025: tháng 12 luôn đỏ đậm, tháng 2 luôn nhạt.
+Bản đồ nhiệt bên phải bảo chứng cho tính "mùa vụ" suốt từ chu kỳ 2010 đến nay: cột Tháng 12 luôn hiển hiện một màu đỏ rực, đối lập với Tháng 2 nhạt nhoà.
 
 ---
 
-## Ưu tiên của quốc gia qua từng thập kỷ
+## Ưu tiên quốc gia chuyển dịch qua các thập kỷ
 
-Mỗi thập kỷ, đất nước có những vấn đề nóng bỏng khác nhau. Bản đồ nhiệt dưới đây phản chiếu điều đó qua tỷ trọng văn bản theo lĩnh vực.
+Mỗi thập kỷ trôi qua, đất nước lại phải gồng gánh những bài toán thử thách trọng tâm khác nhau. Vùng biểu đồ nhiệt dưới đây phản ánh lát cắt thời gian đó thông qua tỷ trọng nội dung văn bản cho từng lĩnh vực chuyên ngành.
 
 ![Tỷ trọng các lĩnh vực pháp lý theo thập kỷ](./sector_heatmap_decade.png)
 
-Một số quan sát nổi bật:
+Một số điểm nhấn phân tích:
 
-- **Bộ máy hành chính** luôn chiếm tỷ trọng cao nhất mọi thập kỷ, và đạt đỉnh **32.3%** vào những năm 2020s — phản ánh làn sóng cải cách hành chính, chuyển đổi số và sắp xếp lại bộ máy nhà nước.
-- **Thương mại** chiếm đến 11% vào thập niên 1980s (thời kỳ đầu Đổi Mới) nhưng giảm dần khi khung pháp lý đã được định hình.
-- **Thuế - Phí - Lệ Phí** vọt lên **16%** vào những năm 2000s — hệ quả trực tiếp của việc gia nhập WTO và cải cách hệ thống thuế.
-- **Lao động - Tiền lương** chiếm 9.5% vào thập niên 1980s khi kinh tế bắt đầu chuyển đổi, rồi giảm dần khi các luật cơ bản đã được ban hành.
-- **Thể thao - Y tế** tăng lên 6.7% vào những năm 2020s — COVID-19 có phần đóng góp không nhỏ.
+- **Bộ máy hành chính** trung thành với tỷ trọng dẫn đầu xuyên suốt lịch sử, trước khi đạt đỉnh cao **32,3%** ở những năm 2020s. Điều này cộng hưởng với làn sóng Cải cách thủ tục hành chính, chuyển đổi số quốc gia và tinh gọn lại bộ máy quản lý.
+- **Thương mại** từng là một mảng cực nóng tốn đến 11% dung lượng ở thập niên 1980s (buổi bình minh Đổi Mới), sau đó ngưng nhiệt và giảm dần khi đã cắm rễ được hệ thống khung pháp lý ổn định.
+- **Thuế - Phí - Lệ phí** đạt đỉnh **16%** vào những năm 2000s — minh chứng rõ rệt cho tính tất yếu trong tiến trình hội nhập WTO và lột xác hệ thống thu ngân sách.
+- **Lao động - Tiền lương** giữ được mức độ quan tâm 9,5% ở thập niên 1980s khi công đoàn kinh tế bắt đầu loay hoay tìm mô thức vận hành mới, rồi nhường sân khi các đạo luật xương sống được kiện toàn.
+- **Thể thao - Y tế** bỗng rẽ nhánh gia tăng 6,7% ở thập niên 2020s — chắc chắn đại dịch COVID-19 đóng vai trò "chất xúc tác" sâu sắc nhất khơi nguồn sự thay đổi này.
 
 ---
 
-## Sự tiến hóa của thể loại văn bản
+## Sự tiến hóa của các thể loại văn bản
 
-Không phải tất cả văn bản đều có trọng lượng như nhau. Quyết định, Công văn, Nghị quyết — mỗi loại mang một tầm quan trọng và chức năng khác nhau.
+Trong hệ thống văn bản pháp quy, không phải ấn phẩm nào cũng mang "sức nặng" quyền lực ngang bằng. Quyết định, Công văn hay Nghị quyết — mỗi cá thể mang một trọng trách điều phối vi mô riêng biệt.
 
 ![Cơ cấu thể loại văn bản pháp luật theo năm (1990–2025)](./doctype_evolution.png)
 
-**Quyết định** (màu nâu) chiếm tỷ trọng lớn nhất và tăng trưởng ổn định qua các năm. Đây là loại văn bản hành chính phổ biến nhất — từ quyết định bổ nhiệm cán bộ đến phê duyệt dự án.
+**Quyết định** (vùng màu nâu) là "tiếng nói" quyền lực bao trùm và tăng trưởng bền bỉ theo chuỗi thời gian. Đây vốn dĩ là nhạc cụ bộ gõ quản lý phổ biến nhất thuộc nhánh hành chính — xuất hiện trong mọi ngõ ngách đời sống từ việc cấp phép thành lập, bổ nhiệm con người đến phê duyệt ngân quỹ.
 
-**Công văn** (màu cam) là loại tăng nhanh thứ hai, đặc biệt từ 2010 trở đi. Công văn thường là trao đổi nghiệp vụ, hướng dẫn thực hiện — khối lượng lớn phản ánh mức độ phức tạp ngày càng tăng của công việc hành chính.
+**Công văn** (vùng màu cam) chứng kiến tốc độ bành trướng mạnh mẽ, nhất là từ vạch mốc 2010 trở đi. Vai trò chủ đạo là điều hành hoạt động, chỉ đạo công tác chuyên môn — độ rộng của nó nói lên cấu trúc thực thi thủ tục hành chính đang phình to phức tạp đến mức nào.
 
-**Nghị quyết** (màu tím) tăng rõ rệt từ 2015, thể hiện xu hướng tăng cường vai trò của Hội đồng nhân dân các cấp.
+**Nghị quyết** (vùng màu tím) cũng bứt tốc từ năm 2015, là đòn bẩy cho xu thế trao quyền quyết định mạnh mẽ đối với Hội đồng nhân dân vào công tác tự quyết địa phương mình.
 
 ---
 
-## Đằng sau mỗi chữ ký
+## Những cái tên xếp sau con dấu
 
-Mỗi văn bản đều có người ký. Ai là những người đã để lại dấu ấn nhiều nhất trong hệ thống pháp lý Việt Nam?
+Mọi tờ giấy pháp lý đều mang theo hơi thở của một cá nhân ban hành. Trong số hàng nghìn con dấu, đâu là người giữ "bút lực" ảnh hưởng sâu rộng nhất trong lịch sử pháp lý của Việt Nam?
 
 ![Top 20 người ký văn bản pháp luật nhiều nhất](./top_signers.png)
 
-**Nguyễn Dương Thái** dẫn đầu với 7,096 văn bản — một quan chức cấp tỉnh mà tên tuổi ít người biết nhưng chữ ký thì đếm không xuể.
+Cái tên giật ngôi đầu bảng gợi khá nhiều bất ngờ: Ông **Nguyễn Dương Thái** với 7.096 văn bản. Đây có thể là vị lãnh đạo địa phương trầm lặng trước truyền thông đại chúng, nhưng tần suất hạ bút phê duyệt mỗi ngày của ông thì cực kỳ gây nể phục.
 
-**Nguyễn Tấn Dũng** đứng thứ hai với 6,982 văn bản — dấu ấn của 10 năm giữ chức Thủ tướng (2006–2016), giai đoạn Việt Nam hội nhập sâu nhất vào kinh tế thế giới.
+Ngự trị ở ngôi vương chuyên ngành kinh tế vĩ mô là Cựu Thủ tướng **Nguyễn Tấn Dũng** với 6.982 văn bản — con số vinh danh đậm nét 10 năm hoàng kim chỉ huy kinh tế (2006–2016), giai đoạn đất nước mở bung mỏ neo trôi vào biển lớn hội nhập.
 
-**Nguyễn Xuân Phúc** (3,663 văn bản) và **Phan Văn Khải** (2,851 văn bản) — hai Thủ tướng khác cũng góp mặt trong top 20.
+Tiếp nối trên bảng xếp hạng vẫn hiện diện những bậc thầy quản trị lão làng như Cựu Thủ tướng **Nguyễn Xuân Phúc** (3.663 văn bản) hay Cố Thủ tướng **Phan Văn Khải** (2.851 văn bản).
 
-Điều thú vị là phần lớn top 20 không phải là những cái tên quen thuộc với công chúng — họ là những quan chức chuyên ngành, lãnh đạo cục, tổng cục, làm việc âm thầm và ký duyệt hàng nghìn văn bản mỗi năm.
+Điều đáng suy ngẫm là quá nửa danh sách top 20 đều không phải là những vị trí quá cao danh vọng. Thay vào đó, nó hội tụ dàn cán bộ kỹ trị chuyên trách, những Lãnh đạo Cấp Tổng cục/Cục miệt mài gồng gánh thao tác xử lý từng hồ sơ vi mô.
 
 ---
 
-## Phân tích dữ liệu của Tứ Trụ
+## Mổ xẻ dữ liệu từ góc nhìn "Tứ Trụ"
 
-Hệ thống chính trị Việt Nam được vận hành bởi bốn trụ cột — mình thường gọi là **Tứ Trụ**:
+Cấu trúc hình thái quyền lực nhà nước Việt Nam xoay quanh 4 trục lớn — thường được giới chuyên môn gọi thân mật là **"Tứ Trụ"**:
 
-| Trụ | Chức danh           | Đại diện cho                   |
+| Vị trí | Chức danh           | Phạm vi đại diện |
 | --- | ------------------- | ------------------------------ |
-| 🏛️  | Tổng Bí thư         | Đảng Cộng sản Việt Nam         |
-| 🌟  | Chủ tịch nước       | Nhà nước — nguyên thủ quốc gia |
-| ⚙️  | Thủ tướng Chính phủ | Hành pháp — điều hành đất nước |
-| 📜  | Chủ tịch Quốc hội   | Lập pháp — tiếng nói nhân dân  |
+| 🏛️  | Tổng Bí thư         | Đảng Cộng sản Việt Nam — Đường lối chính trị |
+| 🌟  | Chủ tịch nước       | Nhà nước — Nguyên thủ quốc gia biểu tượng |
+| ⚙️  | Thủ tướng Chính phủ | Hành pháp — Trực tiếp lèo lái bộ máy đất nước |
+| 📜  | Chủ tịch Quốc hội   | Lập pháp — Hệ thống quyền lực cao nhất của nhân dân |
 
-Trong bộ dữ liệu, mình xác định được **53,495 văn bản** có liên quan trực tiếp đến Tứ Trụ — chiếm **10.4%** tổng số văn bản.
+Cô đọng bộ dữ liệu lại, mình thu lượm được **53.495 bản ghi** "đóng mác" trực tiếp của nhóm Tứ Trụ — tức nắm giữ **10,4%** thanh khoản khối lượng toàn hệ thống.
 
 ---
 
-### Ai ký nhiều nhất?
+### Ai nắm giữ mật độ ký duyệt cao nhất?
 
 ![Tổng số văn bản theo Tứ Trụ và xu hướng theo năm](./volume_by_tru.png)
 
-Câu trả lời không có gì bất ngờ: **Thủ tướng** chiếm tuyệt đại đa số với **45,315 văn bản** — gần gấp 10 lần ba trụ còn lại cộng lại. Điều này phản ánh đúng bản chất của vai trò: Thủ tướng là người điều hành bộ máy hành pháp hàng ngày, ký duyệt từ nghị định, quyết định đến công văn chỉ đạo.
+Không ngoài dự báo, **Thủ tướng Chính phủ** kiểm soát tuyệt đối dung lượng nhóm với **45.315 ấn phẩm** — con số lớn gấp 10 lần tổng thành tích 3 chức danh còn lại. Nhánh Hành pháp tựu trung vẫn là những người "đầu bù tóc rối" giải quyết công việc sự vụ hằng ngày, từ xử lý tờ rơi thông cáo đến quy trình công bố ban quy định chi tiết.
 
-Ba trụ còn lại có khối lượng văn bản khiêm tốn hơn rất nhiều:
+Ba thiết chế quyền lực còn lại nhường lại một khoảng lùi nhất định về lượng văn bản điều hành:
 
-- **Chủ tịch nước**: 4,288 văn bản
-- **Chủ tịch Quốc hội**: 2,771 văn bản
-- **Tổng Bí thư**: 1,121 văn bản
+- **Chủ tịch nước**: 4.288 văn bản.
+- **Chủ tịch Quốc hội**: 2.771 văn bản.
+- **Tổng Bí thư**: 1.121 văn bản.
 
-Biểu đồ xu hướng bên phải cho thấy từ trước năm 1990, toàn bộ Tứ Trụ gần như không xuất hiện trong dữ liệu — bộ máy chưa vận hành theo cơ chế văn bản hiện đại. Đường Thủ tướng bắt đầu bứt phá từ đầu những năm 2000, và đạt đỉnh vào giai đoạn 2008–2015.
+Riêng biểu đồ dây bên phải bóc trần một lăng kính thực tế: Nếu soi ngược về những năm trước thềm 1990, Tứ Trụ gần như "vắng mặt" khỏi văn bản pháp luật mở của đại chúng — thời kỳ đó chưa thiết lập lề thói kỹ trị theo hình thái văn kiện số. Chỉ đến thập niên 2000, tốc độ ban hành của Thủ tướng mới xé toạc đỉnh thẳng đứng và tạo cao trào bão hòa ở phạm vi 2008–2015.
 
 ---
 
-### 80 năm nhiệm kỳ
+### Bức tranh thế kỷ: 80 năm nhiệm kỳ Tứ Trụ
 
 ![Nhiệm kỳ của các nhà lãnh đạo Tứ Trụ (1945–2025)](./gantt_tenures.png)
 
-Biểu đồ Gantt này là một trong những hình ảnh mình thấy đẹp nhất trong toàn bộ phân tích. Nó trải dài 80 năm lịch sử và kể câu chuyện về sự thay thế thế hệ lãnh đạo.
+Biểu đồ Gantt phía trên có thể coi là lát cắt nghệ thuật nhất của toàn bộ chặng đường phân tích. Nó trải phẳng 80 năm lịch sử và miêu tả nhịp cầu chuyển giao thế hệ lãnh đạo từ những ngày đầu.
 
-Vài điểm đáng chú ý:
+Vài vạch mốc lịch sử sâu đậm:
 
-- **Phạm Văn Đồng** giữ chức Thủ tướng suốt **32 năm** (1955–1987) — kỷ lục tuyệt đối, một nhiệm kỳ trải qua cả hai cuộc kháng chiến và những năm đầu thống nhất đất nước.
-- **Lê Duẩn** làm Tổng Bí thư **26 năm** (1960–1986) — người định hình đường lối chính trị Việt Nam qua giai đoạn dài nhất.
-- **Hồ Chí Minh** là Chủ tịch nước **24 năm** (1945–1969).
-- Giai đoạn từ 2016 đến nay, nhịp thay đổi lãnh đạo ngắn hơn đáng kể — đặc biệt ở vị trí Chủ tịch nước và Chủ tịch Quốc hội.
+- Cố Thủ tướng **Phạm Văn Đồng** đứng trơ trọi một biểu tượng vĩ đại vì sự giữ vững chiếc ghế Thủ tướng tới **32 năm liên tục** (1955–1987) — ông là chứng nhân cho 2 cuộc kháng chiến rực lửa và giai đoạn đặt viên gạch đầu tiên khởi công cho một nước Việt Nam mới.
+- Cố Tổng Bí thư **Lê Duẩn** giữ thăng bằng quyền lực tận **26 năm** (1960–1986) — hệ tư tưởng của ông như một sợi chỉ đỏ neo đậu lâu dài cho lịch sử Đảng ta.
+- Chủ tịch **Hồ Chí Minh** đảm trách vị trí Chủ tịch ở khoảng thời gian dài **24 năm** (1945–1969).
+- Quãng từ thềm 2016 đến nay lại thiết lập một nhịp xoay vòng nhân sự nhanh và dồn dập, nổi cộm tại chiếc ghế Chủ tịch nước và Chủ tịch Quốc hội.
 
 ---
 
-### Sự dịch chuyển quyền lực theo năm
+### Quỹ đạo thay đổi quyền lực theo dòng đời
 
 ![Số lượng và tỷ trọng văn bản của từng Trụ theo năm (1954–2025)](./power_share.png)
 
-Biểu đồ trên cùng cho thấy khối lượng tuyệt đối: Thủ tướng (xanh dương) chiếm gần như toàn bộ diện tích — không có gì thay đổi.
+Biểu đồ bề mặt trên cùng là khối lượng cơ học: Đỉnh sinh trưởng màu xanh (Thủ tướng) ngậm trọn diện mạo tổng thể mà không có một kẽ hở hoán ngôi.
 
-Nhưng biểu đồ tỷ trọng phía dưới mới thú vị: đầu những năm 1990, **Chủ tịch nước** (cam) từng chiếm đến 20–25% tổng văn bản Tứ Trụ. Đây là giai đoạn chuyển đổi sau Hiến pháp 1992, khi vai trò Chủ tịch nước được tái lập với nhiều thẩm quyền hơn. Từ 2000 trở đi, tỷ trọng này giảm dần và ổn định dưới 10%.
+Tuy lại, phía tỷ trọng (mặt dưới) mới cất giữ tinh hoa: Thuở ban đầu những năm 1990, nhánh **Chủ tịch nước** (màu cam) có thời điểm nuốt trọn từ 20–25% tỷ lệ đóng góp của Tứ Trụ. Hiện tượng lạ này là do Hiến pháp 1992 khôi phục uy quyền rõ rệt và tạo ra cơ chế giám sát thực quyền đặc trưng hơn. Từ 2000 trở về sau, con số này lại thuyên giảm dần và đóng băng dưới hạn mức 10%.
 
-**Tổng Bí thư** (đỏ) gần như không xuất hiện trong dữ liệu văn bản — điều này logic, vì văn kiện của Đảng thường không được công bố trong hệ thống pháp luật công khai.
+Nhánh đường **Tổng Bí thư** (màu đỏ) thưa thớt đan xen — nó thuận theo quy luận bất thành văn: Các chỉ thị của cơ quan Đảng luôn mang tính định hướng, nghị quyết tư tưởng nên không quy nạp và phân bổ trong kho dữ liệu văn bản pháp quy truyền thống.
 
 ---
 
-### Mỗi Trụ ký loại văn bản gì?
+### Ngôn ngữ nào đại diện cho quyền lực mỗi Trụ?
 
 ![Cơ cấu thể loại văn bản của từng Trụ quyền lực](./doctype_by_tru_top5.png)
 
-Cơ cấu thể loại văn bản phản ánh rõ chức năng của từng trụ:
+Hãy để thể loại văn bản thay lời định danh đặc quyền cho từng khối tổ chức:
 
-- **Tổng Bí thư**: Gần một nửa là "Khác" (46.4%) — chủ yếu là văn kiện Đảng. Nghị quyết (17.7%) và Chỉ thị (12.3%) chiếm tỷ lệ lớn — đây là công cụ định hướng, ra đường lối.
-- **Chủ tịch nước**: Áp đảo bởi Quyết định (62.2%) và Sắc lệnh (22.6%) — vai trò ký phê chuẩn nhân sự, điều ước quốc tế, lệnh ân xá.
-- **Thủ tướng**: Chia đều giữa Quyết định (30.8%) và Công văn (32.8%), cộng thêm Nghị định (11%) — bộ máy hành pháp vận hành qua ba loại văn bản này.
-- **Chủ tịch Quốc hội**: Nghị quyết chiếm **67.7%** — đúng như kỳ vọng, mọi quyết định lập pháp đều đi qua hình thức này.
+- Cấp **Tổng Bí thư**: Tới 46,4% rải đều vào kho mục phân cấp "Khác" (chủ yếu là bộ văn kiện nghị sự Đảng). Cấu trúc nòng cốt rơi vào Nghị quyết (17,7%) và Chỉ thị (12,3%) — làm định dạng chuẩn mực cho khuôn khổ tư tưởng đường lối.
+- Nhánh **Chủ tịch nước**: Trung thành mãnh liệt vào các quyết sách vi mô qua **Quyết định** (62,2%) và **Sắc lệnh** (22,6%) — phù hợp cho việc tặng thưởng danh dự, bổ nhiệm Tướng lĩnh, hay ân xá phạm nhân và phê chuẩn công ước quốc tế.
+- Khối **Thủ tướng**: Phân tán chia ba cho **Công văn** (32,8%), **Quyết định** (30,8%) và **Nghị định** (11%) — guồng quay 3 trục tạo nên nhịp thở lưu thông mượt mà cho cỗ máy.
+- Hệ **Chủ tịch Quốc hội**: Không trật một nhịp khi **Nghị quyết** giữ lấy **67,7%** — nó đánh dấu quyền lực biểu quyết thành văn, hợp danh đại đa số Quốc hội.
 
 ---
 
-### Từng Trụ quan tâm đến lĩnh vực nào?
+### Vùng phủ sóng quyền lực - họ quan tâm đến gì?
 
 ![Lĩnh vực pháp lý trọng tâm của từng Trụ quyền lực](./sector_by_tru.png)
 
-Bản đồ nhiệt này vạch rõ "vùng phủ sóng" của mỗi trụ quyền lực:
+Chữ ký vạch lên một bức tường nhiệt ảnh rõ ràng lãnh giới phạm vi quyền hạn:
 
-- **Tổng Bí thư** tập trung vào **Bộ máy hành chính** (54.9%) và **Văn hóa - Xã hội** (15.5%) — không ngạc nhiên, Đảng quan tâm nhiều đến công tác tổ chức và tư tưởng.
-- **Chủ tịch nước** có điểm đặc biệt: **Quyền dân sự** chiếm tới **59.9%** — đây là các văn bản ân xá, quốc tịch, huân chương và phê chuẩn điều ước quốc tế liên quan đến quyền con người.
-- **Thủ tướng** phủ rộng hơn, nhưng **Bộ máy hành chính** vẫn dẫn đầu (23.2%), kèm theo Tài chính nhà nước (7.2%), Tài nguyên - Môi trường (6.8%), Doanh nghiệp (6.4%).
-- **Chủ tịch Quốc hội** cũng tập trung vào **Bộ máy hành chính** (56.2%) và Tài chính nhà nước (7.8%) — phản ánh vai trò giám sát và phê duyệt ngân sách.
+- **Tổng Bí thư** đi sâu đàm thoại cho khâu kiến trúc **Bộ máy hành chính** (54,9%) và dọn đường **Văn hóa - Xã hội** (15,5%) — củng cố thành trì về con người tổ chức bộ máy.
+- **Chủ tịch nước** lại là nét lãng mạn nhân văn, xoáy ốc thẳng vào **Quyền dân sự** chạm mốc **59,9%**. Bởi trong đó là mệnh lệnh xoá tội, nhân đạo đặc xá và ban phát công dân quyền.
+- **Thủ tướng** mang tính chất khai phá toàn năng, dẫu **Bộ máy hành chính** vẫn bao cấp (23,2%) nhưng nhịp chùm ảnh còn san sẻ đều cho: Tài chính nhà nước (7,2%), Đất đai Tài nguyên (6,8%), Thương mại Doanh nghiệp (6,4%).
+- Nhịp chu kỳ **Chủ tịch Quốc hội** xoáy thẳng vào thấu kính giám định **Bộ máy hành chính** (56,2%) cùng giám sát ví tiền qua Tài chính nhà nước (7,8%).
 
 ---
 
-### Ai làm việc năng suất nhất?
+### Năng suất trung bình: "CEO" nào hiệu quả nhất?
 
 ![Top 10 năng suất ban hành: số văn bản trung bình mỗi năm tại chức](./top10_docs_per_year.png)
 
-Thay vì chỉ xét tổng số văn bản, mình tính **số văn bản trung bình mỗi năm tại chức** để công bằng hơn cho những người giữ chức ngắn.
+Thay vì tính chỉ số khối lượng thuần tuý, ta lọc ra **thông số văn bản trên từng năm tuổi vị trí** để tạo sự công bằng bình xét.
 
-**Nguyễn Tấn Dũng** dẫn đầu tuyệt đối: **585 văn bản/năm** trong 10 năm làm Thủ tướng (2006–2016) — giai đoạn Việt Nam hội nhập sâu nhất, khối lượng ban hành chính sách đạt đỉnh. **Nguyễn Xuân Phúc** khi còn là Thủ tướng đứng thứ hai với **522 văn bản/năm**.
+Người giữ kỷ lục cồng kềnh đáng nể nhất là Cựu Thủ tướng **Nguyễn Tấn Dũng** sở hữu chu kỳ cực độ: **585 kỷ lục/năm** xuyên suốt thập kỷ 2006–2016. Á quân không ai khác chính là người kế tục ngay sau — ông **Nguyễn Xuân Phúc** (giai đoạn TTCP) chạm ngưỡng năng suất **522 đơn vị/năm**.
 
-Điều thú vị: **Trần Thanh Mẫn** (Chủ tịch Quốc hội, màu xanh lá) đứng thứ ba với **394 VB/năm** — cao hơn nhiều các Chủ tịch Quốc hội trước, cho thấy vai trò lập pháp đang được đẩy mạnh trong giai đoạn gần đây.
+Một hạt giống "lạ" hiện thân, Đương kim Chủ tịch Quốc hội **Trần Thanh Mẫn** (thể hiện bằng cột xanh lá) bất ngờ giành vị trí số 3 với **394 VB/năm** — báo hiệu một cơ cấu Lập pháp đang xoay mình chủ động vươn tay sâu rộng hơn trên diễn đàn.
 
-Ngược lại, **Phạm Văn Đồng** dù giữ chức 32 năm chỉ đạt **~17 VB/năm** — thời đó hệ thống văn bản chưa được số hóa và công bố đầy đủ.
+Trong vị thế ở bên kia thái cực, Cố Thủ tướng **Phạm Văn Đồng** có thâm niên cầm quyền ngập 32 năm nhưng số liệu số hoá đoạt ~**17 VB/năm**. Hệ quy chiếu thời gian khiến dữ liệu bị giấu nhẹm do khi ấy không đủ rập khuôn như bộ máy tân thời.
 
 ---
 
-### Dấu ấn của từng cá nhân
+### Đỉnh cao cá nhân của lịch sử Tứ Trụ
 
 ![Dấu ấn văn bản của từng nhà lãnh đạo Tứ Trụ](./leader_doc_counts.png)
 
-Nhìn vào từng chức danh, mỗi "trụ" có một người để lại dấu ấn đậm nhất:
+Phân bổ ra từng ngai vị, ta đều tìm thấy một nhân vật kiệt xuất có khối tượng đài quyền lực để lại vượt xa hậu bối đương thời:
 
-- **Thủ tướng**: **Nguyễn Tấn Dũng** — 5,947 văn bản trong nhiệm kỳ. Con số này gấp đôi người đứng thứ hai (Nguyễn Xuân Phúc: 2,009).
-- **Chủ tịch nước**: **Hồ Chí Minh** — 999 văn bản, dẫn đầu dù ở thời kỳ đầu khi hệ thống còn sơ khai. Trương Tấn Sang đứng thứ hai với 882 văn bản.
-- **Chủ tịch Quốc hội**: **Trường Chinh** — 149 văn bản trong 21 năm (1960–1981). Thời hiện đại, **Nguyễn Sinh Hùng** dẫn đầu với 384 văn bản.
-- **Tổng Bí thư**: **Nguyễn Phú Trọng** — 190 văn bản trong 13 năm (2011–2024), bỏ xa những người tiền nhiệm.
+- **Thủ tướng**: Trọn điểm vàng mang tên Cựu Thủ tướng **Nguyễn Tấn Dũng** đoạt số lượng 5.947 hệ ấn phẩm, nhấn chìm luôn đối thủ số 2 (Thủ tướng Nguyễn Xuân Phúc: 2.009).
+- **Chủ tịch nước**: Dù ở buổi bình minh xây quốc nhọc nhằn dẫu vậy nhưng tinh thần Cố Chủ tịch **Hồ Chí Minh** luôn lưu dấu trên 999 thủ bút, bảo vệ một kỷ lục vô tiền khoáng hậu (vượt qua bác Trương Tấn Sang đứng sau với 882 bài).
+- **Chủ tịch Quốc hội**: Nhà nho lỗi lạc, Cố TBT Chủ tịch Quốc hội **Trường Chinh** thu về con số 149 lưu dấu trong hơn hai thập kỷ dài đăng đẵng (1960–1981). Dựa trên chuẩn thế kỷ hiện nay, Cựu Chủ tịch **Nguyễn Sinh Hùng** chiếm ưu thế vượt trội ở tầm điểm 384 bản pháp quy.
+- **Tổng Bí thư**: Vị Tổng Bí thư đáng kính **Nguyễn Phú Trọng** thu vào cho mình 190 tàng thư suốt 13 năm (2011–2024), tách biệt khỏi dòng chảy nhỏ giọt của các bậc minh chủ trước.
 
 ---
 
-### Những người đã ngồi nhiều ghế
+### Những "cuộc du ngoạn" đa quyền lực trên bàn cờ chính trị
 
 ![Tương quan: Thời gian tại vị × Văn bản ký — kích thước bong bóng = số chức danh đã đảm nhận](./multirole_bubble.png)
 
-Một số lãnh đạo đã trải qua nhiều hơn một vị trí Tứ Trụ — và bong bóng to hơn trong biểu đồ đại diện cho những người đó:
+Chiếc bong bóng tròn đa chiều lột tả bức tranh nhân sinh cho những danh tinh có tài năng đảm nhiệm cùng lúc hoặc xuyên việt chuyển trục trên "Tứ Trụ":
 
-| Người            | Hành trình                                               |
-| ---------------- | -------------------------------------------------------- |
-| Nguyễn Xuân Phúc | Thủ tướng → Chủ tịch nước (3,022 VB tổng)                |
-| Nguyễn Phú Trọng | Chủ tịch Quốc hội → Tổng Bí thư → Chủ tịch nước (513 VB) |
-| Nông Đức Mạnh    | Chủ tịch Quốc hội → Tổng Bí thư (255 VB)                 |
-| Trường Chinh     | Tổng Bí thư → Chủ tịch Quốc hội → Chủ tịch nước (235 VB) |
-| Tô Lâm           | Tổng Bí thư → Chủ tịch nước (101 VB)                     |
-| Tôn Đức Thắng    | Chủ tịch Quốc hội → Chủ tịch nước (18 VB)                |
+| Nguyên Thủ | Bản đồ danh vị |
+| --- | --- |
+| Ông **Nguyễn Xuân Phúc** | Quán xuyến từ Thủ tướng xuyên thủng đến Chủ tịch nước (Dấu ấn: 3.022 văn bản tổng) |
+| Cố TBT **Nguyễn Phú Trọng** | Tầm sư vòng xoay huyền thoại: Chủ tịch Quốc hội → Tổng Bí thư → lấn sân qua Chủ tịch nước (Dấu ấn: 513 văn bản) |
+| Cựu TBT **Nông Đức Mạnh** | Nắn gân nền triều cường kinh qua Chủ tịch Quốc hội thẳng tiến Tổng Bí thư (255 văn bản) |
+| Cố TBT **Trường Chinh** | Dấu ấn kim cổ kinh qua rực rỡ từ Tổng Bí thư kéo sang Chủ tịch Quốc hội sang đến Chủ tịch nước (235 văn bản) |
+| Đương kim TBT **Tô Lâm** | Bùng nổ ấn vàng thăng tự Chủ tịch nước nối ngai chuyển hướng Tổng Bí thư (101 văn bản) |
+| Cố Chủ tịch **Tôn Đức Thắng** | Dâng tặng quyền trượng uy nghi từ Chủ tịch Quốc hội lên ngai vàng Chủ tịch nước (18 văn bản) |
 
-Biểu đồ bong bóng cho thấy một nghịch lý thú vị: **Phạm Văn Đồng** (TT, ~32 năm) và **Hồ Chí Minh** (CTN, ~24 năm) có thời gian tại vị dài nhất nhưng số văn bản lại khá thấp — minh chứng cho sự khác biệt giữa thời đại lãnh đạo trực tiếp và thời đại quản trị qua văn bản. Trong khi đó, **Nguyễn Tấn Dũng** chỉ tại vị 10 năm nhưng ký gần 6,000 văn bản — hiệu suất cao nhất trong lịch sử.
-
----
-
-## Kết
-
-515,253 văn bản là một con số khô khan. Nhưng đằng sau đó là lịch sử của một đất nước đang không ngừng tự định hình lại mình — qua từng quyết định nhỏ, từng thông tư hướng dẫn, từng nghị quyết được thông qua.
-
-Dữ liệu không nói lên tất cả. Nhưng đôi khi, những con số biết kể chuyện theo cách mà lời văn không làm được.
+Nếu nhìn lại chùm biểu đồ giao lộ, có thể rút gọn thành một ẩn dụ quá hay ho về lăng kính tổ chức: Cố Thủ tướng **Phạm Văn Đồng** ở vị trí lâu tận thập kỷ (32 năm) hay Vị cha già **Hồ Chí Minh** đứng đỉnh núi 24 năm — đều có dấu thủ phê duyệt rất khiêm tốn. Những trang thời sự cổ đại chuộng cách điều tiết rèn quân thủ lĩnh trực tiếp. Đối nghịch lại, Cựu Thủ tướng **Nguyễn Tấn Dũng** tại vị "chỉ" 10 năm song thu về gần 6.000 tàng khố, chứng minh cho thời đại cải cách thiết chế của nền công nghệ pháp lý và quyền hành hành chính số hóa ngày nay.
 
 ---
 
-_Bài viết này được viết dựa trên bộ dữ liệu [th1nhng0/thuvienphapluat](https://huggingface.co/datasets/th1nhng0/thuvienphapluat) do mình tổng hợp — công khai trên HuggingFace. Bạn có thể tải về và tự khám phá nhé._
+## Lời Kết
+
+Cho đến cuối cùng, 515.253 văn bản cũng sẽ chỉ là một biển hồ số hóa cứng nhắc khô khan. Thế nhưng ẩn bên dưới dãy dữ liệu dày đặc kia là quá trình xây dựng, cấu tạo và vươn mình của cả một tiến trình lịch sử — được định hình chân thật qua từng cái phẩy tay quyết định, những bộ luật tháo nút gỡ băng đầy chông gai vất vả lập quốc.
+
+Dù rằng máy dữ liệu không bao giờ nói lên được đầy đủ bản chất cốt lõi tất cả của mặt trái quyền năng pháp học thế giới Việt Nam, nhưng, hãy cứ tin rằng một góc của các con số sẽ giúp bạn và mình cùng nhau nghe được tiếng đập của mạch truyện lịch sử... kể theo một thứ ngôn ngữ toán văn mà nếu không dùng thì sẽ có rất ít từ ngữ lột tả.
+
+---
+
+_Bài phân tích này được trích xuất dựa trên thông tin được chiết lọc từ bộ dữ liệu mã nguồn mở [th1nhng0/thuvienphapluat](https://huggingface.co/datasets/th1nhng0/thuvienphapluat) do hệ thống mình tự thân nhặt hái để tổng hợp, xuất bản trên ngôi nhà HuggingFace. Hãy ghé tham khảo và dùng nó khám phá sức hấp dẫn của thế giới quan của riêng bạn._
