@@ -1,0 +1,151 @@
+---
+title: "515,253 văn bản pháp luật — lịch sử Việt Nam nhìn qua dữ liệu"
+description: "Phân tích bộ dữ liệu hơn nửa triệu văn bản pháp luật Việt Nam từ 1924 đến 2025: ai ban hành, ban hành lúc nào, và ưu tiên của đất nước thay đổi ra sao qua từng thập kỷ."
+date: "2026-03-20"
+draft: true
+lang: "vi"
+---
+
+Mỗi quyết định, thông tư, nghị quyết là một mảnh ghép nhỏ của lịch sử. Gộp lại hơn nửa triệu mảnh ghép đó lại, ta có thể thấy một bức tranh rất khác về cách Việt Nam vận hành — không qua lời kể, mà qua dữ liệu.
+
+Bài phân tích này dựa trên bộ dữ liệu do mình tổng hợp và công bố tại [HuggingFace](https://huggingface.co/datasets/th1nhng0/thuvienphapluat).
+
+Bộ dữ liệu mình phân tích gồm **515,253 văn bản pháp luật**, trải dài từ năm 1924 đến 2025. Đây là một số thống kê nhanh:
+
+| | |
+|---|---|
+| Tổng số văn bản | 515,253 |
+| Khoảng thời gian | 1924 – 2025 |
+| Cơ quan ban hành | Hàng trăm cơ quan trung ương và địa phương |
+
+---
+
+## Dòng thời gian: Lịch sử qua từng văn bản
+
+![Dòng thời gian văn bản pháp luật Việt Nam (1945–2025)](./timeline_annotated.png)
+
+Biểu đồ trên kể một câu chuyện quen thuộc bằng ngôn ngữ rất lạ: số lượng văn bản pháp luật.
+
+Trước **Đổi Mới 1986**, bộ máy nhà nước ban hành rất ít văn bản — vài trăm đến vài nghìn mỗi năm. Nhưng kể từ khi nền kinh tế mở cửa, con số này tăng liên tục, không ngừng nghỉ. Đến **Hiến pháp 1992**, đà tăng càng rõ hơn khi khuôn khổ pháp lý cho nền kinh tế thị trường định hướng xã hội chủ nghĩa bắt đầu được xây dựng.
+
+Bước ngoặt lớn nhất là giai đoạn **gia nhập WTO 2007** — hàng loạt luật, nghị định, thông tư phải được ban hành để tương thích với cam kết quốc tế. Năm 2010, lần đầu tiên số văn bản vượt mốc 15,000/năm.
+
+**COVID-19 năm 2020** tạo ra một nhịp giảm đáng chú ý, nhưng chỉ tạm thời. Đến 2025, sản lượng pháp lý đạt đỉnh mới với gần **35,000 văn bản trong một năm**.
+
+---
+
+## Tăng trưởng theo thập kỷ: Bước nhảy vọt của những năm 2000
+
+![Tổng số văn bản theo thập kỷ](./decade_growth.png)
+
+Nhìn vào con số theo thập kỷ, mức tăng trưởng thực sự gây choáng:
+
+- **Thập niên 2000s**: tăng **717%** so với thập niên 1990s — từ 10,699 lên 87,421 văn bản
+- **Thập niên 2010s**: tiếp tục tăng **155%**, đạt đỉnh **222,772 văn bản**
+- **Thập niên 2020s** (chưa kết thúc): 185,012 văn bản, giảm nhẹ 17% so với thập niên trước
+
+Thập niên 1970s là giai đoạn duy nhất có tăng trưởng âm (-14%) — thời kỳ đất nước vừa thống nhất, bộ máy đang tái cơ cấu sau chiến tranh.
+
+---
+
+## Trung ương vs. Địa phương: Ai ban hành nhiều hơn?
+
+Một trong những cuộc tranh luận lâu dài trong quản trị nhà nước là: quyền lực nên tập trung hay phân cấp? Dữ liệu cho thấy câu trả lời thực tế.
+
+![Tỷ lệ văn bản Trung ương vs Địa phương](./central_vs_provincial.png)
+
+Tính tổng thể, **Trung ương chiếm 47.6%** và **Địa phương chiếm 52.4%** tổng số văn bản. Gần như ngang bằng — nhưng xu hướng theo thời gian mới thú vị.
+
+Nhìn vào biểu đồ diện tích từ 1986 đến 2025: ban đầu văn bản trung ương chiếm ưu thế rõ rệt, nhưng kể từ đầu những năm 2000, địa phương liên tục vươn lên và ngày càng mở rộng khoảng cách. Phân cấp quản lý không chỉ là chủ trương — nó hiện rõ trong dữ liệu.
+
+---
+
+## Top 20 cơ quan ban hành văn bản nhiều nhất
+
+![Top 20 cơ quan ban hành văn bản](./top_authorities.png)
+
+Hai cơ quan dẫn đầu khá bất ngờ: **Tổng cục Hải quan** (27,483 văn bản) và **Tổng cục Thuế** (23,668 văn bản) — vượt cả **Thủ tướng Chính phủ** (18,065 văn bản).
+
+Điều này phản ánh đặc thù nghiệp vụ: hải quan và thuế phải xử lý hàng triệu giao dịch mỗi ngày, cần ban hành liên tục các công văn hướng dẫn, trả lời vướng mắc cụ thể.
+
+Trong số địa phương, **TP. Hồ Chí Minh** (11,651) và **TP. Hà Nội** (11,505) dẫn đầu tuyệt đối — hai đầu tàu kinh tế cũng là hai cỗ máy ban hành văn bản chạy hết công suất.
+
+---
+
+## Nhịp đập của bộ máy: Mùa vụ ban hành văn bản
+
+![Số văn bản ban hành theo tháng](./monthly_patterns.png)
+
+Bộ máy nhà nước có nhịp điệu riêng, và dữ liệu vạch rõ nhịp đó.
+
+**Tháng 12 là tháng bận rộn nhất** với 69,277 văn bản — gần gấp đôi tháng thấp nhất. Cuối năm là lúc tổng kết, ban hành quyết định ngân sách, phê duyệt kế hoạch, chốt các chỉ tiêu còn dang dở.
+
+**Tháng 2 là tháng yên tĩnh nhất** (28,521 văn bản) — Tết Nguyên Đán đặt bộ máy vào trạng thái nghỉ ngơi.
+
+**Tháng 7** đứng thứ hai (48,205) — giữa năm là thời điểm sơ kết, điều chỉnh kế hoạch và triển khai các chính sách ban hành đầu năm.
+
+Mapa nhiệt bên phải cho thấy xu hướng này ổn định qua từng năm từ 2010 đến 2025: tháng 12 luôn đỏ đậm, tháng 2 luôn nhạt.
+
+---
+
+## Ưu tiên của quốc gia qua từng thập kỷ
+
+Mỗi thập kỷ, đất nước có những vấn đề nóng bỏng khác nhau. Bản đồ nhiệt dưới đây phản chiếu điều đó qua tỷ trọng văn bản theo lĩnh vực.
+
+![Tỷ trọng các lĩnh vực pháp lý theo thập kỷ](./sector_heatmap_decade.png)
+
+Một số quan sát nổi bật:
+
+- **Bộ máy hành chính** luôn chiếm tỷ trọng cao nhất mọi thập kỷ, và đạt đỉnh **32.3%** vào những năm 2020s — phản ánh làn sóng cải cách hành chính, chuyển đổi số và sắp xếp lại bộ máy nhà nước.
+- **Thương mại** chiếm đến 11% vào thập niên 1980s (thời kỳ đầu Đổi Mới) nhưng giảm dần khi khung pháp lý đã được định hình.
+- **Thuế - Phí - Lệ Phí** vọt lên **16%** vào những năm 2000s — hệ quả trực tiếp của việc gia nhập WTO và cải cách hệ thống thuế.
+- **Lao động - Tiền lương** chiếm 9.5% vào thập niên 1980s khi kinh tế bắt đầu chuyển đổi, rồi giảm dần khi các luật cơ bản đã được ban hành.
+- **Thể thao - Y tế** tăng lên 6.7% vào những năm 2020s — COVID-19 có phần đóng góp không nhỏ.
+
+---
+
+## Sự tiến hóa của thể loại văn bản
+
+Không phải tất cả văn bản đều có trọng lượng như nhau. Quyết định, Công văn, Nghị quyết — mỗi loại mang một tầm quan trọng và chức năng khác nhau.
+
+![Cơ cấu thể loại văn bản pháp luật theo năm (1990–2025)](./doctype_evolution.png)
+
+**Quyết định** (màu nâu) chiếm tỷ trọng lớn nhất và tăng trưởng ổn định qua các năm. Đây là loại văn bản hành chính phổ biến nhất — từ quyết định bổ nhiệm cán bộ đến phê duyệt dự án.
+
+**Công văn** (màu cam) là loại tăng nhanh thứ hai, đặc biệt từ 2010 trở đi. Công văn thường là trao đổi nghiệp vụ, hướng dẫn thực hiện — khối lượng lớn phản ánh mức độ phức tạp ngày càng tăng của công việc hành chính.
+
+**Nghị quyết** (màu tím) tăng rõ rệt từ 2015, thể hiện xu hướng tăng cường vai trò của Hội đồng nhân dân các cấp.
+
+---
+
+## Đằng sau mỗi chữ ký
+
+Mỗi văn bản đều có người ký. Ai là những người đã để lại dấu ấn nhiều nhất trong hệ thống pháp lý Việt Nam?
+
+![Top 20 người ký văn bản pháp luật nhiều nhất](./top_signers.png)
+
+**Nguyễn Dương Thái** dẫn đầu với 7,096 văn bản — một quan chức cấp tỉnh mà tên tuổi ít người biết nhưng chữ ký thì đếm không xuể.
+
+**Nguyễn Tấn Dũng** đứng thứ hai với 6,982 văn bản — dấu ấn của 10 năm giữ chức Thủ tướng (2006–2016), giai đoạn Việt Nam hội nhập sâu nhất vào kinh tế thế giới.
+
+**Nguyễn Xuân Phúc** (3,663 văn bản) và **Phan Văn Khải** (2,851 văn bản) — hai Thủ tướng khác cũng góp mặt trong top 20.
+
+Điều thú vị là phần lớn top 20 không phải là những cái tên quen thuộc với công chúng — họ là những quan chức chuyên ngành, lãnh đạo cục, tổng cục, làm việc âm thầm và ký duyệt hàng nghìn văn bản mỗi năm.
+
+---
+
+## Kết
+
+515,253 văn bản là một con số khô khan. Nhưng đằng sau đó là lịch sử của một đất nước đang không ngừng tự định hình lại mình — qua từng quyết định nhỏ, từng thông tư hướng dẫn, từng nghị quyết được thông qua.
+
+Dữ liệu không nói lên tất cả. Nhưng đôi khi, những con số biết kể chuyện theo cách mà lời văn không làm được.
+
+---
+
+## Tiếp theo: Phân tích dữ liệu của Tứ Trụ
+
+*Đang thực hiện — sẽ cập nhật sau.*
+
+---
+
+*Bài viết này được viết dựa trên bộ dữ liệu [th1nhng0/thuvienphapluat](https://huggingface.co/datasets/th1nhng0/thuvienphapluat) do mình tổng hợp — công khai trên HuggingFace. Bạn có thể tải về và tự khám phá nhé.*
