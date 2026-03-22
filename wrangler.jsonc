@@ -10,4 +10,8 @@
   "observability": {
     "enabled": true,
   },
+  // Secrets (SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REFRESH_TOKEN)
+  // must be added via: wrangler secret put <KEY>
+  // or in the Cloudflare dashboard → Workers → Settings → Variables & Secrets
+  // For local dev, create a .dev.vars file (see .dev.vars.example)
 }

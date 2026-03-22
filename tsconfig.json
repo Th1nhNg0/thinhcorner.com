@@ -9,6 +9,7 @@
     "dist"
   ],
   "compilerOptions": {
+    "types": ["@cloudflare/workers-types"],
     "strictNullChecks": true,
     "baseUrl": ".",
     "paths": {

@@ -1,0 +1,7 @@
+# Cloudflare local dev secrets (used by wrangler dev)
+# Copy to .dev.vars and fill in your real values
+# These are NOT committed to git
+
+SPOTIFY_CLIENT_ID=your-spotify-client-id
+SPOTIFY_CLIENT_SECRET=your-spotify-client-secret
+SPOTIFY_REFRESH_TOKEN=your-spotify-refresh-token
