@@ -17,7 +17,7 @@ export default defineConfig({
   site: "https://thinhcorner.com",
   trailingSlash: "never",
   adapter: cloudflare({
-    imageService: "cloudflare-binding",
+    imageService: "passthrough",
     prerenderEnvironment: "node",
   }),
   integrations: [
