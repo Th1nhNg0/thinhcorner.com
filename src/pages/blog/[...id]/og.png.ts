@@ -21,10 +21,8 @@ const route = await OGImageRoute({
         families: ["Inter"],
         lineHeight: 1.3,
         horizontalAlign: "center",
-        verticalAlign: "center", // centers vertically in its bounding box
       },
     },
-    padding: 80,
   }),
   getSlug: (id) => id,
 });
