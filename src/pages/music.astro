@@ -8,9 +8,10 @@ import { format, formatDistanceToNow } from "date-fns";
 
 Astro.cache.set({ maxAge: 1, swr: 86400 });
 
-const topTracks = await getTopTracks();
-const recentlyPlayed = await getRecentlyPlayed();
-const topArtists = await getTopArtists();
+const spotifyEnv = Astro.locals.runtime?.env ?? import.meta.env;
+const topTracks = await getTopTracks(spotifyEnv);
+const recentlyPlayed = await getRecentlyPlayed(spotifyEnv);
+const topArtists = await getTopArtists(spotifyEnv);
 const now = new Date();
 ---
 

@@ -1,19 +1,20 @@
-const client_id = import.meta.env.SPOTIFY_CLIENT_ID;
-const client_secret = import.meta.env.SPOTIFY_CLIENT_SECRET;
-const refresh_token = import.meta.env.SPOTIFY_REFRESH_TOKEN;
-
-const basic = btoa(`${client_id}:${client_secret}`);
 const NOW_PLAYING_ENDPOINT = `https://api.spotify.com/v1/me/player/currently-playing`;
 const TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=25`;
 const TOP_ARTISTS_ENDPOINT = `https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=24`;
 const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played?limit=5`;
-const SAVED_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/tracks?limit=50`;
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
 
-const getAccessToken = async () => {
+interface SpotifyEnv {
+  SPOTIFY_CLIENT_ID: string;
+  SPOTIFY_CLIENT_SECRET: string;
+  SPOTIFY_REFRESH_TOKEN: string;
+}
+
+const getAccessToken = async (env: SpotifyEnv) => {
+  const basic = btoa(`${env.SPOTIFY_CLIENT_ID}:${env.SPOTIFY_CLIENT_SECRET}`);
   const body = new URLSearchParams();
   body.append("grant_type", "refresh_token");
-  body.append("refresh_token", refresh_token);
+  body.append("refresh_token", env.SPOTIFY_REFRESH_TOKEN);
   const response = await fetch(TOKEN_ENDPOINT, {
     method: "POST",
     headers: {
@@ -41,8 +42,8 @@ type NowPlayingFalse = {
 
 export type NowPlaying = NowPlayingTrue | NowPlayingFalse;
 
-const getNowPlaying = async () => {
-  const { access_token } = await getAccessToken();
+const getNowPlaying = async (env: SpotifyEnv) => {
+  const { access_token } = await getAccessToken(env);
 
   const res = await fetch(NOW_PLAYING_ENDPOINT, {
     headers: {
@@ -108,8 +109,8 @@ export interface TopTrack {
   previewUrl: string;
 }
 
-const getTopTracks = async () => {
-  const { access_token } = await getAccessToken();
+const getTopTracks = async (env: SpotifyEnv) => {
+  const { access_token } = await getAccessToken(env);
 
   const { items } = await fetch(TOP_TRACKS_ENDPOINT, {
     headers: {
@@ -123,7 +124,6 @@ const getTopTracks = async () => {
       songUrl: track.external_urls.spotify,
       title: track.name,
       imageUrl: track.album.images[1].url,
-      // previewUrl: track.preview_url,
     })) || [];
   return tracks;
 };
@@ -157,9 +157,9 @@ export interface RecentlyPlayedTrack {
   played_at: string;
 }
 
-const getRecentlyPlayed = async () => {
-  const { access_token } = await getAccessToken();
-  const response = await fetch(`${RECENTLY_PLAYED_ENDPOINT}`, {
+const getRecentlyPlayed = async (env: SpotifyEnv) => {
+  const { access_token } = await getAccessToken(env);
+  const response = await fetch(RECENTLY_PLAYED_ENDPOINT, {
     headers: {
       Authorization: `Bearer ${access_token}`,
     },
@@ -200,8 +200,8 @@ export interface TopArtist {
   uri: string;
 }
 
-const getTopArtists = async () => {
-  const { access_token } = await getAccessToken();
+const getTopArtists = async (env: SpotifyEnv) => {
+  const { access_token } = await getAccessToken(env);
 
   const { items } = await fetch(TOP_ARTISTS_ENDPOINT, {
     headers: {
