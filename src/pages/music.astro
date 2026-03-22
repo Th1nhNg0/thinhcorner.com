@@ -5,13 +5,11 @@ import Layout from "@/layouts/Layout.astro";
 import { getRecentlyPlayed, getTopArtists, getTopTracks } from "@/lib/spotify";
 import { SOCIAL_MEDIA } from "@/consts";
 import { format, formatDistanceToNow } from "date-fns";
+import { env } from "cloudflare:workers";
 
-Astro.cache.set({ maxAge: 1, swr: 86400 });
-
-const spotifyEnv = Astro.locals.runtime?.env ?? import.meta.env;
-const topTracks = await getTopTracks(spotifyEnv);
-const recentlyPlayed = await getRecentlyPlayed(spotifyEnv);
-const topArtists = await getTopArtists(spotifyEnv);
+const topTracks = await getTopTracks(env);
+const recentlyPlayed = await getRecentlyPlayed(env);
+const topArtists = await getTopArtists(env);
 const now = new Date();
 ---
 

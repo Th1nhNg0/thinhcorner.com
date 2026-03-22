@@ -6,8 +6,6 @@ import { get_book } from "@/lib/goodread";
 import { format } from "date-fns";
 import { GOODREADS_USER_URL } from "@/consts";
 
-Astro.cache.set({ maxAge: 60 * 15, swr: 60 * 15 });
-
 const books = await get_book();
 const read = books.read;
 
