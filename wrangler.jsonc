@@ -1,14 +1,14 @@
 {
 	"compatibility_date": "2026-03-22",
-	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+	"compatibility_flags": [
+		"nodejs_compat",
+		"global_fetch_strictly_public"
+	],
 	"name": "my-blog",
 	"main": "@astrojs/cloudflare/entrypoints/server",
 	"assets": {
 		"directory": "./dist",
 		"binding": "ASSETS"
-	},
-	"images": {
-		"binding": "IMAGES"
 	},
 	"observability": {
 		"enabled": true
