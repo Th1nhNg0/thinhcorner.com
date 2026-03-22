@@ -7,11 +7,10 @@ interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
 
-// Cloudflare Workers runtime env (secrets + bindings)
-declare namespace Cloudflare {
-  interface Env {
-    SPOTIFY_CLIENT_ID: string;
-    SPOTIFY_CLIENT_SECRET: string;
-    SPOTIFY_REFRESH_TOKEN: string;
-  }
+// Augment the global Env interface (declared in worker-configuration.d.ts)
+// with secrets set via `wrangler secret put`
+interface Env {
+  SPOTIFY_CLIENT_ID: string;
+  SPOTIFY_CLIENT_SECRET: string;
+  SPOTIFY_REFRESH_TOKEN: string;
 }
