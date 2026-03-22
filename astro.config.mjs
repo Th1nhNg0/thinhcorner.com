@@ -1,10 +1,9 @@
 // @ts-check
-import { defineConfig, memoryCache } from "astro/config";
+import { defineConfig } from "astro/config";
 
 import mdx from "@astrojs/mdx";
 import partytown from "@astrojs/partytown";
 import sitemap from "@astrojs/sitemap";
-import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
@@ -12,18 +11,12 @@ import rehypeFigure from "./remark/rehype-figure.mjs";
 import { remarkModifiedTime } from "./remark/remark-modified-time.mjs";
 import { remarkReadingTime } from "./remark/remark-reading-time.mjs";
 
+import cloudflare from "@astrojs/cloudflare";
+
 export default defineConfig({
   site: "https://thinhcorner.com",
   trailingSlash: "never",
-  adapter: vercel({
-    imageService: true,
-    isr: {
-      expiration: 60 * 15,
-    },
-    webAnalytics: {
-      enabled: true,
-    },
-  }),
+  adapter: cloudflare(),
   integrations: [
     sitemap(),
     partytown({
@@ -35,11 +28,6 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
-  },
-  experimental: {
-    cache: {
-      provider: memoryCache(),
-    },
   },
   markdown: {
     remarkPlugins: [remarkReadingTime, remarkModifiedTime, remarkMath],

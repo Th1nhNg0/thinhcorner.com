@@ -1,7 +1,6 @@
 ---
 import Head from "@/components/Head.astro";
 import Header from "@/components/Header.astro";
-import SpeedInsights from "@vercel/speed-insights/astro";
 
 type Props = {
   title: string;
@@ -64,6 +63,5 @@ const {
     <main id="main-content">
       <slot />
     </main>
-    <SpeedInsights />
   </body>
 </html>
