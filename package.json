@@ -34,6 +34,7 @@
     "wrangler": "^4.76.0"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260317.1",
     "@tailwindcss/typography": "^0.5.19"
   },
   "overrides": {
