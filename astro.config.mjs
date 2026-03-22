@@ -16,7 +16,10 @@ import cloudflare from "@astrojs/cloudflare";
 export default defineConfig({
   site: "https://thinhcorner.com",
   trailingSlash: "never",
-  adapter: cloudflare(),
+  adapter: cloudflare({
+    imageService: "cloudflare-binding",
+    prerenderEnvironment: "node",
+  }),
   integrations: [
     sitemap(),
     partytown({
