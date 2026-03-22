@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+import { defineConfig, memoryCache } from "astro/config";
 
 import mdx from "@astrojs/mdx";
 import partytown from "@astrojs/partytown";
@@ -28,6 +28,11 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+  },
+  experimental: {
+    cache: {
+      provider: memoryCache(),
+    },
   },
   markdown: {
     remarkPlugins: [remarkReadingTime, remarkModifiedTime, remarkMath],
