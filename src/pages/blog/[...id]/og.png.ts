@@ -1,68 +1,31 @@
 export const prerender = true;
 
-import { ImageResponse } from "@vercel/og";
-import type { APIRoute } from "astro";
+import { OGImageRoute } from "astro-og-canvas";
 import { getCollection } from "astro:content";
-import { readFileSync } from "fs";
 
-interface Props {
-  data: { title: string; date: Date };
-}
+const posts = await getCollection("blog");
+const pages = Object.fromEntries(posts.map((post) => [post.id, post.data]));
 
-export const GET: APIRoute<Props> = async ({ props }) => {
-  const interBold = readFileSync("./src/assets/Inter_18pt-Bold.ttf");
-  const ogTemplate = readFileSync("./src/assets/og-template.png");
-  return new ImageResponse(
-    {
-      type: "div",
-      key: "og-root",
-      props: {
-        style: {
-          height: "100%",
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundImage: `url("data:image/png;base64,${ogTemplate.toString(
-            "base64"
-          )}")`,
-        },
-        children: {
-          type: "p",
-          key: "og-title",
-          props: {
-            style: {
-              fontSize: 48,
-              color: "white",
-              textAlign: "center",
-              maxWidth: 900,
-            },
-            children: props.data.title,
-          },
-        },
+const route = await OGImageRoute({
+  param: "id",
+  pages,
+  getImageOptions: (_id, data) => ({
+    title: data.title,
+    bgImage: { path: "./src/assets/og-template.png" },
+    fonts: ["./src/assets/Inter_18pt-Bold.ttf"],
+    font: {
+      title: {
+        color: [255, 255, 255],
+        size: 56,
+        weight: "ExtraBold",
+        families: ["Inter"],
+        lineHeight: 1.3,
       },
     },
-    {
-      width: 1200,
-      height: 630,
-      fonts: [
-        {
-          name: "Inter",
-          data: interBold,
-          style: "normal",
-          weight: 800,
-        },
-      ],
-    }
-  );
-};
+    padding: 80,
+  }),
+  getSlug: (id) => id,
+});
 
-export async function getStaticPaths() {
-  const posts = (await getCollection("blog")).sort(
-    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-  );
-  return posts.map((post) => ({
-    params: { id: post.id },
-    props: post,
-  }));
-}
+export const getStaticPaths = route.getStaticPaths;
+export const GET = route.GET;
