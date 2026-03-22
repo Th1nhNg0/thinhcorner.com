@@ -2,7 +2,6 @@
 import { defineConfig, memoryCache } from "astro/config";
 
 import mdx from "@astrojs/mdx";
-import partytown from "@astrojs/partytown";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import rehypeKatex from "rehype-katex";
@@ -22,11 +21,6 @@ export default defineConfig({
   }),
   integrations: [
     sitemap(),
-    partytown({
-      config: {
-        forward: ["dataLayer.push"],
-      },
-    }),
     mdx(),
   ],
   vite: {

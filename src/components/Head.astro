@@ -1,9 +1,11 @@
 ---
 import { SITE, GOOGLE_ANALYTICS_ID, GOOGLE_ANALYTICS_URL } from "@/consts";
 import "@/styles/global.css";
-import "@fontsource/iosevka-etoile/latin.css";
-import "@fontsource/iosevka-aile/latin.css";
-import iosevkaEtoile400Woff2 from "@fontsource/iosevka-etoile/files/iosevka-etoile-latin-400-normal.woff2?url";
+import "@fontsource/iosevka-etoile/latin-400.css";
+import "@fontsource/iosevka-etoile/latin-700.css";
+import "@fontsource/iosevka-aile/latin-400.css";
+import "@fontsource/iosevka-aile/latin-700.css";
+import iosevkaEtoile700Woff2 from "@fontsource/iosevka-etoile/files/iosevka-etoile-latin-700-normal.woff2?url";
 import iosevkaAile400Woff2 from "@fontsource/iosevka-aile/files/iosevka-aile-latin-400-normal.woff2?url";
 
 interface Props {
@@ -53,7 +55,7 @@ const {
     rel="preload"
     as="font"
     type="font/woff2"
-    href={iosevkaEtoile400Woff2}
+    href={iosevkaEtoile700Woff2}
     crossorigin="anonymous"
   />
   <link
@@ -130,9 +132,9 @@ const {
   {
     import.meta.env.PROD && (
       <>
-        <script type="text/partytown" async src={GOOGLE_ANALYTICS_URL} />
+        <script async src={GOOGLE_ANALYTICS_URL} />
         <script
-          type="text/partytown"
+          is:inline
           set:html={`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
