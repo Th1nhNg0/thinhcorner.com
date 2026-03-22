@@ -20,6 +20,8 @@ const route = await OGImageRoute({
         weight: "ExtraBold",
         families: ["Inter"],
         lineHeight: 1.3,
+        horizontalAlign: "center",
+        verticalAlign: "center", // centers vertically in its bounding box
       },
     },
     padding: 80,
