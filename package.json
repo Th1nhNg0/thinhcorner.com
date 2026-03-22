@@ -19,7 +19,6 @@
     "@tailwindcss/vite": "^4.2.2",
     "astro": "6.0.8",
     "astro-embed": "^0.12.0",
-    "astro-og-canvas": "^0.10.1",
     "cheerio": "^1.2.0",
     "date-fns": "^4.1.0",
     "katex": "^0.16.40",
@@ -28,13 +27,13 @@
     "reading-time": "^1.5.0",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
+    "satori": "^0.26.0",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.2.2",
     "unist-util-visit": "^5.1.0",
     "wrangler": "^4.76.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260317.1",
     "@tailwindcss/typography": "^0.5.19"
   },
   "overrides": {

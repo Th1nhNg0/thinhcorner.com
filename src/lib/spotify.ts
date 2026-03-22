@@ -4,7 +4,7 @@ const TOP_ARTISTS_ENDPOINT = `https://api.spotify.com/v1/me/top/artists?time_ran
 const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played?limit=5`;
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
 
-const getAccessToken = async (env: Cloudflare.Env) => {
+const getAccessToken = async (env: Env) => {
   const basic = btoa(`${env.SPOTIFY_CLIENT_ID}:${env.SPOTIFY_CLIENT_SECRET}`);
   const body = new URLSearchParams();
   body.append("grant_type", "refresh_token");
@@ -36,7 +36,7 @@ type NowPlayingFalse = {
 
 export type NowPlaying = NowPlayingTrue | NowPlayingFalse;
 
-const getNowPlaying = async (env: Cloudflare.Env) => {
+const getNowPlaying = async (env: Env) => {
   const { access_token } = await getAccessToken(env);
 
   const res = await fetch(NOW_PLAYING_ENDPOINT, {
@@ -103,7 +103,7 @@ export interface TopTrack {
   previewUrl: string;
 }
 
-const getTopTracks = async (env: Cloudflare.Env) => {
+const getTopTracks = async (env: Env) => {
   const { access_token } = await getAccessToken(env);
 
   const { items } = await fetch(TOP_TRACKS_ENDPOINT, {
@@ -151,7 +151,7 @@ export interface RecentlyPlayedTrack {
   played_at: string;
 }
 
-const getRecentlyPlayed = async (env: Cloudflare.Env) => {
+const getRecentlyPlayed = async (env: Env) => {
   const { access_token } = await getAccessToken(env);
   const response = await fetch(RECENTLY_PLAYED_ENDPOINT, {
     headers: {
@@ -194,7 +194,7 @@ export interface TopArtist {
   uri: string;
 }
 
-const getTopArtists = async (env: Cloudflare.Env) => {
+const getTopArtists = async (env: Env) => {
   const { access_token } = await getAccessToken(env);
 
   const { items } = await fetch(TOP_ARTISTS_ENDPOINT, {
