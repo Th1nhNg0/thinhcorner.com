@@ -1,5 +1,6 @@
 ---
 import Container from "@/components/Container.astro";
+import { AUTHOR_NAME } from "@/consts";
 import Layout from "@/layouts/Layout.astro";
 
 const projects = [
@@ -48,7 +49,7 @@ const projects = [
     url: new URL("/projects", Astro.site).toString(),
     author: {
       "@type": "Person",
-      name: "Ngô Phú Thịnh",
+      name: AUTHOR_NAME,
       url: new URL("/", Astro.site).toString(),
     },
   }}

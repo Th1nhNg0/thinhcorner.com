@@ -1,6 +1,6 @@
 ---
 import Container from "@/components/Container.astro";
-import { SITE, SOCIAL_MEDIA } from "@/consts";
+import { AUTHOR_EMAIL, AUTHOR_NAME, SITE, SOCIAL_MEDIA } from "@/consts";
 import Layout from "@/layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import { format } from "date-fns";
@@ -27,7 +27,7 @@ const blog = (await getCollection("blog"))
     {
       "@context": "https://schema.org",
       "@type": "Person",
-      name: "Ngô Phú Thịnh",
+      name: AUTHOR_NAME,
       url: new URL("/", Astro.site).toString(),
       jobTitle: "Indie Hacker",
       address: {
@@ -49,11 +49,11 @@ const blog = (await getCollection("blog"))
       <h1
         class="text-4xl tracking-tight font-bold sm:text-6xl inline-block font-heading"
       >
-        Ngô Phú Thịnh
+        {AUTHOR_NAME}
       </h1>
       <div class="space-y-4 text-zinc-400">
         <p class="leading-relaxed">
-          Hello! I'm Ngô Phú Thịnh, an enthusiastic indie hacker exploring the
+          Hello! I'm {AUTHOR_NAME}, an enthusiastic indie hacker exploring the
           entrepreneurial path right here in Ho Chi Minh City, Vietnam. My world
           revolves around technology and the joy of learning new things.
         </p>
@@ -102,10 +102,10 @@ const blog = (await getCollection("blog"))
           class="flex flex-col gap-3 text-base text-zinc-200 sm:flex-row sm:items-center sm:justify-end sm:gap-6"
         >
           <a
-            href="mailto:thinhngow@gmail.com"
+            href={`mailto:${AUTHOR_EMAIL}`}
             class="transition-colors duration-200 hover:text-yellow-500"
           >
-            thinhngow@gmail.com
+            {AUTHOR_EMAIL}
           </a>
           {
             SOCIAL_MEDIA.github && (
