@@ -1,5 +1,3 @@
-import { env } from "cloudflare:workers";
-
 // Configuration for all social media profile URLs
 const PERSONAL_SOCIAL_PROFILES: {
   github?: string;
@@ -20,9 +18,6 @@ const WEBSITE_CONFIG = {
 };
 
 // Google Analytics (gtag) configuration
-
-export const GOOGLE_ANALYTICS_ID = env.PUBLIC_GOOGLE_ANALYTICS_ID;
-export const GOOGLE_ANALYTICS_URL = `https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`;
 
 // External reading profile URL for book recommendations integration
 export const GOODREADS_USER_URL = "https://www.goodreads.com/th1nhng0";
