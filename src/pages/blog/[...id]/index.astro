@@ -3,6 +3,7 @@ export const prerender = true;
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
 import type { CollectionEntry } from "astro:content";
+import { AUTHOR_NAME } from "@/consts";
 import { getCollection, render } from "astro:content";
 import { format } from "date-fns";
 import "katex/dist/katex.min.css";
@@ -62,7 +63,7 @@ let slug = Array.isArray(Astro.params.id)
   robots={post.data.draft ? "noindex,nofollow" : undefined}
   lang={post.data.lang ?? "en"}
   locale={post.data.lang === "vi" ? "vi_VN" : "en_US"}
-  author="Ngô Phú Thịnh"
+  author={AUTHOR_NAME}
   publishedTime={post.data.date.toISOString()}
   imageAlt={post.data.title}
   prevUrl={prevPost ? new URL(`/blog/${prevPost.id}`, Astro.site) : undefined}
@@ -76,13 +77,13 @@ let slug = Array.isArray(Astro.params.id)
       image: new URL(`/blog/${post.id}/og.png`, Astro.site).toString(),
       author: {
         "@type": "Person",
-        name: "Ngô Phú Thịnh",
-        url: "https://thinhcorner.com",
+        name: AUTHOR_NAME,
+        url: new URL("/", Astro.site).toString(),
       },
       publisher: {
         "@type": "Person",
-        name: "Ngô Phú Thịnh",
-        url: "https://thinhcorner.com",
+        name: AUTHOR_NAME,
+        url: new URL("/", Astro.site).toString(),
       },
       datePublished: post.data.date.toISOString(),
       dateModified: remarkPluginFrontmatter?.lastModified

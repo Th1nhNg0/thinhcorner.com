@@ -1,3 +1,7 @@
+// Personal information
+export const AUTHOR_NAME = "Ngô Phú Thịnh";
+export const AUTHOR_EMAIL = "thinhngow@gmail.com";
+
 // Configuration for all social media profile URLs
 const PERSONAL_SOCIAL_PROFILES: {
   github?: string;
@@ -17,7 +21,8 @@ const WEBSITE_CONFIG = {
   description: "Ngô Phú Thịnh's personal blog",
 };
 
-// External reading profile URL for book recommendations integration
+// Goodreads integration
+export const GOODREADS_USER_ID = "161740636";
 export const GOODREADS_USER_URL = "https://www.goodreads.com/th1nhng0";
 
 // Export constants with descriptive aliases

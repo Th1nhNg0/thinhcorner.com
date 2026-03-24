@@ -1,4 +1,5 @@
 import * as cheerio from "cheerio";
+import { GOODREADS_USER_ID } from "@/consts";
 
 export interface Book {
   title: string;
@@ -13,10 +14,10 @@ export interface Book {
 
 export async function get_book() {
   const current_reads = await crawl_book(
-    "https://www.goodreads.com/review/list_rss/161740636?shelf=currently-reading"
+    `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`
   );
   const read = await crawl_book(
-    "https://www.goodreads.com/review/list_rss/161740636?shelf=read"
+    `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read`
   );
 
   return {
