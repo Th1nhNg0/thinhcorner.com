@@ -10,6 +10,9 @@
   "observability": {
     "enabled": true,
   },
+  "vars": {
+    "GOOGLE_ANALYTICS_ID": "G-P4B7XCWCYP",
+  },
   // Secrets (SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REFRESH_TOKEN)
   // must be added via: wrangler secret put <KEY>
   // or in the Cloudflare dashboard → Workers → Settings → Variables & Secrets
