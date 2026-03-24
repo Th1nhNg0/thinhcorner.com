@@ -16,13 +16,10 @@ export default defineConfig({
   site: "https://thinhcorner.com",
   trailingSlash: "never",
   adapter: cloudflare({
-    imageService: "passthrough",
+    imageService: "cloudflare",
     prerenderEnvironment: "node",
   }),
-  integrations: [
-    sitemap(),
-    mdx(),
-  ],
+  integrations: [sitemap(), mdx()],
   vite: {
     plugins: [tailwindcss()],
   },
@@ -31,4 +28,5 @@ export default defineConfig({
     rehypePlugins: [rehypeKatex, rehypeFigure],
     gfm: true,
   },
+  output: "server",
 });
