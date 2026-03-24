@@ -28,5 +28,4 @@ export default defineConfig({
     rehypePlugins: [rehypeKatex, rehypeFigure],
     gfm: true,
   },
-  output: "server",
 });

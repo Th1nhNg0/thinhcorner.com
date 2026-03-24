@@ -1,5 +1,5 @@
 ---
-import { SITE } from "@/consts";
+import { SITE, GOOGLE_ANALYTICS_ID } from "@/consts";
 import "@/styles/global.css";
 import iosevkaAile400Woff2 from "@fontsource/iosevka-aile/files/iosevka-aile-latin-400-normal.woff2?url";
 import "@fontsource/iosevka-aile/latin-400.css";
@@ -7,7 +7,6 @@ import "@fontsource/iosevka-aile/latin-700.css";
 import iosevkaEtoile700Woff2 from "@fontsource/iosevka-etoile/files/iosevka-etoile-latin-700-normal.woff2?url";
 import "@fontsource/iosevka-etoile/latin-400.css";
 import "@fontsource/iosevka-etoile/latin-700.css";
-import { env } from "cloudflare:workers";
 
 interface Props {
   title: string;
@@ -135,7 +134,7 @@ const {
       <>
         <script
           async
-          src={`https://www.googletagmanager.com/gtag/js?id=${env.PUBLIC_GOOGLE_ANALYTICS_ID}`}
+          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`}
         />
         <script
           is:inline
@@ -143,7 +142,7 @@ const {
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', '${env.PUBLIC_GOOGLE_ANALYTICS_ID}');
+        gtag('config', '${GOOGLE_ANALYTICS_ID}');
       `}
         />
       </>
