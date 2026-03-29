@@ -60,6 +60,10 @@ const now = new Date();
                 <img
                   src={track.imageUrl}
                   alt={track.title}
+                  width="64"
+                  height="64"
+                  loading="lazy"
+                  decoding="async"
                   class="rounded-md object-cover w-full h-full"
                 />
                 <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 rounded-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -112,6 +116,10 @@ const now = new Date();
                 <img
                   src={track.imageUrl}
                   alt={track.title}
+                  width="300"
+                  height="300"
+                  loading="lazy"
+                  decoding="async"
                   class="rounded-md object-cover w-full h-full"
                 />
                 <div class="absolute inset-0 bg-black/40 rounded-md opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
@@ -157,6 +165,10 @@ const now = new Date();
               <img
                 src={artist.images[0].url}
                 alt={artist.name}
+                width="640"
+                height="480"
+                loading="lazy"
+                decoding="async"
                 class="absolute inset-0 object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
