@@ -85,7 +85,7 @@ const blog = (await getCollection("blog"))
                   <a
                     data-astro-prefetch=""
                     href={`/blog/${post.id}`}
-                    class="hover:text-yellow-500 transition-colors"
+                    class="hover:text-yellow-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:rounded"
                   >
                     {post.data.title}
                   </a>
@@ -113,7 +113,7 @@ const blog = (await getCollection("blog"))
                 href={SOCIAL_MEDIA.github}
                 target="_blank"
                 class="transition-colors duration-200 hover:text-yellow-500"
-                aria-label="GitHub Profile"
+                aria-label="GitHub Profile (opens in new tab)"
               >
                 GitHub
               </a>
@@ -125,7 +125,7 @@ const blog = (await getCollection("blog"))
                 href={SOCIAL_MEDIA.linkedin}
                 target="_blank"
                 class="transition-colors duration-200 hover:text-yellow-500"
-                aria-label="LinkedIn Profile"
+                aria-label="LinkedIn Profile (opens in new tab)"
               >
                 LinkedIn
               </a>
