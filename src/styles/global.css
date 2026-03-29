@@ -8,15 +8,6 @@
   --font-normal: "Iosevka Aile", sans-serif;
 }
 
-/* Ensure font-display: swap for better CLS/LCP */
-@font-face {
-  font-family: "Iosevka Etoile";
-  font-display: swap;
-}
-@font-face {
-  font-family: "Iosevka Aile";
-  font-display: swap;
-}
 
 :root {
   --radius-surface: 1rem;
