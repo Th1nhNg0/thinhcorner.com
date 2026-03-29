@@ -106,7 +106,7 @@ const years = Object.keys(postsByYear)
             <div class="flex items-center gap-3 mb-5">
               <h2 class="text-xl text-zinc-200 font-mono font-bold">{year}</h2>
               <div class="flex-1 h-px bg-zinc-800" />
-              <span class="text-xs font-mono text-zinc-500 whitespace-nowrap">
+              <span class="text-xs font-mono text-zinc-400 whitespace-nowrap">
                 {postsByYear[year].length}{" "}
                 {postsByYear[year].length === 1 ? "post" : "posts"}
               </span>
@@ -120,7 +120,7 @@ const years = Object.keys(postsByYear)
                   <time
                     datetime={post.data.date.toISOString()}
                     title={post.data.date.toISOString()}
-                    class="shrink-0 text-xs font-mono text-zinc-500 min-w-[5.5rem]"
+                    class="shrink-0 text-xs font-mono text-zinc-400 min-w-[5.5rem]"
                   >
                     {format(new Date(post.data.date), "dd MMM y")}
                   </time>
@@ -133,7 +133,7 @@ const years = Object.keys(postsByYear)
                     <a
                       data-astro-prefetch
                       href={`/blog/${post.id}`}
-                      class="hover:text-yellow-500 transition-colors"
+                      class="hover:text-yellow-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:rounded"
                     >
                       {post.data.title}
                     </a>

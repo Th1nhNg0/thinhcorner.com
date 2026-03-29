@@ -75,15 +75,16 @@ const projects = [
                     href={project.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="text-lg font-semibold text-zinc-100 hover:text-yellow-500 transition-colors"
+                    class="text-lg font-semibold text-zinc-100 hover:text-yellow-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:rounded"
                   >
                     {project.name}
+                    <span class="sr-only">(opens in new tab)</span>
                   </a>
                   <p class="text-xs text-zinc-500 mt-0.5 font-mono">
                     {project.repo}
                   </p>
                 </div>
-                <span class="text-xs font-mono text-zinc-600 bg-zinc-800/80 px-2 py-0.5 rounded-full shrink-0">
+                <span class="text-xs font-mono text-zinc-400 bg-zinc-800/80 px-2 py-0.5 rounded-full shrink-0">
                   {project.year}
                 </span>
               </div>
@@ -102,6 +103,8 @@ const projects = [
                 target="_blank"
                 rel="noopener noreferrer"
                 class="inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-yellow-500 transition-colors font-mono"
+                aria-hidden="true"
+                tabindex="-1"
               >
                 {project.linkIcon === "huggingface" ? (
                   <svg

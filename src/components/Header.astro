@@ -34,7 +34,7 @@ const navLinks = [
             <a
               href={link.href}
               class:list={[
-                "transition-colors duration-200",
+                "transition-colors duration-200 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500",
                 isActive(link.href)
                   ? "text-white font-semibold"
                   : "text-gray-300 hover:text-white",
