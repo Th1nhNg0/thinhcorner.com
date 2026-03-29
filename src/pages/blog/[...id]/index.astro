@@ -187,7 +187,7 @@ let slug = Array.isArray(Astro.params.id)
         prevPost && (
           <a
             href={`/blog/${prevPost.id}`}
-            class="group relative rounded-surface border border-zinc-700/50 p-4 transition-colors hover:border-gray-600"
+            class="group relative rounded-surface border border-zinc-700/50 p-4 transition-colors hover:border-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500"
           >
             <div class="mb-2 text-sm text-gray-400">← Previous Article</div>
             <div class="line-clamp-2 font-medium text-gray-100 group-hover:text-white">
@@ -201,7 +201,7 @@ let slug = Array.isArray(Astro.params.id)
         nextPost && (
           <a
             href={`/blog/${nextPost.id}`}
-            class="group relative rounded-surface border border-zinc-700/50 p-4 transition-colors hover:border-gray-600"
+            class="group relative rounded-surface border border-zinc-700/50 p-4 transition-colors hover:border-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500"
           >
             <div class="mb-2 text-sm text-gray-400">Next Article →</div>
             <div class="line-clamp-2 font-medium text-gray-100 group-hover:text-white">
