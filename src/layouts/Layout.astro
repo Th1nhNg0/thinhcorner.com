@@ -7,6 +7,7 @@ type Props = {
   description: string;
   image?: string;
   lang?: string; // e.g., en or vi
+  katex?: boolean;
   // Extended SEO props passthrough
   type?: "website" | "article";
   robots?: string;
@@ -26,6 +27,7 @@ const {
   description,
   image,
   lang = "en",
+  katex,
   type,
   robots,
   locale,
@@ -57,6 +59,7 @@ const {
     modifiedTime={modifiedTime}
     imageAlt={imageAlt}
     structuredData={structuredData}
+    katex={katex}
   />
   <body class="bg-zinc-900 text-white">
     <Header />

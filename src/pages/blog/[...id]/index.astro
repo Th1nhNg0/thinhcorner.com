@@ -6,7 +6,6 @@ import type { CollectionEntry } from "astro:content";
 import { AUTHOR_NAME } from "@/consts";
 import { getCollection, render } from "astro:content";
 import { format } from "date-fns";
-import "katex/dist/katex.min.css";
 import EditOnGithub from "../../../components/EditOnGithub.astro";
 
 export async function getStaticPaths() {
@@ -50,6 +49,9 @@ const prevPost = getPrevPost();
 const post = Astro.props;
 const { Content, remarkPluginFrontmatter } = await render(post);
 
+// Detect math content to conditionally load KaTeX CSS
+const hasMath = post.body ? /\$\$|(?<!\w)\$[^\n$]+\$(?!\w)|\\\[|\\\(/.test(post.body) : false;
+
 let slug = Array.isArray(Astro.params.id)
   ? Astro.params.id[0]
   : Astro.params.id;
@@ -60,6 +62,7 @@ let slug = Array.isArray(Astro.params.id)
   description={post.data.description}
   image={`/blog/${post.id}/og.png`}
   type="article"
+  katex={hasMath}
   robots={post.data.draft ? "noindex,nofollow" : undefined}
   lang={post.data.lang ?? "en"}
   locale={post.data.lang === "vi" ? "vi_VN" : "en_US"}
