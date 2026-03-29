@@ -7,11 +7,13 @@ import "@fontsource/iosevka-aile/latin-700.css";
 import iosevkaEtoile700Woff2 from "@fontsource/iosevka-etoile/files/iosevka-etoile-latin-700-normal.woff2?url";
 import "@fontsource/iosevka-etoile/latin-400.css";
 import "@fontsource/iosevka-etoile/latin-700.css";
+import katexCSSUrl from "katex/dist/katex.min.css?url";
 
 interface Props {
   title: string;
   description: string;
   image?: string;
+  katex?: boolean;
   // SEO extras
   type?: "website" | "article";
   robots?: string;
@@ -42,6 +44,7 @@ const {
   modifiedTime,
   imageAlt,
   structuredData,
+  katex = false,
 } = Astro.props;
 ---
 
@@ -51,6 +54,8 @@ const {
   <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="generator" content={Astro.generator} />
   <meta name="theme-color" content="#18181b" />
+  {import.meta.env.PROD && <link rel="preconnect" href="https://www.googletagmanager.com" />}
+  {katex && <link rel="stylesheet" href={katexCSSUrl} />}
   <link
     rel="preload"
     as="font"
