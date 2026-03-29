@@ -55,6 +55,7 @@ const {
   <meta name="generator" content={Astro.generator} />
   <meta name="theme-color" content="#18181b" />
   {import.meta.env.PROD && <link rel="preconnect" href="https://www.googletagmanager.com" />}
+  {import.meta.env.PROD && <link rel="dns-prefetch" href="https://www.googletagmanager.com" />}
   {katex && <link rel="stylesheet" href={katexCSSUrl} />}
   <link
     rel="preload"
@@ -87,6 +88,8 @@ const {
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:image" content={new URL(image, Astro.site)} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   {imageAlt && <meta property="og:image:alt" content={imageAlt} />}
   <meta property="og:site_name" content={siteName} />
   {locale && <meta property="og:locale" content={locale} />}
