@@ -386,12 +386,24 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
 
     <!-- Footer -->
     <p class="text-xs text-zinc-600 font-mono text-right mt-4 mb-8">
-      Last updated: {format(now, "MMM d, yyyy 'at' h:mm a")}
+      Last updated: <time id="last-updated" datetime={now.toISOString()}>{format(now, "MMM d, yyyy 'at' h:mm a")}</time>
     </p>
   </Container>
 </Layout>
 
 <script>
+  const lastUpdatedEl = document.getElementById("last-updated");
+  if (lastUpdatedEl) {
+    const d = new Date(lastUpdatedEl.getAttribute("datetime")!);
+    lastUpdatedEl.textContent = d.toLocaleString(undefined, {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  }
+
   const btnThisYear = document.getElementById("btn-this-year");
   const btnAllYears = document.getElementById("btn-all-years");
   const chartThisYear = document.getElementById("chart-this-year");
