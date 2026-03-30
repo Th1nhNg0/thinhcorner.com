@@ -363,9 +363,14 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                     </a>
                     <p class="text-xs text-zinc-500 mt-1">{book.author}</p>
                     {book.rating > 0 && (
-                      <span class="text-yellow-500 text-[11px] tracking-wide mt-1.5">
-                        {"★".repeat(Math.round(book.rating))}
-                      </span>
+                      <div class="flex items-center gap-1.5 mt-1.5">
+                        <span class="text-yellow-500 text-[11px] tracking-wide">
+                          {"★".repeat(Math.round(book.rating))}
+                        </span>
+                        <span class="text-zinc-500 text-[10px] font-mono">
+                          {book.rating === 5 ? "it was amazing" : book.rating === 4 ? "really liked it" : book.rating === 3 ? "liked it" : book.rating === 2 ? "it was ok" : "didn't like it"}
+                        </span>
+                      </div>
                     )}
                     <div class="mt-auto pt-2 flex items-center gap-2 text-[11px] text-zinc-600 font-mono">
                       {book.num_pages && <span>Pages: {book.num_pages}</span>}
