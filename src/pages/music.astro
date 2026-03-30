@@ -208,7 +208,21 @@ const now = new Date();
     </section>
 
     <p class="text-xs text-zinc-600 font-mono text-right mt-4 mb-8">
-      Last updated: {format(now, "MMM d, yyyy 'at' h:mm a")}
+      Last updated: <time id="last-updated" datetime={now.toISOString()}>{format(now, "MMM d, yyyy 'at' h:mm a")}</time>
     </p>
   </Container>
 </Layout>
+
+<script>
+  const el = document.getElementById("last-updated");
+  if (el) {
+    const d = new Date(el.getAttribute("datetime")!);
+    el.textContent = d.toLocaleString(undefined, {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  }
+</script>
