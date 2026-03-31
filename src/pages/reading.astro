@@ -362,11 +362,26 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                       {book.title}
                     </a>
                     <p class="text-xs text-zinc-500 mt-1">{book.author}</p>
-                    {book.rating > 0 && (
-                      <span class="text-yellow-500 text-[11px] tracking-wide mt-1.5">
-                        {"★".repeat(Math.round(book.rating))}
-                      </span>
-                    )}
+                    {book.rating > 0 && (() => {
+                      const ratingLabels: Record<number, string> = {
+                        1: "didn't like it",
+                        2: "i dont like it",
+                        3: "liked it",
+                        4: "really liked it",
+                        5: "it was amazing",
+                      };
+                      const r = Math.round(book.rating);
+                      return (
+                        <span class="flex items-center gap-1.5 mt-1.5">
+                          <span class="text-yellow-500 text-[11px] tracking-wide">
+                            {"★".repeat(r)}
+                          </span>
+                          <span class="text-[10px] text-zinc-500 font-mono">
+                            {ratingLabels[r]}
+                          </span>
+                        </span>
+                      );
+                    })()}
                     <div class="mt-auto pt-2 flex items-center gap-2 text-[11px] text-zinc-600 font-mono">
                       {book.num_pages && <span>Pages: {book.num_pages}</span>}
                       {book.user_read_at && (
