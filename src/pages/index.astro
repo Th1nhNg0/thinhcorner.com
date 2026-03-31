@@ -29,7 +29,7 @@ const blog = (await getCollection("blog"))
       "@type": "Person",
       name: AUTHOR_NAME,
       url: new URL("/", Astro.site).toString(),
-      jobTitle: "Indie Hacker",
+      jobTitle: "Writer & Developer",
       address: {
         "@type": "PostalAddress",
         addressLocality: "Ho Chi Minh City",
@@ -53,9 +53,11 @@ const blog = (await getCollection("blog"))
       </h1>
       <div class="space-y-4 text-zinc-400">
         <p class="leading-relaxed">
-          Hello! I'm {AUTHOR_NAME}, an enthusiastic indie hacker exploring the
-          entrepreneurial path right here in Ho Chi Minh City, Vietnam. My world
-          revolves around technology and the joy of learning new things.
+          Hello! I'm {AUTHOR_NAME}, a curious mind based in Ho Chi Minh City,
+          Vietnam. I spend my time building things with code, thinking about
+          society and culture, and writing about whatever I find interesting —
+          from AI and game design to Vietnamese history and the small details of
+          everyday life. Tech is my day job; curiosity is the operating system.
         </p>
       </div>
       <section class="mb-16">
