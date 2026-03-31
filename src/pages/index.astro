@@ -29,7 +29,7 @@ const blog = (await getCollection("blog"))
       "@type": "Person",
       name: AUTHOR_NAME,
       url: new URL("/", Astro.site).toString(),
-      jobTitle: "Indie Hacker",
+      jobTitle: "Curious Mind",
       address: {
         "@type": "PostalAddress",
         addressLocality: "Ho Chi Minh City",
@@ -53,9 +53,18 @@ const blog = (await getCollection("blog"))
       </h1>
       <div class="space-y-4 text-zinc-400">
         <p class="leading-relaxed">
-          Hello! I'm {AUTHOR_NAME}, an enthusiastic indie hacker exploring the
-          entrepreneurial path right here in Ho Chi Minh City, Vietnam. My world
-          revolves around technology and the joy of learning new things.
+          Hey there! I'm {AUTHOR_NAME}, based in Ho Chi Minh City, Vietnam.
+          I'm the kind of person who falls down rabbit holes — one week it's
+          a puzzle game I can't put down, the next it's a book that
+          changes how I see things, and sometimes it's a weird idea I just
+          have to build.
+        </p>
+        <p class="leading-relaxed">
+          This little corner is where I collect the things I find along the
+          way — what I'm <a href="/reading" class="text-yellow-500 hover:text-yellow-400 transition-colors">reading</a>,
+          what I'm <a href="/music" class="text-yellow-500 hover:text-yellow-400 transition-colors">listening to</a>,
+          and whatever I'm <a href="/projects" class="text-yellow-500 hover:text-yellow-400 transition-colors">tinkering with</a>.
+          Nothing too serious, just a curious mind trying to make sense of the world.
         </p>
       </div>
       <section class="mb-16">
