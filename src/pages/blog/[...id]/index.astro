@@ -24,23 +24,13 @@ const posts = (await getCollection("blog")).sort(
 );
 
 function getNextPost() {
-  let postIndex;
-  for (const post of posts) {
-    if (post.id === Astro.params.id) {
-      postIndex = posts.indexOf(post);
-      return posts[postIndex + 1];
-    }
-  }
+  const idx = posts.findIndex((p) => p.id === Astro.params.id);
+  return idx !== -1 ? posts[idx + 1] : undefined;
 }
 
 function getPrevPost() {
-  let postIndex;
-  for (const post of posts) {
-    if (post.id === Astro.params.id) {
-      postIndex = posts.indexOf(post);
-      return posts[postIndex - 1];
-    }
-  }
+  const idx = posts.findIndex((p) => p.id === Astro.params.id);
+  return idx > 0 ? posts[idx - 1] : undefined;
 }
 
 const nextPost = getNextPost();
@@ -89,9 +79,6 @@ let slug = Array.isArray(Astro.params.id)
         url: new URL("/", Astro.site).toString(),
       },
       datePublished: post.data.date.toISOString(),
-      dateModified: remarkPluginFrontmatter?.lastModified
-        ? new Date(remarkPluginFrontmatter.lastModified).toISOString()
-        : post.data.date.toISOString(),
       mainEntityOfPage: new URL(`/blog/${post.id}`, Astro.site).toString(),
       url: new URL(`/blog/${post.id}`, Astro.site).toString(),
       inLanguage: post.data.lang ?? "en",
@@ -158,20 +145,6 @@ let slug = Array.isArray(Astro.params.id)
             )
           }
         </div>
-        <!-- vercel is not fully clone the git so disabled for now -->
-        <!-- <div>
-          {
-            remarkPluginFrontmatter.lastModified && (
-              <span class="inline-flex items-center rounded-md bg-gray-800 px-2 py-1 text-xs font-medium text-gray-300">
-                Updated:{" "}
-                {format(
-                  new Date(remarkPluginFrontmatter.lastModified),
-                  "dd MMM yyyy"
-                )}
-              </span>
-            )
-          }
-        </div> -->
       </div>
     </div>
     <article
@@ -182,7 +155,7 @@ let slug = Array.isArray(Astro.params.id)
 
     <EditOnGithub slug={slug} />
 
-    <nav class="pb-4 flex flex-col gap-4">
+    <nav class="pb-4 flex flex-col gap-4" aria-label="Post navigation">
       {
         prevPost && (
           <a

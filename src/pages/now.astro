@@ -7,13 +7,15 @@ import { YouTube } from "astro-embed";
 ---
 
 <Layout
-  title="Now"
-  description="What I'm up to now."
+  title="Now — Thinh's Corner"
+  description="My personal timeline — where I've been and what I'm doing now."
+  lang="en"
+  locale="en_US"
   structuredData={{
     "@context": "https://schema.org",
     "@type": "ProfilePage",
     name: "Now",
-    description: "What I'm up to now.",
+    description: "My personal timeline — where I've been and what I'm doing now.",
     url: new URL("/now", Astro.site).toString(),
   }}
 >
@@ -41,10 +43,13 @@ import { YouTube } from "astro-embed";
       >
         <a
           href="https://arxiv.org/abs/2406.06239"
+          target="_blank"
+          rel="noopener noreferrer"
           class="text-yellow-500 hover:underline"
         >
           I-MPN: Inductive Message Passing Network for Efficient
           Human-in-the-Loop Annotation of Mobile Eye Tracking Data
+          <span class="sr-only">(opens in new tab)</span>
         </a>
       </TimelineItem>
       <TimelineItem
@@ -54,10 +59,13 @@ import { YouTube } from "astro-embed";
       >
         <a
           href="https://doi.org/10.11591/ijai.v13.i4.pp3962-3973"
+          target="_blank"
+          rel="noopener noreferrer"
           class="text-yellow-500 hover:underline"
         >
           Enhancing legal research through knowledge-infused information
           retrieval for Vietnamese labor law
+          <span class="sr-only">(opens in new tab)</span>
         </a>
       </TimelineItem>
 
@@ -82,9 +90,12 @@ import { YouTube } from "astro-embed";
       >
         <a
           href="https://doi.org/10.1007/978-981-99-5834-4_8"
+          target="_blank"
+          rel="noopener noreferrer"
           class="text-yellow-500 hover:underline"
         >
           Intelligent Retrieval System on Legal Information
+          <span class="sr-only">(opens in new tab)</span>
         </a>
       </TimelineItem>
       <TimelineItem
@@ -93,10 +104,13 @@ import { YouTube } from "astro-embed";
         time="2022-05-13"
       >
         <a
-          class="text-yellow-500 hover:underline"
           href="https://github.com/Th1nhNg0/travel_flow_hackathon"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-yellow-500 hover:underline"
         >
           Link to Project
+          <span class="sr-only">(opens in new tab)</span>
         </a>
         <Image
           inferSize={true}

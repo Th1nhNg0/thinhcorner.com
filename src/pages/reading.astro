@@ -5,8 +5,9 @@ import Layout from "@/layouts/Layout.astro";
 import { get_book } from "@/lib/goodread";
 import { format } from "date-fns";
 import { GOODREADS_USER_URL } from "@/consts";
+import { env } from "cloudflare:workers";
 
-const books = await get_book();
+const books = await get_book(env.CACHE);
 const read = books.read;
 
 const readByYear = read.reduce(
@@ -91,8 +92,10 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
 ---
 
 <Layout
-  title="Reading"
+  title="Reading — Thinh's Corner"
   description="A list of books I've read and recommend."
+  lang="en"
+  locale="en_US"
   structuredData={{
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -176,11 +179,14 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
             {books.current_reads.map((book) => (
               <a
                 href={book.url}
+                target="_blank"
+                rel="noopener noreferrer"
                 class="inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-yellow-500 transition-colors"
               >
-                <span class="text-yellow-500/60">&#9656;</span>
+                <span class="text-yellow-500/60" aria-hidden="true">&#9656;</span>
                 <span class="font-medium">{book.title}</span>
                 <span class="text-zinc-600">by {book.author}</span>
+                <span class="sr-only">(opens in new tab)</span>
               </a>
             ))}
           </div>
@@ -242,6 +248,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
               id="btn-this-year"
               class="px-3 py-0.5 text-[11px] font-mono rounded-full transition-colors bg-yellow-500/20 text-yellow-500"
               type="button"
+              aria-pressed="true"
             >
               {currentYear}
             </button>
@@ -249,6 +256,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
               id="btn-all-years"
               class="px-3 py-0.5 text-[11px] font-mono rounded-full transition-colors text-zinc-500 hover:text-zinc-400"
               type="button"
+              aria-pressed="false"
             >
               All
             </button>
@@ -324,7 +332,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
     </section>
 
     <!-- Book List -->
-    <section id="blogPosts">
+    <section id="book-list">
       {
         years.map((year) => (
           <div class="mb-12" data-year={year}>
@@ -357,9 +365,12 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                   <div class="flex flex-col flex-1 min-w-0 py-0.5">
                     <a
                       href={book.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       class="text-zinc-100 font-medium hover:text-yellow-500 transition-colors line-clamp-2 text-[13px] leading-snug"
                     >
                       {book.title}
+                      <span class="sr-only">(opens in new tab)</span>
                     </a>
                     <p class="text-xs text-zinc-500 mt-1">{book.author}</p>
                     {book.rating > 0 && (() => {
@@ -434,6 +445,8 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
       btnThisYear.classList.remove("text-zinc-500", "hover:text-zinc-400");
       btnAllYears.classList.remove("bg-yellow-500/20", "text-yellow-500");
       btnAllYears.classList.add("text-zinc-500", "hover:text-zinc-400");
+      btnThisYear.setAttribute("aria-pressed", "true");
+      btnAllYears.setAttribute("aria-pressed", "false");
     });
 
     btnAllYears.addEventListener("click", () => {
@@ -445,6 +458,8 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
       btnAllYears.classList.remove("text-zinc-500", "hover:text-zinc-400");
       btnThisYear.classList.remove("bg-yellow-500/20", "text-yellow-500");
       btnThisYear.classList.add("text-zinc-500", "hover:text-zinc-400");
+      btnAllYears.setAttribute("aria-pressed", "true");
+      btnThisYear.setAttribute("aria-pressed", "false");
     });
   }
 </script>

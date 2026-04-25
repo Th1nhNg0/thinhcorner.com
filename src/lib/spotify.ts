@@ -1,3 +1,5 @@
+import { withCache } from "@/lib/cache";
+
 const NOW_PLAYING_ENDPOINT = `https://api.spotify.com/v1/me/player/currently-playing`;
 const TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=25`;
 const TOP_ARTISTS_ENDPOINT = `https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=24`;
@@ -17,7 +19,7 @@ const getAccessToken = async (env: Env) => {
     },
     body: body,
   });
-  const result = await response.json();
+  const result = await response.json() as any;
   return result;
 };
 
@@ -49,7 +51,7 @@ const getNowPlaying = async (env: Env) => {
       isPlaying: false,
     } as NowPlaying;
   }
-  const song = await res.json();
+  const song = await res.json() as any;
   if (song.item === null) {
     return {
       isPlaying: false,
@@ -103,23 +105,22 @@ export interface TopTrack {
   previewUrl: string;
 }
 
-const getTopTracks = async (env: Env) => {
-  const { access_token } = await getAccessToken(env);
-
-  const { items } = await fetch(TOP_TRACKS_ENDPOINT, {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
-  }).then((res) => res.json());
-  const tracks: TopTrack[] =
-    items?.map((track: any) => ({
-      id: track.id,
-      artist: track.artists,
-      songUrl: track.external_urls.spotify,
-      title: track.name,
-      imageUrl: track.album.images[1].url,
-    })) || [];
-  return tracks;
+const getTopTracks = async (env: Env, kv: KVNamespace) => {
+  return withCache(kv, "spotify_top_tracks", 3600, async () => {
+    const { access_token } = await getAccessToken(env);
+    const { items } = await fetch(TOP_TRACKS_ENDPOINT, {
+      headers: { Authorization: `Bearer ${access_token}` },
+    }).then((res) => res.json() as Promise<any>);
+    const tracks: TopTrack[] =
+      items?.map((track: any) => ({
+        id: track.id,
+        artist: track.artists,
+        songUrl: track.external_urls.spotify,
+        title: track.name,
+        imageUrl: track.album.images[1].url,
+      })) || [];
+    return tracks;
+  });
 };
 
 export interface RecentlyPlayedTrack {
@@ -151,25 +152,24 @@ export interface RecentlyPlayedTrack {
   played_at: string;
 }
 
-const getRecentlyPlayed = async (env: Env) => {
-  const { access_token } = await getAccessToken(env);
-  const response = await fetch(RECENTLY_PLAYED_ENDPOINT, {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
+const getRecentlyPlayed = async (env: Env, kv: KVNamespace) => {
+  return withCache(kv, "spotify_recently_played", 1800, async () => {
+    const { access_token } = await getAccessToken(env);
+    const response = await fetch(RECENTLY_PLAYED_ENDPOINT, {
+      headers: { Authorization: `Bearer ${access_token}` },
+    });
+    const { items } = await response.json() as any;
+    const tracks: RecentlyPlayedTrack[] =
+      items?.map((track: any) => ({
+        id: track.track.id,
+        artist: track.track.artists,
+        songUrl: track.track.external_urls.spotify,
+        title: track.track.name,
+        imageUrl: track.track.album.images[1].url,
+        played_at: track.played_at,
+      })) || [];
+    return tracks;
   });
-  const { items } = await response.json();
-  const tracks: RecentlyPlayedTrack[] =
-    items?.map((track: any) => ({
-      id: track.track.id,
-      artist: track.track.artists,
-      songUrl: track.track.external_urls.spotify,
-      title: track.track.name,
-      imageUrl: track.track.album.images[1].url,
-      played_at: track.played_at,
-    })) || [];
-
-  return tracks;
 };
 
 export interface TopArtist {
@@ -194,28 +194,27 @@ export interface TopArtist {
   uri: string;
 }
 
-const getTopArtists = async (env: Env) => {
-  const { access_token } = await getAccessToken(env);
-
-  const { items } = await fetch(TOP_ARTISTS_ENDPOINT, {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
-  }).then((res) => res.json());
-  const artists: TopArtist[] =
-    items?.map((artist: any) => ({
-      external_urls: artist.external_urls,
-      followers: artist.followers,
-      genres: artist.genres,
-      href: artist.href,
-      id: artist.id,
-      images: artist.images,
-      name: artist.name,
-      popularity: artist.popularity,
-      type: artist.type,
-      uri: artist.uri,
-    })) || [];
-  return artists;
+const getTopArtists = async (env: Env, kv: KVNamespace) => {
+  return withCache(kv, "spotify_top_artists", 3600, async () => {
+    const { access_token } = await getAccessToken(env);
+    const { items } = await fetch(TOP_ARTISTS_ENDPOINT, {
+      headers: { Authorization: `Bearer ${access_token}` },
+    }).then((res) => res.json() as Promise<any>);
+    const artists: TopArtist[] =
+      items?.map((artist: any) => ({
+        external_urls: artist.external_urls,
+        followers: artist.followers,
+        genres: artist.genres,
+        href: artist.href,
+        id: artist.id,
+        images: artist.images,
+        name: artist.name,
+        popularity: artist.popularity,
+        type: artist.type,
+        uri: artist.uri,
+      })) || [];
+    return artists;
+  });
 };
 
 export { getNowPlaying, getTopTracks, getRecentlyPlayed, getTopArtists };
