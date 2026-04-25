@@ -7,6 +7,13 @@
     "directory": "./dist",
     "binding": "ASSETS",
   },
+  "kv_namespaces": [
+    {
+      "binding": "CACHE",
+      "id": "ad30c914b63f4f86a5ae918dc39e4a19",
+      "preview_id": "1abe882b9c1847bf803b0bbdb71644ed",
+    },
+  ],
   "observability": {
     "enabled": true,
   },
