@@ -7,9 +7,9 @@ import { SOCIAL_MEDIA } from "@/consts";
 import { format, formatDistanceToNow } from "date-fns";
 import { env } from "cloudflare:workers";
 
-const topTracks = await getTopTracks(env);
-const recentlyPlayed = await getRecentlyPlayed(env);
-const topArtists = await getTopArtists(env);
+const topTracks = await getTopTracks(env, env.CACHE);
+const recentlyPlayed = await getRecentlyPlayed(env, env.CACHE);
+const topArtists = await getTopArtists(env, env.CACHE);
 const now = new Date();
 ---
 
@@ -66,12 +66,13 @@ const now = new Date();
                   decoding="async"
                   class="rounded-md object-cover w-full h-full"
                 />
-                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 rounded-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 rounded-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                     class="w-6 h-6 text-white"
+                    aria-hidden="true"
                   >
                     <path
                       fill-rule="evenodd"
@@ -122,13 +123,14 @@ const now = new Date();
                   decoding="async"
                   class="rounded-md object-cover w-full h-full"
                 />
-                <div class="absolute inset-0 bg-black/40 rounded-md opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
+                <div class="absolute inset-0 bg-black/40 rounded-md opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center" aria-hidden="true">
                   <div class="bg-white/20 p-2 rounded-full">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       fill="currentColor"
                       class="w-6 h-6"
+                      aria-hidden="true"
                     >
                       <path
                         fill-rule="evenodd"
@@ -183,10 +185,11 @@ const now = new Date();
                       class="w-4 h-4"
                       viewBox="0 0 20 20"
                       fill="currentColor"
+                      aria-hidden="true"
                     >
                       <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6z" />
                     </svg>
-                    <span>{artist.followers.total.toLocaleString()}</span>
+                    <span>{artist.followers.total.toLocaleString()} followers</span>
                   </div>
                   <div class="flex items-center gap-1">
                     <svg
@@ -194,10 +197,11 @@ const now = new Date();
                       class="w-4 h-4"
                       viewBox="0 0 20 20"
                       fill="currentColor"
+                      aria-hidden="true"
                     >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
-                    <span>{artist.popularity}%</span>
+                    <span>{artist.popularity}% popularity</span>
                   </div>
                 </div>
               </div>

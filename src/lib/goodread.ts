@@ -1,5 +1,6 @@
 import * as cheerio from "cheerio";
 import { GOODREADS_USER_ID } from "@/consts";
+import { withCache } from "@/lib/cache";
 
 export interface Book {
   title: string;
@@ -12,18 +13,16 @@ export interface Book {
   user_read_at?: string;
 }
 
-export async function get_book() {
-  const current_reads = await crawl_book(
-    `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`
-  );
-  const read = await crawl_book(
-    `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read`
-  );
-
-  return {
-    current_reads,
-    read,
-  };
+export async function get_book(kv: KVNamespace) {
+  return withCache(kv, "goodreads_books", 3600, async () => {
+    const current_reads = await crawl_book(
+      `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`
+    );
+    const read = await crawl_book(
+      `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read`
+    );
+    return { current_reads, read };
+  });
 }
 
 async function crawl_book(url: string) {
