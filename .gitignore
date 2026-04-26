@@ -27,3 +27,7 @@ pnpm-debug.log*
 # cloudflare / wrangler local state
 .vercel/
 .wrangler/
+
+# generated cloudflare worker types (regenerate via `bun run generate-types`)
+worker-configuration.d.ts
+.claude/
