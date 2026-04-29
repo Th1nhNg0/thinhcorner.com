@@ -1,0 +1,14 @@
+---
+interface Props {
+  cite?: string;
+}
+
+const { cite } = Astro.props;
+---
+
+<figure class="not-prose my-10 text-center">
+  <blockquote class="font-heading text-2xl md:text-3xl font-semibold leading-snug text-white">
+    <slot />
+  </blockquote>
+  {cite && <figcaption class="mt-3 text-sm text-zinc-500">— {cite}</figcaption>}
+</figure>
