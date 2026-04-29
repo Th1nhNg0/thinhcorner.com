@@ -1,0 +1,94 @@
+---
+title: "AI's Dead End"
+description: "To write"
+date: 2026-04-30
+lang: "en"
+draft: true
+---
+
+import Callout from "@/components/Callout.astro";
+import PullQuote from "@/components/PullQuote.astro";
+
+In November 2025, a researcher walked into Mark Zuckerberg's office and quit. It wasn't just any researcher—it was one of the people awarded the 2018 Turing Award for foundational breakthroughs in modern deep learning. His name is **Yann LeCun**, and if anyone knows about AI, it's him.
+
+<Callout title="Who is Yann LeCun?">
+  A French-American computer scientist, Chief AI Scientist at Meta (2013–2025),
+  and professor at NYU. He is best known for pioneering **convolutional neural
+  networks (CNNs)** in the late 1980s—the architecture that powers most modern
+  computer vision systems. Alongside Geoffrey Hinton and Yoshua Bengio, he is
+  considered one of the three "Godfathers of Deep Learning."
+</Callout>
+
+<Callout title="What is the 2018 Turing Award?">
+  The Turing Award is widely regarded as the "Nobel Prize of computing," given
+  annually by the ACM for major contributions to computer science. In 2018, it
+  was jointly awarded to LeCun, Hinton, and Bengio for the conceptual and
+  engineering breakthroughs that made deep neural networks a critical component
+  of computing.
+</Callout>
+
+Four months later, he'd raised more than a billion dollars to build something new—something designed to prove the entire industry wrong.
+
+LeCun's pitch to investors was that **large language models are dead**. Not that they're useless, but in terms of human-level intelligence or superintelligence, LLMs are not the way forward.
+
+What we've seen over the last few years is big tech throwing more and more compute at LLMs and getting less and less improvement back. At the end of the day, these things are token prediction machines, and there's no chance they'll turn into AGI on their own. These systems still can't get the basics right.
+
+<Callout title="What is AGI?">
+  **Artificial General Intelligence** refers to a hypothetical AI that can
+  understand, learn, and perform any intellectual task a human can—across any
+  domain, without being narrowly trained for it. Today's LLMs are considered
+  "narrow AI": impressive at language tasks, but lacking the flexible, grounded
+  understanding humans have.
+</Callout>
+
+LeCun is **not saying that AI is useless**. He uses AI every day, extensively. He's positive about Claude and ChatGPT. He's saying that:
+
+- We've exhausted most of the output we're going to get from LLMs
+- If our goal is human-level intelligence, scaling LLMs will never get you there
+- It won't be solved with more parameters, more GPUs, or more data centers
+- **The architecture itself has hit a wall**
+
+## Four walls LLMs can't climb
+
+**1. No model of the physical world.** An LLM can describe the world in multiple languages, but it has never been to Paris, seen a waterfall, or touched a puppy. Unlike humans, it has no intuitive understanding of gravity, friction, heat, or hunger—these are tokens with no innate meaning behind them. Notably, **a 4-month-old baby has a much better physics engine than GPT-5**. This tells us human intelligence is much more than predicting the next word in a sentence.
+
+<Callout title="LeCun's alternative: JEPA">
+  Instead of LLMs, LeCun champions the **Joint Embedding Predictive Architecture
+  (JEPA)**—a model that learns by predicting abstract representations of the
+  world from sensory input (video, images), rather than predicting tokens. The
+  aim is to give machines an intuitive "world model" similar to the one infants
+  develop.
+</Callout>
+
+**2. No persistent memory.** Every time you interact with an AI, it starts from zero. Behind the scenes, your chatbot manages context history and injects it into the conversation—which is why every session begins from a blank slate. Think of it this way: context windows are like a goldfish with a really good notebook, while human persistent memory is like an elephant who never forgets.
+
+**3. No real ability to reason.** Large language models are guessing at information rather than retrieving it. They're predicting the next token, and when they appear to reason, they're doing pattern matching against reasoning traces they've been trained on (from Reddit or other internet sources). This is why an LLM can solve a hard math problem straight out of a textbook, yet fail on something trivial that a child could handle.
+
+The human difference runs deeper than capability. Humans have cultural values, social norms, and an inbuilt assessment of whether something will hurt or help them. An LLM has no skin in the game—because there's no skin. It's predicting what the right answer might _look like_, not finding the right answer.
+
+<PullQuote>
+  "What's most important to being human is not ever written down."
+</PullQuote>
+
+**4. Limited planning.** If you ask an LLM to plan a week of work for you, it will produce something that _looks_ like a plan, but it isn't simulating the future. It's stitching together your week based on existing patterns it has seen before. The problem becomes obvious the moment you show it something new—it will have you meeting a customer at one end of the city and then schedule the very next meeting on the other side of town, with no inherent ability to account for geography or time. The result looks plausible, but probably isn't useful.
+
+Language, LeCun argues, is a **thin, compressed shadow of reality**. Training on text alone is like **learning to swim by reading a textbook**.
+
+<Callout title='The "stochastic parrot" critique'>
+  LeCun's view echoes a 2021 paper by Emily Bender and Timnit Gebru that called
+  LLMs "stochastic parrots"—systems that stitch together linguistic forms based
+  on probability without any understanding of meaning. LeCun's argument extends
+  this: no amount of scaling fixes the missing grounding in physical reality.
+</Callout>
+
+## So what?
+
+If LeCun is right, the hundreds of billions of dollars being poured into LLM infrastructure right now—through data centers, GPUs, and power stations—are funding the final chapter of a dead-end technology.
+
+This doesn't mean LLMs go away. For some uses, like **coding and programming, they're absolute gold**. But the hype about agents and LLMs taking over the world will pass. There's been more than enough capital deployed on traditional AI solutions, and it still fails to deliver real economic value outside coding.
+
+Of course, LeCun might be wrong. He has been before—he was skeptical of the transformer architecture early on, and transformers went on to power the very LLMs he now critiques. But betting against a Turing Award winner who walked away from a billion-dollar role at Meta to build the alternative? That's a bet worth thinking carefully about.
+
+---
+
+**The key question:** Do you still believe AGI is a realistic goal—and if so, do you think LLMs are how we get there?
