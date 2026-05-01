@@ -1,14 +1,14 @@
 ---
 title: "AI's Dead End"
-description: "To write"
-date: 2026-05-1
+description: "Yann LeCun walked away from Meta to bet a billion dollars that LLMs are an architectural dead end. Meanwhile, the vibe coding hype is collapsing into a familiar shape: software engineering."
+date: 2026-05-01
 lang: "en"
 ---
 
 import Callout from "@/components/blog/Callout.astro";
 import PullQuote from "@/components/blog/PullQuote.astro";
 
-In November 2025, a researcher walked into Mark Zuckerberg's office and quit. It wasn't just any researcher—it was one of the people awarded the 2018 Turing Award for foundational breakthroughs in modern deep learning. His name is **Yann LeCun**, and if anyone knows about AI, it's him.
+In November 2025, a researcher walked into Mark Zuckerberg's office and quit. Not just any researcher—a winner of the 2018 Turing Award for the breakthroughs that made modern deep learning possible. His name is **Yann LeCun**, and if anyone knows AI, it's him.
 
 <Callout title="Who is Yann LeCun?">
   A French-American computer scientist, Chief AI Scientist at Meta (2013–2025),
@@ -26,11 +26,11 @@ In November 2025, a researcher walked into Mark Zuckerberg's office and quit. It
   of computing.
 </Callout>
 
-Four months later, he'd raised more than a billion dollars to build something new—something designed to prove the entire industry wrong.
+Four months later, he had raised more than a billion dollars to build something designed to prove the entire industry wrong.
 
-LeCun's pitch to investors was that **large language models are dead**. Not that they're useless, but in terms of human-level intelligence or superintelligence, LLMs are not the way forward.
+LeCun's pitch to investors: **large language models are dead.** Not useless—but as a path to human-level intelligence, a dead end.
 
-What we've seen over the last few years is big tech throwing more and more compute at LLMs and getting less and less improvement back. At the end of the day, these things are token prediction machines, and there's no chance they'll turn into AGI on their own. These systems still can't get the basics right.
+The pattern of the last few years tells the story. Big tech keeps throwing more compute at LLMs and getting diminishing returns. At the end of the day, these are token prediction machines. They aren't going to turn into AGI on their own, and they still can't get the basics right.
 
 <Callout title="What is AGI?">
   **Artificial General Intelligence** refers to a hypothetical AI that can
@@ -40,7 +40,7 @@ What we've seen over the last few years is big tech throwing more and more compu
   understanding humans have.
 </Callout>
 
-LeCun is **not saying that AI is useless**. He uses AI every day, extensively. He's positive about Claude and ChatGPT. He's saying that:
+LeCun is **not saying AI is useless**. He uses it every day and is positive about Claude and ChatGPT. His claim is narrower:
 
 - We've exhausted most of the output we're going to get from LLMs
 - If our goal is human-level intelligence, scaling LLMs will never get you there
@@ -49,7 +49,7 @@ LeCun is **not saying that AI is useless**. He uses AI every day, extensively. H
 
 ## Four walls LLMs can't climb
 
-**1. No model of the physical world.** An LLM can describe the world in multiple languages, but it has never been to Paris, seen a waterfall, or touched a puppy. Unlike humans, it has no intuitive understanding of gravity, friction, heat, or hunger—these are tokens with no innate meaning behind them. Notably, **a 4-month-old baby has a much better physics engine than GPT-5**. This tells us human intelligence is much more than predicting the next word in a sentence.
+**1. No model of the physical world.** An LLM can describe the world in dozens of languages, but it has never been to Paris, seen a waterfall, or touched a puppy. Gravity, friction, heat, hunger—these are just tokens, with no innate meaning behind them. **A 4-month-old baby has a better physics engine than GPT-5.** Human intelligence is much more than predicting the next word in a sentence.
 
 <Callout title="LeCun's alternative: JEPA">
   Instead of LLMs, LeCun champions the **Joint Embedding Predictive Architecture
@@ -59,17 +59,17 @@ LeCun is **not saying that AI is useless**. He uses AI every day, extensively. H
   develop.
 </Callout>
 
-**2. No persistent memory.** Every time you interact with an AI, it starts from zero. Behind the scenes, your chatbot manages context history and injects it into the conversation—which is why every session begins from a blank slate. Think of it this way: context windows are like a goldfish with a really good notebook, while human persistent memory is like an elephant who never forgets.
+**2. No persistent memory.** Every interaction starts from zero. What looks like memory is just the chatbot stuffing prior turns back into the prompt each time—a notebook, not a mind. Context windows are a goldfish with a very good notebook. Human memory is an elephant that never forgets.
 
-**3. No real ability to reason.** Large language models are guessing at information rather than retrieving it. They're predicting the next token, and when they appear to reason, they're doing pattern matching against reasoning traces they've been trained on (from Reddit or other internet sources). This is why an LLM can solve a hard math problem straight out of a textbook, yet fail on something trivial that a child could handle.
+**3. No real ability to reason.** LLMs guess at information rather than retrieve it. When they appear to reason, they're pattern-matching against reasoning traces from their training data—Reddit threads, textbook solutions, Stack Overflow answers. That's why an LLM can solve a hard math problem straight from a textbook yet fail on something trivial a child handles easily.
 
-The human difference runs deeper than capability. Humans have cultural values, social norms, and an inbuilt assessment of whether something will hurt or help them. An LLM has no skin in the game—because there's no skin. It's predicting what the right answer might _look like_, not finding the right answer.
+The human difference runs deeper than capability. Humans carry cultural values, social norms, and a built-in sense of what helps or hurts them. An LLM has no skin in the game—because there's no skin. It predicts what the right answer might _look like_, not what it actually is.
 
 <PullQuote>
   "What's most important to being human is not ever written down."
 </PullQuote>
 
-**4. Limited planning.** If you ask an LLM to plan a week of work for you, it will produce something that _looks_ like a plan, but it isn't simulating the future. It's stitching together your week based on existing patterns it has seen before. The problem becomes obvious the moment you show it something new—it will have you meeting a customer at one end of the city and then schedule the very next meeting on the other side of town, with no inherent ability to account for geography or time. The result looks plausible, but probably isn't useful.
+**4. Limited planning.** Ask an LLM to plan your week and it will produce something that _looks_ like a plan—but it isn't simulating the future. It's stitching together patterns from weeks it has seen before. Show it something new and the seams split: a meeting on one side of the city followed immediately by another on the opposite side, with no sense of geography or travel time. Plausible, rarely useful.
 
 Language, LeCun argues, is a **thin, compressed shadow of reality**. Training on text alone is like **learning to swim by reading a textbook**.
 
@@ -82,15 +82,15 @@ Language, LeCun argues, is a **thin, compressed shadow of reality**. Training on
 
 ## So what?
 
-If LeCun is right, the hundreds of billions of dollars being poured into LLM infrastructure right now—through data centers, GPUs, and power stations—are funding the final chapter of a dead-end technology.
+If LeCun is right, the hundreds of billions being poured into data centers, GPUs, and power stations right now are funding the final chapter of a dead-end technology.
 
-This doesn't mean LLMs go away. For some uses, like **coding and programming, they're absolute gold**. But the hype about agents and LLMs taking over the world will pass. There's been more than enough capital deployed on traditional AI solutions, and it still fails to deliver real economic value outside coding.
+That doesn't mean LLMs disappear. For some workflows—**coding especially**—they're genuinely valuable. But the hype about autonomous agents replacing knowledge work will pass. Enormous capital has already been deployed, and outside coding the technology has yet to deliver real economic value.
 
 ## The vibe coding paradox
 
-Even in coding—LLMs' strongest domain—the hype has cratered. In November 2025, the Collins Dictionary named **"vibe coding"** its Word of the Year. Six months later, the very LinkedIn crowd that hyped it now generates articles about how vibe coding is dead.
+Even in coding—LLMs' best domain—the hype has cratered. In November 2025, Collins Dictionary named **"vibe coding"** its Word of the Year. Six months later, the same LinkedIn crowd that hyped it is now generating articles about how vibe coding is dead.
 
-The promise was that vibe coding would finally deprecate "those weird geeks with no social skills and high-paying jobs," turn project managers into millionaire solopreneurs, and let companies cut human costs. The reality was non-engineers shipping bad software and discovering that skipping the engineering part of software engineering produces software that doesn't work.
+The promise: vibe coding would finally deprecate "those weird geeks with no social skills and high-paying jobs," turn project managers into millionaire solopreneurs, and let companies cut human costs. The reality: non-engineers shipping bad software and discovering that skipping the engineering part of software engineering produces software that doesn't work.
 
 <Callout title="What is vibe coding?">
   Coined by Andrej Karpathy in early 2025, **vibe coding** is the practice of
@@ -103,11 +103,11 @@ The promise was that vibe coding would finally deprecate "those weird geeks with
 
 The hype isn't going away—it's being renamed. **"Vibe engineering"** and **"agentic engineering"** are the next iterations. Brace yourself for the revelation: agentic engineering is software engineering. The kind practiced since the 1960s.
 
-The supposedly revolutionary practices being rediscovered:
+The "revolutionary" practices being rediscovered:
 
-1. **Write a specification.** Write down what the thing is supposed to do before you build it.
-2. **Task decomposition.** Break the work into smaller, well-defined tasks. Covered in the first two weeks of any computer science degree.
-3. **Code review.** Thoroughly review the code before merging. And if the review and prompt iteration are taking too long, you might as well write the code yourself.
+1. **Write a specification.** Decide what the thing is supposed to do before you build it.
+2. **Task decomposition.** Break the work into smaller, well-defined tasks. Covered in the first two weeks of any CS degree.
+3. **Code review.** Thoroughly review the code before merging. If the review-and-reprompt loop takes longer than writing it yourself, write it yourself.
 
 <PullQuote>
   We are slowly going back to building software like we did a couple of years
@@ -118,7 +118,7 @@ The supposedly revolutionary practices being rediscovered:
 
 This isn't the first time the industry has tried to democratize programming by making the syntax friendlier. When **Grace Hopper** and her peers designed **COBOL** in 1959, the explicit goal was to let managers and non-programmers read and write code in English-like syntax.
 
-COBOL succeeded as infrastructure—it still runs much of global finance. But it **failed Hopper's specific goal**. Instead of empowering non-technical managers to build complex systems, it forced programmers to write extremely verbose, rigid, and difficult-to-maintain code. When the **Y2K bug** hit, the business managers who were supposed to maintain the code couldn't handle the technical debt, and retired COBOL programmers were dragged back into the workforce at premium rates.
+COBOL succeeded as infrastructure—it still runs much of global finance. But it **failed Hopper's actual goal**. Rather than empowering non-technical managers to build complex systems, it forced programmers to write extremely verbose, rigid, hard-to-maintain code. When the **Y2K bug** hit, the business managers who were supposed to maintain it couldn't handle the technical debt, and retired COBOL programmers were dragged back into the workforce at premium rates.
 
 Plain-English programming has been tried. It doesn't remove the need for engineers—it just defers the bill.
 
@@ -133,17 +133,17 @@ Plain-English programming has been tried. It doesn't remove the need for enginee
 
 ## Where the real work moved
 
-Even in coding, where LLMs genuinely help, the economics are not what the hype suggested. As writing code becomes cheaper, **everything that follows becomes more expensive**:
+Even in coding, where LLMs genuinely help, the economics are not what the hype suggested. As writing code gets cheaper, **everything downstream gets more expensive**:
 
-- Teams deal with higher code churn—large volumes of generated code are quickly rewritten, reverted, or patched
+- Higher code churn—large volumes of generated code are quickly rewritten, reverted, or patched
 - Developers increasingly act as reviewers, integrators, and debuggers
-- Less time is spent typing; more effort is required for validation, debugging, and long-term maintenance
+- Less time spent typing; more effort spent on validation, debugging, and long-term maintenance
 
-**The real cost lies in judgment, not generation.** And judgment is where technical skill matters most. The surface process of "developer with AI" and "non-technical person vibe coding" can look identical. The outputs are not.
+**The real cost lies in judgment, not generation.** And judgment is where technical skill matters most. On the surface, "developer using AI" and "non-technical person vibe coding" can look identical. The outputs are not.
 
 ## Closing thought
 
-Of course, LeCun might be wrong. He has been before—he was skeptical of the transformer architecture early on, and transformers went on to power the very LLMs he now critiques. But betting against a Turing Award winner who walked away from a billion-dollar role at Meta to build the alternative? That's a bet worth thinking carefully about.
+LeCun might be wrong. He has been before—he was skeptical of transformers early on, and transformers went on to power the very LLMs he now critiques. But betting against a Turing Award winner who walked away from a billion-dollar role at Meta to build the alternative? That's a bet worth thinking carefully about.
 
 If "vibe coding" was the word of 2025, expect **"plateauing"** to be the word of 2026.
 
