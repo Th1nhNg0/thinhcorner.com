@@ -1,9 +1,8 @@
 ---
 title: "AI's Dead End"
 description: "To write"
-date: 2026-04-30
+date: 2026-05-1
 lang: "en"
-draft: true
 ---
 
 import Callout from "@/components/blog/Callout.astro";
@@ -87,7 +86,66 @@ If LeCun is right, the hundreds of billions of dollars being poured into LLM inf
 
 This doesn't mean LLMs go away. For some uses, like **coding and programming, they're absolute gold**. But the hype about agents and LLMs taking over the world will pass. There's been more than enough capital deployed on traditional AI solutions, and it still fails to deliver real economic value outside coding.
 
+## The vibe coding paradox
+
+Even in coding—LLMs' strongest domain—the hype has cratered. In November 2025, the Collins Dictionary named **"vibe coding"** its Word of the Year. Six months later, the very LinkedIn crowd that hyped it now generates articles about how vibe coding is dead.
+
+The promise was that vibe coding would finally deprecate "those weird geeks with no social skills and high-paying jobs," turn project managers into millionaire solopreneurs, and let companies cut human costs. The reality was non-engineers shipping bad software and discovering that skipping the engineering part of software engineering produces software that doesn't work.
+
+<Callout title="What is vibe coding?">
+  Coined by Andrej Karpathy in early 2025, **vibe coding** is the practice of
+  building software by describing what you want to an LLM in natural language
+  and accepting whatever it generates—without reading the code, understanding
+  the architecture, or doing traditional engineering review.
+</Callout>
+
+## The rebrand cycle
+
+The hype isn't going away—it's being renamed. **"Vibe engineering"** and **"agentic engineering"** are the next iterations. Brace yourself for the revelation: agentic engineering is software engineering. The kind practiced since the 1960s.
+
+The supposedly revolutionary practices being rediscovered:
+
+1. **Write a specification.** Write down what the thing is supposed to do before you build it.
+2. **Task decomposition.** Break the work into smaller, well-defined tasks. Covered in the first two weeks of any computer science degree.
+3. **Code review.** Thoroughly review the code before merging. And if the review and prompt iteration are taking too long, you might as well write the code yourself.
+
+<PullQuote>
+  We are slowly going back to building software like we did a couple of years
+  ago, but framing it as a completely new thing.
+</PullQuote>
+
+## The COBOL precedent
+
+This isn't the first time the industry has tried to democratize programming by making the syntax friendlier. When **Grace Hopper** and her peers designed **COBOL** in 1959, the explicit goal was to let managers and non-programmers read and write code in English-like syntax.
+
+COBOL succeeded as infrastructure—it still runs much of global finance. But it **failed Hopper's specific goal**. Instead of empowering non-technical managers to build complex systems, it forced programmers to write extremely verbose, rigid, and difficult-to-maintain code. When the **Y2K bug** hit, the business managers who were supposed to maintain the code couldn't handle the technical debt, and retired COBOL programmers were dragged back into the workforce at premium rates.
+
+Plain-English programming has been tried. It doesn't remove the need for engineers—it just defers the bill.
+
+<Callout title="The tokenomics irony">
+  Plain English was supposed to make software development more accessible. But
+  pay-per-token pricing is now compressing prompts back into pidgin: "make
+  button blue" beats "please modify the visual appearance of the aforementioned
+  interactive element." If you find yourself typing "update object, no fluff,
+  just code, make no mistakes," you've reinvented an inefficient, expensive
+  programming language.
+</Callout>
+
+## Where the real work moved
+
+Even in coding, where LLMs genuinely help, the economics are not what the hype suggested. As writing code becomes cheaper, **everything that follows becomes more expensive**:
+
+- Teams deal with higher code churn—large volumes of generated code are quickly rewritten, reverted, or patched
+- Developers increasingly act as reviewers, integrators, and debuggers
+- Less time is spent typing; more effort is required for validation, debugging, and long-term maintenance
+
+**The real cost lies in judgment, not generation.** And judgment is where technical skill matters most. The surface process of "developer with AI" and "non-technical person vibe coding" can look identical. The outputs are not.
+
+## Closing thought
+
 Of course, LeCun might be wrong. He has been before—he was skeptical of the transformer architecture early on, and transformers went on to power the very LLMs he now critiques. But betting against a Turing Award winner who walked away from a billion-dollar role at Meta to build the alternative? That's a bet worth thinking carefully about.
+
+If "vibe coding" was the word of 2025, expect **"plateauing"** to be the word of 2026.
 
 ---
 
