@@ -1,12 +1,11 @@
 ---
 import { SITE, GOOGLE_ANALYTICS_ID } from "@/consts";
 import "@/styles/global.css";
-import iosevkaAile400Woff2 from "@fontsource/iosevka-aile/files/iosevka-aile-latin-400-normal.woff2?url";
-import "@fontsource/iosevka-aile/latin-400.css";
-import "@fontsource/iosevka-aile/latin-700.css";
-import iosevkaEtoile700Woff2 from "@fontsource/iosevka-etoile/files/iosevka-etoile-latin-700-normal.woff2?url";
-import "@fontsource/iosevka-etoile/latin-400.css";
-import "@fontsource/iosevka-etoile/latin-700.css";
+import "@fontsource-variable/ibm-plex-sans";
+import "@fontsource/ibm-plex-serif/400.css";
+import "@fontsource/ibm-plex-serif/700.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/700.css";
 import katexCSSUrl from "katex/dist/katex.min.css?url";
 
 interface Props {
@@ -57,20 +56,6 @@ const {
   {import.meta.env.PROD && <link rel="preconnect" href="https://www.googletagmanager.com" />}
   {import.meta.env.PROD && <link rel="dns-prefetch" href="https://www.googletagmanager.com" />}
   {katex && <link rel="stylesheet" href={katexCSSUrl} />}
-  <link
-    rel="preload"
-    as="font"
-    type="font/woff2"
-    href={iosevkaEtoile700Woff2}
-    crossorigin="anonymous"
-  />
-  <link
-    rel="preload"
-    as="font"
-    type="font/woff2"
-    href={iosevkaAile400Woff2}
-    crossorigin="anonymous"
-  />
 
   <!-- Canonical URL -->
   <link rel="canonical" href={canonicalURL} />

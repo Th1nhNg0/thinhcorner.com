@@ -7,10 +7,10 @@ import sharp from "sharp";
 import { readFileSync } from "node:fs";
 
 const fontHeading = readFileSync(
-  "./node_modules/@fontsource/iosevka-etoile/files/iosevka-etoile-latin-700-normal.woff",
+  "./node_modules/@fontsource/ibm-plex-serif/files/ibm-plex-serif-latin-700-normal.woff",
 );
 const fontBody = readFileSync(
-  "./node_modules/@fontsource/iosevka-aile/files/iosevka-aile-latin-400-normal.woff",
+  "./node_modules/@fontsource/ibm-plex-serif/files/ibm-plex-serif-latin-400-normal.woff",
 );
 const bgImage = readFileSync("./src/assets/og-template.png");
 
@@ -72,7 +72,7 @@ export const GET: APIRoute = async ({ params }) => {
                       flex: 1,
                       color: "#ffffff",
                       fontSize: 62,
-                      fontFamily: "Iosevka Etoile",
+                      fontFamily: "IBM Plex Serif",
                       fontWeight: 700,
                       lineHeight: 1.3,
                     },
@@ -90,13 +90,13 @@ export const GET: APIRoute = async ({ params }) => {
       height: 630,
       fonts: [
         {
-          name: "Iosevka Etoile",
+          name: "IBM Plex Serif",
           data: fontHeading,
           weight: 700,
           style: "normal",
         },
         {
-          name: "Iosevka Aile",
+          name: "IBM Plex Serif",
           data: fontBody,
           weight: 400,
           style: "normal",
