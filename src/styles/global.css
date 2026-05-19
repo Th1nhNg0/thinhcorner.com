@@ -4,8 +4,9 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-heading: "Iosevka Etoile", sans-serif;
-  --font-normal: "Iosevka Aile", sans-serif;
+  --font-heading: "IBM Plex Sans Variable", sans-serif;
+  --font-normal: "IBM Plex Serif", serif;
+  --font-mono: "IBM Plex Mono", monospace;
 }
 
 
@@ -22,7 +23,11 @@ html {
 }
 
 body {
-  font-family: "Iosevka Aile", sans-serif;
+  font-family: "IBM Plex Serif", serif;
+}
+
+pre, code {
+  font-family: "IBM Plex Mono", monospace;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
