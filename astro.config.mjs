@@ -1,4 +1,3 @@
-// @ts-check
 import { defineConfig } from "astro/config";
 
 import mdx from "@astrojs/mdx";
@@ -8,6 +7,7 @@ import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 import rehypeFigure from "./remark/rehype-figure.mjs";
 import { remarkReadingTime } from "./remark/remark-reading-time.mjs";
+import { unified } from "@astrojs/markdown-remark";
 
 import cloudflare from "@astrojs/cloudflare";
 
@@ -22,8 +22,10 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   markdown: {
-    remarkPlugins: [remarkReadingTime, remarkMath],
-    rehypePlugins: [rehypeKatex, rehypeFigure],
-    gfm: true,
+    processor: unified({
+      remarkPlugins: [remarkReadingTime, remarkMath],
+      rehypePlugins: [rehypeKatex, rehypeFigure],
+      gfm: true,
+    }),
   },
 });

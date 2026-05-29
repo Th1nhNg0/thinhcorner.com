@@ -1,14 +1,15 @@
 import { SITE } from "@/consts";
 import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
+import type { APIRoute } from "astro";
 
-export async function GET(context: any) {
+export const GET: APIRoute = async (context) => {
   const blog = (await getCollection("blog")).filter((p) => !p.data.draft);
 
   return rss({
     title: SITE.title,
     description: SITE.description,
-    site: context.site,
+    site: context.site!,
     items: blog
       .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
       .map((post) => ({
@@ -18,4 +19,4 @@ export async function GET(context: any) {
         link: new URL(`/blog/${post.id}`, context.site).toString(),
       })),
   });
-}
+};
