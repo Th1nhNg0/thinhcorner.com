@@ -24,7 +24,66 @@ const projects = [
     tags: ["MiniZinc", "Python", "Constraint Programming", "Puzzle Solver"],
     year: "2025",
   },
+  {
+    name: "Hayday Game Schedule",
+    repo: "th1nhng0/hayday",
+    url: "https://github.com/Th1nhNg0/hayday",
+    description:
+      "Code and resources for the Hayday Game Schedule blog post. Models Hay Day production as a Flexible Job Shop Scheduling Problem (FJSP) and solves it with Google OR-Tools and a genetic algorithm, including a web crawler for game data.",
+    tags: ["Python", "OR-Tools", "Genetic Algorithm", "Scheduling", "Jupyter Notebook"],
+    year: "2024",
+  },
+  {
+    name: "Vietnamese Legal AI Thesis",
+    repo: "th1nhng0/vietnamese-legal-ai-thesis",
+    url: "https://github.com/Th1nhNg0/vietnamese-legal-ai-thesis",
+    description:
+      "Bachelor thesis on Vietnamese legal question answering using BM25, TF-IDF, ChromaDB, dense embeddings, Instructor model fine-tuning, and RAG (final score 9.7/10).",
+    tags: ["Python", "Legal AI", "Vietnamese", "RAG", "BM25", "TF-IDF", "ChromaDB", "Embeddings"],
+    year: "2023",
+  },
+  {
+    name: "Travel Flow Hackathon",
+    repo: "th1nhng0/travel_flow_hackathon",
+    url: "https://github.com/Th1nhNg0/travel_flow_hackathon",
+    description:
+      "First-prize UIT Web Adventure 2022 mobile app for Travel Flow. Built with Expo and React Native, with authentication, location permissions, map-based travel discovery, location details, and trip plan detail screens.",
+    tags: ["React Native", "Expo", "Travel", "Maps", "Hackathon"],
+    year: "2022",
+  },
+  {
+    name: "VAIPE 2022",
+    repo: "th1nhng0/VAIPE-2022",
+    url: "https://github.com/Th1nhNg0/VAIPE-2022",
+    description:
+      "Medicine pill image recognition challenge pipeline using Tesseract OCR for prescriptions, U-2-Net preprocessing, YOLOv5 object detection, and ResNet50 classification, with Dockerized training and inference scripts.",
+    tags: ["Computer Vision", "YOLOv5", "ResNet50", "OCR", "Docker", "Jupyter Notebook"],
+    year: "2022",
+  },
+  {
+    name: "AthenaEdu",
+    repo: "th1nhng0/athenaedu-spkt-hackathon",
+    url: "https://github.com/Th1nhNg0/athenaedu-spkt-hackathon",
+    description:
+      "SPKT Hackathon 2020 education platform using Vue, Firebase, Express, and Socket.IO. Includes login, quiz categories, single-player practice, multiplayer quiz rooms, forum questions, and rankings.",
+    tags: ["Vue", "Firebase", "Express", "Socket.IO", "Education", "Hackathon"],
+    year: "2020",
+  },
+  {
+    name: "TicTacMul",
+    repo: "th1nhng0/tic-tac-toe-multiplayer",
+    url: "https://github.com/Th1nhNg0/tic-tac-toe-multiplayer",
+    description:
+      "A realtime multiplayer tic-tac-toe game built with Vue, Node.js, Express, and Socket.IO, including room-based play and a bundled Vue client served by the Node backend.",
+    tags: ["Vue", "Node.js", "Express", "Socket.IO", "Game"],
+    year: "2019",
+  },
 ];
+
+const sortedProjects = [...projects].sort((a, b) => {
+  const yearDiff = Number(b.year) - Number(a.year);
+  return yearDiff || a.name.localeCompare(b.name);
+});
 ---
 
 <Layout
@@ -58,7 +117,7 @@ const projects = [
 
       <ul class="space-y-4" role="list">
         {
-          projects.map((project) => (
+          sortedProjects.map((project) => (
             <li class="bg-gradient-to-br from-zinc-800/60 to-zinc-900/60 backdrop-blur-sm rounded-surface border border-zinc-700/40 p-5 hover:border-zinc-600/60 hover:from-zinc-800/80 transition-all space-y-4">
               <div class="flex items-start justify-between gap-4">
                 <div class="min-w-0">
