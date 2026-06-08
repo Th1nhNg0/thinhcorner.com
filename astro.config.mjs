@@ -1,4 +1,4 @@
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
@@ -14,6 +14,34 @@ import cloudflare from "@astrojs/cloudflare";
 export default defineConfig({
   site: "https://thinhcorner.com",
   trailingSlash: "never",
+  fonts: [
+    {
+      provider: fontProviders.fontsource(),
+      name: "Quicksand",
+      cssVariable: "--font-quicksand",
+      weights: [400, 500, 600, 700],
+      styles: ["normal"],
+      subsets: ["latin", "latin-ext", "vietnamese"],
+      formats: ["woff2", "woff"],
+    },
+    {
+      provider: fontProviders.fontsource(),
+      name: "Asimovian",
+      cssVariable: "--font-asimovian",
+      weights: [400],
+      styles: ["normal"],
+      subsets: ["latin", "latin-ext", "vietnamese"],
+    },
+    {
+      provider: fontProviders.fontsource(),
+      name: "JetBrains Mono",
+      cssVariable: "--font-jetbrains-mono",
+      weights: [400, 700],
+      styles: ["normal"],
+      subsets: ["latin", "latin-ext"],
+      fallbacks: ["monospace"],
+    },
+  ],
   adapter: cloudflare({
     prerenderEnvironment: "node",
   }),
