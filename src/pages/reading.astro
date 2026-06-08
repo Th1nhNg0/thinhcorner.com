@@ -108,7 +108,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
     <!-- Header -->
     <section class="mb-6">
       <h1
-        class="text-4xl font-bold tracking-tight sm:text-6xl font-heading mb-4"
+        class="text-4xl font-bold tracking-tight sm:text-6xl mb-4"
       >
         My bookshelf
       </h1>
@@ -135,7 +135,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
       <div
         class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4"
       >
-        <div class="text-2xl font-bold font-heading text-yellow-500">
+        <div class="text-2xl font-bold text-yellow-500">
           {read.length}
         </div>
         <div class="text-xs text-zinc-500 font-mono mt-1">books total</div>
@@ -143,7 +143,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
       <div
         class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4"
       >
-        <div class="text-2xl font-bold font-heading text-yellow-500">
+        <div class="text-2xl font-bold text-yellow-500">
           {booksThisYear}
         </div>
         <div class="text-xs text-zinc-500 font-mono mt-1">
@@ -153,7 +153,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
       <div
         class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4"
       >
-        <div class="text-2xl font-bold font-heading text-yellow-500">
+        <div class="text-2xl font-bold text-yellow-500">
           {totalPages.toLocaleString()}
         </div>
         <div class="text-xs text-zinc-500 font-mono mt-1">pages read</div>
@@ -161,7 +161,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
       <div
         class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4"
       >
-        <div class="text-2xl font-bold font-heading text-yellow-500">
+        <div class="text-2xl font-bold text-yellow-500">
           ~{totalHours.toLocaleString()}h
         </div>
         <div class="text-xs text-zinc-500 font-mono mt-1">time spent</div>
@@ -172,7 +172,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
     {
       books.current_reads.length > 0 && (
         <section class="mb-8 bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-5">
-          <h2 class="text-sm font-mono text-zinc-500 uppercase tracking-wider mb-3">
+          <h2 class="text-sm text-zinc-500 uppercase tracking-wider mb-3">
             Currently reading
           </h2>
           <div class="flex flex-wrap gap-2">
@@ -238,7 +238,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
         id="monthly-chart"
       >
         <div class="flex items-center justify-between mb-4">
-          <h3 class="text-sm font-mono text-zinc-500 uppercase tracking-wider">
+          <h3 class="text-sm text-zinc-500 uppercase tracking-wider">
             Monthly
           </h3>
           <div
@@ -337,7 +337,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
         years.map((year) => (
           <div class="mb-12" data-year={year}>
             <div class="flex items-center gap-3 mb-5">
-              <h2 class="text-xl text-zinc-200 font-mono font-bold">{year}</h2>
+              <h2 class="text-xl text-zinc-200 font-bold">{year}</h2>
               <div class="flex-1 h-px bg-zinc-800" />
               <span class="text-xs font-mono text-zinc-500 whitespace-nowrap">
                 {readByYear[year].length}{" "}

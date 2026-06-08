@@ -44,7 +44,7 @@ async function crawl_book(url: string) {
       xmlMode: true,
     });
     const books: Book[] = [];
-    $("item").each((i, el) => {
+    $("item").each((_i, el) => {
       const title = $(el).find("title").text();
       const url = $(el).find("link").text();
       const rating = Number($(el).find("user_rating").text());
