@@ -124,7 +124,7 @@ let slug = Array.isArray(Astro.params.id)
       )
     }
     <div class="mb-10 space-y-1">
-      <h1 class="text-4xl font-semibold text-white font-heading leading-normal">
+      <h1 class="text-4xl font-semibold text-white leading-normal">
         {post.data.title}
       </h1>
       <div class="flex flex-col md:flex-row gap-2 md:items-center">
@@ -148,7 +148,7 @@ let slug = Array.isArray(Astro.params.id)
       </div>
     </div>
     <article
-      class="prose prose-h2:font-heading prose-h3:font-heading prose-hr:border-zinc-700 prose-h4:font-heading prose-code:bg-[#24292e] prose-code:p-0.5 prose-code:rounded prose-code:before:content-[''] prose-code:after:content-[''] prose-img:mx-auto max-w-none prose-invert prose-a:text-yellow-500 prose-table:my-auto"
+      class="prose prose-lg prose-hr:border-zinc-700 prose-code:bg-[#24292e] prose-code:p-0.5 prose-code:rounded prose-code:before:content-[''] prose-code:after:content-[''] prose-img:mx-auto max-w-none prose-invert prose-a:text-yellow-500 prose-table:my-auto"
     >
       <Content />
     </article>

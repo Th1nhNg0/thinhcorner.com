@@ -1,17 +1,12 @@
 export const prerender = true;
 
 import type { APIRoute } from "astro";
+import { experimental_getFontFileURL, fontData } from "astro:assets";
 import { getCollection } from "astro:content";
 import satori from "satori";
 import sharp from "sharp";
 import { readFileSync } from "node:fs";
 
-const fontLatin700 = readFileSync(
-  "./node_modules/@fontsource/geist/files/geist-latin-700-normal.woff",
-);
-const fontVietnamese700 = readFileSync(
-  "./node_modules/@fontsource/geist/files/geist-vietnamese-700-normal.woff",
-);
 const bgImage = readFileSync("./src/assets/og-template.png");
 
 const posts = await getCollection("blog");
@@ -21,9 +16,25 @@ export function getStaticPaths() {
   return posts.map((post) => ({ params: { id: post.id } }));
 }
 
-export const GET: APIRoute = async ({ params }) => {
+async function loadQuicksand700(url: URL) {
+  const variant = fontData["--font-quicksand"]?.find(
+    (font) => String(font.weight) === "700" && font.style === "normal",
+  );
+  const source = variant?.src.find((src) => src.format === "woff") ?? variant?.src[0];
+
+  if (!source) {
+    throw new Error("Cannot find Quicksand 700 font.");
+  }
+
+  const fontUrl = experimental_getFontFileURL(source.url, url);
+  return fetch(fontUrl).then((response) => response.arrayBuffer());
+}
+
+export const GET: APIRoute = async ({ params, url }) => {
   const data = postMap.get(params.id as string);
   if (!data) return new Response("Not found", { status: 404 });
+
+  const fontQuicksand700 = await loadQuicksand700(url);
 
   // Render text layer with transparent background
   const svg = await satori(
@@ -72,7 +83,7 @@ export const GET: APIRoute = async ({ params }) => {
                       flex: 1,
                       color: "#ffffff",
                       fontSize: 62,
-                      fontFamily: "Geist",
+                      fontFamily: "Quicksand",
                       fontWeight: 700,
                       lineHeight: 1.3,
                     },
@@ -90,14 +101,8 @@ export const GET: APIRoute = async ({ params }) => {
       height: 630,
       fonts: [
         {
-          name: "Geist",
-          data: fontLatin700,
-          weight: 700,
-          style: "normal",
-        },
-        {
-          name: "Geist",
-          data: fontVietnamese700,
+          name: "Quicksand",
+          data: fontQuicksand700,
           weight: 700,
           style: "normal",
         },

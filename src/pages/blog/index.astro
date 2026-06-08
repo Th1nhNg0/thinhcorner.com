@@ -43,7 +43,7 @@ const years = Object.keys(postsByYear)
     <section class="mb-8">
       <div class="flex items-center justify-between">
         <h1
-          class="font-bold text-4xl tracking-tight sm:text-6xl inline-flex items-baseline gap-3 font-heading"
+          class="font-bold text-4xl tracking-tight sm:text-6xl inline-flex items-baseline gap-3"
         >
           <span>Posts</span>
           <a href="/rss.xml" aria-label="RSS feed" title="RSS feed">
@@ -104,7 +104,7 @@ const years = Object.keys(postsByYear)
         years.map((year) => (
           <div class="mb-10" data-year={year}>
             <div class="flex items-center gap-3 mb-5">
-              <h2 class="text-xl text-zinc-200 font-mono font-bold">{year}</h2>
+              <h2 class="text-xl text-zinc-200 font-bold">{year}</h2>
               <div class="flex-1 h-px bg-zinc-800" />
               <span class="text-xs font-mono text-zinc-400 whitespace-nowrap">
                 {postsByYear[year].length}{" "}
