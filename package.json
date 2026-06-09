@@ -10,12 +10,12 @@
     "generate-types": "wrangler types"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "13.6.0",
-    "@astrojs/mdx": "6.0.1",
+    "@astrojs/cloudflare": "13.6.1",
+    "@astrojs/mdx": "6.0.2",
     "@astrojs/rss": "4.0.18",
     "@astrojs/sitemap": "3.7.3",
     "@tailwindcss/vite": "^4.2.2",
-    "astro": "6.4.2",
+    "astro": "6.4.4",
     "astro-embed": "^0.12.0",
     "cheerio": "^1.2.0",
     "date-fns": "^4.1.0",
