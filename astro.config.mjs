@@ -3,13 +3,17 @@ import { defineConfig, fontProviders } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
-import rehypeKatex from "rehype-katex";
-import remarkMath from "remark-math";
+import { satteri } from "@astrojs/markdown-satteri";
 import rehypeFigure from "./remark/rehype-figure.mjs";
-import { remarkReadingTime } from "./remark/remark-reading-time.mjs";
-import { unified } from "@astrojs/markdown-remark";
+import satteriKatex from "./remark/satteri-katex.mjs";
 
 import cloudflare from "@astrojs/cloudflare";
+
+const markdownProcessor = satteri({
+  features: { math: true },
+  mdastPlugins: [satteriKatex],
+  hastPlugins: [rehypeFigure],
+});
 
 export default defineConfig({
   site: "https://thinhcorner.com",
@@ -45,15 +49,11 @@ export default defineConfig({
   adapter: cloudflare({
     prerenderEnvironment: "node",
   }),
-  integrations: [sitemap(), mdx()],
+  integrations: [sitemap(), mdx({ processor: markdownProcessor })],
   vite: {
     plugins: [tailwindcss()],
   },
   markdown: {
-    processor: unified({
-      remarkPlugins: [remarkReadingTime, remarkMath],
-      rehypePlugins: [rehypeKatex, rehypeFigure],
-      gfm: true,
-    }),
+    processor: markdownProcessor,
   },
 });

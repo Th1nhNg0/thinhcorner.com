@@ -1,0 +1,21 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  class?: string;
+  className?: string;
+}
+
+const { id, title, class: astroClass, className } = Astro.props;
+const classes = ["aspect-video w-full", astroClass, className].filter(Boolean).join(" ");
+---
+
+<iframe
+  class={classes}
+  src={`https://www.youtube-nocookie.com/embed/${id}`}
+  title={title}
+  loading="lazy"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowfullscreen
+  referrerpolicy="strict-origin-when-cross-origin"
+></iframe>
