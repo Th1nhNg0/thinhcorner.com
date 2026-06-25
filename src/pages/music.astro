@@ -87,7 +87,7 @@ const now = new Date();
                   {track.title}
                 </h3>
                 <p class="text-zinc-400 text-xs sm:text-sm line-clamp-1">
-                  {track.artist.map((a) => a.name).join(", ")}
+                  {track.artist}
                 </p>
                 <p class="text-zinc-500 text-xs mt-0.5">
                   Played{" "}
@@ -145,7 +145,7 @@ const now = new Date();
                 {track.title}
               </h3>
               <p class="text-zinc-400 text-xs line-clamp-1">
-                {track.artist.map((a) => a.name).join(", ")}
+                {track.artist}
               </p>
             </a>
           ))
@@ -159,13 +159,13 @@ const now = new Date();
         {
           topArtists.map((artist) => (
             <a
-              href={artist.external_urls.spotify}
+              href={artist.url}
               target="_blank"
               rel="noopener noreferrer"
               class="group block relative overflow-hidden rounded-xl aspect-[4/3]"
             >
               <img
-                src={artist.images[0].url}
+                src={artist.imageUrl}
                 alt={artist.name}
                 width="640"
                 height="480"
@@ -189,7 +189,7 @@ const now = new Date();
                     >
                       <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6z" />
                     </svg>
-                    <span>{artist.followers.total.toLocaleString()} followers</span>
+                    <span>{artist.followers.toLocaleString()} followers</span>
                   </div>
                   <div class="flex items-center gap-1">
                     <svg
@@ -217,16 +217,3 @@ const now = new Date();
   </Container>
 </Layout>
 
-<script>
-  const el = document.getElementById("last-updated");
-  if (el) {
-    const d = new Date(el.getAttribute("datetime")!);
-    el.textContent = d.toLocaleString(undefined, {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-    });
-  }
-</script>

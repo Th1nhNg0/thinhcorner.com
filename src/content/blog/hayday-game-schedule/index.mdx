@@ -4,7 +4,7 @@ date: 2024-05-22
 description: Learn how to solve the scheduling problem in the Hay Day game using Mixed-integer linear programming and Google OR-Tools.
 ---
 
-import { YouTube } from "astro-embed";
+import YouTubeEmbed from "../../../components/YouTubeEmbed.astro";
 
 It's has beed a long time since my last post. I was researching the scheduling problem in the Hay Day game for a while. And now is the good time to share the result with you.
 
@@ -12,7 +12,7 @@ It's has beed a long time since my last post. I was researching the scheduling p
 
 Hay Day is a popular mobile game created by Supercell in 2012. It is a farming simulator where you can plant crops and trees, raise animals, sell products, compete in derbies, and so much more. Hay Day is a freemium game so all features of the game are open to players who choose not to buy in-app-purchases.
 
-<YouTube
+<YouTubeEmbed
   id="mSev84nF1HA"
   title="Hay Day official trailer"
   className="mx-auto"
@@ -79,7 +79,7 @@ Let's break down the mathematical formulation behind the FJSP problem:
 
 **Problem Definition**
 
-We have a set of tasks $T=\{1,2,...,n\}$ that need to be scheduled on a set of machines $M=\{1,2,…,m\}$. Each task $t \in T$ has a duration $d t$ ​ and can be assigned to one or more machines. Additionally, tasks may have dependencies such that a task $t$ can only start after another task $t'$ finishes.
+We have a set of tasks $T=\{1,2,...,n\}$ that need to be scheduled on a set of machines $M=\{1,2,…,m\}$. Each task $t \in T$ has a duration $d t$ and can be assigned to one or more machines. Additionally, tasks may have dependencies such that a task $t$ can only start after another task $u$ finishes.
 
 **Variables**
 
@@ -92,16 +92,16 @@ We have a set of tasks $T=\{1,2,...,n\}$ that need to be scheduled on a set of m
 
 - $E_t = S_t + d_t, \quad \forall t \in T$.
 - For tasks $t_1$ and $t_2$ assigned to the same machine, either $E_{t_1} \leq S_{t_2}$ or $E_{t_2} \leq S_{t_1}$.
-- If task $t$ depends on task $t'$, then $S_t \geq E_{t'}$.
+- If task $t$ depends on task $u$, then $S_t \geq E_u$.
 - Each task must be assigned to one of its allowable machines
 
 **Objective**
 
 The objective is to minimize the makespan, which is the total time required to complete all tasks. Mathematically, this can be formulated as minimizing the maximum of all end times:
 
-$
+$$
 \text{Minimize} \quad \max_{t \in T} E_t 
-$
+$$
 
 ## Let code
 

@@ -100,25 +100,18 @@ const getNowPlaying = async (env: Env): Promise<NowPlaying> => {
 };
 
 interface SpotifyArtist {
-  href: string;
   id: string;
   name: string;
   external_urls: {
     spotify: string;
   };
   followers: {
-    href: string | null;
     total: number;
   };
-  genres: string[];
   images: {
     url: string;
-    height: number | null;
-    width: number | null;
   }[];
   popularity: number;
-  type: string;
-  uri: string;
 }
 
 interface SpotifyTrack {
@@ -135,7 +128,7 @@ interface SpotifyTrack {
 
 export interface TopTrack {
   id: string;
-  artist: SpotifyArtist[];
+  artist: string;
   songUrl: string;
   title: string;
   imageUrl: string;
@@ -154,7 +147,7 @@ const getTopTracks = async (env: Env, kv: KVNamespace): Promise<TopTrack[]> => {
     const tracks: TopTrack[] =
       items?.map((track) => ({
         id: track.id,
-        artist: track.artists,
+        artist: track.artists.map((artist) => artist.name).join(", "),
         songUrl: track.external_urls.spotify,
         title: track.name,
         imageUrl: track.album.images[1].url,
@@ -165,7 +158,7 @@ const getTopTracks = async (env: Env, kv: KVNamespace): Promise<TopTrack[]> => {
 
 export interface RecentlyPlayedTrack {
   id: string;
-  artist: SpotifyArtist[];
+  artist: string;
   songUrl: string;
   title: string;
   imageUrl: string;
@@ -191,7 +184,7 @@ const getRecentlyPlayed = async (env: Env, kv: KVNamespace): Promise<RecentlyPla
     const tracks: RecentlyPlayedTrack[] =
       items?.map((item) => ({
         id: item.track.id,
-        artist: item.track.artists,
+        artist: item.track.artists.map((artist) => artist.name).join(", "),
         songUrl: item.track.external_urls.spotify,
         title: item.track.name,
         imageUrl: item.track.album.images[1].url,
@@ -202,25 +195,12 @@ const getRecentlyPlayed = async (env: Env, kv: KVNamespace): Promise<RecentlyPla
 };
 
 export interface TopArtist {
-  external_urls: {
-    spotify: string;
-  };
-  followers: {
-    href: string | null;
-    total: number;
-  };
-  genres: string[];
-  href: string;
   id: string;
-  images: {
-    url: string;
-    height: number | null;
-    width: number | null;
-  }[];
   name: string;
+  url: string;
+  imageUrl: string;
+  followers: number;
   popularity: number;
-  type: "artist";
-  uri: string;
 }
 
 interface SpotifyTopArtistsResponse {
@@ -235,16 +215,12 @@ const getTopArtists = async (env: Env, kv: KVNamespace): Promise<TopArtist[]> =>
     }).then((res) => res.json() as Promise<SpotifyTopArtistsResponse>);
     const artists: TopArtist[] =
       items?.map((artist) => ({
-        external_urls: artist.external_urls,
-        followers: artist.followers,
-        genres: artist.genres,
-        href: artist.href,
         id: artist.id,
-        images: artist.images,
         name: artist.name,
+        url: artist.external_urls.spotify,
+        imageUrl: artist.images[0].url,
+        followers: artist.followers.total,
         popularity: artist.popularity,
-        type: artist.type,
-        uri: artist.uri,
       })) || [];
     return artists;
   });

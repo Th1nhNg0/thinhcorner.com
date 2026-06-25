@@ -3,7 +3,7 @@ import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
 import TimelineItem from "@/components/blog/TimelineItem.astro";
 import { Image } from "astro:assets";
-import { YouTube } from "astro-embed";
+import YouTubeEmbed from "@/components/YouTubeEmbed.astro";
 ---
 
 <Layout
@@ -233,7 +233,7 @@ import { YouTube } from "astro-embed";
         <p class="text-zinc-400 italic">
           A long time ago in a galaxy far, far away...
         </p>
-        <YouTube
+        <YouTubeEmbed
           id="UcgV4OFRS-w"
           class="w-full aspect-video"
           title="Big Bang - The Beginning of Everything video"
