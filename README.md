@@ -11,14 +11,14 @@ A personal website built with [Astro](https://astro.build/), featuring a blog wi
 - **Dynamic Open Graph Images:** Auto-generates OG images for blog posts using `@vercel/og`.
 - **Spotify Integration:** Shows listening activity (`/music` page).
 - **Goodreads Integration:** Displays reading activity (`/reading` page).
-- **Math Support:** KaTeX integration via `remark-math` and `rehype-katex`.
+- **Math Support:** KaTeX integration on Astro's Sätteri Markdown pipeline.
 - **Reading Time:** Auto-calculated reading time for blog posts.
 - **Tailwind CSS v4:** Modern styling with typography plugin.
 - **TypeScript:** Type safety throughout the project.
 
 ## Tech Stack
 
-- [Astro](https://astro.build/) v6
+- [Astro](https://astro.build/) v7
 - [Tailwind CSS](https://tailwindcss.com/) v4
 - [MDX](https://mdxjs.com/) - Enhanced Markdown with JSX
 - [KaTeX](https://katex.org/) - Math rendering

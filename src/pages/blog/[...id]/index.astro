@@ -6,6 +6,7 @@ import type { CollectionEntry } from "astro:content";
 import { AUTHOR_NAME } from "@/consts";
 import { getCollection, render } from "astro:content";
 import { format } from "date-fns";
+import getReadingTime from "reading-time";
 import EditOnGithub from "../../../components/EditOnGithub.astro";
 
 export async function getStaticPaths() {
@@ -37,7 +38,8 @@ const nextPost = getNextPost();
 const prevPost = getPrevPost();
 
 const post = Astro.props;
-const { Content, remarkPluginFrontmatter } = await render(post);
+const { Content } = await render(post);
+const minutesRead = post.body ? getReadingTime(post.body).text : undefined;
 
 // Detect math content to conditionally load KaTeX CSS
 const hasMath = post.body ? /\$\$|(?<!\w)\$[^\n$]+\$(?!\w)|\\\[|\\\(/.test(post.body) : false;
@@ -82,8 +84,8 @@ let slug = Array.isArray(Astro.params.id)
       mainEntityOfPage: new URL(`/blog/${post.id}`, Astro.site).toString(),
       url: new URL(`/blog/${post.id}`, Astro.site).toString(),
       inLanguage: post.data.lang ?? "en",
-      ...(remarkPluginFrontmatter?.minutesRead && {
-        timeRequired: `PT${Math.ceil(parseInt(remarkPluginFrontmatter.minutesRead))}M`,
+      ...(minutesRead && {
+        timeRequired: `PT${Math.ceil(parseInt(minutesRead))}M`,
       }),
     },
     {
@@ -140,7 +142,7 @@ let slug = Array.isArray(Astro.params.id)
           {
             post.body && (
               <div class="font-base text-sm">
-                {remarkPluginFrontmatter.minutesRead}
+                {minutesRead}
               </div>
             )
           }
