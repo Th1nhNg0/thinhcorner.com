@@ -20,13 +20,13 @@ So right now I'm paying for a handful of subscriptions:
 - Consensus — \$9/month with a student discount, I'll keep it until I finish my master's thesis
 - Google AI Pro — roughly \$9.6/month
 - ElevenLabs Starter — \$6/month
-- opencode — \$10/month
+- Opencode GO — \$10/month
 
 Total: roughly \$55/month. All of it replaces things I used to do by hand, so it pays for itself.
 
-My favorite story though: I told opencode — my coding agent — to build an automatic video generator. No specs, no detailed plan, just "make this thing." It spent two hours researching how to do it, and the whole thing cost about \$0.20. When it came back it had built a full pipeline: it generates the script, writes the voiceover text, creates image generation prompts, connects to ComfyUI to generate the images, and uses Edge TTS for the voiceover. A tool that would've taken me weeks to build, done in an afternoon for the price of a piece of candy.
+My favorite story though: I told Opencode — my coding agent — to build an automatic video generator. No specs, no detailed plan, just "make this thing." It spent two hours researching how to do it, and the whole thing cost about \$0.20. When it came back it had built a full pipeline: it generates the script, writes the voiceover text, creates image generation prompts, connects to ComfyUI to generate the images, and uses Edge TTS for the voiceover. A tool that would've taken me weeks to build, done in an afternoon for the price of a piece of candy.
 
-The secret is DeepSeek v4 Flash inside opencode. The latest update — [DeepSeek V4 Flash 0731](https://artificialanalysis.ai/models/deepseek-v4-flash) — has performance close to the top-tier models like GPT-5 and Claude, but at the cheapest price per million tokens I've ever seen. The numbers from my own usage tell the story: it runs at roughly \$0.01 per million tokens while Claude Opus runs around \$5/M and Sonnet around \$3/M — 100 to 500 times more expensive. On top of that there's a free tier; I've pushed 107 million tokens through it for exactly \$0.00.
+The secret is DeepSeek v4 Flash inside Opencode. The latest update — [DeepSeek V4 Flash 0731](https://artificialanalysis.ai/models/deepseek-v4-flash) — has performance close to the top-tier models like GPT-5 and Claude, but at the cheapest price per million tokens I've ever seen. The numbers from my own usage tell the story: it runs at roughly \$0.01 per million tokens while Claude Opus runs around \$5/M and Sonnet around \$3/M — 100 to 500 times more expensive. On top of that there's a free tier; I've pushed 107 million tokens through it for exactly \$0.00.
 
 ![DeepSeek V4 Flash benchmark vs top-tier models](./deepseek-benchmark.jpg)
 
