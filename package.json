@@ -10,13 +10,13 @@
     "generate-types": "wrangler types"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "14.0.0",
-    "@astrojs/markdown-satteri": "^0.3.2",
-    "@astrojs/mdx": "7.0.0",
-    "@astrojs/rss": "4.0.18",
+    "@astrojs/cloudflare": "14.1.7",
+    "@astrojs/markdown-satteri": "0.3.5",
+    "@astrojs/mdx": "7.0.5",
+    "@astrojs/rss": "4.0.19",
     "@astrojs/sitemap": "3.7.3",
     "@tailwindcss/vite": "^4.2.2",
-    "astro": "7.0.2",
+    "astro": "7.1.6",
     "cheerio": "^1.2.0",
     "date-fns": "^4.1.0",
     "katex": "^0.16.40",
@@ -28,7 +28,7 @@
     "wrangler": "^4.76.0"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.9",
+    "@astrojs/check": "0.9.10",
     "@tailwindcss/typography": "^0.5.19",
     "typescript": "^6.0.3"
   }
