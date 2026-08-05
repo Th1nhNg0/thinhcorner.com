@@ -1,41 +1,51 @@
 ---
-title: "How I Use AI in My Everyday Life"
+title: "How I Use AI Every Day"
 date: "2026-08-05"
-description: "From my master's thesis to a full video pipeline, AI is my everyday sidekick — 201 million tokens for $1.66."
+description: "A personal note on the AI tools I use for research, automation, coding, transcription, and experimentation."
 ---
 
-AI stopped being a novelty for me a long time ago. These days it's just part of how I get things done. My [token analytics](https://tokscale.ai/u/Th1nhNg0) say I've burned 201 million tokens across 2,149 messages for a grand total of \$1.66. Let me share how.
+AI stopped feeling like a novelty to me a long time ago. It is now part of how I study, research, plan, and build things. This is not a guide to the best AI products. It is simply a snapshot of the tools that are useful to me right now.
 
-I'm doing my master's in Business Administration, and ChatGPT is basically my unofficial research assistant. Need a chart or a graph for a chapter? I describe what I want and it generates the image in seconds. The killer combo is ChatGPT plus the Consensus MCP — I ask for research papers and instead of scrolling Google Scholar for hours, I get relevant articles instantly, with their journal ranks (Q1, Q2...) checked and each one summarized. For a thesis student, that's like having a librarian and a translator on call 24/7.
+I am doing a master's degree in Business Administration, and ChatGPT has become my unofficial research assistant. I use it to explore ideas and quickly turn data or instructions into charts and graphs. ChatGPT combined with the Consensus MCP is especially helpful: it can narrow down research papers, identify the journal quartile (Q1, Q2, and so on), and summarize each paper. This saves me from spending hours searching, although I still open the original paper and verify its claims and citations before using it in my thesis.
 
-The ChatGPT Plus subscription is worth it for the scheduled feature alone. I've set up automations that run by themselves: every morning one of them scrapes the news and reports back only the topics I actually want to read. And once a week it goes through my chat history, summarizes it, and suggests what I should prepare or do next. It's like a personal assistant that never sleeps.
+The scheduled tasks in ChatGPT Plus are also surprisingly useful. Every morning, one task searches for news in the fields I follow and returns a focused report. Another runs weekly, reviews my recent conversations and goals, and suggests what I should prepare or do next. It feels like a lightweight personal assistant that works in the background.
 
-I also use Gemini, though it hasn't been great lately — which is a shame, because it has a big context window and Google search built in, with access to information other providers just don't have. But Google's AI can be very stupid sometimes xD. The best thing is the Flow: AI Creative Studio for videos and images, which lets me make both for free (I just don't need them much). And then there's NotebookLM — now called Google Notebook — which works like a local RAG system: it only answers from the sources you give it. Upload a PDF, spreadsheet, docx, audio file, or website link and chat about them; the answers are correct because it only reads what's in your docs, with citations and no hallucination. Its only weak spot is audio transcription.
+I still use Gemini because its large context window and integration with Google Search can surface information that other providers miss. Its quality has felt inconsistent lately, though. Sometimes Google's AI is surprisingly stupid xD. Flow, Google's creative studio, is probably the best part for me because it can generate videos and images for free, although I do not need those features very often.
 
-That's where ElevenLabs comes in. Its speech-to-text can transcribe very long recordings with every speaker labeled, and the quality is insane — far fewer typos than NotebookLM. It helps a lot when I want an AI system to actually understand something. The text-to-speech side is just as good: natural voices and accents.
+NotebookLM (shown as Google Notebook in my account) is more useful. It is a cloud-hosted, source-grounded notebook that works similarly to a RAG system. I can upload PDFs, spreadsheets, documents, audio files, and website links, then ask questions across those sources. Its citations make the answers easy to verify and usually reduce hallucinations, but I still check the cited passage instead of assuming every answer is correct. Its audio transcription is the weak point in my experience.
 
-So right now I'm paying for a handful of subscriptions:
+That is where ElevenLabs helps. Its speech-to-text feature can process long recordings and label each speaker. In my tests, the speaker detection is excellent and the transcript contains fewer spelling mistakes than NotebookLM's output. This cleaner text also gives other AI systems better material to work with. ElevenLabs is equally strong at text-to-speech, with natural voices and convincing accents.
 
-- ChatGPT Plus — \$20/month
-- Consensus — \$9/month with a student discount, I'll keep it until I finish my master's thesis
-- Google AI Pro — roughly \$9.6/month
-- ElevenLabs Starter — \$6/month
-- Opencode GO — \$10/month
+At the time of writing, these are the AI subscriptions I pay for:
 
-Total: roughly \$55/month. All of it replaces things I used to do by hand, so it pays for itself.
+- ChatGPT Plus: \$20/month
+- Consensus: \$9/month with a student discount, which I plan to keep until I finish my thesis
+- Google AI Pro: roughly \$9.60/month
+- ElevenLabs Starter: \$6/month
+- OpenCode Go: \$10/month
 
-My favorite story though: I told Opencode — my coding agent — to build an automatic video generator. No specs, no detailed plan, just "make this thing." It spent two hours researching how to do it, and the whole thing cost about \$0.20. When it came back it had built a full pipeline: it generates the script, writes the voiceover text, creates image generation prompts, connects to ComfyUI to generate the images, and uses Edge TTS for the voiceover. A tool that would've taken me weeks to build, done in an afternoon for the price of a piece of candy.
+That comes to roughly \$55/month. It is not a small amount, but these tools replace enough repetitive work that the cost makes sense for me.
 
-The secret is DeepSeek v4 Flash inside Opencode. The latest update — [DeepSeek V4 Flash 0731](https://artificialanalysis.ai/models/deepseek-v4-flash) — has performance close to the top-tier models like GPT-5 and Claude, but at the cheapest price per million tokens I've ever seen. The numbers from my own usage tell the story: it runs at roughly \$0.01 per million tokens while Claude Opus runs around \$5/M and Sonnet around \$3/M — 100 to 500 times more expensive. On top of that there's a free tier; I've pushed 107 million tokens through it for exactly \$0.00.
+My favorite example came from OpenCode. I asked it to build an automatic video generator without giving it a detailed specification. It spent about two hours researching the problem, and the model usage cost roughly \$0.20. The result was a complete pipeline that generates a script, prepares the voice-over text, creates image prompts, connects to ComfyUI for image generation, and uses Edge TTS for the voice-over. Building the same experiment manually would have taken me much longer.
 
-![DeepSeek V4 Flash benchmark vs top-tier models](./deepseek-benchmark.jpg)
+The model behind many of these coding experiments is [DeepSeek V4 Flash 0731](https://artificialanalysis.ai/models/deepseek-v4-flash). Artificial Analysis currently reports a one-million-token context window, strong intelligence and coding results, and first-party prices of \$0.14 per million input tokens, \$0.28 per million output tokens, and \$0.003 per million cached-input tokens. Those categories matter: there is no single price that represents every workload.
 
-![Price per million tokens, DeepSeek vs the competition](./deepseek-price.jpg)
+A local Tokscale scan on one of my machines counted about 201 million tokens across 2,149 messages for \$1.66. That was an unusually cache-heavy subset and included free DeepSeek usage, so its effective rate of roughly \$0.01 per million tokens is not DeepSeek's standard API price. My [public Tokscale profile](https://tokscale.ai/u/Th1nhNg0) combines multiple machines and more expensive providers, so its all-time totals are much higher.
 
-That changes your behavior completely. I can experiment, try wild ideas, and let long tasks run for hours without watching the meter. With Claude or Codex I was always counting tokens in my head. With DeepSeek I just let it cook. I genuinely don't think I need the expensive coding agents anymore.
+![DeepSeek V4 Flash 0731 vendor-reported coding benchmarks](./deepseek-benchmark.jpg)
 
-For big tasks with heavy context, I also use subagents. Most models only work well within a ~256k token context window, so instead of cramming a huge project into one giant session, I spawn subagents — each one handles a small, focused task in its own small context window — and they report back to the main agent. Everything stays sharp, fast, and cheap.
+*Source: DeepSeek's official [V4 Flash 0731 model card](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731). These are vendor-reported results, and some use DeepSeek's internal benchmark sets and an upcoming harness, so I treat them as directional rather than independent proof.*
 
-The honest downside: DeepSeek isn't multimodal yet — it can't read images. So I split the work: ChatGPT handles anything visual, DeepSeek handles the code. A small tax, and the savings more than make up for it.
+![Model input and output price comparison](./deepseek-price.jpg)
 
-AI isn't some futuristic thing anymore. It's my everyday sidekick — writing, researching, coding, building — and it's making my life faster, cheaper, and way more fun.
+*Source: Bloomberg, ["China's AI Blitz Creates 'Death Zone' for Rival US Model Makers"](https://www.bloomberg.com/news/articles/2026-08-04/china-s-ai-blitz-creates-death-zone-for-rival-us-model-makers), August 4, 2026. Model prices change frequently; [Artificial Analysis](https://artificialanalysis.ai/models/deepseek-v4-flash) provides more detailed current pricing.*
+
+This low effective cost changes how I work. I can test strange ideas and let long tasks run without constantly watching a token meter. DeepSeek is now good enough for many of my coding experiments, so I reserve more expensive agents such as Claude or Codex for the tasks where they provide a clear advantage.
+
+For large tasks, I also use subagents. Advertised context windows can be huge, but model quality often becomes less reliable as a session fills with unrelated details. Instead of forcing an entire project into one conversation, I give each subagent a small, focused task and have it report the result back to the main agent. This keeps each context relevant and makes the overall process easier to review.
+
+Two skills make that workflow better. When a problem is still vague, I use Matt Pocock's [grill-me](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md) skill. It repeatedly questions my assumptions until the problem is clear, which feels similar to the Socratic method: learning through focused questions rather than receiving a one-way answer. When I want to optimize something with a measurable metric, I use the [autoresearch](https://www.skills.sh/github/awesome-copilot/autoresearch) skill. Inspired by [Andrej Karpathy's autoresearch experiment](https://github.com/karpathy/autoresearch), it repeatedly changes the code, runs an experiment, measures the result, and keeps only the improvements.
+
+DeepSeek V4 Flash still has one important limitation: it accepts text, not images. I therefore split the work. ChatGPT handles visual input and image creation, while DeepSeek handles most coding and long-running experiments.
+
+AI is no longer a futuristic idea in my daily life. It is a collection of practical tools, each with different strengths, weaknesses, and costs. The useful part is not finding one model that does everything. It is learning how to combine them without trusting any of them blindly.
