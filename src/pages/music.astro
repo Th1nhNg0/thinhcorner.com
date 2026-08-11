@@ -11,6 +11,11 @@ const topTracks = await getTopTracks(env, env.CACHE);
 const recentlyPlayed = await getRecentlyPlayed(env, env.CACHE);
 const topArtists = await getTopArtists(env, env.CACHE);
 const now = new Date();
+
+Astro.response.headers.set(
+  "Cache-Control",
+  "public, s-maxage=600, stale-while-revalidate=300",
+);
 ---
 
 <Layout
