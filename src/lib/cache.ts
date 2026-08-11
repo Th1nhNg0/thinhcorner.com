@@ -18,10 +18,13 @@ export async function withCache<T>(
   }
 
   const data = await fetcher();
-  try {
-    await kv.put(key, JSON.stringify(data), { expirationTtl: ttlSeconds });
-  } catch (err) {
-    console.error(`[Cache] Error writing key ${key} to KV:`, err);
+  const isEmptyArray = Array.isArray(data) && data.length === 0;
+  if (!isEmptyArray) {
+    try {
+      await kv.put(key, JSON.stringify(data), { expirationTtl: ttlSeconds });
+    } catch (err) {
+      console.error(`[Cache] Error writing key ${key} to KV:`, err);
+    }
   }
 
   return data;

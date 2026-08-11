@@ -14,7 +14,7 @@ export interface Book {
 }
 
 export async function get_book(kv: KVNamespace) {
-  return withCache(kv, "goodreads_books", 3600, async () => {
+  return withCache(kv, "goodreads_books", 21600, async () => {
     const current_reads = await crawl_book(
       `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`
     );

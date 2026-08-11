@@ -7,13 +7,15 @@ import { AUTHOR_NAME } from "@/consts";
 import { getCollection, render } from "astro:content";
 import { format } from "date-fns";
 import getReadingTime from "reading-time";
+import { statSync, existsSync } from "node:fs";
+import { join } from "node:path";
 import EditOnGithub from "../../../components/EditOnGithub.astro";
 
 export async function getStaticPaths() {
-  const posts = (await getCollection("blog")).sort(
+  const paths = (await getCollection("blog")).sort(
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
   );
-  return posts.map((post) => ({
+  return paths.map((post) => ({
     params: { id: post.id },
     props: post,
   }));
@@ -41,6 +43,14 @@ const post = Astro.props;
 const { Content } = await render(post);
 const minutesRead = post.body ? getReadingTime(post.body).text : undefined;
 
+const postDir = join(process.cwd(), "src/content/blog", post.id);
+const postFile = ["index.md", "index.mdx"].find((f) =>
+  existsSync(join(postDir, f)),
+);
+const modifiedTime = postFile
+  ? statSync(join(postDir, postFile)).mtime.toISOString()
+  : post.data.date.toISOString();
+
 // Detect math content to conditionally load KaTeX CSS
 const hasMath = post.body ? /\$\$|(?<!\w)\$[^\n$]+\$(?!\w)|\\\[|\\\(/.test(post.body) : false;
 
@@ -52,7 +62,7 @@ let slug = Array.isArray(Astro.params.id)
 <Layout
   title={post.data.title}
   description={post.data.description}
-  image={`/blog/${post.id}/og.png`}
+  image={`/blog/${post.id}/og.jpg`}
   type="article"
   katex={hasMath}
   robots={post.data.draft ? "noindex,nofollow" : undefined}
@@ -60,6 +70,7 @@ let slug = Array.isArray(Astro.params.id)
   locale={post.data.lang === "vi" ? "vi_VN" : "en_US"}
   author={AUTHOR_NAME}
   publishedTime={post.data.date.toISOString()}
+  modifiedTime={modifiedTime}
   imageAlt={post.data.title}
   prevUrl={prevPost ? new URL(`/blog/${prevPost.id}`, Astro.site) : undefined}
   nextUrl={nextPost ? new URL(`/blog/${nextPost.id}`, Astro.site) : undefined}
@@ -69,7 +80,7 @@ let slug = Array.isArray(Astro.params.id)
       "@type": "BlogPosting",
       headline: post.data.title,
       description: post.data.description,
-      image: new URL(`/blog/${post.id}/og.png`, Astro.site).toString(),
+      image: new URL(`/blog/${post.id}/og.jpg`, Astro.site).toString(),
       author: {
         "@type": "Person",
         name: AUTHOR_NAME,

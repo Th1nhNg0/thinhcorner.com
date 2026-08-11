@@ -139,7 +139,7 @@ interface SpotifyTopTracksResponse {
 }
 
 const getTopTracks = async (env: Env, kv: KVNamespace): Promise<TopTrack[]> => {
-  return withCache(kv, "spotify_top_tracks", 3600, async () => {
+  return withCache(kv, "spotify_top_tracks", 7200, async () => {
     const { access_token } = await getAccessToken(env);
     const { items } = await fetch(TOP_TRACKS_ENDPOINT, {
       headers: { Authorization: `Bearer ${access_token}` },
@@ -175,7 +175,7 @@ interface SpotifyRecentlyPlayedResponse {
 }
 
 const getRecentlyPlayed = async (env: Env, kv: KVNamespace): Promise<RecentlyPlayedTrack[]> => {
-  return withCache(kv, "spotify_recently_played", 1800, async () => {
+  return withCache(kv, "spotify_recently_played", 3600, async () => {
     const { access_token } = await getAccessToken(env);
     const response = await fetch(RECENTLY_PLAYED_ENDPOINT, {
       headers: { Authorization: `Bearer ${access_token}` },
@@ -223,7 +223,7 @@ interface SpotifyTopArtistsResponse {
 }
 
 const getTopArtists = async (env: Env, kv: KVNamespace): Promise<TopArtist[]> => {
-  return withCache(kv, "spotify_top_artists", 3600, async () => {
+  return withCache(kv, "spotify_top_artists", 7200, async () => {
     const { access_token } = await getAccessToken(env);
     const { items } = await fetch(TOP_ARTISTS_ENDPOINT, {
       headers: { Authorization: `Bearer ${access_token}` },
