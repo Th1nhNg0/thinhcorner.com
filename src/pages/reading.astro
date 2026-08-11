@@ -10,6 +10,11 @@ import { env } from "cloudflare:workers";
 const books = await get_book(env.CACHE);
 const read = books.read;
 
+Astro.response.headers.set(
+  "Cache-Control",
+  "public, s-maxage=600, stale-while-revalidate=300",
+);
+
 const readByYear = read.reduce(
   (acc, post) => {
     if (!post.user_read_at) {

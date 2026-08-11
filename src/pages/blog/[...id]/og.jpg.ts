@@ -111,13 +111,13 @@ export const GET: APIRoute = async ({ params, url }) => {
   );
 
   // Composite: template background + text overlay
-  const png = await sharp(bgImage)
+  const jpeg = await sharp(bgImage)
     .resize(1200, 630, { fit: "cover" })
     .composite([{ input: Buffer.from(svg), top: 0, left: 0 }])
-    .png()
+    .jpeg({ quality: 85 })
     .toBuffer();
 
-  return new Response(new Uint8Array(png), {
-    headers: { "Content-Type": "image/png" },
+  return new Response(new Uint8Array(jpeg), {
+    headers: { "Content-Type": "image/jpeg" },
   });
 };

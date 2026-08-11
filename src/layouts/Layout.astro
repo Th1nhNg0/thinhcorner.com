@@ -1,6 +1,7 @@
 ---
 import Head from "@/components/Head.astro";
 import Header from "@/components/Header.astro";
+import { ClientRouter } from "astro:transitions";
 
 type Props = {
   title: string;
@@ -61,6 +62,7 @@ const {
     structuredData={structuredData}
     katex={katex}
   />
+  <ClientRouter />
   <body class="bg-zinc-900 text-white font-sans">
     <Header />
     <main id="main-content">

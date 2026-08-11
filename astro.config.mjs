@@ -18,6 +18,7 @@ const markdownProcessor = satteri({
 export default defineConfig({
   site: "https://thinhcorner.com",
   trailingSlash: "never",
+  prefetch: true,
   fonts: [
     {
       provider: fontProviders.fontsource(),
