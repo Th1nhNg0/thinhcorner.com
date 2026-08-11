@@ -203,8 +203,23 @@ export interface TopArtist {
   popularity: number;
 }
 
+interface SpotifyTopArtistItem {
+  id: string;
+  name: string;
+  external_urls: {
+    spotify: string;
+  };
+  followers: {
+    total: number;
+  };
+  images: {
+    url: string;
+  }[];
+  popularity: number;
+}
+
 interface SpotifyTopArtistsResponse {
-  items: TopArtist[];
+  items: SpotifyTopArtistItem[];
 }
 
 const getTopArtists = async (env: Env, kv: KVNamespace): Promise<TopArtist[]> => {
