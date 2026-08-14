@@ -7,7 +7,7 @@ import { format } from "date-fns";
 
 const blog = (await getCollection("blog"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 5);
+  .slice(0, 6);
 ---
 
 <Layout
@@ -45,112 +45,53 @@ const blog = (await getCollection("blog"))
   ]}
 >
   <Container>
-    <div class="space-y-8">
-      <h1 class="text-4xl sm:text-6xl font-display uppercase">
-        {AUTHOR_NAME}
-      </h1>
-      <div class="space-y-4 text-zinc-400">
-        <p class="leading-relaxed">
-          Hey there! I'm {AUTHOR_NAME}, based in Ho Chi Minh City, Vietnam. I'm
-          the kind of person who falls down rabbit holes — one week it's a
-          puzzle game I can't put down, the next it's a book that changes how I
-          see things, and sometimes it's a weird idea I just have to build.
+    <header class="page-header pt-4">
+      <h1 class="page-title">{AUTHOR_NAME}</h1>
+      <div class="page-intro space-y-3">
+        <p>
+          I’m based in Ho Chi Minh City, exploring technology, research,
+          books, games, and ideas worth understanding.
         </p>
-        <p class="leading-relaxed">
-          This little corner is where I collect the things I find along the way
-          — what I'm <a
-            href="/reading"
-            class="text-yellow-500 hover:text-yellow-400 underline decoration-yellow-500/60 underline-offset-2 transition-colors"
-            >reading</a
-          >, what I'm <a
-            href="/music"
-            class="text-yellow-500 hover:text-yellow-400 underline decoration-yellow-500/60 underline-offset-2 transition-colors"
-            >listening to</a
-          >, and whatever I'm <a
-            href="/projects"
-            class="text-yellow-500 hover:text-yellow-400 underline decoration-yellow-500/60 underline-offset-2 transition-colors"
-            >tinkering with</a
-          >. Nothing too serious, just a curious mind trying to make sense of
-          the world.
+        <p>
+          This is where I keep notes on what I’m learning and building. You can
+          also see what I’m <a href="/reading" class="text-link">reading</a>,{" "}
+          <a href="/music" class="text-link">listening to</a>, or{" "}
+          <a href="/projects" class="text-link">working on</a>.
         </p>
       </div>
-      <section class="mb-12">
-        <div class="flex items-center gap-2 mb-3">
-          <h2 class="text-lg text-zinc-200 font-bold">
-            <a href="/blog/">Posts</a>
-          </h2>
-          <div class="flex-1 h-px bg-zinc-800"></div>
-        </div>
-        <ul class="space-y-1" role="list">
-          {
-            blog.map((post) => (
-              <li class="group flex items-baseline gap-3 py-1.5 px-2 -mx-2 rounded-md hover:bg-zinc-800/40 transition-colors">
-                <time
-                  datetime={post.data.date.toISOString()}
-                  title={post.data.date.toISOString()}
-                  class="shrink-0 text-[11px] font-mono text-zinc-400 min-w-[4.75rem]"
-                >
-                  {format(new Date(post.data.date), "dd MMM yyyy")}
+    </header>
+
+    <section class="mt-10">
+      <div class="mb-3 flex items-center justify-between">
+        <h2 class="text-sm font-medium text-zinc-200">Latest writing</h2>
+        <a href="/blog/" class="text-xs text-zinc-500 transition-colors hover:text-[#eab308]">View all</a>
+      </div>
+      <ol role="list">
+        {
+          blog.map((post) => (
+            <li>
+              <a
+                data-astro-prefetch
+                href={`/blog/${post.id}`}
+                class="group grid grid-cols-[1fr_auto] gap-4 py-2"
+              >
+                <span class="min-w-0 text-sm text-zinc-400 transition-colors group-hover:text-zinc-100">
+                  {post.data.title}
+                </span>
+                <time datetime={post.data.date.toISOString()} class="font-mono text-[10px] text-zinc-600">
+                  {format(new Date(post.data.date), "MMM yyyy")}
                 </time>
-                <div class="text-zinc-300 group-hover:text-zinc-100 transition-colors text-sm">
-                  {post.data.draft && (
-                    <span class="text-yellow-500 font-bold mr-2 text-xs">
-                      [Draft]
-                    </span>
-                  )}
-                  <a
-                    data-astro-prefetch=""
-                    href={`/blog/${post.id}`}
-                    class="hover:text-yellow-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:rounded"
-                  >
-                    {post.data.title}
-                  </a>
-                </div>
-              </li>
-            ))
-          }
-        </ul>
-      </section>
-      <footer
-        class="mt-20 border-t border-zinc-800 pt-8 pb-12 text-sm text-zinc-400 text-right"
-      >
-        <div
-          class="flex flex-col gap-3 text-base text-zinc-200 sm:flex-row sm:items-center sm:justify-end sm:gap-6"
-        >
-          <a
-            href={`mailto:${AUTHOR_EMAIL}`}
-            class="transition-colors duration-200 hover:text-yellow-500"
-          >
-            {AUTHOR_EMAIL}
-          </a>
-          {
-            SOCIAL_MEDIA.github && (
-              <a
-                href={SOCIAL_MEDIA.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="transition-colors duration-200 hover:text-yellow-500"
-                aria-label="GitHub Profile (opens in new tab)"
-              >
-                GitHub
               </a>
-            )
-          }
-          {
-            SOCIAL_MEDIA.linkedin && (
-              <a
-                href={SOCIAL_MEDIA.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="transition-colors duration-200 hover:text-yellow-500"
-                aria-label="LinkedIn Profile (opens in new tab)"
-              >
-                LinkedIn
-              </a>
-            )
-          }
-        </div>
-      </footer>
-    </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <footer class="mt-14 flex flex-wrap gap-x-4 gap-y-2 border-t border-[#27272a] py-5 text-xs text-zinc-600">
+      <a href={`mailto:${AUTHOR_EMAIL}`} class="transition-colors hover:text-[#eab308]">Email</a>
+      {SOCIAL_MEDIA.github && <a href={SOCIAL_MEDIA.github} target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-zinc-200">GitHub</a>}
+      {SOCIAL_MEDIA.linkedin && <a href={SOCIAL_MEDIA.linkedin} target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-zinc-200">LinkedIn</a>}
+    </footer>
   </Container>
 </Layout>

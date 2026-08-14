@@ -10,6 +10,8 @@ import { env } from "cloudflare:workers";
 const topTracks = await getTopTracks(env, env.CACHE);
 const recentlyPlayed = await getRecentlyPlayed(env, env.CACHE);
 const topArtists = await getTopArtists(env, env.CACHE);
+const mobileArtistCount = topArtists.length - (topArtists.length % 2);
+const desktopArtistCount = topArtists.length - (topArtists.length % 3);
 const now = new Date();
 
 Astro.response.headers.set(
@@ -30,38 +32,31 @@ Astro.response.headers.set(
   }}
 >
   <Container>
-    <section class="mb-6">
-      <h1
-        class="text-4xl font-bold tracking-tight sm:text-6xl mb-4"
-      >
-        My music library
-      </h1>
-      <p class="text-zinc-400 leading-relaxed max-w-2xl">
-        A collection of what I've listened to over the past 4 weeks,
-        automatically generated from my
-        <a href={SOCIAL_MEDIA.spotify} class="text-yellow-500 hover:text-yellow-400 underline decoration-yellow-500/60 underline-offset-2 transition-colors"
-          >Spotify profile</a
-        >.
+    <div class="collection-page">
+    <header class="page-header">
+      <p class="page-kicker">Listening log / 4 week window</p>
+      <h1 class="page-title">Music library</h1>
+      <p class="page-intro">
+        A live snapshot of what I’ve been listening to, synced from my{" "}
+        <a href={SOCIAL_MEDIA.spotify} class="text-link">Spotify profile</a>.
       </p>
-    </section>
-
-    <p class="text-zinc-500 italic text-sm mb-8 border-l-2 border-zinc-700 pl-4">
-      "Music is that voice that tells us that the human race is greater than
-      it knows." — Napoleon Bonaparte
-    </p>
+    </header>
 
     <section class="mb-8">
-      <h2 class="text-sm text-zinc-500 uppercase tracking-wider mb-4">Recently Played</h2>
-      <div class="space-y-2">
+      <div class="mb-3 flex items-center justify-between">
+        <h2 class="text-sm font-medium text-zinc-200">Recently played</h2>
+        <span class="font-mono text-[10px] text-zinc-600">{recentlyPlayed.length} tracks</span>
+      </div>
+      <div class="border-y border-[#27272a]">
         {
           recentlyPlayed.map((track) => (
             <a
               href={track.songUrl}
               target="_blank"
               rel="noopener noreferrer"
-              class="group flex items-center gap-3 p-2 bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 transition-all"
+              class="compact-row group flex items-center gap-3 border-b border-[#27272a] p-2 last:border-b-0"
             >
-              <div class="relative w-12 h-12 sm:w-16 sm:h-16">
+              <div class="relative size-10 shrink-0">
                 <img
                   src={track.imageUrl}
                   alt={track.title}
@@ -69,32 +64,18 @@ Astro.response.headers.set(
                   height="64"
                   loading="lazy"
                   decoding="async"
-                  class="rounded-md object-cover w-full h-full"
+                  class="h-full w-full border border-[#27272a] object-cover"
                 />
-                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 rounded-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    class="w-6 h-6 text-white"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </div>
+
               </div>
               <div class="flex-1 min-w-0">
-                <h3 class="font-medium text-sm sm:text-base group-hover:text-white transition-colors line-clamp-1">
+                <h3 class="line-clamp-1 text-xs font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
                   {track.title}
                 </h3>
-                <p class="text-zinc-400 text-xs sm:text-sm line-clamp-1">
+                <p class="line-clamp-1 text-[10px] text-zinc-500">
                   {track.artist}
                 </p>
-                <p class="text-zinc-500 text-xs mt-0.5">
+                <p class="mt-0.5 font-mono text-[9px] text-zinc-700">
                   Played{" "}
                   {formatDistanceToNow(new Date(track.played_at), {
                     addSuffix: true,
@@ -108,15 +89,18 @@ Astro.response.headers.set(
     </section>
 
     <section class="mb-8">
-      <h2 class="text-sm text-zinc-500 uppercase tracking-wider mb-4">Top Tracks</h2>
-      <div class="grid grid-cols-3 md:grid-cols-5 gap-3">
+      <div class="mb-3 flex items-center justify-between">
+        <h2 class="text-sm font-medium text-zinc-200">Top tracks</h2>
+        <span class="font-mono text-[10px] text-zinc-600">Past 4 weeks</span>
+      </div>
+      <div class="grid grid-cols-3 border-l border-t border-[#27272a] md:grid-cols-5">
         {
           topTracks.map((track) => (
             <a
               href={track.songUrl}
               target="_blank"
               rel="noopener noreferrer"
-              class="group p-2 bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 transition-all last:hidden sm:last:block"
+              class="compact-row group border-b border-r border-[#27272a] p-2 last:hidden sm:last:block"
             >
               <div class="relative aspect-square mb-2">
                 <img
@@ -126,27 +110,11 @@ Astro.response.headers.set(
                   height="300"
                   loading="lazy"
                   decoding="async"
-                  class="rounded-md object-cover w-full h-full"
+                  class="h-full w-full border border-[#27272a] object-cover"
                 />
-                <div class="absolute inset-0 bg-black/40 rounded-md opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center" aria-hidden="true">
-                  <div class="bg-white/20 p-2 rounded-full">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      class="w-6 h-6"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                </div>
+
               </div>
-              <h3 class="font-medium text-xs sm:text-sm group-hover:text-white transition-colors line-clamp-1">
+              <h3 class="line-clamp-1 text-[11px] font-medium text-zinc-300 transition-colors group-hover:text-[#eab308]">
                 {track.title}
               </h3>
               <p class="text-zinc-400 text-xs line-clamp-1">
@@ -159,15 +127,22 @@ Astro.response.headers.set(
     </section>
 
     <section class="mb-8">
-      <h2 class="text-sm text-zinc-500 uppercase tracking-wider mb-4">Top Artists</h2>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div class="mb-3 flex items-center justify-between">
+        <h2 class="text-sm font-medium text-zinc-200">Top artists</h2>
+        <span class="font-mono text-[10px] text-zinc-600">Past 4 weeks</span>
+      </div>
+      <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-3">
         {
-          topArtists.map((artist) => (
+          topArtists.map((artist, index) => (
             <a
               href={artist.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="group block relative overflow-hidden rounded-xl aspect-[4/3]"
+              class:list={[
+                "group relative aspect-[4/3] overflow-hidden border-b border-r border-[#27272a]",
+                index < mobileArtistCount ? "block" : "hidden",
+                index < desktopArtistCount ? "md:block" : "md:hidden",
+              ]}
             >
               <img
                 src={artist.imageUrl}
@@ -176,38 +151,16 @@ Astro.response.headers.set(
                 height="480"
                 loading="lazy"
                 decoding="async"
-                class="absolute inset-0 object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+                class="absolute inset-0 h-full w-full object-cover opacity-70 transition duration-300 group-hover:scale-[1.02] group-hover:opacity-85"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
               <div class="absolute inset-0 p-4 flex flex-col justify-end">
-                <h3 class="text-xl font-bold text-white mb-1 drop-shadow-sm">
+                <h3 class="mb-1 text-sm font-medium text-white">
                   {artist.name}
                 </h3>
-                <div class="flex items-center gap-3 text-xs text-zinc-300">
-                  <div class="flex items-center gap-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="w-4 h-4"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6z" />
-                    </svg>
-                    <span>{artist.followers.toLocaleString()} followers</span>
-                  </div>
-                  <div class="flex items-center gap-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="w-4 h-4"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                    <span>{artist.popularity}% popularity</span>
-                  </div>
+                <div class="flex flex-col gap-0.5 font-mono text-[8px] uppercase tracking-wide text-zinc-300 sm:flex-row sm:gap-3">
+                  <span>{artist.followers.toLocaleString()} followers</span>
+                  <span>{artist.popularity}% popularity</span>
                 </div>
               </div>
             </a>
@@ -216,9 +169,10 @@ Astro.response.headers.set(
       </div>
     </section>
 
-    <p class="text-xs text-zinc-600 font-mono text-right mt-4 mb-8">
-      Last updated: <time id="last-updated" datetime={now.toISOString()}>{format(now, "MMM d, yyyy 'at' h:mm a")}</time>
+    <p class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-[10px] text-zinc-600">
+      Updated <time id="last-updated" datetime={now.toISOString()}>{format(now, "MMM d, yyyy 'at' h:mm a")}</time>
     </p>
+    </div>
   </Container>
 </Layout>
 

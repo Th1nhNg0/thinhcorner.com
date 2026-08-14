@@ -12,139 +12,76 @@ const blog = (await getCollection("blog")).sort(
 const postsByYear = blog.reduce(
   (acc, post) => {
     const year = new Date(post.data.date).getFullYear();
-    if (!acc[year]) {
-      acc[year] = [];
-    }
+    if (!acc[year]) acc[year] = [];
     acc[year].push(post);
     return acc;
   },
   {} as Record<number, typeof blog>,
 );
 
-const years = Object.keys(postsByYear)
-  .map(Number)
-  .sort((a, b) => b - a);
+const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
 ---
 
 <Layout
   description="Read my collection of posts and the things that interest me"
-  title="Posts"
+  title="Writing — Thinh's Corner"
   lang="en"
   locale="en_US"
   structuredData={{
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Posts",
+    name: "Writing",
     description: "Read my collection of posts and the things that interest me",
     url: new URL("/blog/", Astro.site).toString(),
   }}
 >
   <Container>
-    <section class="mb-6">
-      <div class="flex items-center justify-between">
-        <h1
-          class="font-bold text-3xl tracking-tight sm:text-5xl inline-flex items-baseline gap-2"
-        >
-          <span>Posts</span>
-          <a href="/rss.xml" aria-label="RSS feed" title="RSS feed">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              class="text-yellow-500"
-              ><circle cx="5" cy="19" r="0" fill="currentColor"
-                ><animate
-                  fill="freeze"
-                  attributeName="r"
-                  dur="0.2s"
-                  values="0;2"></animate></circle
-              ><g
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                ><path
-                  stroke-dasharray="16"
-                  stroke-dashoffset="16"
-                  d="M4 11c2.39 0 4.68 0.95 6.36 2.64c1.69 1.68 2.64 3.97 2.64 6.36"
-                  ><animate
-                    fill="freeze"
-                    attributeName="stroke-dashoffset"
-                    begin="0.2s"
-                    dur="0.3s"
-                    values="16;0"></animate></path
-                ><path
-                  stroke-dasharray="28"
-                  stroke-dashoffset="28"
-                  d="M4 4c4.24 0 8.31 1.69 11.31 4.69c3 3 4.69 7.07 4.69 11.31"
-                  ><animate
-                    fill="freeze"
-                    attributeName="stroke-dashoffset"
-                    begin="0.6s"
-                    dur="0.4s"
-                    values="28;0"></animate></path
-                ></g
-              ></svg
-            >
-          </a>
-        </h1>
-        <label
-          class="flex items-center gap-1.5 text-xs sm:text-sm text-zinc-400 cursor-pointer select-none"
-        >
-          <input type="checkbox" id="englishOnly" class="accent-yellow-500" />
-          English only
-        </label>
+    <header class="page-header pt-4">
+      <div class="flex items-start justify-between gap-6">
+        <div>
+          <h1 class="page-title mt-0">Writing</h1>
+          <p class="page-intro">Notes and essays on technology, research, and things I’m learning.</p>
+        </div>
+        <a href="/rss.xml" class="mt-2 text-xs text-zinc-500 transition-colors hover:text-[#eab308]">RSS</a>
       </div>
-    </section>
+    </header>
 
-    <section id="blogPosts">
+    <div class="mb-8 flex items-center justify-between border-b border-[#27272a] pb-3 text-xs text-zinc-600">
+      <span>{blog.length} posts</span>
+      <label class="flex cursor-pointer select-none items-center gap-2">
+        <input type="checkbox" id="englishOnly" class="size-3 accent-[#eab308]" />
+        English only
+      </label>
+    </div>
+
+    <div id="blogPosts" class="space-y-9">
       {
         years.map((year) => (
-          <div class="mb-8" data-year={year}>
-            <div class="flex items-center gap-2 mb-3">
-              <h2 class="text-lg text-zinc-200 font-bold">{year}</h2>
-              <div class="flex-1 h-px bg-zinc-800" />
-              <span class="text-xs font-mono text-zinc-400 whitespace-nowrap">
-                {postsByYear[year].length}{" "}
-                {postsByYear[year].length === 1 ? "post" : "posts"}
-              </span>
-            </div>
-            <ul class="space-y-1" role="list">
+          <section data-year={year}>
+            <h2 class="mb-2 text-sm font-medium text-zinc-200">{year}</h2>
+            <ol role="list">
               {postsByYear[year].map((post) => (
-                <li
-                  class="group flex items-baseline gap-3 py-1.5 px-2 -mx-2 rounded-md hover:bg-zinc-800/40 transition-colors"
-                  data-lang={post.data.lang || "en"}
-                >
-                  <time
-                    datetime={post.data.date.toISOString()}
-                    title={post.data.date.toISOString()}
-                    class="shrink-0 text-[11px] font-mono text-zinc-400 min-w-[4.75rem]"
+                <li data-lang={post.data.lang || "en"}>
+                  <a
+                    data-astro-prefetch
+                    href={`/blog/${post.id}`}
+                    class="group grid grid-cols-[1fr_auto] items-baseline gap-4 py-2 focus-visible:outline-none"
                   >
-                    {format(new Date(post.data.date), "dd MMM y")}
-                  </time>
-                  <div class="text-zinc-300 group-hover:text-zinc-100 transition-colors text-sm">
-                    {post.data.draft && (
-                      <span class="text-yellow-500 font-bold mr-2 text-xs">
-                        [Draft]
-                      </span>
-                    )}
-                    <a
-                      data-astro-prefetch
-                      href={`/blog/${post.id}`}
-                      class="hover:text-yellow-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:rounded"
-                    >
+                    <span class="min-w-0 text-sm leading-snug text-zinc-400 transition-colors group-hover:text-zinc-100">
+                      {post.data.draft && <span class="mr-2 text-xs text-[#eab308]">Draft</span>}
                       {post.data.title}
-                    </a>
-                  </div>
+                    </span>
+                    <time datetime={post.data.date.toISOString()} title={post.data.date.toISOString()} class="font-mono text-[10px] text-zinc-600">
+                      {format(new Date(post.data.date), "MMM dd")}
+                    </time>
+                  </a>
                 </li>
               ))}
-            </ul>
-          </div>
+            </ol>
+          </section>
         ))
       }
-    </section>
+    </div>
   </Container>
 </Layout>
 
@@ -152,30 +89,22 @@ const years = Object.keys(postsByYear)
   function initEnglishFilter() {
     const checkbox = document.getElementById("englishOnly");
     const blogPostsContainer = document.getElementById("blogPosts");
-
     if (!(checkbox instanceof HTMLInputElement) || !blogPostsContainer) return;
-
     const filterCheckbox = checkbox;
     const postsContainer = blogPostsContainer;
     if (filterCheckbox.dataset.filterInitialized === "true") return;
 
     function filterPosts() {
-      const posts = postsContainer.querySelectorAll("li[data-lang]");
-
-      posts.forEach((post) => {
-        const listItem = post as HTMLLIElement;
-        const lang = listItem.getAttribute("data-lang");
-        listItem.style.display = filterCheckbox.checked && lang !== "en" ? "none" : "";
+      postsContainer.querySelectorAll("li[data-lang]").forEach((post) => {
+        const item = post as HTMLLIElement;
+        item.style.display = filterCheckbox.checked && item.dataset.lang !== "en" ? "none" : "";
       });
 
-      const yearSections = postsContainer.querySelectorAll("[data-year]");
-      yearSections.forEach((yearSection) => {
+      postsContainer.querySelectorAll("[data-year]").forEach((yearSection) => {
         const section = yearSection as HTMLElement;
-        const postsInYear = section.querySelectorAll("li[data-lang]");
-        const hasVisiblePosts = Array.from(postsInYear).some(
+        const hasVisiblePosts = Array.from(section.querySelectorAll("li[data-lang]")).some(
           (post) => (post as HTMLLIElement).style.display !== "none",
         );
-
         section.style.display = hasVisiblePosts ? "" : "none";
       });
     }

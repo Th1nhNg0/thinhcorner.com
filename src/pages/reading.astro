@@ -110,74 +110,36 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
   }}
 >
   <Container>
-    <!-- Header -->
-    <section class="mb-6">
-      <h1
-        class="text-4xl font-bold tracking-tight sm:text-6xl mb-4"
-      >
-        My bookshelf
-      </h1>
-      <p class="text-zinc-400 leading-relaxed max-w-2xl">
-        A collection of what I've read over the years, synced from my
-        <a
-          href={GOODREADS_USER_URL}
-          class="text-yellow-500 hover:text-yellow-400 underline decoration-yellow-500/60 underline-offset-2 transition-colors"
-          >Goodreads profile</a
-        >.
+    <div class="collection-page">
+    <header class="page-header">
+      <p class="page-kicker">Reading log / Goodreads sync</p>
+      <h1 class="page-title">Bookshelf</h1>
+      <p class="page-intro">
+        A record of what I’ve read over the years, synced from my{" "}
+        <a href={GOODREADS_USER_URL} class="text-link">Goodreads profile</a>.
       </p>
-    </section>
-
-    <!-- Quote -->
-    <p
-      class="text-zinc-500 italic text-sm mb-8 border-l-2 border-zinc-700 pl-4"
-    >
-      "Books gives a soul to the universe, wings to the mind, flight to the
-      imagination, and life to everything." — Plato
-    </p>
+    </header>
 
     <!-- Stats Bar -->
-    <section class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-      <div
-        class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4"
-      >
-        <div class="text-2xl font-bold text-yellow-500">
-          {read.length}
+    <section class="mb-7 grid grid-cols-2 border border-[#27272a] sm:grid-cols-4">
+      {[
+        [read.length, "books total"],
+        [booksThisYear, `books in ${currentYear}`],
+        [totalPages.toLocaleString(), "pages read"],
+        [`~${totalHours.toLocaleString()}h`, "time spent"],
+      ].map(([value, label]) => (
+        <div class="border-b border-r border-[#27272a] p-3 even:border-r-0 sm:border-b-0 sm:even:border-r sm:last:border-r-0">
+          <div class="font-mono text-lg text-zinc-200">{value}</div>
+          <div class="mt-0.5 font-mono text-[9px] uppercase tracking-wider text-zinc-600">{label}</div>
         </div>
-        <div class="text-xs text-zinc-500 font-mono mt-1">books total</div>
-      </div>
-      <div
-        class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4"
-      >
-        <div class="text-2xl font-bold text-yellow-500">
-          {booksThisYear}
-        </div>
-        <div class="text-xs text-zinc-500 font-mono mt-1">
-          books in {currentYear}
-        </div>
-      </div>
-      <div
-        class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4"
-      >
-        <div class="text-2xl font-bold text-yellow-500">
-          {totalPages.toLocaleString()}
-        </div>
-        <div class="text-xs text-zinc-500 font-mono mt-1">pages read</div>
-      </div>
-      <div
-        class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-4"
-      >
-        <div class="text-2xl font-bold text-yellow-500">
-          ~{totalHours.toLocaleString()}h
-        </div>
-        <div class="text-xs text-zinc-500 font-mono mt-1">time spent</div>
-      </div>
+      ))}
     </section>
 
     <!-- Currently Reading -->
     {
       books.current_reads.length > 0 && (
-        <section class="mb-8 bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-5">
-          <h2 class="text-sm text-zinc-500 uppercase tracking-wider mb-3">
+        <section class="mb-7 border border-[#27272a] bg-[#111113] p-3">
+          <h2 class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#eab308]">
             Currently reading
           </h2>
           <div class="flex flex-wrap gap-2">
@@ -186,9 +148,8 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                 href={book.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 text-sm text-zinc-300 hover:text-yellow-500 transition-colors"
+                class="inline-flex items-center gap-2 text-xs text-zinc-300 transition-colors hover:text-[#eab308]"
               >
-                <span class="text-yellow-500/60" aria-hidden="true">&#9656;</span>
                 <span class="font-medium">{book.title}</span>
                 <span class="text-zinc-600">by {book.author}</span>
                 <span class="sr-only">(opens in new tab)</span>
@@ -200,11 +161,9 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
     }
 
     <!-- Charts Section -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+    <section class="mb-9 grid grid-cols-1 gap-3 md:grid-cols-2">
       <!-- Year-over-year chart -->
-      <div
-        class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-5"
-      >
+      <div class="border border-[#27272a] bg-[#111113] p-4">
         <h3
           class="text-sm font-mono text-zinc-500 uppercase tracking-wider mb-4"
         >
@@ -223,7 +182,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                     {d.count}
                   </span>
                   <div
-                    class="w-full rounded-sm bg-yellow-500/80 hover:bg-yellow-500 transition-colors"
+                    class="w-full bg-[#eab308]/70 transition-colors hover:bg-[#eab308]"
                     style={`height: ${barH}rem;`}
                     title={`${d.year}: ${d.count} books`}
                   />
@@ -238,20 +197,17 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
       </div>
 
       <!-- Monthly chart with toggle -->
-      <div
-        class="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-sm rounded-surface border border-zinc-700/50 p-5"
-        id="monthly-chart"
-      >
+      <div class="border border-[#27272a] bg-[#111113] p-4" id="monthly-chart">
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-sm text-zinc-500 uppercase tracking-wider">
             Monthly
           </h3>
           <div
-            class="flex bg-zinc-800 rounded-full p-0.5 border border-zinc-700/50"
+            class="flex border border-[#27272a] bg-[#0c0c0d] p-0.5"
           >
             <button
               id="btn-this-year"
-              class="px-3 py-0.5 text-[11px] font-mono rounded-full transition-colors bg-yellow-500/20 text-yellow-500"
+              class="bg-[#eab308] px-2 py-0.5 font-mono text-[9px] uppercase text-black transition-colors"
               type="button"
               aria-pressed="true"
             >
@@ -259,7 +215,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
             </button>
             <button
               id="btn-all-years"
-              class="px-3 py-0.5 text-[11px] font-mono rounded-full transition-colors text-zinc-500 hover:text-zinc-400"
+              class="px-2 py-0.5 font-mono text-[9px] uppercase text-zinc-500 transition-colors hover:text-zinc-300"
               type="button"
               aria-pressed="false"
             >
@@ -288,11 +244,11 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                   </span>
                   <div
                     class:list={[
-                      "w-full rounded-sm transition-colors",
+                      "w-full transition-colors",
                       isFuture
                         ? "bg-zinc-700/30"
                         : count > 0
-                          ? "bg-yellow-500/80 hover:bg-yellow-500"
+                          ? "bg-[#eab308]/70 hover:bg-[#eab308]"
                           : "bg-zinc-700/50",
                     ]}
                     style={`height: ${isFuture ? 0.25 : barH}rem;`}
@@ -323,7 +279,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                     {count}
                   </span>
                   <div
-                    class="w-full rounded-sm bg-yellow-500/60 hover:bg-yellow-500 transition-colors"
+                    class="w-full bg-[#eab308]/60 transition-colors hover:bg-[#eab308]"
                     style={`height: ${barH}rem;`}
                     title={`${m}: ${count} books`}
                   />
@@ -340,30 +296,30 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
     <section id="book-list">
       {
         years.map((year) => (
-          <div class="mb-12" data-year={year}>
-            <div class="flex items-center gap-3 mb-5">
-              <h2 class="text-xl text-zinc-200 font-bold">{year}</h2>
+          <div class="mb-9" data-year={year}>
+            <div class="mb-3 flex items-center gap-3">
+              <h2 class="font-mono text-xs font-semibold text-zinc-300">{year}</h2>
               <div class="flex-1 h-px bg-zinc-800" />
               <span class="text-xs font-mono text-zinc-500 whitespace-nowrap">
                 {readByYear[year].length}{" "}
                 {readByYear[year].length === 1 ? "book" : "books"}
               </span>
             </div>
-            <ul class="grid grid-cols-1 md:grid-cols-2 gap-3" role="list">
+            <ul class="grid grid-cols-1 border-l border-t border-[#27272a] md:grid-cols-2" role="list">
               {readByYear[year].map((book) => (
-                <li class="group relative flex gap-4 bg-gradient-to-br from-zinc-800/60 to-zinc-900/60 backdrop-blur-sm rounded-surface border border-zinc-700/40 p-3 hover:border-zinc-600/60 hover:from-zinc-800/80 transition-all overflow-hidden">
+                <li class="compact-row group relative flex min-h-[7.25rem] gap-3 overflow-hidden border-b border-r border-[#27272a] p-2.5">
                   {book.cover ? (
                     <img
                       src={book.cover}
                       alt={`Cover of ${book.title}`}
                       width="72"
                       height="108"
-                      class="w-[72px] h-[108px] shrink-0 object-cover rounded-md shadow-lg"
+                      class="h-[96px] w-[64px] shrink-0 border border-[#27272a] object-cover"
                       loading="lazy"
                       decoding="async"
                     />
                   ) : (
-                    <div class="w-[72px] h-[108px] shrink-0 bg-zinc-800 rounded-md flex items-center justify-center text-[10px] font-mono text-zinc-600 uppercase tracking-wide">
+                    <div class="flex h-[96px] w-[64px] shrink-0 items-center justify-center border border-[#27272a] bg-zinc-900 font-mono text-[8px] uppercase tracking-wide text-zinc-700">
                       No cover
                     </div>
                   )}
@@ -372,7 +328,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                       href={book.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="text-zinc-100 font-medium hover:text-yellow-500 transition-colors line-clamp-2 text-[13px] leading-snug"
+                      class="line-clamp-2 text-xs font-medium leading-snug text-zinc-200 transition-colors hover:text-[#eab308]"
                     >
                       {book.title}
                       <span class="sr-only">(opens in new tab)</span>
@@ -389,8 +345,8 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                       const r = Math.round(book.rating);
                       return (
                         <span class="flex items-center gap-1.5 mt-1.5">
-                          <span class="text-yellow-500 text-[11px] tracking-wide">
-                            {"★".repeat(r)}
+                          <span class="font-mono text-[10px] text-[#eab308]">
+                            {r}/5
                           </span>
                           <span class="text-[10px] text-zinc-500 font-mono">
                             {ratingLabels[r as keyof typeof ratingLabels]}
@@ -416,9 +372,10 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
     </section>
 
     <!-- Footer -->
-    <p class="text-xs text-zinc-600 font-mono text-right mt-4 mb-8">
-      Last updated: <time id="last-updated" datetime={now.toISOString()}>{format(now, "MMM d, yyyy 'at' h:mm a")}</time>
+    <p class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-[10px] text-zinc-600">
+      Updated <time id="last-updated" datetime={now.toISOString()}>{format(now, "MMM d, yyyy 'at' h:mm a")}</time>
     </p>
+    </div>
   </Container>
 </Layout>
 
@@ -438,10 +395,10 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
       chartThisYear.classList.add("flex");
       chartAllYears.classList.add("hidden");
       chartAllYears.classList.remove("flex");
-      btnThisYear.classList.add("bg-yellow-500/20", "text-yellow-500");
-      btnThisYear.classList.remove("text-zinc-500", "hover:text-zinc-400");
-      btnAllYears.classList.remove("bg-yellow-500/20", "text-yellow-500");
-      btnAllYears.classList.add("text-zinc-500", "hover:text-zinc-400");
+      btnThisYear.classList.add("bg-[#eab308]", "text-black");
+      btnThisYear.classList.remove("text-zinc-500", "hover:text-zinc-300");
+      btnAllYears.classList.remove("bg-[#eab308]", "text-black");
+      btnAllYears.classList.add("text-zinc-500", "hover:text-zinc-300");
       btnThisYear.setAttribute("aria-pressed", "true");
       btnAllYears.setAttribute("aria-pressed", "false");
     });
@@ -451,10 +408,10 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
       chartAllYears.classList.add("flex");
       chartThisYear.classList.add("hidden");
       chartThisYear.classList.remove("flex");
-      btnAllYears.classList.add("bg-yellow-500/20", "text-yellow-500");
-      btnAllYears.classList.remove("text-zinc-500", "hover:text-zinc-400");
-      btnThisYear.classList.remove("bg-yellow-500/20", "text-yellow-500");
-      btnThisYear.classList.add("text-zinc-500", "hover:text-zinc-400");
+      btnAllYears.classList.add("bg-[#eab308]", "text-black");
+      btnAllYears.classList.remove("text-zinc-500", "hover:text-zinc-300");
+      btnThisYear.classList.remove("bg-[#eab308]", "text-black");
+      btnThisYear.classList.add("text-zinc-500", "hover:text-zinc-300");
       btnAllYears.setAttribute("aria-pressed", "true");
       btnThisYear.setAttribute("aria-pressed", "false");
     });
