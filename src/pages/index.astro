@@ -60,35 +60,35 @@ const blog = (await getCollection("blog"))
           This little corner is where I collect the things I find along the way
           — what I'm <a
             href="/reading"
-            class="text-yellow-500 hover:text-yellow-400 transition-colors"
+            class="text-yellow-500 hover:text-yellow-400 underline decoration-yellow-500/60 underline-offset-2 transition-colors"
             >reading</a
           >, what I'm <a
             href="/music"
-            class="text-yellow-500 hover:text-yellow-400 transition-colors"
+            class="text-yellow-500 hover:text-yellow-400 underline decoration-yellow-500/60 underline-offset-2 transition-colors"
             >listening to</a
           >, and whatever I'm <a
             href="/projects"
-            class="text-yellow-500 hover:text-yellow-400 transition-colors"
+            class="text-yellow-500 hover:text-yellow-400 underline decoration-yellow-500/60 underline-offset-2 transition-colors"
             >tinkering with</a
           >. Nothing too serious, just a curious mind trying to make sense of
           the world.
         </p>
       </div>
-      <section class="mb-16">
-        <div class="flex items-center gap-3 mb-5">
-          <h2 class="text-xl text-zinc-200 font-bold">
+      <section class="mb-12">
+        <div class="flex items-center gap-2 mb-3">
+          <h2 class="text-lg text-zinc-200 font-bold">
             <a href="/blog/">Posts</a>
           </h2>
           <div class="flex-1 h-px bg-zinc-800"></div>
         </div>
-        <ul class="space-y-2" role="list">
+        <ul class="space-y-1" role="list">
           {
             blog.map((post) => (
-              <li class="group flex items-baseline gap-4 py-2 px-3 -mx-3 rounded-lg hover:bg-zinc-800/40 transition-colors">
+              <li class="group flex items-baseline gap-3 py-1.5 px-2 -mx-2 rounded-md hover:bg-zinc-800/40 transition-colors">
                 <time
                   datetime={post.data.date.toISOString()}
                   title={post.data.date.toISOString()}
-                  class="shrink-0 text-xs font-mono text-zinc-500 min-w-[5.5rem]"
+                  class="shrink-0 text-[11px] font-mono text-zinc-400 min-w-[4.75rem]"
                 >
                   {format(new Date(post.data.date), "dd MMM yyyy")}
                 </time>

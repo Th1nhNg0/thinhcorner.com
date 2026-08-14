@@ -4,6 +4,13 @@ date: "2026-08-05"
 description: "A personal note on the AI tools I use for research, automation, coding, transcription, and experimentation."
 ---
 
+import benchmark640 from "./deepseek-benchmark-640.webp";
+import benchmark720 from "./deepseek-benchmark-720.webp";
+import benchmark960 from "./deepseek-benchmark-960.webp";
+import benchmark1280 from "./deepseek-benchmark-1280.webp";
+import price640 from "./deepseek-price-640.webp";
+import price960 from "./deepseek-price-960.webp";
+
 AI stopped feeling like a novelty to me a long time ago. It is now part of how I study, research, plan, and build things. This is not a guide to the best AI products. It is simply a snapshot of the tools that are useful to me right now.
 
 I am doing a master's degree in Business Administration, and ChatGPT has become my unofficial research assistant. I use it to explore ideas and quickly turn data or instructions into charts and graphs. ChatGPT combined with the Consensus MCP is especially helpful: it can narrow down research papers, identify the journal quartile (Q1, Q2, and so on), and summarize each paper. This saves me from spending hours searching, although I still open the original paper and verify its claims and citations before using it in my thesis.
@@ -32,11 +39,41 @@ The model behind many of these coding experiments is [DeepSeek V4 Flash 0731](ht
 
 A local Tokscale scan on one of my machines counted about 201 million tokens across 2,149 messages for \$1.66. That was an unusually cache-heavy subset and included free DeepSeek usage, so its effective rate of roughly \$0.01 per million tokens is not DeepSeek's standard API price. My [public Tokscale profile](https://tokscale.ai/u/Th1nhNg0) combines multiple machines and more expensive providers, so its all-time totals are much higher.
 
-![DeepSeek V4 Flash 0731 vendor-reported coding benchmarks](./deepseek-benchmark.jpg)
+<picture>
+  <source
+    type="image/webp"
+    srcSet={`${benchmark640.src} 640w, ${benchmark720.src} 720w, ${benchmark960.src} 960w, ${benchmark1280.src} 1280w`}
+    sizes="(max-width: 48rem) calc(100vw - 2rem), 44rem"
+  />
+  <img
+    src={benchmark640.src}
+    alt="DeepSeek V4 Flash 0731 vendor-reported coding benchmarks"
+    width={1280}
+    height={705}
+    loading="lazy"
+    decoding="async"
+    data-zoom-src={benchmark1280.src}
+  />
+</picture>
 
 *Source: DeepSeek's official [V4 Flash 0731 model card](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731). These are vendor-reported results, and some use DeepSeek's internal benchmark sets and an upcoming harness, so I treat them as directional rather than independent proof.*
 
-![Model input and output price comparison](./deepseek-price.jpg)
+<picture>
+  <source
+    type="image/webp"
+    srcSet={`${price640.src} 640w, ${price960.src} 960w`}
+    sizes="(max-width: 48rem) calc(100vw - 2rem), 44rem"
+  />
+  <img
+    src={price640.src}
+    alt="Model input and output price comparison"
+    width={960}
+    height={508}
+    loading="lazy"
+    decoding="async"
+    data-zoom-src={price960.src}
+  />
+</picture>
 
 *Source: Bloomberg, ["China's AI Blitz Creates 'Death Zone' for Rival US Model Makers"](https://www.bloomberg.com/news/articles/2026-08-04/china-s-ai-blitz-creates-death-zone-for-rival-us-model-makers), August 4, 2026. Model prices change frequently; [Artificial Analysis](https://artificialanalysis.ai/models/deepseek-v4-flash) provides more detailed current pricing.*
 
