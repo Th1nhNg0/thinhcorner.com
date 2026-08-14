@@ -4,14 +4,14 @@ import { GITHUB_CONTENT_SOURCE } from "@/consts";
 const { slug } = Astro.props;
 ---
 
-<p class="mt-10 mb-3 text-right">
+<p class="mt-10 mb-4 text-right">
   <a
     href={`${GITHUB_CONTENT_SOURCE}/${slug}`}
     target="_blank"
     rel="noopener noreferrer"
-    class="inline-flex rounded-surface border border-zinc-700/50 px-4 py-2 text-sm font-medium text-gray-100 hover:border-zinc-600 hover:bg-zinc-800/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500"
+    class="font-mono text-[9px] uppercase tracking-wider text-zinc-600 transition-colors hover:text-[#eab308]"
   >
-    Edit on GitHub
+    Suggest an edit
     <span class="sr-only">(opens in new tab)</span>
   </a>
 </p>

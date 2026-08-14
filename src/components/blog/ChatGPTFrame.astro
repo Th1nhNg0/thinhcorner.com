@@ -1,8 +1,4 @@
 ---
-import ChatGPTIcon from "@/assets/chatgpt-icon.svg";
-import GrokIcon from "@/assets/grok-icon.svg";
-import GeminiIcon from "@/assets/google-gemini-icon.svg";
-
 interface Props {
   title?: string;
   date?: string;
@@ -14,33 +10,27 @@ const {
   title = "",
   date = "",
   model = "GPT-4",
-  chatbot = "chatgpt",
 } = Astro.props;
 ---
 
 <div
-  class="bg-[#212121] rounded-surface border border-[#ffffff0d] overflow-hidden text-sm text-gray-300"
+  class="overflow-hidden rounded-surface border border-[#27272a] bg-[#111113] text-xs text-zinc-400"
 >
   {
     (title || date || model) && (
-      <div class="border-b border-[#ffffff0d] py-2 px-3 flex items-center justify-between not-prose">
-        <div class="flex items-center gap-2">
-          {chatbot === "chatgpt" && <ChatGPTIcon class="w-8 h-8" />}
-          {chatbot === "gemini" && <GeminiIcon class="w-8 h-8" />}
-          {chatbot === "grok" && <GrokIcon class="w-8 h-8" />}
-          <div>
-            {title && <h3 class="font-medium text-gray-200">{title}</h3>}
-            {model && <div class="text-xs text-gray-400">{model} model</div>}
-          </div>
+      <div class="not-prose flex items-center justify-between border-b border-[#27272a] px-3 py-2">
+        <div>
+          {title && <h3 class="font-medium text-zinc-200">{title}</h3>}
+          {model && <div class="font-mono text-[9px] uppercase text-zinc-600">{model} model</div>}
         </div>
         {date && (
-          <div class="text-xs text-gray-400">{`Generated at ${date}`}</div>
+          <div class="font-mono text-[9px] text-zinc-600">{date}</div>
         )}
       </div>
     )
   }
 
-  <div class="chat-content overflow-x-auto prose-h3:my-auto p-3">
+  <div class="chat-content overflow-x-auto p-3 prose-h3:my-auto">
     <slot />
   </div>
 </div>
@@ -64,16 +54,16 @@ const {
 
   .chat-content :is(th),
   .chat-content :is(td) {
-    padding: 0.75rem 1.5rem; /* px-6 py-3 */
+    padding: 0.5rem 0.75rem;
   }
 
   .chat-content :is(tbody tr) {
     border-bottom-width: 1px;
-    background-color: #212121;
-    border-color: #374151; /* border-gray-700 */
+    background-color: #111113;
+    border-color: #27272a;
   }
 
   .chat-content :is(tbody tr:hover) {
-    background-color: #4b5563; /* bg-gray-600 */
+    background-color: #151517;
   }
 </style>
