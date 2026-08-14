@@ -59,7 +59,7 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
         years.map((year) => (
           <section data-year={year}>
             <h2 class="mb-2 text-sm font-medium text-zinc-200">{year}</h2>
-            <ol role="list">
+            <ol>
               {postsByYear[year].map((post) => (
                 <li data-lang={post.data.lang || "en"}>
                   <a
@@ -83,7 +83,6 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
       }
     </div>
   </Container>
-</Layout>
 
 <script>
   function initEnglishFilter() {
@@ -115,3 +114,4 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
 
   document.addEventListener("astro:page-load", initEnglishFilter);
 </script>
+</Layout>

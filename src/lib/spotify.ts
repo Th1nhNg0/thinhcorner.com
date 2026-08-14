@@ -1,6 +1,5 @@
 import { withCache } from "@/lib/cache";
 
-const NOW_PLAYING_ENDPOINT = `https://api.spotify.com/v1/me/player/currently-playing`;
 const TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=25`;
 const TOP_ARTISTS_ENDPOINT = `https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=24`;
 const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played?limit=5`;
@@ -31,74 +30,6 @@ const getAccessToken = async (env: Env): Promise<AccessTokenResponse> => {
   return result;
 };
 
-type NowPlayingTrue = {
-  album: string;
-  albumImageUrl: string;
-  artist: string;
-  isPlaying: true;
-  songUrl: string;
-  title: string;
-};
-
-type NowPlayingFalse = {
-  isPlaying: false;
-};
-
-export type NowPlaying = NowPlayingTrue | NowPlayingFalse;
-
-interface SpotifyCurrentlyPlaying {
-  is_playing: boolean;
-  item: {
-    name: string;
-    artists: { name: string }[];
-    album: {
-      name: string;
-      images: { url: string }[];
-    };
-    external_urls: {
-      spotify: string;
-    };
-  } | null;
-}
-
-const getNowPlaying = async (env: Env): Promise<NowPlaying> => {
-  const { access_token } = await getAccessToken(env);
-
-  const res = await fetch(NOW_PLAYING_ENDPOINT, {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
-  });
-  if (res.status === 204 || res.status > 400) {
-    return {
-      isPlaying: false,
-    };
-  }
-  const song = await res.json() as SpotifyCurrentlyPlaying;
-  if (song.item === null) {
-    return {
-      isPlaying: false,
-    };
-  }
-
-  const isPlaying = song.is_playing;
-  const title = song.item.name;
-  const artist = song.item.artists
-    .map((_artist) => _artist.name)
-    .join(", ");
-  const album = song.item.album.name;
-  const albumImageUrl = song.item.album.images[0].url;
-  const songUrl = song.item.external_urls.spotify;
-  return {
-    album,
-    albumImageUrl,
-    artist,
-    isPlaying,
-    songUrl,
-    title,
-  } as NowPlaying;
-};
-
 interface SpotifyArtist {
   id: string;
   name: string;
@@ -126,7 +57,7 @@ interface SpotifyTrack {
   };
 }
 
-export interface TopTrack {
+interface TopTrack {
   id: string;
   artist: string;
   songUrl: string;
@@ -156,7 +87,7 @@ const getTopTracks = async (env: Env, kv: KVNamespace): Promise<TopTrack[]> => {
   });
 };
 
-export interface RecentlyPlayedTrack {
+interface RecentlyPlayedTrack {
   id: string;
   artist: string;
   songUrl: string;
@@ -194,7 +125,7 @@ const getRecentlyPlayed = async (env: Env, kv: KVNamespace): Promise<RecentlyPla
   });
 };
 
-export interface TopArtist {
+interface TopArtist {
   id: string;
   name: string;
   url: string;
@@ -241,4 +172,4 @@ const getTopArtists = async (env: Env, kv: KVNamespace): Promise<TopArtist[]> =>
   });
 };
 
-export { getNowPlaying, getTopTracks, getRecentlyPlayed, getTopArtists };
+export { getTopTracks, getRecentlyPlayed, getTopArtists };

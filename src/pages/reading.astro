@@ -121,7 +121,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
     </header>
 
     <!-- Stats Bar -->
-    <section class="mb-7 grid grid-cols-2 border border-[#27272a] sm:grid-cols-4">
+    <div class="mb-7 grid grid-cols-2 border border-[#27272a] sm:grid-cols-4">
       {[
         [read.length, "books total"],
         [booksThisYear, `books in ${currentYear}`],
@@ -133,7 +133,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
           <div class="mt-0.5 font-mono text-[9px] uppercase tracking-wider text-zinc-600">{label}</div>
         </div>
       ))}
-    </section>
+    </div>
 
     <!-- Currently Reading -->
     {
@@ -305,7 +305,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                 {readByYear[year].length === 1 ? "book" : "books"}
               </span>
             </div>
-            <ul class="grid grid-cols-1 border-l border-t border-[#27272a] md:grid-cols-2" role="list">
+            <ul class="grid grid-cols-1 border-l border-t border-[#27272a] md:grid-cols-2">
               {readByYear[year].map((book) => (
                 <li class="compact-row group relative flex min-h-[7.25rem] gap-3 overflow-hidden border-b border-r border-[#27272a] p-2.5">
                   {book.cover ? (
@@ -377,7 +377,6 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
     </p>
     </div>
   </Container>
-</Layout>
 
 <script>
   function initReadingChartToggle() {
@@ -419,3 +418,4 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
 
   document.addEventListener("astro:page-load", initReadingChartToggle);
 </script>
+</Layout>
