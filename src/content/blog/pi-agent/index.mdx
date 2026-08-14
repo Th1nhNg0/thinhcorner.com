@@ -1,0 +1,180 @@
+---
+title: "Why Pi Is My GOAT Agent Harness"
+date: 2026-08-14
+description: "After moving from Claude Code to Codex and OpenCode, I found a minimal, extensible coding harness that I could finally shape around my own workflow."
+draft: false
+---
+
+import harnessBenchmark from "./HPXZaY5XUAAmz_p.jpg";
+import costBenchmark from "./composio-cost.webp";
+import beforeCustomize from "./pi-beforecustomize.png";
+import afterCustomize from "./pi-after-customize.png";
+
+I was a Claude Code customer for a long time. Eventually, though, Anthropic's pricing became harder for me to justify, and the model quality felt less consistent. I switched to OpenAI's Codex, which was good, but the experience still had limits. New releases sometimes shipped with bugs or changes that disrupted my workflow. Codex CLI is open source, but its release cadence and product direction were not mine to control, and I did not want to maintain a fork just to keep my workflow stable. The development experience never felt fully consistent.
+
+Then DeepSeek V4 arrived. OpenCode Go's \$10 subscription looked like a great deal, so I gave OpenCode a try. It was fast, inexpensive, and well optimized for running open models. Its plugin system also let me customize parts of the experience and workflow. Even with that flexibility, however, I still felt as though I was adapting my workflow to the harness instead of shaping the harness around how I wanted to work.
+
+While scrolling through X, I found a [Composio benchmark](https://x.com/composio/status/2086814488162972027) comparing agent harnesses with the same DeepSeek V4 Flash model. Pi came out ahead on the metrics that mattered most to me.
+
+In Composio's set of 30 agentic tasks, Pi passed 20, giving it a 66.7% pass rate. That was the best result among the four newly tested harnesses.
+
+<figure>
+  <img
+    src={harnessBenchmark.src}
+    alt="Composio benchmark comparing Pi Agent, Prime Agent, Deep Agents, and Hermes Agent with DeepSeek V4 Flash"
+    width={harnessBenchmark.width}
+    height={harnessBenchmark.height}
+    loading="lazy"
+  />
+  <figcaption>
+    DeepSeek V4 Flash results across four newly tested agent harnesses. Source: Composio.
+  </figcaption>
+</figure>
+
+Cost per successful task was where Pi stood out most. Across all eight harnesses in Composio's comparison, Pi was the cheapest at \$0.028 per successful task. Claude Code was the most expensive at \$0.195, almost seven times as much. Pi's median completion time was 132.2 seconds; only Claude Code and OpenCode were faster in the broader comparison.
+
+<figure>
+  <img
+    src={costBenchmark.src}
+    alt="Cost per successful task across eight agent harnesses using DeepSeek V4 Flash"
+    width={costBenchmark.width}
+    height={costBenchmark.height}
+    loading="lazy"
+  />
+  <figcaption>
+    Estimated cost per successful task at the API rates used by Composio.
+  </figcaption>
+</figure>
+
+This is still one benchmark with one model and 30 tasks, not proof that Pi will win every workload. The [full Composio report](https://composio.dev/content/best-agent-harness-deepseek-v4-flash) also notes that Pi used a different reasoning setting and two model providers, which limits a direct comparison. I treat the result as a useful signal, not a universal verdict.
+
+The more important lesson is that the harness matters. The same model can perform very differently depending on the tools, prompts, context management, and agent loop wrapped around it. The benchmark was enough to make me curious, but Pi's design is what convinced me to stay.
+
+## Why harness choice matters
+
+This effect is not limited to Composio's test. [Harness-Bench](https://arxiv.org/abs/2605.27922) evaluated 106 sandboxed tasks across 5,194 execution trajectories and found substantial differences in completion, efficiency, process quality, and failure behavior across model–harness pairings. Its authors argue that “agent capability should be reported at the model-harness configuration level” rather than attributed to the base model alone.
+
+A second, preliminary study, [The Scaffold Effect in Coding Agents](https://arxiv.org/abs/2607.22585), tested two models across three open-source harnesses and observed up to a 40× difference in tokens per solved task. Pass-rate differences were much smaller, between 0 and 8 percentage points in its paired comparisons. This shows that harness choice can change cost and latency even when success rates look similar.
+
+Neither study proves that Pi is always the best harness. They support a more careful claim: the model name alone does not tell you how an agent will behave in practice.
+
+## What is Pi?
+
+Pi describes itself as a **minimal terminal coding harness**. A model is only the engine; the harness is the system around it that gives the model tools, feeds it context, runs its agent loop, and connects it to your codebase.
+
+Pi's philosophy is simple:
+
+> Adapt Pi to your workflows, not the other way around.
+
+Out of the box, Pi keeps the core small. Its default workflow revolves around four essential tools: `read`, `write`, `edit`, and `bash`. You can add the rest through TypeScript extensions, skills, prompt templates, themes, and packages.
+
+In [What I learned building an opinionated and minimal coding agent](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/), Pi creator Mario Zechner summarizes the argument plainly:
+
+> “As it turns out, these four tools are all you need for an effective coding agent.”
+
+He also notes that Pi's default system prompt and tool definitions together fit within 1,000 tokens. The goal is not minimalism for its own sake; it is to avoid paying a permanent context and complexity cost for features that a particular workflow may never use.
+
+That minimalism is not a limitation. It is the point. Instead of guessing which planning system, permission flow, subagent design, or UI every developer wants, Pi gives you a foundation and lets you build the workflow that suits you.
+
+## Why I chose Pi
+
+I have now used Claude Code, Codex, OpenCode, and Pi. Each has strengths, but Pi is the first one that makes the harness itself feel like something I own.
+
+| Dimension | Pi | Claude Code | Codex CLI | OpenCode |
+| --- | --- | --- | --- | --- |
+| License / source | MIT, open source | Proprietary | Apache-2.0, open source | MIT, open source |
+| Default tools | Four active tools: `read`, `write`, `edit`, and `bash`; optional read-only tools | Broad built-in suite for files, shell, search, web, agents, and product workflows | Compact toolset centered on shell execution, patching, and search | Broad suite including files, shell, search, web, skills, and tasks |
+| Subagents / plan mode | Added through extensions or packages | Built-in subagents and Plan mode | Built-in subagents and `/plan` | Built-in Build/Plan agents and subagents |
+| Model providers | Many built-in API and subscription providers, plus local `llama.cpp` | Claude models through Anthropic and supported cloud platforms | OpenAI-first, with configurable model providers and local options | Broad provider catalog through Models.dev, including local models |
+| Permission system | No permission prompts in core; add an extension or run inside a sandbox | `allow`, `ask`, and `deny` rules with multiple permission modes | Filesystem sandbox plus configurable approval policies | Global and per-agent `allow`, `ask`, and `deny` rules |
+| Extensibility | TypeScript extensions, skills, prompts, themes, packages, RPC, and SDK | Hooks, plugins, skills, MCP, and settings | Configuration, skills, MCP, and source-level customization | Plugins, custom agents, commands, skills, MCP, and configuration |
+| Session branching | Visible session tree with `/tree`, `/fork`, and `/clone` | Resume plus checkpoints and `/rewind` | Resume and fork previous sessions | Continue or fork existing sessions |
+| Context files | `AGENTS.md` or `CLAUDE.md`, global and project scoped | `CLAUDE.md`, global and project scoped | Hierarchical `AGENTS.md` files | `AGENTS.md`, with fallback support for `CLAUDE.md` |
+| Best fit | Developers who want to shape and own the harness | Users who want a polished Claude-native experience | Users who prefer the OpenAI/Codex workflow and sandbox defaults | Users who want an open, provider-flexible, batteries-included agent |
+
+**Official sources used for this comparison:**
+
+- **Pi:** [coding-agent README](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/README.md) and [extension documentation](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/extensions.md)
+- **Claude Code:** [tools](https://docs.anthropic.com/en/docs/claude-code/tools), [permissions](https://docs.anthropic.com/en/docs/claude-code/permissions), [subagents](https://docs.anthropic.com/en/docs/claude-code/sub-agents), [checkpointing](https://docs.anthropic.com/en/docs/claude-code/checkpointing), and [memory and `CLAUDE.md`](https://docs.anthropic.com/en/docs/claude-code/memory)
+- **Codex CLI:** [source repository and license](https://github.com/openai/codex), [CLI reference](https://developers.openai.com/codex/cli/reference), [sandbox and approvals](https://developers.openai.com/codex/agent-approvals-security), [subagents](https://developers.openai.com/codex/subagents), and [`AGENTS.md`](https://developers.openai.com/codex/guides/agents-md)
+- **OpenCode:** [source repository and license](https://github.com/anomalyco/opencode), [tools](https://opencode.ai/docs/tools/), [agents](https://opencode.ai/docs/agents/), [providers](https://opencode.ai/docs/providers/), [permissions](https://opencode.ai/docs/permissions/), [plugins](https://opencode.ai/docs/plugins/), [rules and `AGENTS.md`](https://opencode.ai/docs/rules/), and [CLI sessions](https://opencode.ai/docs/cli/)
+
+These products change quickly, so the table is a snapshot as of August 14, 2026 rather than a permanent specification.
+
+Codex may be open source, but Pi is deliberately designed as a small, extension-first harness that I can reshape without maintaining a fork. OpenCode is open source too; the distinction is not whether I can read the source, but whether extending the harness is the intended day-to-day workflow.
+
+The trade-off is important: Pi may require more effort at the beginning. If you want every feature preselected and built in, a more opinionated agent may feel easier. Pi also makes safety my responsibility. Zechner describes the default honestly: “pi runs in full YOLO mode and assumes you know what you're doing.” If you care about understanding your tools and changing them when they do not fit, that control is powerful, but it should be paired with trusted code, careful review of extensions, and a sandbox for risky work.
+
+## Installation and getting started
+
+Install Pi globally with npm:
+
+```bash
+npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+```
+
+Then start it and authenticate with a provider:
+
+```bash
+pi
+```
+
+Inside Pi, run `/login` and select the provider you want to use. Pi supports API keys as well as subscriptions such as ChatGPT Plus/Pro, Claude Pro/Max, GitHub Copilot, OpenCode Go, and many other providers. You can switch models at any time with `/model`.
+
+At the time of writing, I am using [Pi 0.84.2](https://www.npmjs.com/package/@earendil-works/pi-coding-agent) with [DeepSeek‑V4‑Flash‑0731](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731).
+
+After that, just describe what you want to do. Pi can inspect the project, edit files, and run commands directly from the terminal.
+
+## My hands-on experience
+
+Pi's power comes from its simplicity. It starts small, but almost every part of the experience can be extended. Instead of waiting for a feature request to be accepted or hoping a future release adds what I need, I can ask Pi to build the feature with me.
+
+A simple example is subscription usage. I use both an OpenCode Go subscription and ChatGPT Plus through Pi. Both providers have usage limits, but I wanted to see those limits directly in the terminal instead of opening separate dashboards.
+
+This was Pi before the customization:
+
+<figure>
+  <img
+    src={beforeCustomize.src}
+    alt="Pi terminal interface before adding subscription usage indicators"
+    width={beforeCustomize.width}
+    height={beforeCustomize.height}
+    loading="lazy"
+  />
+</figure>
+
+I asked Pi to build an extension for it. The result was a clean TypeScript extension that reads usage data for the active provider and adds compact progress bars to the footer. For OpenCode Go, it displays rolling, weekly, and monthly usage. For Codex through ChatGPT Plus, it shows the weekly usage window and subscription plan.
+
+<figure>
+  <img
+    src={afterCustomize.src}
+    alt="Pi terminal interface showing OpenCode Go subscription usage bars in the footer"
+    width={afterCustomize.width}
+    height={afterCustomize.height}
+    loading="lazy"
+  />
+  <figcaption>
+    Rolling, weekly, and monthly OpenCode Go usage displayed directly in Pi.
+  </figcaption>
+</figure>
+
+The extension refreshes when a session starts, when I switch models, and after an agent run settles. It also uses a cooldown and a five-minute idle refresh so it stays current without spamming the provider APIs. Most importantly, it is just a readable file in `~/.pi/agent/extensions/`. I can inspect it, change it, debug it, or remove it whenever I want.
+
+That experience captures what I like most about Pi. I did not have to fork the project or wait for the maintainers. I described the workflow I wanted, Pi helped implement it using its extension API, and the feature now lives as code that I own.
+
+{/* TODO: Add another concrete project example or a memorable prompt/session excerpt. */}
+
+## Tips and tricks
+
+- Start with Pi's defaults before installing a large collection of packages. Add features when you understand why you need them.
+- Ask Pi to create small extensions for repeated friction in your workflow. Status indicators, safety checks, commands, and custom tools are all good starting points.
+- Put global extensions in `~/.pi/agent/extensions/` and use `/reload` after editing them.
+- Review third-party extensions before installing them. Extensions run with your full system permissions.
+
+## Conclusion
+
+Pi is not my favorite harness because it has the longest feature list. It is my favorite because it gives me a small, understandable core and the freedom to build the rest around my own workflow.
+
+Claude Code, Codex, and OpenCode can all be excellent choices. But with Pi, when something is missing or does not work the way I want, I am no longer limited to filing an issue and waiting. I can inspect the harness, extend it, and keep the solution as code that I control.
+
+That sense of ownership is what turned Pi from another coding agent I wanted to test into the harness I want to keep using.

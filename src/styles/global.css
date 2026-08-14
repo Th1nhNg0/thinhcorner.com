@@ -147,9 +147,21 @@ img {
   --tw-prose-kbd: var(--ink);
   --tw-prose-code: #e6e6e8;
   --tw-prose-pre-code: #d1d1d5;
-  --tw-prose-pre-bg: #111113;
+  --tw-prose-pre-bg: var(--surface);
   --tw-prose-th-borders: #414147;
   --tw-prose-td-borders: var(--line);
+}
+
+/* Keep inline code distinct without painting a second layer inside code blocks. */
+.prose :where(:not(pre) > code) {
+  border-radius: 0.2rem;
+  background-color: var(--surface-hover);
+  padding: 0.125rem 0.25rem;
+}
+
+.prose :where(pre code) {
+  background-color: transparent;
+  padding: 0;
 }
 
 .prose :where(h2, h3, h4) {
