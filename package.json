@@ -10,7 +10,7 @@
     "generate-types": "wrangler types"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "14.2.0",
+    "@astrojs/cloudflare": "14.2.1",
     "@astrojs/markdown-satteri": "0.3.5",
     "@astrojs/mdx": "7.0.5",
     "@astrojs/rss": "4.0.19",
@@ -25,10 +25,11 @@
     "satori": "^0.29.0",
     "sharp": "^0.35.3",
     "tailwindcss": "^4.3.3",
-    "wrangler": "^4.120.1"
+    "wrangler": "4.123.0"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
+    "@cloudflare/vite-plugin": "1.52.1",
     "@tailwindcss/typography": "^0.5.20",
     "typescript": "^6.0.3"
   }

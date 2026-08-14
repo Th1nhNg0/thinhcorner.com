@@ -40,17 +40,17 @@ const years = Object.keys(postsByYear)
   }}
 >
   <Container>
-    <section class="mb-8">
+    <section class="mb-6">
       <div class="flex items-center justify-between">
         <h1
-          class="font-bold text-4xl tracking-tight sm:text-6xl inline-flex items-baseline gap-3"
+          class="font-bold text-3xl tracking-tight sm:text-5xl inline-flex items-baseline gap-2"
         >
           <span>Posts</span>
           <a href="/rss.xml" aria-label="RSS feed" title="RSS feed">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
+              width="24"
+              height="24"
               viewBox="0 0 24 24"
               class="text-yellow-500"
               ><circle cx="5" cy="19" r="0" fill="currentColor"
@@ -91,7 +91,7 @@ const years = Object.keys(postsByYear)
           </a>
         </h1>
         <label
-          class="flex items-center gap-2 text-sm text-zinc-400 cursor-pointer select-none"
+          class="flex items-center gap-1.5 text-xs sm:text-sm text-zinc-400 cursor-pointer select-none"
         >
           <input type="checkbox" id="englishOnly" class="accent-yellow-500" />
           English only
@@ -102,25 +102,25 @@ const years = Object.keys(postsByYear)
     <section id="blogPosts">
       {
         years.map((year) => (
-          <div class="mb-10" data-year={year}>
-            <div class="flex items-center gap-3 mb-5">
-              <h2 class="text-xl text-zinc-200 font-bold">{year}</h2>
+          <div class="mb-8" data-year={year}>
+            <div class="flex items-center gap-2 mb-3">
+              <h2 class="text-lg text-zinc-200 font-bold">{year}</h2>
               <div class="flex-1 h-px bg-zinc-800" />
               <span class="text-xs font-mono text-zinc-400 whitespace-nowrap">
                 {postsByYear[year].length}{" "}
                 {postsByYear[year].length === 1 ? "post" : "posts"}
               </span>
             </div>
-            <ul class="space-y-2" role="list">
+            <ul class="space-y-1" role="list">
               {postsByYear[year].map((post) => (
                 <li
-                  class="group flex items-baseline gap-4 py-2 px-3 -mx-3 rounded-lg hover:bg-zinc-800/40 transition-colors"
+                  class="group flex items-baseline gap-3 py-1.5 px-2 -mx-2 rounded-md hover:bg-zinc-800/40 transition-colors"
                   data-lang={post.data.lang || "en"}
                 >
                   <time
                     datetime={post.data.date.toISOString()}
                     title={post.data.date.toISOString()}
-                    class="shrink-0 text-xs font-mono text-zinc-400 min-w-[5.5rem]"
+                    class="shrink-0 text-[11px] font-mono text-zinc-400 min-w-[4.75rem]"
                   >
                     {format(new Date(post.data.date), "dd MMM y")}
                   </time>
