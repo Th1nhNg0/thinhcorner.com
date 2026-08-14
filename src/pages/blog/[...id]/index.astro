@@ -198,27 +198,32 @@ let slug = Array.isArray(Astro.params.id)
       }
     </nav>
     <script>
-      // Lazy-load medium-zoom after the page is idle for better LCP/TBT
-      const init = () => {
-        const imageSelectors = [
-          ...document.querySelectorAll("article.prose img"),
-          ...document.querySelectorAll("[data-zoomable]"),
-        ] as HTMLElement[];
+      // Lazy-load medium-zoom after the page is idle for better LCP/TBT.
+      // astro:page-load also runs after ClientRouter navigations.
+      const initMediumZoom = () => {
+        const load = () => {
+          const imageSelectors = [
+            ...document.querySelectorAll("article.prose img"),
+            ...document.querySelectorAll("[data-zoomable]"),
+          ] as HTMLElement[];
 
-        if (imageSelectors.length === 0) return;
+          if (imageSelectors.length === 0) return;
 
-        import("medium-zoom").then(({ default: mediumZoom }) => {
-          mediumZoom(imageSelectors, {
-            background: "var(--color-zinc-950)",
+          import("medium-zoom").then(({ default: mediumZoom }) => {
+            mediumZoom(imageSelectors, {
+              background: "var(--color-zinc-950)",
+            });
           });
-        });
+        };
+
+        if ("requestIdleCallback" in window) {
+          (window as any).requestIdleCallback(load);
+        } else {
+          setTimeout(load, 200);
+        }
       };
 
-      if ("requestIdleCallback" in window) {
-        (window as any).requestIdleCallback(init);
-      } else {
-        setTimeout(init, 200);
-      }
+      document.addEventListener("astro:page-load", initMediumZoom);
     </script>
   </Container>
 </Layout>
