@@ -32,14 +32,14 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
     "@type": "CollectionPage",
     name: "Writing",
     description: "Read my collection of posts and the things that interest me",
-    url: new URL("/blog/", Astro.site).toString(),
+    url: new URL("/blog", Astro.site).toString(),
   }}
 >
   <Container>
-    <header class="page-header pt-4">
+    <header class="page-header">
       <div class="flex items-start justify-between gap-6">
         <div>
-          <h1 class="page-title mt-0">Writing</h1>
+          <h1 class="page-title">Writing</h1>
           <p class="page-intro">Notes and essays on technology, research, and things I’m learning.</p>
         </div>
         <a href="/rss.xml" class="mt-2 text-xs text-zinc-500 transition-colors hover:text-[#eab308]">RSS</a>
