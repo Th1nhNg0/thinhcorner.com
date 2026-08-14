@@ -51,8 +51,10 @@ const modifiedTime = postFile
   ? statSync(join(postDir, postFile)).mtime.toISOString()
   : post.data.date.toISOString();
 
-// Detect math content to conditionally load KaTeX CSS
-const hasMath = post.body ? /\$\$|(?<!\w)\$[^\n$]+\$(?!\w)|\\\[|\\\(/.test(post.body) : false;
+// Detect math content without mistaking escaped currency or MDX `${...}` expressions for math.
+const hasMath = post.body
+  ? /(?<!\\)\$\$|(?<![\\\w])\$(?!\{)[^\n$]+\$(?!\w)|(?<!\\)\\\[|(?<!\\)\\\(/.test(post.body)
+  : false;
 
 let slug = Array.isArray(Astro.params.id)
   ? Astro.params.id[0]
@@ -128,7 +130,7 @@ let slug = Array.isArray(Astro.params.id)
   <Container>
     {
       post.data.draft && (
-        <div class="mb-8 rounded-surface border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-yellow-500">
+        <div class="mb-5 rounded-surface border border-yellow-500/30 bg-yellow-500/10 px-3 py-2 text-yellow-500">
           <p class="text-sm font-medium">
             ⚠️ This is a draft post. It may be incomplete or contain incorrect
             information.
@@ -136,8 +138,8 @@ let slug = Array.isArray(Astro.params.id)
         </div>
       )
     }
-    <div class="mb-10 space-y-1">
-      <h1 class="text-4xl font-semibold text-white leading-normal">
+    <div class="mb-6 space-y-1">
+      <h1 class="text-3xl font-semibold text-white leading-tight sm:text-4xl">
         {post.data.title}
       </h1>
       <div class="flex flex-col md:flex-row gap-2 md:items-center">
@@ -161,21 +163,21 @@ let slug = Array.isArray(Astro.params.id)
       </div>
     </div>
     <article
-      class="prose prose-lg prose-hr:border-zinc-700 prose-code:bg-[#24292e] prose-code:p-0.5 prose-code:rounded prose-code:before:content-[''] prose-code:after:content-[''] prose-img:mx-auto max-w-none prose-invert prose-a:text-yellow-500 prose-table:my-auto"
+      class="prose prose-base max-w-none prose-invert prose-headings:mt-6 prose-headings:mb-3 prose-headings:leading-tight prose-p:my-3 prose-ul:my-3 prose-ol:my-3 prose-li:my-1 prose-blockquote:my-4 prose-figure:my-5 prose-pre:my-4 prose-hr:my-6 prose-hr:border-zinc-700 prose-code:bg-[#24292e] prose-code:p-0.5 prose-code:rounded prose-code:before:content-[''] prose-code:after:content-[''] prose-img:mx-auto prose-img:my-4 prose-a:text-yellow-500 prose-a:underline prose-a:decoration-yellow-500/60 prose-a:underline-offset-2 prose-table:my-auto prose-table:text-sm"
     >
       <Content />
     </article>
 
     <EditOnGithub slug={slug} />
 
-    <nav class="pb-4 flex flex-col gap-4" aria-label="Post navigation">
+    <nav class="pb-4 flex flex-col gap-2" aria-label="Post navigation">
       {
         prevPost && (
           <a
             href={`/blog/${prevPost.id}`}
-            class="group relative rounded-surface border border-zinc-700/50 p-4 transition-colors hover:border-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500"
+            class="group relative rounded-surface border border-zinc-700/50 p-3 transition-colors hover:border-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500"
           >
-            <div class="mb-2 text-sm text-gray-400">← Previous Article</div>
+            <div class="mb-1 text-sm text-gray-400">← Previous Article</div>
             <div class="line-clamp-2 font-medium text-gray-100 group-hover:text-white">
               {prevPost.data.title}
             </div>
@@ -187,9 +189,9 @@ let slug = Array.isArray(Astro.params.id)
         nextPost && (
           <a
             href={`/blog/${nextPost.id}`}
-            class="group relative rounded-surface border border-zinc-700/50 p-4 transition-colors hover:border-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500"
+            class="group relative rounded-surface border border-zinc-700/50 p-3 transition-colors hover:border-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500"
           >
-            <div class="mb-2 text-sm text-gray-400">Next Article →</div>
+            <div class="mb-1 text-sm text-gray-400">Next Article →</div>
             <div class="line-clamp-2 font-medium text-gray-100 group-hover:text-white">
               {nextPost.data.title}
             </div>

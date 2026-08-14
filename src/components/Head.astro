@@ -52,16 +52,6 @@ const {
   <Font cssVariable="--font-quicksand" preload={[{ weight: "400" }]} />
   <Font cssVariable="--font-asimovian" />
   <Font cssVariable="--font-jetbrains-mono" />
-  {
-    import.meta.env.PROD && (
-      <link rel="preconnect" href="https://www.googletagmanager.com" />
-    )
-  }
-  {
-    import.meta.env.PROD && (
-      <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-    )
-  }
   {katex && <link rel="stylesheet" href={katexCSSUrl} />}
 
   <!-- Canonical URL -->
@@ -129,25 +119,46 @@ const {
     )
   }
 
-  {/* Google Analytics (gtag) */}
+  {/* Load Google Analytics after the initial page is interactive. */}
   {
     import.meta.env.PROD && (
-      <>
-        <script
-          is:inline
-          async
-          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`}
-        />
-        <script
-          is:inline
-          set:html={`
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '${GOOGLE_ANALYTICS_ID}');
-      `}
-        />
-      </>
+      <script
+        is:inline
+        set:html={`
+(() => {
+  const id = ${JSON.stringify(GOOGLE_ANALYTICS_ID)};
+  let loaded = false;
+
+  const loadAnalytics = () => {
+    if (loaded) return;
+    loaded = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function gtag() {
+      window.dataLayer.push(arguments);
+    };
+    window.gtag("js", new Date());
+    window.gtag("config", id);
+
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(id);
+    document.head.appendChild(script);
+  };
+
+  ["pointerdown", "keydown", "touchstart", "scroll"].forEach((eventName) => {
+    window.addEventListener(eventName, loadAnalytics, { once: true, passive: true });
+  });
+  window.addEventListener("load", () => window.setTimeout(loadAnalytics, 10000), { once: true });
+
+  document.addEventListener("astro:page-load", () => {
+    if (loaded && typeof window.gtag === "function") {
+      window.gtag("event", "page_view", {
+        page_path: window.location.pathname + window.location.search,
+      });
+    }
+  });
+})();`}
+      />
     )
   }
 </head>
