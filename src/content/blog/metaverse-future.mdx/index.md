@@ -28,7 +28,7 @@ Dưới đây là một số đặc điểm chính của Metaverse:
 - **Tính tương tác**: Người dùng có thể tương tác với nhau, với các vật thể trong môi trường ảo và với các nội dung được tạo ra bởi người khác.
 - **Tính phi tập trung**: Metaverse không được kiểm soát bởi một tổ chức duy nhất, mà được xây dựng và vận hành bởi nhiều công ty và cá nhân khác nhau.
 
-<YouTubeEmbed videoid="D8GMeEZSfPQ" />
+[Watch an introduction to the Metaverse on YouTube](https://www.youtube.com/watch?v=D8GMeEZSfPQ)
 
 Mark Zuckerberg, CEO của Meta (trước đây là Facebook), là người tiên phong khởi đầu cho thế giới kỹ thuật số Metaverse. Vào tháng 10 năm 2021, ông thông báo rằng chiến lược của công ty sẽ tập trung vào phát triển Metaverse và Facebook không còn là thứ ưu tiên hàng đầu. Mục tiêu của Mark Zuckerberg là phát triển công nghệ giúp mọi người có thể tương tác và kết nối với nhau một cách chân thực hơn trong môi trường ảo.
 
@@ -68,12 +68,12 @@ Nói nhiều về Meta như thế này không có nghĩa là chỉ có mình Met
 
 Vào ngày 8 tháng 2 năm 2024, **Disney** đã bất ngờ đầu tư 1.5 tỷ đô la vào Epic Games[^Disney_invest]. Với mục tiêu tạo ra thứ mà công ty này hằng mong muốn: "Vũ trụ trò chơi và giải trí rộng mở và bao la" gắn liền với tựa game Fornite. Điều này xuất phát từ một cuộc tái cấu trúc lớn của Fortnite vào đầu năm nay, trong đó nó chuyển từ một tựa game bắn súng trực tuyến sang một tập hợp các trải nghiệm được kết nối, từ tựa game kết hợp với **LEGO** cho đến trải nghiệm lễ hội âm nhạc ảo trong game[^fortnite_festival].
 
-<YouTubeEmbed videoid="HsahlWt7Um0" />
+[Watch Disney and Epic Games discuss their partnership on YouTube](https://www.youtube.com/watch?v=HsahlWt7Um0)
 
 ​
 **Tim Sweeney**, Giám đốc điều hành của Epic Games, là một người tin tưởng vào metaverse. Vào tháng 5 năm 2023, khi Business Insider đăng tải bài báo cho rằng metaverse sẽ gia nhập danh sách những trào lưu thất bại của ngành công nghệ[^RIP_Metaverse], Sweeney đã đăng tweet trả lời một cách đùa vui kêu gọi tổ chức một buổi tang lễ trực tuyến để "600 triệu người dùng hoạt động hàng tháng trong Fortnite, Minecraft, Roblox, PUBG Mobile, Sandbox và VRChat có thể cùng nhau chia buồn cho sự ra đi của nó trong thế giới 3D thời gian thực."
 
-<StaticTweet id="1655995809270202392"/>
+[View Tim Sweeney’s post on X](https://x.com/i/web/status/1655995809270202392)
 
 Disney trước đây đã có những nỗ lực riêng trong lĩnh vực này. Vào năm 2022, công ty đã giao nhiệm vụ cho giám đốc Mike White dẫn dắt các nỗ lực về metaverse của mình, với cựu CEO Bob Chapek tuyên bố "cái gọi là metaverse, mà tôi tin rằng là biên giới kể chuyện vĩ đại tiếp theo"[^disney_metaverse]. Một năm sau, bộ phận metaverse của họ đã bị loại bỏ như một phần của làn sóng sa thải hàng loạt[^disney_metaverse_cutoff].
 

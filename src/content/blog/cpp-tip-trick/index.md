@@ -73,7 +73,7 @@ for (int i = 0; i < 1000000; i++)
 
 ## Hàm ước chung lớn nhất có sẵn
 
-Trong C++, có hàm **\_\_gcd(m,n)** trả về giá trị ước chung lớn nhất của 2 số m và n. Độ phức tạp của thuật toán này là $ O(\log\_{2}{max(n,m)}) $.
+Trong C++, có hàm **\_\_gcd(m,n)** trả về giá trị ước chung lớn nhất của 2 số m và n. Độ phức tạp của thuật toán này là $O(\log_2(\max(n,m)))$.
 
 ## Sử dụng auto
 

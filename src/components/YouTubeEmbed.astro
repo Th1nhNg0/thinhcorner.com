@@ -10,12 +10,49 @@ const { id, title, class: astroClass, className } = Astro.props;
 const classes = ["aspect-video w-full", astroClass, className].filter(Boolean).join(" ");
 ---
 
-<iframe
-  class={classes}
-  src={`https://www.youtube-nocookie.com/embed/${id}`}
-  title={title}
-  loading="lazy"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-  allowfullscreen
-  referrerpolicy="strict-origin-when-cross-origin"
-></iframe>
+<div class={classes} data-youtube-embed data-video-id={id} data-video-title={title}>
+  <button
+    type="button"
+    class="group relative size-full overflow-hidden border border-[#27272a] bg-[#111113]"
+    aria-label={`Play ${title}`}
+  >
+    <img
+      src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
+      alt=""
+      width="480"
+      height="360"
+      loading="lazy"
+      decoding="async"
+      class="size-full object-cover opacity-70 transition-opacity group-hover:opacity-85"
+    />
+    <span class="absolute inset-0 flex items-center justify-center text-sm font-medium text-white">
+      Play video
+    </span>
+  </button>
+</div>
+
+<script>
+  function initYouTubeEmbeds() {
+    document.querySelectorAll<HTMLElement>("[data-youtube-embed]").forEach((container) => {
+      if (container.dataset.initialized === "true") return;
+      const button = container.querySelector("button");
+      const id = container.dataset.videoId;
+      const title = container.dataset.videoTitle;
+      if (!button || !id || !title) return;
+
+      container.dataset.initialized = "true";
+      button.addEventListener("click", () => {
+        const iframe = document.createElement("iframe");
+        iframe.className = "size-full border-0";
+        iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1`;
+        iframe.title = title;
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+        container.replaceChildren(iframe);
+      }, { once: true });
+    });
+  }
+
+  document.addEventListener("astro:page-load", initYouTubeEmbeds);
+</script>

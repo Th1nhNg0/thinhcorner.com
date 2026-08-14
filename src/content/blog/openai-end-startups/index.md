@@ -25,7 +25,7 @@ Do tính cạnh tranh khốc liệt ở thị trường AI mới này, ai cũng 
 
 Như [neotice.app](https://www.neotice.app/), một website tin tức hội tụ các yếu tố: Nguồn tin tức đáng tin cậy, Đề xuất tin tức phù hợp, Truy xuất thông tin hiệu quả và Tiết kiệm thời gian. Được lập trình từ một lập trình viên duy nhất, sử dụng các nền tảng, công cụ có sẵn. Và đây là sản phẩm trong một cuộc thi hackathon[^easystartup].
 
-<StaticTweet id='1718706088743424388'/>
+[View the announcement on X](https://x.com/i/web/status/1718706088743424388)
 
 Nếu đọc kỹ bài viết về sản phẩm trên, ta có thể thấy toàn bộ công nghệ đều phụ thuộc về bên thứ 3. Từ mô hình AI, cho đến database đều là thuê của người khác. Tuy quá trình phát triển có dễ dàng và tiết kiệm thời gian nhưng đây lại là một điểm yếu lớn. Nếu như bên thứ 3 đó ngừng cung cấp dịch vụ, thì toàn bộ sản phẩm sẽ không thể hoạt động được nữa.
 
@@ -33,7 +33,7 @@ Nếu đọc kỹ bài viết về sản phẩm trên, ta có thể thấy toàn
 
 Nvidia senior AI scientist Jim Fan đồng tình:
 
-<StaticTweet id='1718637140748505283'/>
+[View the related discussion on X](https://x.com/i/web/status/1718637140748505283)
 
 Có thể lấy **Jasper AI** ra làm ví dụ. Ra mắt vào tháng 2 năm 2021, Jasper là một nền tảng nội dung AI giúp người sáng tạo và các công ty thuộc mọi loại hình mở rộng tiềm năng sáng tạo của họ. Cách đây 1 năm, Jasper đã gọi vốn thành công 125 triệu USD ở series A, nâng tổng giá trị công ty lên 1,5 tỷ USD[^jasperraise].
 

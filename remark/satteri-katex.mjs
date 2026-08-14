@@ -1,12 +1,14 @@
 import katex from "katex";
 
 function renderMath(node, displayMode) {
-  return {
-    rawHtml: katex.renderToString(node.value, {
-      displayMode,
-      throwOnError: false,
-    }),
-  };
+  const value = katex.renderToString(node.value, {
+    displayMode,
+    throwOnError: false,
+  });
+
+  // Preserve inline math as an inline HTML node. Returning rawHtml here makes
+  // Sätteri emit a block-level paragraph inside the surrounding paragraph.
+  return displayMode ? { rawHtml: value } : { type: "html", value };
 }
 
 const satteriKatex = {
