@@ -2,7 +2,7 @@ import * as cheerio from "cheerio";
 import { GOODREADS_USER_ID } from "@/consts";
 import { withCache } from "@/lib/cache";
 
-export interface Book {
+interface Book {
   title: string;
   url: string;
   rating: number;
