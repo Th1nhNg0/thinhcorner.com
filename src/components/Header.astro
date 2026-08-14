@@ -8,44 +8,42 @@ function isActive(href: string) {
 }
 const navLinks = [
   { href: "/", label: "home" },
+  { href: "/blog", label: "writing" },
   { href: "/now", label: "now" },
   { href: "/projects", label: "projects" },
-  { href: "/blog", label: "blog" },
-  { href: "/reading", label: "reading" },
+  { href: "/reading", label: "books" },
   { href: "/music", label: "music" },
 ];
 ---
 
 <a
   href="#main-content"
-  class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:bg-zinc-800 focus:text-white focus:px-4 focus:py-2 focus:rounded"
+  class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-50 focus:bg-[#eab308] focus:px-3 focus:py-1.5 focus:text-sm focus:text-black"
 >
   Skip to content
 </a>
-<header transition:persist>
+<header>
   <Container>
-    <div class="py-5 md:py-8">
-      <nav
-        class="flex flex-wrap gap-2 md:gap-4 uppercase"
-        aria-label="Main navigation"
-      >
-        {
-          navLinks.map((link) => (
-            <a
-              href={link.href}
-              class:list={[
-                "transition-colors duration-200 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500",
-                isActive(link.href)
-                  ? "text-white font-semibold"
-                  : "text-gray-300 hover:text-white",
-              ]}
-              aria-current={isActive(link.href) ? "page" : undefined}
-            >
-              {link.label}
-            </a>
-          ))
-        }
-      </nav>
-    </div>
+    <nav
+      class="scrollbar-hide flex h-12 items-center gap-5 overflow-x-auto"
+      aria-label="Main navigation"
+    >
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class:list={[
+              "whitespace-nowrap text-sm transition-colors focus-visible:outline-none",
+              isActive(link.href)
+                ? "text-[#eab308]"
+                : "text-zinc-500 hover:text-zinc-200",
+            ]}
+            aria-current={isActive(link.href) ? "page" : undefined}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
   </Container>
 </header>
