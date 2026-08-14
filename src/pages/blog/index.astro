@@ -149,36 +149,40 @@ const years = Object.keys(postsByYear)
 </Layout>
 
 <script>
-  const checkbox = document.getElementById("englishOnly") as HTMLInputElement;
-  const blogPostsContainer = document.getElementById("blogPosts");
+  function initEnglishFilter() {
+    const checkbox = document.getElementById("englishOnly");
+    const blogPostsContainer = document.getElementById("blogPosts");
 
-  function filterPosts() {
-    if (!blogPostsContainer) return;
+    if (!(checkbox instanceof HTMLInputElement) || !blogPostsContainer) return;
 
-    const posts = blogPostsContainer.querySelectorAll("li[data-lang]");
+    const filterCheckbox = checkbox;
+    const postsContainer = blogPostsContainer;
+    if (filterCheckbox.dataset.filterInitialized === "true") return;
 
-    posts?.forEach((post) => {
-      const listItem = post as HTMLLIElement;
-      const lang = listItem.getAttribute("data-lang");
+    function filterPosts() {
+      const posts = postsContainer.querySelectorAll("li[data-lang]");
 
-      if (checkbox.checked && lang !== "en") {
-        listItem.style.display = "none";
-      } else {
-        listItem.style.display = "";
-      }
-    });
+      posts.forEach((post) => {
+        const listItem = post as HTMLLIElement;
+        const lang = listItem.getAttribute("data-lang");
+        listItem.style.display = filterCheckbox.checked && lang !== "en" ? "none" : "";
+      });
 
-    const yearSections = blogPostsContainer.querySelectorAll("[data-year]");
-    yearSections?.forEach((yearSection) => {
-      const section = yearSection as HTMLElement;
-      const postsInYear = section.querySelectorAll("li[data-lang]");
-      const hasVisiblePosts = Array.from(postsInYear).some(
-        (post) => (post as HTMLLIElement).style.display !== "none",
-      );
+      const yearSections = postsContainer.querySelectorAll("[data-year]");
+      yearSections.forEach((yearSection) => {
+        const section = yearSection as HTMLElement;
+        const postsInYear = section.querySelectorAll("li[data-lang]");
+        const hasVisiblePosts = Array.from(postsInYear).some(
+          (post) => (post as HTMLLIElement).style.display !== "none",
+        );
 
-      section.style.display = hasVisiblePosts ? "" : "none";
-    });
+        section.style.display = hasVisiblePosts ? "" : "none";
+      });
+    }
+
+    filterCheckbox.dataset.filterInitialized = "true";
+    filterCheckbox.addEventListener("change", filterPosts);
   }
 
-  checkbox.addEventListener("change", filterPosts);
+  document.addEventListener("astro:page-load", initEnglishFilter);
 </script>
