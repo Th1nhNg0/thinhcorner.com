@@ -22,13 +22,13 @@ export default defineConfig({
     layout: "constrained",
     responsiveStyles: false,
   },
-  // Used only by the server-side Open Graph image generator.
+  // Used by the server-side Open Graph image generator and matches the site's sans-serif UI.
   fonts: [
     {
       provider: fontProviders.fontsource(),
-      name: "Quicksand",
-      cssVariable: "--font-quicksand",
-      weights: [700],
+      name: "Inter",
+      cssVariable: "--font-inter",
+      weights: [600],
       styles: ["normal"],
       subsets: ["latin", "latin-ext", "vietnamese"],
       formats: ["woff"],

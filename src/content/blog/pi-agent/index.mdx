@@ -165,7 +165,7 @@ That experience captures what I like most about Pi. I did not have to fork the p
 
 I also built an autoresearch extension based on the principles in [Andrej Karpathy's autoresearch project](https://github.com/karpathy/autoresearch). [Shopify had already explored a similar idea](https://shopify.engineering/autoresearch), but when I tried the available implementation, it was buggy and did not fit the way I like to work. So I built my own.
 
-With the help of OpenAI's GPT-5.6 Luna model at max thinking, I turned the idea into a complete workflow. I define an objective with `/autoresearch <goal>`, then run `/autoresearch start`. From there, the agent works through a bounded experiment loop: it changes the code, runs the evaluation, compares the result with the current best, keeps improvements, reverts failures, and records each experiment automatically.
+With the help of OpenAI's GPT-5.6 Luna model at max thinking, I built a fully working workflow in about 10 minutes. It generated roughly 2,000 lines of code covering the commands, experiment orchestration, Git branch isolation, evaluation logic, progress tracking, and interactive dashboard. I define an objective with `/autoresearch <goal>`, then run `/autoresearch start`. From there, the agent works through a bounded experiment loop: it changes the code, runs the evaluation, compares the result with the current best, keeps improvements, reverts failures, and records each experiment automatically.
 
 <figure>
   <img
