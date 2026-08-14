@@ -9,6 +9,7 @@ import harnessBenchmark from "./HPXZaY5XUAAmz_p.jpg";
 import costBenchmark from "./composio-cost.webp";
 import beforeCustomize from "./pi-beforecustomize.png";
 import afterCustomize from "./pi-after-customize.png";
+import autoresearch from "./autoresearch.png";
 
 I was a Claude Code customer for a long time. Eventually, though, Anthropic's pricing became harder for me to justify, and the model quality felt less consistent. I switched to OpenAI's Codex, which was good, but the experience still had limits. New releases sometimes shipped with bugs or changes that disrupted my workflow. Codex CLI is open source, but its release cadence and product direction were not mine to control, and I did not want to maintain a fork just to keep my workflow stable. The development experience never felt fully consistent.
 
@@ -162,7 +163,24 @@ The extension refreshes when a session starts, when I switch models, and after a
 
 That experience captures what I like most about Pi. I did not have to fork the project or wait for the maintainers. I described the workflow I wanted, Pi helped implement it using its extension API, and the feature now lives as code that I own.
 
-{/* TODO: Add another concrete project example or a memorable prompt/session excerpt. */}
+I also built an autoresearch extension based on the principles in [Andrej Karpathy's autoresearch project](https://github.com/karpathy/autoresearch). [Shopify had already explored a similar idea](https://shopify.engineering/autoresearch), but when I tried the available implementation, it was buggy and did not fit the way I like to work. So I built my own.
+
+With the help of OpenAI's GPT-5.6 Luna model at max thinking, I turned the idea into a complete workflow. I define an objective with `/autoresearch <goal>`, then run `/autoresearch start`. From there, the agent works through a bounded experiment loop: it changes the code, runs the evaluation, compares the result with the current best, keeps improvements, reverts failures, and records each experiment automatically.
+
+<figure>
+  <img
+    src={autoresearch.src}
+    alt="Pi autoresearch dashboard showing a sequence of autonomous code experiments and their results"
+    width={autoresearch.width}
+    height={autoresearch.height}
+    loading="lazy"
+  />
+  <figcaption>
+    My autoresearch extension running a bounded optimization loop and tracking the best result.
+  </figcaption>
+</figure>
+
+This is a more ambitious example of why Pi's extensibility matters to me. I was not limited to someone else's implementation or workflow. I could take the core autoresearch principle, adapt it to my preferences, and make it feel like a native part of the harness.
 
 ## Tips and tricks
 
