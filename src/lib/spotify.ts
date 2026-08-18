@@ -1,7 +1,7 @@
 import { withCache } from "@/lib/cache";
 
-const TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=25`;
-const TOP_ARTISTS_ENDPOINT = `https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=24`;
+export type TimeRange = "short_term" | "medium_term" | "long_term";
+
 const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played?limit=5`;
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
 
@@ -26,7 +26,7 @@ const getAccessToken = async (env: Env): Promise<AccessTokenResponse> => {
     },
     body: body,
   });
-  const result = await response.json() as AccessTokenResponse;
+  const result = (await response.json()) as AccessTokenResponse;
   return result;
 };
 
@@ -57,7 +57,7 @@ interface SpotifyTrack {
   };
 }
 
-interface TopTrack {
+export interface TopTrack {
   id: string;
   artist: string;
   songUrl: string;
@@ -69,10 +69,15 @@ interface SpotifyTopTracksResponse {
   items: SpotifyTrack[];
 }
 
-const getTopTracks = async (env: Env, kv: KVNamespace): Promise<TopTrack[]> => {
-  return withCache(kv, "spotify_top_tracks", 7200, async () => {
+const getTopTracks = async (
+  env: Env,
+  kv: KVNamespace,
+  timeRange: TimeRange = "short_term",
+): Promise<TopTrack[]> => {
+  return withCache(kv, `spotify_top_tracks_${timeRange}`, 7200, async () => {
     const { access_token } = await getAccessToken(env);
-    const { items } = await fetch(TOP_TRACKS_ENDPOINT, {
+    const endpoint = `https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=25`;
+    const { items } = await fetch(endpoint, {
       headers: { Authorization: `Bearer ${access_token}` },
     }).then((res) => res.json() as Promise<SpotifyTopTracksResponse>);
     const tracks: TopTrack[] =
@@ -81,13 +86,13 @@ const getTopTracks = async (env: Env, kv: KVNamespace): Promise<TopTrack[]> => {
         artist: track.artists.map((artist) => artist.name).join(", "),
         songUrl: track.external_urls.spotify,
         title: track.name,
-        imageUrl: track.album.images[1].url,
+        imageUrl: track.album?.images?.[1]?.url || track.album?.images?.[0]?.url || "",
       })) || [];
     return tracks;
   });
 };
 
-interface RecentlyPlayedTrack {
+export interface RecentlyPlayedTrack {
   id: string;
   artist: string;
   songUrl: string;
@@ -105,27 +110,30 @@ interface SpotifyRecentlyPlayedResponse {
   items: SpotifyRecentlyPlayedItem[];
 }
 
-const getRecentlyPlayed = async (env: Env, kv: KVNamespace): Promise<RecentlyPlayedTrack[]> => {
+const getRecentlyPlayed = async (
+  env: Env,
+  kv: KVNamespace,
+): Promise<RecentlyPlayedTrack[]> => {
   return withCache(kv, "spotify_recently_played", 3600, async () => {
     const { access_token } = await getAccessToken(env);
     const response = await fetch(RECENTLY_PLAYED_ENDPOINT, {
       headers: { Authorization: `Bearer ${access_token}` },
     });
-    const { items } = await response.json() as SpotifyRecentlyPlayedResponse;
+    const { items } = (await response.json()) as SpotifyRecentlyPlayedResponse;
     const tracks: RecentlyPlayedTrack[] =
       items?.map((item) => ({
         id: item.track.id,
         artist: item.track.artists.map((artist) => artist.name).join(", "),
         songUrl: item.track.external_urls.spotify,
         title: item.track.name,
-        imageUrl: item.track.album.images[1].url,
+        imageUrl: item.track.album?.images?.[1]?.url || item.track.album?.images?.[0]?.url || "",
         played_at: item.played_at,
       })) || [];
     return tracks;
   });
 };
 
-interface TopArtist {
+export interface TopArtist {
   id: string;
   name: string;
   url: string;
@@ -153,10 +161,15 @@ interface SpotifyTopArtistsResponse {
   items: SpotifyTopArtistItem[];
 }
 
-const getTopArtists = async (env: Env, kv: KVNamespace): Promise<TopArtist[]> => {
-  return withCache(kv, "spotify_top_artists", 7200, async () => {
+const getTopArtists = async (
+  env: Env,
+  kv: KVNamespace,
+  timeRange: TimeRange = "short_term",
+): Promise<TopArtist[]> => {
+  return withCache(kv, `spotify_top_artists_${timeRange}`, 7200, async () => {
     const { access_token } = await getAccessToken(env);
-    const { items } = await fetch(TOP_ARTISTS_ENDPOINT, {
+    const endpoint = `https://api.spotify.com/v1/me/top/artists?time_range=${timeRange}&limit=24`;
+    const { items } = await fetch(endpoint, {
       headers: { Authorization: `Bearer ${access_token}` },
     }).then((res) => res.json() as Promise<SpotifyTopArtistsResponse>);
     const artists: TopArtist[] =
@@ -164,9 +177,9 @@ const getTopArtists = async (env: Env, kv: KVNamespace): Promise<TopArtist[]> =>
         id: artist.id,
         name: artist.name,
         url: artist.external_urls.spotify,
-        imageUrl: artist.images[0].url,
-        followers: artist.followers.total,
-        popularity: artist.popularity,
+        imageUrl: artist.images?.[0]?.url || "",
+        followers: artist.followers?.total || 0,
+        popularity: artist.popularity || 0,
       })) || [];
     return artists;
   });
