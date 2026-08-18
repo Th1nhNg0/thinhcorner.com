@@ -54,7 +54,7 @@ const blog = (await getCollection("blog"))
         </p>
         <p>
           This is where I keep notes on what I’m learning and building. You can
-          also see what I’m <a href="/reading" class="text-link">reading</a>,{" "}
+          also see what I’m <a href="/books" class="text-link">reading</a>,{" "}
           <a href="/music" class="text-link">listening to</a>, or{" "}
           <a href="/projects" class="text-link">working on</a>.
         </p>
@@ -64,7 +64,7 @@ const blog = (await getCollection("blog"))
     <section class="mt-10">
       <div class="mb-3 flex items-center justify-between">
         <h2 class="text-sm font-medium text-zinc-200">Latest writing</h2>
-        <a href="/blog" class="text-xs text-zinc-500 transition-colors hover:text-[#eab308]">View all</a>
+        <a href="/writing" class="text-xs text-zinc-500 transition-colors hover:text-[#eab308]">View all</a>
       </div>
       <ol>
         {
@@ -72,7 +72,7 @@ const blog = (await getCollection("blog"))
             <li>
               <a
                 data-astro-prefetch
-                href={`/blog/${post.id}`}
+                href={`/writing/${post.id}`}
                 class="group grid grid-cols-[1fr_auto] gap-4 py-2"
               >
                 <span class="min-w-0 text-sm text-zinc-400 transition-colors group-hover:text-zinc-100">

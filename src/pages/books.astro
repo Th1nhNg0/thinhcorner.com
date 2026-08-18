@@ -97,22 +97,21 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
 ---
 
 <Layout
-  title="Reading — Thinh's Corner"
+  title="Books — Thinh's Corner"
   description="A list of books I've read and recommend."
   lang="en"
   locale="en_US"
   structuredData={{
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Reading",
+    name: "Books",
     description: "A list of books I've read and recommend.",
-    url: new URL("/reading", Astro.site).toString(),
+    url: new URL("/books", Astro.site).toString(),
   }}
 >
   <Container>
     <div class="collection-page">
     <header class="page-header">
-      <p class="page-kicker">Reading log / Goodreads sync</p>
       <h1 class="page-title">Bookshelf</h1>
       <p class="page-intro">
         A record of what I’ve read over the years, synced from my{" "}
@@ -373,7 +372,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
 
     <!-- Footer -->
     <p class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-[10px] text-zinc-600">
-      Updated <time id="last-updated" datetime={now.toISOString()}>{format(now, "MMM d, yyyy 'at' h:mm a")}</time>
+      Updated <time id="last-updated" datetime={now.toISOString()}></time>
     </p>
     </div>
   </Container>
@@ -416,6 +415,30 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
     });
   }
 
-  document.addEventListener("astro:page-load", initReadingChartToggle);
+  function formatLastUpdated() {
+    const timeEl = document.getElementById("last-updated");
+    if (!timeEl) return;
+    const dt = timeEl.getAttribute("datetime");
+    if (!dt) return;
+    const date = new Date(dt);
+    if (isNaN(date.getTime())) return;
+
+    const datePart = date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+    const timePart = date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+    timeEl.textContent = `${datePart} at ${timePart}`;
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    initReadingChartToggle();
+    formatLastUpdated();
+  });
 </script>
 </Layout>

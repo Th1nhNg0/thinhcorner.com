@@ -4,14 +4,45 @@ import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
 import { getRecentlyPlayed, getTopArtists, getTopTracks } from "@/lib/spotify";
 import { SOCIAL_MEDIA } from "@/consts";
-import { format, formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { env } from "cloudflare:workers";
 
-const topTracks = await getTopTracks(env, env.CACHE);
-const recentlyPlayed = await getRecentlyPlayed(env, env.CACHE);
-const topArtists = await getTopArtists(env, env.CACHE);
-const mobileArtistCount = topArtists.length - (topArtists.length % 2);
-const desktopArtistCount = topArtists.length - (topArtists.length % 3);
+const [
+  recentlyPlayed,
+  topTracksShort,
+  topTracksMedium,
+  topTracksLong,
+  topArtistsShort,
+  topArtistsMedium,
+  topArtistsLong,
+] = await Promise.all([
+  getRecentlyPlayed(env, env.CACHE),
+  getTopTracks(env, env.CACHE, "short_term"),
+  getTopTracks(env, env.CACHE, "medium_term"),
+  getTopTracks(env, env.CACHE, "long_term"),
+  getTopArtists(env, env.CACHE, "short_term"),
+  getTopArtists(env, env.CACHE, "medium_term"),
+  getTopArtists(env, env.CACHE, "long_term"),
+]);
+
+const tracksByRange = {
+  short_term: topTracksShort,
+  medium_term: topTracksMedium,
+  long_term: topTracksLong,
+};
+
+const artistsByRange = {
+  short_term: topArtistsShort,
+  medium_term: topArtistsMedium,
+  long_term: topArtistsLong,
+};
+
+const timeRanges = [
+  { key: "short_term", label: "4 Weeks" },
+  { key: "medium_term", label: "6 Months" },
+  { key: "long_term", label: "All Time" },
+] as const;
+
 const now = new Date();
 
 Astro.response.headers.set(
@@ -34,7 +65,6 @@ Astro.response.headers.set(
   <Container>
     <div class="collection-page">
     <header class="page-header">
-      <p class="page-kicker">Listening log / 4 week window</p>
       <h1 class="page-title">Music library</h1>
       <p class="page-intro">
         A live snapshot of what I’ve been listening to, synced from my{" "}
@@ -66,7 +96,6 @@ Astro.response.headers.set(
                   decoding="async"
                   class="h-full w-full border border-[#27272a] object-cover"
                 />
-
               </div>
               <div class="flex-1 min-w-0">
                 <h3 class="line-clamp-1 text-xs font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
@@ -91,88 +120,251 @@ Astro.response.headers.set(
     <section class="mb-8">
       <div class="mb-3 flex items-center justify-between">
         <h2 class="text-sm font-medium text-zinc-200">Top tracks</h2>
-        <span class="font-mono text-[10px] text-zinc-600">Past 4 weeks</span>
+        <div class="flex border border-[#27272a] bg-[#0c0c0d] p-0.5" role="tablist" aria-label="Top tracks time range">
+          {
+            timeRanges.map((range, i) => (
+              <button
+                type="button"
+                data-track-range={range.key}
+                class:list={[
+                  "px-2 py-0.5 font-mono text-[9px] uppercase transition-colors",
+                  i === 0
+                    ? "bg-[#eab308] text-black"
+                    : "text-zinc-500 hover:text-zinc-300",
+                ]}
+                aria-pressed={i === 0 ? "true" : "false"}
+              >
+                {range.label}
+              </button>
+            ))
+          }
+        </div>
       </div>
-      <div class="grid grid-cols-3 border-l border-t border-[#27272a] md:grid-cols-5">
-        {
-          topTracks.map((track) => (
-            <a
-              href={track.songUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="compact-row group border-b border-r border-[#27272a] p-2 last:hidden sm:last:block"
-            >
-              <div class="relative aspect-square mb-2">
-                <img
-                  src={track.imageUrl}
-                  alt={track.title}
-                  width="300"
-                  height="300"
-                  loading="lazy"
-                  decoding="async"
-                  class="h-full w-full border border-[#27272a] object-cover"
-                />
-
-              </div>
-              <h3 class="line-clamp-1 text-[11px] font-medium text-zinc-300 transition-colors group-hover:text-[#eab308]">
-                {track.title}
-              </h3>
-              <p class="text-zinc-400 text-xs line-clamp-1">
-                {track.artist}
-              </p>
-            </a>
-          ))
-        }
-      </div>
+      {
+        timeRanges.map((range, i) => (
+          <div
+            id={`tracks-${range.key}`}
+            class:list={[
+              "grid-cols-3 border-l border-t border-[#27272a] md:grid-cols-5",
+              i === 0 ? "grid" : "hidden",
+            ]}
+          >
+            {
+              tracksByRange[range.key].map((track) => (
+                <a
+                  href={track.songUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="compact-row group border-b border-r border-[#27272a] p-2 last:hidden sm:last:block"
+                >
+                  <div class="relative aspect-square mb-2">
+                    <img
+                      src={track.imageUrl}
+                      alt={track.title}
+                      width="300"
+                      height="300"
+                      loading="lazy"
+                      decoding="async"
+                      class="h-full w-full border border-[#27272a] object-cover"
+                    />
+                  </div>
+                  <h3 class="line-clamp-1 text-[11px] font-medium text-zinc-300 transition-colors group-hover:text-[#eab308]">
+                    {track.title}
+                  </h3>
+                  <p class="text-zinc-400 text-xs line-clamp-1">
+                    {track.artist}
+                  </p>
+                </a>
+              ))
+            }
+          </div>
+        ))
+      }
     </section>
 
     <section class="mb-8">
       <div class="mb-3 flex items-center justify-between">
         <h2 class="text-sm font-medium text-zinc-200">Top artists</h2>
-        <span class="font-mono text-[10px] text-zinc-600">Past 4 weeks</span>
+        <div class="flex border border-[#27272a] bg-[#0c0c0d] p-0.5" role="tablist" aria-label="Top artists time range">
+          {
+            timeRanges.map((range, i) => (
+              <button
+                type="button"
+                data-artist-range={range.key}
+                class:list={[
+                  "px-2 py-0.5 font-mono text-[9px] uppercase transition-colors",
+                  i === 0
+                    ? "bg-[#eab308] text-black"
+                    : "text-zinc-500 hover:text-zinc-300",
+                ]}
+                aria-pressed={i === 0 ? "true" : "false"}
+              >
+                {range.label}
+              </button>
+            ))
+          }
+        </div>
       </div>
-      <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-3">
-        {
-          topArtists.map((artist, index) => (
-            <a
-              href={artist.url}
-              target="_blank"
-              rel="noopener noreferrer"
+      {
+        timeRanges.map((range, i) => {
+          const artists = artistsByRange[range.key];
+          const mobileCount = artists.length - (artists.length % 2);
+          const desktopCount = artists.length - (artists.length % 3);
+          return (
+            <div
+              id={`artists-${range.key}`}
               class:list={[
-                "group relative aspect-[4/3] overflow-hidden border-b border-r border-[#27272a]",
-                index < mobileArtistCount ? "block" : "hidden",
-                index < desktopArtistCount ? "md:block" : "md:hidden",
+                "grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-3",
+                i === 0 ? "grid" : "hidden",
               ]}
             >
-              <img
-                src={artist.imageUrl}
-                alt={artist.name}
-                width="640"
-                height="480"
-                loading="lazy"
-                decoding="async"
-                class="absolute inset-0 h-full w-full object-cover opacity-70 transition duration-300 group-hover:scale-[1.02] group-hover:opacity-85"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
-              <div class="absolute inset-0 p-4 flex flex-col justify-end">
-                <h3 class="mb-1 text-sm font-medium text-white">
-                  {artist.name}
-                </h3>
-                <div class="flex flex-col gap-0.5 font-mono text-[8px] uppercase tracking-wide text-zinc-300 sm:flex-row sm:gap-3">
-                  <span>{artist.followers.toLocaleString()} followers</span>
-                  <span>{artist.popularity}% popularity</span>
-                </div>
-              </div>
-            </a>
-          ))
-        }
-      </div>
+              {
+                artists.map((artist, index) => (
+                  <a
+                    href={artist.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class:list={[
+                      "group relative aspect-[4/3] overflow-hidden border-b border-r border-[#27272a]",
+                      index < mobileCount ? "block" : "hidden",
+                      index < desktopCount ? "md:block" : "md:hidden",
+                    ]}
+                  >
+                    <img
+                      src={artist.imageUrl}
+                      alt={artist.name}
+                      width="640"
+                      height="480"
+                      loading="lazy"
+                      decoding="async"
+                      class="absolute inset-0 h-full w-full object-cover opacity-70 transition duration-300 group-hover:scale-[1.02] group-hover:opacity-85"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
+                    <div class="absolute inset-0 p-4 flex flex-col justify-end">
+                      <h3 class="mb-1 text-sm font-medium text-white">
+                        {artist.name}
+                      </h3>
+                      <div class="flex flex-col gap-0.5 font-mono text-[8px] uppercase tracking-wide text-zinc-300 sm:flex-row sm:gap-3">
+                        <span>{artist.followers.toLocaleString()} followers</span>
+                        <span>{artist.popularity}% popularity</span>
+                      </div>
+                    </div>
+                  </a>
+                ))
+              }
+            </div>
+          );
+        })
+      }
     </section>
 
     <p class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-[10px] text-zinc-600">
-      Updated <time id="last-updated" datetime={now.toISOString()}>{format(now, "MMM d, yyyy 'at' h:mm a")}</time>
+      Updated <time id="last-updated" datetime={now.toISOString()}></time>
     </p>
     </div>
   </Container>
-</Layout>
 
+<script>
+  const TIME_RANGES = ["short_term", "medium_term", "long_term"];
+
+  function initMusicToggles() {
+    const trackButtons = document.querySelectorAll<HTMLButtonElement>("[data-track-range]");
+    trackButtons.forEach((btn) => {
+      if (btn.dataset.toggleInitialized === "true") return;
+      btn.dataset.toggleInitialized = "true";
+
+      btn.addEventListener("click", () => {
+        const selected = btn.dataset.trackRange;
+        if (!selected) return;
+
+        TIME_RANGES.forEach((range) => {
+          const container = document.getElementById(`tracks-${range}`);
+          if (container) {
+            if (range === selected) {
+              container.classList.remove("hidden");
+              container.classList.add("grid");
+            } else {
+              container.classList.add("hidden");
+              container.classList.remove("grid");
+            }
+          }
+        });
+
+        trackButtons.forEach((b) => {
+          const isActive = b.dataset.trackRange === selected;
+          b.setAttribute("aria-pressed", isActive ? "true" : "false");
+          if (isActive) {
+            b.classList.add("bg-[#eab308]", "text-black");
+            b.classList.remove("text-zinc-500", "hover:text-zinc-300");
+          } else {
+            b.classList.remove("bg-[#eab308]", "text-black");
+            b.classList.add("text-zinc-500", "hover:text-zinc-300");
+          }
+        });
+      });
+    });
+
+    const artistButtons = document.querySelectorAll<HTMLButtonElement>("[data-artist-range]");
+    artistButtons.forEach((btn) => {
+      if (btn.dataset.toggleInitialized === "true") return;
+      btn.dataset.toggleInitialized = "true";
+
+      btn.addEventListener("click", () => {
+        const selected = btn.dataset.artistRange;
+        if (!selected) return;
+
+        TIME_RANGES.forEach((range) => {
+          const container = document.getElementById(`artists-${range}`);
+          if (container) {
+            if (range === selected) {
+              container.classList.remove("hidden");
+              container.classList.add("grid");
+            } else {
+              container.classList.add("hidden");
+              container.classList.remove("grid");
+            }
+          }
+        });
+
+        artistButtons.forEach((b) => {
+          const isActive = b.dataset.artistRange === selected;
+          b.setAttribute("aria-pressed", isActive ? "true" : "false");
+          if (isActive) {
+            b.classList.add("bg-[#eab308]", "text-black");
+            b.classList.remove("text-zinc-500", "hover:text-zinc-300");
+          } else {
+            b.classList.remove("bg-[#eab308]", "text-black");
+            b.classList.add("text-zinc-500", "hover:text-zinc-300");
+          }
+        });
+      });
+    });
+  }
+
+  function formatLastUpdated() {
+    const timeEl = document.getElementById("last-updated");
+    if (!timeEl) return;
+    const dt = timeEl.getAttribute("datetime");
+    if (!dt) return;
+    const date = new Date(dt);
+    if (isNaN(date.getTime())) return;
+
+    const datePart = date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+    const timePart = date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+    timeEl.textContent = `${datePart} at ${timePart}`;
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    initMusicToggles();
+    formatLastUpdated();
+  });
+</script>
+</Layout>

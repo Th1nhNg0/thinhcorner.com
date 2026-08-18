@@ -64,7 +64,7 @@ let slug = Array.isArray(Astro.params.id)
 <Layout
   title={post.data.title}
   description={post.data.description}
-  image={`/blog/${post.id}/og.jpg`}
+  image={`/writing/${post.id}/og.jpg`}
   type="article"
   katex={hasMath}
   robots={post.data.draft ? "noindex,nofollow" : undefined}
@@ -74,15 +74,15 @@ let slug = Array.isArray(Astro.params.id)
   publishedTime={post.data.date.toISOString()}
   modifiedTime={modifiedTime}
   imageAlt={post.data.title}
-  prevUrl={prevPost ? new URL(`/blog/${prevPost.id}`, Astro.site) : undefined}
-  nextUrl={nextPost ? new URL(`/blog/${nextPost.id}`, Astro.site) : undefined}
+  prevUrl={prevPost ? new URL(`/writing/${prevPost.id}`, Astro.site) : undefined}
+  nextUrl={nextPost ? new URL(`/writing/${nextPost.id}`, Astro.site) : undefined}
   structuredData={[
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
       headline: post.data.title,
       description: post.data.description,
-      image: new URL(`/blog/${post.id}/og.jpg`, Astro.site).toString(),
+      image: new URL(`/writing/${post.id}/og.jpg`, Astro.site).toString(),
       author: {
         "@type": "Person",
         name: AUTHOR_NAME,
@@ -95,8 +95,8 @@ let slug = Array.isArray(Astro.params.id)
       },
       datePublished: post.data.date.toISOString(),
       dateModified: modifiedTime,
-      mainEntityOfPage: new URL(`/blog/${post.id}`, Astro.site).toString(),
-      url: new URL(`/blog/${post.id}`, Astro.site).toString(),
+      mainEntityOfPage: new URL(`/writing/${post.id}`, Astro.site).toString(),
+      url: new URL(`/writing/${post.id}`, Astro.site).toString(),
       inLanguage: post.data.lang ?? "en",
       ...(minutesRead && {
         timeRequired: `PT${Math.ceil(parseInt(minutesRead))}M`,
@@ -115,14 +115,14 @@ let slug = Array.isArray(Astro.params.id)
         {
           "@type": "ListItem",
           position: 2,
-          name: "Blog",
-          item: new URL("/blog", Astro.site).toString(),
+          name: "Writing",
+          item: new URL("/writing", Astro.site).toString(),
         },
         {
           "@type": "ListItem",
           position: 3,
           name: post.data.title,
-          item: new URL(`/blog/${post.id}`, Astro.site).toString(),
+          item: new URL(`/writing/${post.id}`, Astro.site).toString(),
         },
       ],
     },
@@ -140,7 +140,7 @@ let slug = Array.isArray(Astro.params.id)
     }
     <article aria-labelledby="post-title">
     <header class="mb-8 border-b border-[#27272a] pb-6">
-      <a href="/blog" class="page-kicker transition-colors hover:text-white">Writing / {post.data.lang ?? "en"}</a>
+      <a href="/writing" class="page-kicker transition-colors hover:text-white">Writing / {post.data.lang ?? "en"}</a>
       <h1 id="post-title" class="mt-3 max-w-3xl text-[clamp(1.75rem,6vw,2.75rem)] font-semibold leading-[1.08] tracking-[-0.04em] text-zinc-100">
         {post.data.title}
       </h1>
@@ -163,7 +163,7 @@ let slug = Array.isArray(Astro.params.id)
     <nav class="grid border-y border-[#27272a] sm:grid-cols-2" aria-label="Post navigation">
       {
         prevPost ? (
-          <a href={`/blog/${prevPost.id}`} class="group px-3 py-4 transition-colors hover:bg-[#111113] sm:border-r sm:border-[#27272a]">
+          <a href={`/writing/${prevPost.id}`} class="group px-3 py-4 transition-colors hover:bg-[#111113] sm:border-r sm:border-[#27272a]">
             <div class="font-mono text-[9px] uppercase tracking-wider text-zinc-600">Newer</div>
             <div class="mt-1 line-clamp-2 text-xs text-zinc-300 group-hover:text-[#eab308]">{prevPost.data.title}</div>
           </a>
@@ -171,7 +171,7 @@ let slug = Array.isArray(Astro.params.id)
       }
       {
         nextPost && (
-          <a href={`/blog/${nextPost.id}`} class="group px-3 py-4 text-right transition-colors hover:bg-[#111113]">
+          <a href={`/writing/${nextPost.id}`} class="group px-3 py-4 text-right transition-colors hover:bg-[#111113]">
             <div class="font-mono text-[9px] uppercase tracking-wider text-zinc-600">Older</div>
             <div class="mt-1 line-clamp-2 text-xs text-zinc-300 group-hover:text-[#eab308]">{nextPost.data.title}</div>
           </a>
