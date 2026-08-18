@@ -32,7 +32,7 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
     "@type": "CollectionPage",
     name: "Writing",
     description: "Read my collection of posts and the things that interest me",
-    url: new URL("/blog", Astro.site).toString(),
+    url: new URL("/writing", Astro.site).toString(),
   }}
 >
   <Container>
@@ -64,7 +64,7 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
                 <li data-lang={post.data.lang || "en"}>
                   <a
                     data-astro-prefetch
-                    href={`/blog/${post.id}`}
+                    href={`/writing/${post.id}`}
                     class="group grid grid-cols-[1fr_auto] items-baseline gap-4 py-2 focus-visible:outline-none"
                   >
                     <span class="min-w-0 text-sm leading-snug text-zinc-400 transition-colors group-hover:text-zinc-100">
