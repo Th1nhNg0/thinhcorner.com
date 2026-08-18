@@ -1,0 +1,158 @@
+---
+title: "I Asked AI to Build a Game Bot. It Became Something Else."
+date: "2026-08-18"
+description: "A personal story about using an AI coding agent to automate a Discord game, debug it through real failures, and discover where automation ends and cheating begins."
+lang: "en"
+draft: true
+---
+
+I did not begin with the intention of building a game cheat.
+
+I was playing Farm Merge Valley, a small merge game that runs inside Discord, and I wanted to automate the boring parts. Harvesting crops, combining items, clearing trees, collecting rewards — the things that are satisfying for a few minutes and repetitive after that.
+
+My first attempt used computer vision. It looked at screenshots and tried to understand what was on the screen before simulating clicks. It was the obvious approach, and it was also frustrating. A small change in the game layout could break it. A different window size could break it. A slightly different animation timing could make it click the wrong thing.
+
+Eventually I stopped trying to make a robot pretend to be a player. The game was already a web application running in my browser. Instead of reading pixels, I could ask the browser to run code inside the game and use the same systems the game used internally.
+
+That was the turning point. I asked an AI coding agent to help me explore that idea.
+
+## I did not give the AI a complete plan
+
+I did not write a detailed specification and receive a finished bot at the end. The process was much less impressive and much more useful than that.
+
+I started with a rough direction: connect to Chrome, reach the game running inside Discord, discover how the game was structured, and expose a few useful actions. The agent helped turn each vague idea into something I could run.
+
+Then I tested it in the real game.
+
+If it connected successfully, I asked for the next step. If it failed, I copied the error or described what happened on screen. If it appeared to work but produced a strange result, I investigated that result with the agent. We repeated the cycle until the behavior made sense.
+
+The game was a particularly good environment for this kind of work because it did not give us friendly names or a clean API. Much of the code was obfuscated. Functions and modules had meaningless names, and there was no documentation explaining how harvesting, merging, timers, or rewards worked.
+
+The AI could search through the running application much faster than I could. It could write experiments, inspect objects, compare possible paths, and change a large amount of code without getting tired. But it could not see whether the farm actually looked correct unless I ran the experiment and told it what happened.
+
+That made the division of labor quite clear. The agent was fast at forming and testing hypotheses. I was the person standing in front of the game, deciding whether the result was real.
+
+## The first time it felt real
+
+The first useful milestone was not an infinite-reward button. It was a small menu appearing inside the game.
+
+There was a button to merge items on the board. I clicked it, and the game performed real merges instead of moving images around. The game created the result, awarded experience, played its own effects, and saved the state. That distinction mattered. The bot was no longer pretending that something had happened. It was asking the game to perform the action itself.
+
+From there, the menu slowly grew. It could sort the board, fill empty spaces, harvest, collect rewards, start orders, and clear sources. Every new button looked simple from the outside. Internally, each one required finding the path the game used when a real player performed that action.
+
+A normal click was often not enough.
+
+For example, tapping a crop did not necessarily harvest it. The visible tap was only one part of the process. The game expected an internal event to be added to the crop before the harvest machinery would run. Once we understood that, the bot could use the game's own harvest behavior instead of trying to imitate a tap more accurately.
+
+This was the pattern for almost everything: the visible interface was only the surface. The useful behavior was underneath it.
+
+<figure>
+  <img
+    src="./menu-screenshoot.png"
+    alt="The FMV Bot menu inside Farm Merge Valley"
+    width={231}
+    height={148}
+    loading="lazy"
+    decoding="async"
+  />
+  <figcaption>
+    The small in-game menu that started as an experiment and gradually became the main way I used the bot.
+  </figcaption>
+</figure>
+
+## The game kept teaching us through failure
+
+The AI was good at producing a plausible solution. The game was good at proving that a plausible solution was not always correct.
+
+One of the first surprises was that the game paused when the Discord tab was hidden. That made background automation mostly useless. The agent helped me work around the browser's visibility behavior, but this only became obvious after I left the tab alone and came back to find that almost nothing had happened.
+
+Then there were the bubbles.
+
+The game stores some rewards in bubbles that appear on the farm. If a bubble was tapped twice before its animation finished, the contents could be duplicated. That was not a theoretical edge case. It happened in testing. The fix was not simply “make the loop faster” or “try again when something fails.” The safe behavior was to slow down and wait for the previous action to finish.
+
+At another point, I used the wrong path to create crates. The objects appeared, but they were not placed correctly. After enough of them accumulated, the game froze. That single failure changed the way the bot handled crates from then on.
+
+There was also a worker problem. Finishing a source's cooldown timer made it look ready, but the worker assigned to it remained occupied. After a few cycles, all workers were stuck and the automation stopped with no obvious reason. The timer was not the whole operation; the worker had to be released through a separate part of the game's logic.
+
+These failures were more valuable than a smooth first attempt would have been. They revealed the difference between changing a value and completing a real game action. They also gave the agent something better than a vague memory. After each failure, I kept a short note explaining what happened and what should never be repeated.
+
+Over time, that note became a kind of shared memory for the work. Whenever a new session started, the agent could read the important discoveries instead of assuming the same things again. It included rules such as waiting between bubble taps, never reloading the game while the bot was installed, and giving the game time to process large batches of actions.
+
+This small habit made a bigger difference than I expected. Without it, every new conversation would have started with an intelligent assistant that knew JavaScript but did not know the history of this particular game. With it, the agent gradually became familiar with the strange behavior we had already encountered.
+
+## The moment automation became cheating
+
+For the first part of the experiment, I thought of the bot as an automation tool. It did repetitive work that a player could also do manually.
+
+That distinction became harder to defend when the agent found that some of the game's reward logic trusted the client. Values such as coins, gems, energy, and crates could be changed locally and then persisted by the game's normal save process.
+
+That was the moment the project changed character.
+
+Adding a button to harvest crops is automation. Adding a button that creates resources the player did not earn is cheating. The code can make both actions look equally neat, but they are not morally or practically equivalent.
+
+I still explored the discovery because understanding how the game worked was the reason I started. The bot gained a separate cheat area with resource grants, object spawning, instant timers, and other experiments. I deliberately left real-money purchase systems alone. There is a line between investigating a poorly protected game economy and interfering with actual payments.
+
+The uncomfortable part is that the game accepted these changes because the important validation happened on the client. If the client can tell the server how much currency it has and the server accepts that report, the client is effectively in charge of the economy.
+
+An AI did not create that weakness. It only made the weakness easier to find and easier to explore.
+
+## What the AI actually contributed
+
+It is tempting to describe this kind of work as “I told AI to build a bot and it did.” That is not how it felt from inside the process.
+
+The agent contributed an enormous amount of implementation. It wrote the browser connection, the in-game controls, the automation loops, the discovery logic, the safety checks, and the supporting code around them. It was also much better than me at repetitive exploration. It could inspect a large number of objects and functions, try several structural patterns, and rewrite a helper without losing patience.
+
+It was especially good at turning discoveries into consistent behavior. Once we learned that some actions needed time to settle, the agent could add the same kind of waiting and safety guard across multiple operations. Once we learned that hidden tabs behaved differently, it could trace the consequences through the rest of the automation.
+
+It also helped with the less exciting work that makes experiments sustainable: organizing the code, keeping behavior consistent, writing explanations, and recording mistakes. That part is easy to underestimate. A clever discovery is useful once. A documented discovery can keep helping for weeks.
+
+But the agent did not replace the human part of the work.
+
+I chose the important direction: stop using screenshots and interact with the web application directly. I decided which features were worth pursuing. I ran the game, watched the animations, noticed when the board was wrong, and decided whether a shortcut was safe enough to keep. I also decided when a discovery was interesting but not worth turning into a feature.
+
+The agent could tell me that a function appeared to grant a reward. It could not decide whether I wanted that behavior in the final bot. It could suggest that an action had completed. It could not see that the game had quietly frozen thirty seconds later unless I tested it.
+
+My job gradually became less about writing code and more about being a researcher, tester, and editor for the agent's ideas.
+
+## The surprising part was not the speed
+
+The obvious benefit was speed. I could describe a change in plain language and receive a working attempt quickly. A feature that would have taken me a long time to write from scratch could be tested within minutes.
+
+But speed was not the most important benefit. The surprising part was continuity.
+
+AI conversations are temporary. The work is not. Without a shared record of decisions and failures, a new session can confidently repeat an old mistake. With a living set of notes, each session starts with more context than the last one.
+
+The notes did not need to be formal. They just needed to answer a few questions:
+
+- What do we know is real?
+- What did we try that failed?
+- What must not happen again?
+- What should be checked after the next change?
+
+That was enough to turn a collection of short AI sessions into one continuous collaboration.
+
+The other surprise was how much debugging remained. AI removed a lot of typing, but it did not remove uncertainty. In some ways, it made the feedback loop more important. Since the agent could change things so quickly, I had to be disciplined about running the game and checking the result instead of assuming that a confident explanation meant the feature worked.
+
+A fast wrong answer is still wrong. It is just wrong sooner.
+
+## What I learned from the experiment
+
+The first lesson is that AI works best when the human can provide real feedback. I did not need to understand every line of the generated code, but I needed to know what a correct result looked like. I needed to notice when an item disappeared, when a timer looked finished but was not, or when an apparently successful action made the next cycle fail.
+
+The second lesson is to preserve failures. Most debugging notes feel unimportant when they are written. Later, they become the most valuable part of the work. The agent did not need a long explanation of the entire game every time. It needed a short reminder that one particular shortcut had already frozen the game once.
+
+The third lesson is that the human should own the boundaries. An agent is very good at following a direction to its logical conclusion. That is useful when the direction is safe. It is dangerous when the direction is vague. I had to decide which experiments were acceptable, which features should remain private, and where to stop.
+
+Finally, I learned that the bottleneck moves. Before using an agent, I worried about how long it would take me to write the code. During this experiment, writing became the easy part. The difficult parts were choosing the right idea, designing a useful test, and deciding whether a result was trustworthy.
+
+## A necessary disclaimer
+
+This bot almost certainly violates the game's Terms of Service. Using it may put an account at risk. I built it for personal experimentation and learning, not to sell access or distribute the code. This post is about the experience of working with an AI coding agent, not a tutorial for cheating in Farm Merge Valley.
+
+There is also an ethical difference between understanding a system and abusing it. I crossed that line during the experiment, which is why I am not presenting the result as a harmless productivity tool. The fact that a game makes something possible does not automatically make it acceptable.
+
+The most interesting result was not the resource button or the automatic farming loop. It was seeing what happened when I gave an AI agent a vague goal, a real application to investigate, and constant feedback from the outside world.
+
+The agent wrote the code. The game supplied the truth. I had to decide what the truth meant and what to do with it.
+
+That feels like a more honest description of AI-assisted programming than saying that AI built everything by itself.
