@@ -18,11 +18,6 @@ export default defineConfig({
   site: "https://thinhcorner.com",
   trailingSlash: "never",
   prefetch: true,
-  redirects: {
-    "/blog": "/writing",
-    "/blog/[...id]": "/writing/[...id]",
-    "/reading": "/books",
-  },
   image: {
     layout: "constrained",
     responsiveStyles: false,
