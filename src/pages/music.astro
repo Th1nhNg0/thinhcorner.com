@@ -3,7 +3,7 @@ export const prerender = false;
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
 import { getRecentlyPlayed, getTopArtists, getTopTracks } from "@/lib/spotify";
-import { SOCIAL_MEDIA } from "@/consts";
+import { SOCIAL_MEDIA } from "../../data/consts";
 import { formatDistanceToNow } from "date-fns";
 import { env } from "cloudflare:workers";
 
@@ -64,93 +64,98 @@ Astro.response.headers.set(
 >
   <Container>
     <div class="collection-page">
-    <header class="page-header">
-      <h1 class="page-title">Music library</h1>
-      <p class="page-intro">
-        A live snapshot of what I’ve been listening to, synced from my{" "}
-        <a href={SOCIAL_MEDIA.spotify} class="text-link">Spotify profile</a>.
-      </p>
-    </header>
+      <header class="page-header">
+        <h1 class="page-title">Music library</h1>
+        <p class="page-intro">
+          A live snapshot of what I’ve been listening to, synced from my{" "}
+          <a href={SOCIAL_MEDIA.spotify} class="text-link">Spotify profile</a>.
+        </p>
+      </header>
 
-    <section class="mb-8">
-      <div class="mb-3 flex items-center justify-between">
-        <h2 class="text-sm font-medium text-zinc-200">Recently played</h2>
-        <span class="font-mono text-[10px] text-zinc-600">{recentlyPlayed.length} tracks</span>
-      </div>
-      <div class="border-y border-[#27272a]">
-        {
-          recentlyPlayed.map((track) => (
-            <a
-              href={track.songUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="compact-row group flex items-center gap-3 border-b border-[#27272a] p-2 last:border-b-0"
-            >
-              <div class="relative size-10 shrink-0">
-                <img
-                  src={track.imageUrl}
-                  alt={track.title}
-                  width="64"
-                  height="64"
-                  loading="lazy"
-                  decoding="async"
-                  class="h-full w-full border border-[#27272a] object-cover"
-                />
-              </div>
-              <div class="flex-1 min-w-0">
-                <h3 class="line-clamp-1 text-xs font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
-                  {track.title}
-                </h3>
-                <p class="line-clamp-1 text-[10px] text-zinc-500">
-                  {track.artist}
-                </p>
-                <p class="mt-0.5 font-mono text-[9px] text-zinc-700">
-                  Played{" "}
-                  {formatDistanceToNow(new Date(track.played_at), {
-                    addSuffix: true,
-                  })}
-                </p>
-              </div>
-            </a>
-          ))
-        }
-      </div>
-    </section>
-
-    <section class="mb-8">
-      <div class="mb-3 flex items-center justify-between">
-        <h2 class="text-sm font-medium text-zinc-200">Top tracks</h2>
-        <div class="flex border border-[#27272a] bg-[#0c0c0d] p-0.5" role="tablist" aria-label="Top tracks time range">
+      <section class="mb-8">
+        <div class="mb-3 flex items-center justify-between">
+          <h2 class="text-sm font-medium text-zinc-200">Recently played</h2>
+          <span class="font-mono text-[10px] text-zinc-600"
+            >{recentlyPlayed.length} tracks</span
+          >
+        </div>
+        <div class="border-y border-[#27272a]">
           {
-            timeRanges.map((range, i) => (
-              <button
-                type="button"
-                data-track-range={range.key}
-                class:list={[
-                  "px-2 py-0.5 font-mono text-[9px] uppercase transition-colors",
-                  i === 0
-                    ? "bg-[#eab308] text-black"
-                    : "text-zinc-500 hover:text-zinc-300",
-                ]}
-                aria-pressed={i === 0 ? "true" : "false"}
+            recentlyPlayed.map((track) => (
+              <a
+                href={track.songUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="compact-row group flex items-center gap-3 border-b border-[#27272a] p-2 last:border-b-0"
               >
-                {range.label}
-              </button>
+                <div class="relative size-10 shrink-0">
+                  <img
+                    src={track.imageUrl}
+                    alt={track.title}
+                    width="64"
+                    height="64"
+                    loading="lazy"
+                    decoding="async"
+                    class="h-full w-full border border-[#27272a] object-cover"
+                  />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h3 class="line-clamp-1 text-xs font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
+                    {track.title}
+                  </h3>
+                  <p class="line-clamp-1 text-[10px] text-zinc-500">
+                    {track.artist}
+                  </p>
+                  <p class="mt-0.5 font-mono text-[9px] text-zinc-700">
+                    Played{" "}
+                    {formatDistanceToNow(new Date(track.played_at), {
+                      addSuffix: true,
+                    })}
+                  </p>
+                </div>
+              </a>
             ))
           }
         </div>
-      </div>
-      {
-        timeRanges.map((range, i) => (
+      </section>
+
+      <section class="mb-8">
+        <div class="mb-3 flex items-center justify-between">
+          <h2 class="text-sm font-medium text-zinc-200">Top tracks</h2>
           <div
-            id={`tracks-${range.key}`}
-            class:list={[
-              "grid-cols-3 border-l border-t border-[#27272a] md:grid-cols-5",
-              i === 0 ? "grid" : "hidden",
-            ]}
+            class="flex border border-[#27272a] bg-[#0c0c0d] p-0.5"
+            role="tablist"
+            aria-label="Top tracks time range"
           >
             {
-              tracksByRange[range.key].map((track) => (
+              timeRanges.map((range, i) => (
+                <button
+                  type="button"
+                  data-track-range={range.key}
+                  class:list={[
+                    "px-2 py-0.5 font-mono text-[9px] uppercase transition-colors",
+                    i === 0
+                      ? "bg-[#eab308] text-black"
+                      : "text-zinc-500 hover:text-zinc-300",
+                  ]}
+                  aria-pressed={i === 0 ? "true" : "false"}
+                >
+                  {range.label}
+                </button>
+              ))
+            }
+          </div>
+        </div>
+        {
+          timeRanges.map((range, i) => (
+            <div
+              id={`tracks-${range.key}`}
+              class:list={[
+                "grid-cols-3 border-l border-t border-[#27272a] md:grid-cols-5",
+                i === 0 ? "grid" : "hidden",
+              ]}
+            >
+              {tracksByRange[range.key].map((track) => (
                 <a
                   href={track.songUrl}
                   target="_blank"
@@ -175,51 +180,53 @@ Astro.response.headers.set(
                     {track.artist}
                   </p>
                 </a>
+              ))}
+            </div>
+          ))
+        }
+      </section>
+
+      <section class="mb-8">
+        <div class="mb-3 flex items-center justify-between">
+          <h2 class="text-sm font-medium text-zinc-200">Top artists</h2>
+          <div
+            class="flex border border-[#27272a] bg-[#0c0c0d] p-0.5"
+            role="tablist"
+            aria-label="Top artists time range"
+          >
+            {
+              timeRanges.map((range, i) => (
+                <button
+                  type="button"
+                  data-artist-range={range.key}
+                  class:list={[
+                    "px-2 py-0.5 font-mono text-[9px] uppercase transition-colors",
+                    i === 0
+                      ? "bg-[#eab308] text-black"
+                      : "text-zinc-500 hover:text-zinc-300",
+                  ]}
+                  aria-pressed={i === 0 ? "true" : "false"}
+                >
+                  {range.label}
+                </button>
               ))
             }
           </div>
-        ))
-      }
-    </section>
-
-    <section class="mb-8">
-      <div class="mb-3 flex items-center justify-between">
-        <h2 class="text-sm font-medium text-zinc-200">Top artists</h2>
-        <div class="flex border border-[#27272a] bg-[#0c0c0d] p-0.5" role="tablist" aria-label="Top artists time range">
-          {
-            timeRanges.map((range, i) => (
-              <button
-                type="button"
-                data-artist-range={range.key}
-                class:list={[
-                  "px-2 py-0.5 font-mono text-[9px] uppercase transition-colors",
-                  i === 0
-                    ? "bg-[#eab308] text-black"
-                    : "text-zinc-500 hover:text-zinc-300",
-                ]}
-                aria-pressed={i === 0 ? "true" : "false"}
-              >
-                {range.label}
-              </button>
-            ))
-          }
         </div>
-      </div>
-      {
-        timeRanges.map((range, i) => {
-          const artists = artistsByRange[range.key];
-          const mobileCount = artists.length - (artists.length % 2);
-          const desktopCount = artists.length - (artists.length % 3);
-          return (
-            <div
-              id={`artists-${range.key}`}
-              class:list={[
-                "grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-3",
-                i === 0 ? "grid" : "hidden",
-              ]}
-            >
-              {
-                artists.map((artist, index) => (
+        {
+          timeRanges.map((range, i) => {
+            const artists = artistsByRange[range.key];
+            const mobileCount = artists.length - (artists.length % 2);
+            const desktopCount = artists.length - (artists.length % 3);
+            return (
+              <div
+                id={`artists-${range.key}`}
+                class:list={[
+                  "grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-3",
+                  i === 0 ? "grid" : "hidden",
+                ]}
+              >
+                {artists.map((artist, index) => (
                   <a
                     href={artist.url}
                     target="_blank"
@@ -245,126 +252,132 @@ Astro.response.headers.set(
                         {artist.name}
                       </h3>
                       <div class="flex flex-col gap-0.5 font-mono text-[8px] uppercase tracking-wide text-zinc-300 sm:flex-row sm:gap-3">
-                        <span>{artist.followers.toLocaleString()} followers</span>
+                        <span>
+                          {artist.followers.toLocaleString()} followers
+                        </span>
                         <span>{artist.popularity}% popularity</span>
                       </div>
                     </div>
                   </a>
-                ))
-              }
-            </div>
-          );
-        })
-      }
-    </section>
+                ))}
+              </div>
+            );
+          })
+        }
+      </section>
 
-    <p class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-[10px] text-zinc-600">
-      Updated <time id="last-updated" datetime={now.toISOString()}></time>
-    </p>
+      <p
+        class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-[10px] text-zinc-600"
+      >
+        Updated <time id="last-updated" datetime={now.toISOString()}></time>
+      </p>
     </div>
   </Container>
 
-<script>
-  const TIME_RANGES = ["short_term", "medium_term", "long_term"];
+  <script>
+    const TIME_RANGES = ["short_term", "medium_term", "long_term"];
 
-  function initMusicToggles() {
-    const trackButtons = document.querySelectorAll<HTMLButtonElement>("[data-track-range]");
-    trackButtons.forEach((btn) => {
-      if (btn.dataset.toggleInitialized === "true") return;
-      btn.dataset.toggleInitialized = "true";
+    function initMusicToggles() {
+      const trackButtons =
+        document.querySelectorAll<HTMLButtonElement>("[data-track-range]");
+      trackButtons.forEach((btn) => {
+        if (btn.dataset.toggleInitialized === "true") return;
+        btn.dataset.toggleInitialized = "true";
 
-      btn.addEventListener("click", () => {
-        const selected = btn.dataset.trackRange;
-        if (!selected) return;
+        btn.addEventListener("click", () => {
+          const selected = btn.dataset.trackRange;
+          if (!selected) return;
 
-        TIME_RANGES.forEach((range) => {
-          const container = document.getElementById(`tracks-${range}`);
-          if (container) {
-            if (range === selected) {
-              container.classList.remove("hidden");
-              container.classList.add("grid");
-            } else {
-              container.classList.add("hidden");
-              container.classList.remove("grid");
+          TIME_RANGES.forEach((range) => {
+            const container = document.getElementById(`tracks-${range}`);
+            if (container) {
+              if (range === selected) {
+                container.classList.remove("hidden");
+                container.classList.add("grid");
+              } else {
+                container.classList.add("hidden");
+                container.classList.remove("grid");
+              }
             }
-          }
-        });
+          });
 
-        trackButtons.forEach((b) => {
-          const isActive = b.dataset.trackRange === selected;
-          b.setAttribute("aria-pressed", isActive ? "true" : "false");
-          if (isActive) {
-            b.classList.add("bg-[#eab308]", "text-black");
-            b.classList.remove("text-zinc-500", "hover:text-zinc-300");
-          } else {
-            b.classList.remove("bg-[#eab308]", "text-black");
-            b.classList.add("text-zinc-500", "hover:text-zinc-300");
-          }
+          trackButtons.forEach((b) => {
+            const isActive = b.dataset.trackRange === selected;
+            b.setAttribute("aria-pressed", isActive ? "true" : "false");
+            if (isActive) {
+              b.classList.add("bg-[#eab308]", "text-black");
+              b.classList.remove("text-zinc-500", "hover:text-zinc-300");
+            } else {
+              b.classList.remove("bg-[#eab308]", "text-black");
+              b.classList.add("text-zinc-500", "hover:text-zinc-300");
+            }
+          });
         });
       });
-    });
 
-    const artistButtons = document.querySelectorAll<HTMLButtonElement>("[data-artist-range]");
-    artistButtons.forEach((btn) => {
-      if (btn.dataset.toggleInitialized === "true") return;
-      btn.dataset.toggleInitialized = "true";
+      const artistButtons = document.querySelectorAll<HTMLButtonElement>(
+        "[data-artist-range]",
+      );
+      artistButtons.forEach((btn) => {
+        if (btn.dataset.toggleInitialized === "true") return;
+        btn.dataset.toggleInitialized = "true";
 
-      btn.addEventListener("click", () => {
-        const selected = btn.dataset.artistRange;
-        if (!selected) return;
+        btn.addEventListener("click", () => {
+          const selected = btn.dataset.artistRange;
+          if (!selected) return;
 
-        TIME_RANGES.forEach((range) => {
-          const container = document.getElementById(`artists-${range}`);
-          if (container) {
-            if (range === selected) {
-              container.classList.remove("hidden");
-              container.classList.add("grid");
-            } else {
-              container.classList.add("hidden");
-              container.classList.remove("grid");
+          TIME_RANGES.forEach((range) => {
+            const container = document.getElementById(`artists-${range}`);
+            if (container) {
+              if (range === selected) {
+                container.classList.remove("hidden");
+                container.classList.add("grid");
+              } else {
+                container.classList.add("hidden");
+                container.classList.remove("grid");
+              }
             }
-          }
-        });
+          });
 
-        artistButtons.forEach((b) => {
-          const isActive = b.dataset.artistRange === selected;
-          b.setAttribute("aria-pressed", isActive ? "true" : "false");
-          if (isActive) {
-            b.classList.add("bg-[#eab308]", "text-black");
-            b.classList.remove("text-zinc-500", "hover:text-zinc-300");
-          } else {
-            b.classList.remove("bg-[#eab308]", "text-black");
-            b.classList.add("text-zinc-500", "hover:text-zinc-300");
-          }
+          artistButtons.forEach((b) => {
+            const isActive = b.dataset.artistRange === selected;
+            b.setAttribute("aria-pressed", isActive ? "true" : "false");
+            if (isActive) {
+              b.classList.add("bg-[#eab308]", "text-black");
+              b.classList.remove("text-zinc-500", "hover:text-zinc-300");
+            } else {
+              b.classList.remove("bg-[#eab308]", "text-black");
+              b.classList.add("text-zinc-500", "hover:text-zinc-300");
+            }
+          });
         });
       });
-    });
-  }
+    }
 
-  function formatLastUpdated() {
-    const timeEl = document.getElementById("last-updated");
-    if (!timeEl) return;
-    const dt = timeEl.getAttribute("datetime");
-    if (!dt) return;
-    const date = new Date(dt);
-    if (isNaN(date.getTime())) return;
+    function formatLastUpdated() {
+      const timeEl = document.getElementById("last-updated");
+      if (!timeEl) return;
+      const dt = timeEl.getAttribute("datetime");
+      if (!dt) return;
+      const date = new Date(dt);
+      if (isNaN(date.getTime())) return;
 
-    const datePart = date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-    const timePart = date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-    timeEl.textContent = `${datePart} at ${timePart}`;
-  }
+      const datePart = date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      });
+      const timePart = date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      });
+      timeEl.textContent = `${datePart} at ${timePart}`;
+    }
 
-  document.addEventListener("astro:page-load", () => {
-    initMusicToggles();
-    formatLastUpdated();
-  });
-</script>
+    document.addEventListener("astro:page-load", () => {
+      initMusicToggles();
+      formatLastUpdated();
+    });
+  </script>
 </Layout>
