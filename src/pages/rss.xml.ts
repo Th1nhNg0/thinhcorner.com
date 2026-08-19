@@ -4,7 +4,7 @@ import { getCollection } from "astro:content";
 import type { APIRoute } from "astro";
 
 export const GET: APIRoute = async (context) => {
-  const blog = (await getCollection("blog")).filter((p) => !p.data.draft);
+  const blog = (await getCollection("writing")).filter((p) => !p.data.draft);
 
   return rss({
     title: SITE.title,
