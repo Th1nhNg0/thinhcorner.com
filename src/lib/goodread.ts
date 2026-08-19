@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import { GOODREADS_USER_ID } from "@/consts";
+import { GOODREADS_USER_ID } from "../../data/consts";
 import { withCache } from "@/lib/cache";
 
 interface Book {
@@ -16,10 +16,10 @@ interface Book {
 export async function get_book(kv: KVNamespace) {
   return withCache(kv, "goodreads_books", 21600, async () => {
     const current_reads = await crawl_book(
-      `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`
+      `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`,
     );
     const read = await crawl_book(
-      `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read`
+      `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read`,
     );
     return { current_reads, read };
   });
@@ -30,15 +30,18 @@ async function crawl_book(url: string) {
   try {
     const res = await fetch(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
-      }
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+      },
     });
     console.log(`[Goodreads] Status: ${res.status} ${res.statusText}`);
 
     const data = await res.text();
     console.log(`[Goodreads] Length: ${data.length}`);
     if (res.status !== 200) {
-      console.warn(`[Goodreads] Non-200 response. Content preview: ${data.slice(0, 500)}`);
+      console.warn(
+        `[Goodreads] Non-200 response. Content preview: ${data.slice(0, 500)}`,
+      );
     }
     const $ = cheerio.load(data, {
       xmlMode: true,
@@ -75,4 +78,3 @@ async function crawl_book(url: string) {
     return [];
   }
 }
-
