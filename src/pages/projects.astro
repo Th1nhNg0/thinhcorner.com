@@ -1,6 +1,6 @@
 ---
 import Container from "@/components/Container.astro";
-import { AUTHOR_NAME } from "@/consts";
+import { AUTHOR_NAME } from "../../data/consts";
 import Layout from "@/layouts/Layout.astro";
 
 const projects = [
@@ -28,7 +28,13 @@ const projects = [
     url: "https://github.com/Th1nhNg0/hayday",
     description:
       "Code and resources for the Hayday Game Schedule blog post. Models Hay Day production as a Flexible Job Shop Scheduling Problem (FJSP) and solves it with Google OR-Tools and a genetic algorithm, including a web crawler for game data.",
-    tags: ["Python", "OR-Tools", "Genetic Algorithm", "Scheduling", "Jupyter Notebook"],
+    tags: [
+      "Python",
+      "OR-Tools",
+      "Genetic Algorithm",
+      "Scheduling",
+      "Jupyter Notebook",
+    ],
     year: "2024",
   },
   {
@@ -37,7 +43,16 @@ const projects = [
     url: "https://github.com/Th1nhNg0/vietnamese-legal-ai-thesis",
     description:
       "Bachelor thesis on Vietnamese legal question answering using BM25, TF-IDF, ChromaDB, dense embeddings, Instructor model fine-tuning, and RAG (final score 9.7/10).",
-    tags: ["Python", "Legal AI", "Vietnamese", "RAG", "BM25", "TF-IDF", "ChromaDB", "Embeddings"],
+    tags: [
+      "Python",
+      "Legal AI",
+      "Vietnamese",
+      "RAG",
+      "BM25",
+      "TF-IDF",
+      "ChromaDB",
+      "Embeddings",
+    ],
     year: "2023",
   },
   {
@@ -55,7 +70,14 @@ const projects = [
     url: "https://github.com/Th1nhNg0/VAIPE-2022",
     description:
       "Medicine pill image recognition challenge pipeline using Tesseract OCR for prescriptions, U-2-Net preprocessing, YOLOv5 object detection, and ResNet50 classification, with Dockerized training and inference scripts.",
-    tags: ["Computer Vision", "YOLOv5", "ResNet50", "OCR", "Docker", "Jupyter Notebook"],
+    tags: [
+      "Computer Vision",
+      "YOLOv5",
+      "ResNet50",
+      "OCR",
+      "Docker",
+      "Jupyter Notebook",
+    ],
     year: "2022",
   },
   {
@@ -107,7 +129,8 @@ const sortedProjects = [...projects].sort((a, b) => {
       <header class="page-header">
         <h1 class="page-title">Projects</h1>
         <p class="page-intro">
-          Small tools, research work, experiments, and things built to answer a question.
+          Small tools, research work, experiments, and things built to answer a
+          question.
         </p>
       </header>
 
@@ -143,7 +166,9 @@ const sortedProjects = [...projects].sort((a, b) => {
                   </p>
                   <div class="mt-2.5 flex flex-wrap gap-x-3 gap-y-1">
                     {project.tags.map((tag) => (
-                      <span class="font-mono text-[9px] uppercase tracking-wide text-zinc-600">{tag}</span>
+                      <span class="font-mono text-[9px] uppercase tracking-wide text-zinc-600">
+                        {tag}
+                      </span>
                     ))}
                   </div>
                   <span class="sr-only">(opens in new tab)</span>
