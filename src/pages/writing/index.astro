@@ -5,7 +5,7 @@ import Layout from "@/layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import { format } from "date-fns";
 
-const blog = (await getCollection("blog")).sort(
+const blog = (await getCollection("writing")).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 
