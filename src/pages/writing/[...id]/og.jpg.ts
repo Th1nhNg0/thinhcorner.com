@@ -14,7 +14,7 @@ const HEIGHT = 630 * SCALE;
 const px = (value: number) => value * SCALE;
 const bgImage = readFileSync("./src/assets/og-background.png");
 
-const posts = await getCollection("blog");
+const posts = await getCollection("writing");
 const postMap = new Map(posts.map((p) => [p.id, p.data]));
 
 export function getStaticPaths() {
