@@ -6,7 +6,7 @@ A personal website built with [Astro](https://astro.build/), featuring a blog wi
 
 ## Features
 
-- **Blog:** Content managed using Astro's Content Collections with MD/MDX support (`src/content/blog`).
+- **Blog:** Content managed using Astro's Content Collections with MD/MDX support (`data/writing`).
 - **RSS Feed:** Automatically generated at `/rss.xml`.
 - **Dynamic Open Graph Images:** Auto-generates OG images for blog posts using `@vercel/og`.
 - **Spotify Integration:** Shows listening activity (`/music` page).
@@ -69,7 +69,7 @@ A personal website built with [Astro](https://astro.build/), featuring a blog wi
 
 ## Creating Blog Posts
 
-Add a new folder under `src/content/blog/` with an `index.md` or `index.mdx` file:
+Add a new folder under `data/writing/` with an `index.md` or `index.mdx` file:
 
 ```markdown
 ---
@@ -85,7 +85,7 @@ Your content here...
 ### File Structure
 
 ```
-src/content/blog/
+data/writing/
   your-post-slug/
     index.md      # Main content file
     image.jpg     # Optional: images/assets

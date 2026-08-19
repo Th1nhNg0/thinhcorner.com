@@ -12,7 +12,7 @@ import { join } from "node:path";
 import EditOnGithub from "../../../components/EditOnGithub.astro";
 
 export async function getStaticPaths() {
-  const paths = (await getCollection("blog")).sort(
+  const paths = (await getCollection("writing")).sort(
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
   );
   return paths.map((post) => ({
@@ -20,9 +20,9 @@ export async function getStaticPaths() {
     props: post,
   }));
 }
-type Props = CollectionEntry<"blog">;
+type Props = CollectionEntry<"writing">;
 
-const posts = (await getCollection("blog")).sort(
+const posts = (await getCollection("writing")).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 
@@ -43,7 +43,7 @@ const post = Astro.props;
 const { Content } = await render(post);
 const minutesRead = post.body ? getReadingTime(post.body).text : undefined;
 
-const postDir = join(process.cwd(), "src/content/blog", post.id);
+const postDir = join(process.cwd(), "data/writing", post.id);
 const postFile = ["index.md", "index.mdx"].find((f) =>
   existsSync(join(postDir, f)),
 );
