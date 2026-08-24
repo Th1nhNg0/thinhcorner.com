@@ -153,7 +153,7 @@ export async function getSteamOverview(
 ): Promise<SteamOverview | null> {
   if (!env.STEAM_API_KEY) return null;
 
-  return withCache(kv, `steam_overview_${vanity}_v2`, 21600, async () => {
+  return withCache(kv, `steam_overview_${vanity}_v3`, 21600, async () => {
     const steamId = await resolveSteamId(vanity, env);
     const [playersResult, ownedResult, recentResult] = await Promise.allSettled(
       [
