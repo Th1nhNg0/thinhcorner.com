@@ -1,0 +1,75 @@
+---
+import Container from "@/components/Container.astro";
+import Layout from "@/layouts/Layout.astro";
+
+// One entry per analysis — add new ones here and they show up automatically.
+const analyses = [
+  {
+    href: "/data/chess",
+    glyph: "♞",
+    title: "Chess",
+    source: "chess.com",
+    description:
+      "Ratings, rating history, most played openings and recent games from my chess.com profile.",
+  },
+];
+---
+
+<Layout
+  title="Data — Thinh's Corner"
+  description="Visualizations and analyses built from my own activity data across the services I use."
+  structuredData={{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Data",
+    description:
+      "Visualizations and analyses built from my own activity data across the services I use.",
+    url: new URL("/data", Astro.site).toString(),
+  }}
+>
+  <Container>
+    <div class="collection-page">
+      <header class="page-header">
+        <h1 class="page-title">Data</h1>
+        <p class="page-intro">
+          Visualizations built from my own activity data across the services I
+          use — synced live and cached server-side.
+        </p>
+      </header>
+
+      <section class="mb-8">
+        <div class="grid grid-cols-1 gap-px border border-[#27272a] bg-[#27272a] md:grid-cols-2">
+          {
+            analyses.map((analysis) => (
+              <a
+                href={analysis.href}
+                class="group flex flex-col justify-between bg-[#0c0c0d] p-4 transition-colors hover:bg-[#111113]"
+              >
+                <div class="flex items-start justify-between gap-3">
+                  <span
+                    class="flex size-9 items-center justify-center border border-[#27272a] text-lg"
+                    aria-hidden="true"
+                  >
+                    {analysis.glyph}
+                  </span>
+                  <span class="font-mono text-sm text-zinc-700 transition-colors group-hover:text-[#eab308]">
+                    →
+                  </span>
+                </div>
+                <h2 class="mt-3 text-sm font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
+                  {analysis.title}
+                </h2>
+                <p class="mt-1 text-xs leading-relaxed text-zinc-500">
+                  {analysis.description}
+                </p>
+                <p class="mt-2 font-mono text-[9px] uppercase tracking-wide text-zinc-700">
+                  {analysis.source}
+                </p>
+              </a>
+            ))
+          }
+        </div>
+      </section>
+    </div>
+  </Container>
+</Layout>

@@ -25,6 +25,10 @@ const WEBSITE_CONFIG = {
 export const GOODREADS_USER_ID = "161740636";
 export const GOODREADS_USER_URL = "https://www.goodreads.com/th1nhng0";
 
+// Chess.com integration
+export const CHESS_USERNAME = "Th1nhNg0";
+export const CHESS_PROFILE_URL = "https://www.chess.com/member/Th1nhNg0";
+
 // Export constants with descriptive aliases
 export { PERSONAL_SOCIAL_PROFILES as SOCIAL_MEDIA, WEBSITE_CONFIG as SITE };
 
