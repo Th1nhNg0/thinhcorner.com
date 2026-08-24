@@ -1,0 +1,468 @@
+---
+export const prerender = false;
+import Container from "@/components/Container.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getChessOverview } from "@/lib/chess";
+import { CHESS_PROFILE_URL, CHESS_USERNAME } from "../../../data/consts";
+import { format, formatDistanceToNow } from "date-fns";
+import { env } from "cloudflare:workers";
+
+const data = await getChessOverview(CHESS_USERNAME, env.CACHE);
+const now = new Date();
+
+Astro.response.headers.set(
+  "Cache-Control",
+  "public, s-maxage=600, stale-while-revalidate=300",
+);
+
+// --- Rating cards -----------------------------------------------------------
+const statViews = data.stats.map((s) => {
+  const total = s.win + s.loss + s.draw;
+  return {
+    ...s,
+    total,
+    winPct: total > 0 ? (s.win / total) * 100 : 0,
+    drawPct: total > 0 ? (s.draw / total) * 100 : 0,
+    lossPct: total > 0 ? (s.loss / total) * 100 : 0,
+  };
+});
+
+// --- Rating history chart (inline SVG, no client deps) ----------------------
+const SERIES_META = [
+  { key: "rapid", label: "Rapid", color: "#eab308" },
+  { key: "blitz", label: "Blitz", color: "#38bdf8" },
+  { key: "bullet", label: "Bullet", color: "#f472b6" },
+  { key: "daily", label: "Daily", color: "#a78bfa" },
+] as const;
+
+const chartSeries = SERIES_META.map((meta) => ({
+  ...meta,
+  points: [...(data.history[meta.key] ?? [])].sort((a, b) => a.t - b.t),
+})).filter((series) => series.points.length > 0);
+
+const allPoints = chartSeries.flatMap((s) => s.points);
+const hasChart = allPoints.length >= 2;
+
+const W = 720;
+const H = 260;
+const PAD = { l: 44, r: 14, t: 18, b: 30 };
+
+const round25 = (v: number) => Math.round(v / 25) * 25;
+let yLo = round25(Math.min(...allPoints.map((p) => p.r)) - 40);
+let yHi = round25(Math.max(...allPoints.map((p) => p.r)) + 40);
+if (!Number.isFinite(yLo)) yLo = 800;
+if (!Number.isFinite(yHi)) yHi = 1600;
+if (yHi - yLo < 100) yHi = yLo + 100;
+
+let tMin = Math.min(...allPoints.map((p) => p.t));
+let tMax = Math.max(...allPoints.map((p) => p.t));
+if (!Number.isFinite(tMin)) tMin = Date.now() - 86400000;
+if (!Number.isFinite(tMax)) tMax = Date.now();
+if (tMax === tMin) {
+  tMin -= 43200000;
+  tMax += 43200000;
+}
+
+const x = (t: number) =>
+  PAD.l + ((t - tMin) / (tMax - tMin)) * (W - PAD.l - PAD.r);
+const y = (r: number) =>
+  PAD.t + (1 - (r - yLo) / (yHi - yLo)) * (H - PAD.t - PAD.b);
+
+const yTicks = Array.from({ length: 5 }, (_, i) => yLo + ((yHi - yLo) / 4) * i);
+const xTicks = Array.from({ length: 4 }, (_, i) => tMin + ((tMax - tMin) / 3) * i);
+
+const seriesViews = chartSeries.map((s) => ({
+  ...s,
+  pointsAttr: s.points
+    .map((p) => `${x(p.t).toFixed(1)},${y(p.r).toFixed(1)}`)
+    .join(" "),
+}));
+
+// --- Openings bars ----------------------------------------------------------
+const maxOpeningCount = data.openings[0]?.count ?? 1;
+
+// --- Recent games helpers ---------------------------------------------------
+const outcomeStyles = {
+  win: { text: "W", class: "text-[#4ade80] border-[#14532d]" },
+  loss: { text: "L", class: "text-[#f87171] border-[#7f1d1d]" },
+  draw: { text: "D", class: "text-zinc-400 border-zinc-700" },
+} as const;
+
+const formatDelta = (delta: number) =>
+  `${delta > 0 ? "+" : ""}${delta}`;
+---
+
+<Layout
+  title="Chess — Thinh's Corner"
+  description="My chess.com stats: ratings, rating history, openings and recent games."
+  structuredData={{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Chess",
+    description: "My chess.com stats: ratings, rating history, openings and recent games.",
+    url: new URL("/data/chess", Astro.site).toString(),
+  }}
+>
+  <Container>
+    <div class="collection-page">
+      <header class="page-header">
+        <p class="font-mono text-[10px] uppercase tracking-wide text-zinc-600">
+          <a href="/data" class="transition-colors hover:text-zinc-400">← All data</a>
+        </p>
+        <h1 class="page-title">Chess</h1>
+        <p class="page-intro">
+          A live snapshot of my games, synced from my{" "}
+          <a href={CHESS_PROFILE_URL} class="text-link">chess.com profile</a> — the last{" "}
+          {data.monthsCovered} months of rated play.
+        </p>
+      </header>
+
+      <!-- Profile -->
+      <section class="mb-8">
+        <div class="flex items-center gap-4 border border-[#27272a] bg-[#0c0c0d] p-3">
+          {
+            data.profile.avatar ? (
+              <img
+                src={data.profile.avatar}
+                alt={data.profile.name}
+                width="64"
+                height="64"
+                loading="lazy"
+                decoding="async"
+                class="size-14 shrink-0 border border-[#27272a]"
+              />
+            ) : (
+              <div class="size-14 shrink-0 border border-[#27272a]" />
+            )
+          }
+          <div class="min-w-0 flex-1">
+            <h2 class="text-sm font-medium text-zinc-200">{data.profile.name}</h2>
+            <p class="font-mono text-[10px] text-zinc-500">@{data.profile.username}</p>
+            <p class="mt-1 flex flex-wrap gap-x-3 font-mono text-[9px] uppercase tracking-wide text-zinc-600">
+              <span>{data.profile.followers.toLocaleString()} followers</span>
+              <span>since {format(data.profile.joined * 1000, "MMM yyyy")}</span>
+              {
+                data.profile.league && <span>{data.profile.league} league</span>
+              }
+              <span>
+                online {formatDistanceToNow(new Date(data.profile.lastOnline * 1000), {
+                  addSuffix: true,
+                })}
+              </span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Rating cards -->
+      {
+        statViews.length > 0 && (
+          <section class="mb-8">
+            <div class="mb-3 flex items-center justify-between">
+              <h2 class="text-sm font-medium text-zinc-200">Ratings &amp; record</h2>
+              <span class="font-mono text-[10px] text-zinc-600">
+                {data.gamesFetched.toLocaleString()} rated games in window
+              </span>
+            </div>
+            <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-4">
+              {statViews.map((stat) => (
+                <div class="border-b border-r border-[#27272a] p-3">
+                  <p class="font-mono text-[9px] uppercase tracking-wide text-zinc-500">
+                    {stat.label}
+                  </p>
+                  <p class="mt-1 text-xl font-medium text-zinc-100">{stat.rating}</p>
+                  {stat.best && (
+                    <p class="font-mono text-[9px] text-zinc-600">
+                      peak {stat.best}
+                    </p>
+                  )}
+                  <div class="mt-2 flex h-1 overflow-hidden bg-[#27272a]">
+                    <div class="bg-[#4ade80]/70" style={`width:${stat.winPct}%`} />
+                    <div class="bg-zinc-600/70" style={`width:${stat.drawPct}%`} />
+                    <div class="bg-[#f87171]/70" style={`width:${stat.lossPct}%`} />
+                  </div>
+                  <p class="mt-1.5 font-mono text-[9px] text-zinc-600">
+                    <span class="text-[#4ade80]">{stat.win}W</span>{" "}
+                    <span class="text-zinc-500">{stat.draw}D</span>{" "}
+                    <span class="text-[#f87171]">{stat.loss}L</span>
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <!-- Rating history chart -->
+      <section class="mb-8">
+        <div class="mb-3 flex items-center justify-between">
+          <h2 class="text-sm font-medium text-zinc-200">Rating history</h2>
+          {
+            hasChart && (
+              <div
+                class="flex flex-wrap gap-1"
+                role="group"
+                aria-label="Toggle time classes"
+              >
+                {seriesViews.map((series) => (
+                  <button
+                    type="button"
+                    data-series-toggle={series.key}
+                    aria-pressed="true"
+                    class:list={[
+                      "flex items-center gap-1.5 border border-[#27272a] bg-[#0c0c0d] px-2 py-0.5 font-mono text-[9px] uppercase transition-opacity",
+                    ]}
+                  >
+                    <span
+                      class="size-1.5 rounded-full"
+                      style={`background:${series.color}`}
+                    />
+                    {series.label}
+                  </button>
+                ))}
+              </div>
+            )
+          }
+        </div>
+
+        {
+          hasChart ? (
+            <svg
+              viewBox={`0 0 ${W} ${H}`}
+              class="w-full border border-[#27272a] bg-[#0c0c0d]"
+              role="img"
+              aria-label="Rating history over time per time class"
+              preserveAspectRatio="xMidYMid meet"
+            >
+              {yTicks.map((tick) => (
+                <g>
+                  <line
+                    x1={PAD.l}
+                    x2={W - PAD.r}
+                    y1={y(tick)}
+                    y2={y(tick)}
+                    stroke="#27272a"
+                    stroke-width="1"
+                  />
+                  <text
+                    x={PAD.l - 6}
+                    y={y(tick) + 3}
+                    text-anchor="end"
+                    fill="#71717a"
+                    font-size="9"
+                    font-family="ui-monospace, monospace"
+                  >
+                    {Math.round(tick)}
+                  </text>
+                </g>
+              ))}
+
+              {xTicks.map((tick) => (
+                <text
+                  x={Math.min(Math.max(x(tick), PAD.l), W - PAD.r)}
+                  y={H - 10}
+                  text-anchor="middle"
+                  fill="#71717a"
+                  font-size="9"
+                  font-family="ui-monospace, monospace"
+                >
+                  {format(tick, "MMM d")}
+                </text>
+              ))}
+
+              {seriesViews.map((series) => (
+                <g data-series={series.key}>
+                  {series.points.length === 1 ? (
+                    <circle
+                      cx={x(series.points[0].t)}
+                      cy={y(series.points[0].r)}
+                      r="3"
+                      fill={series.color}
+                    />
+                  ) : (
+                    <polyline
+                      points={series.pointsAttr}
+                      fill="none"
+                      stroke={series.color}
+                      stroke-width="1.5"
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                    />
+                  )}
+                </g>
+              ))}
+            </svg>
+          ) : (
+            <p class="border border-[#27272a] bg-[#0c0c0d] p-6 text-center font-mono text-[10px] text-zinc-600">
+              Not enough rated games in the window to draw a chart yet.
+            </p>
+          )
+        }
+      </section>
+
+      <!-- Most played openings -->
+      {
+        data.openings.length > 0 && (
+          <section class="mb-8">
+            <div class="mb-3 flex items-center justify-between">
+              <h2 class="text-sm font-medium text-zinc-200">Most played openings</h2>
+              <span class="font-mono text-[10px] text-zinc-600">last {data.monthsCovered} months</span>
+            </div>
+            <div class="border-y border-[#27272a]">
+              {data.openings.map((opening) => (
+                <div class="border-b border-[#27272a] px-1 py-2 last:border-b-0">
+                  <div class="flex items-baseline justify-between gap-3">
+                    <p class="line-clamp-1 text-xs text-zinc-300">{opening.name}</p>
+                    <span class="shrink-0 font-mono text-[10px] text-zinc-600">
+                      {opening.count}
+                    </span>
+                  </div>
+                  <div class="mt-1 h-0.5 w-full bg-[#27272a]">
+                    <div
+                      class="h-full bg-[#eab308]/80"
+                      style={`width:${(opening.count / maxOpeningCount) * 100}%`}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <!-- Recent games -->
+      <section class="mb-8">
+        <div class="mb-3 flex items-center justify-between">
+          <h2 class="text-sm font-medium text-zinc-200">Recent games</h2>
+          <span class="font-mono text-[10px] text-zinc-600">{data.recent.length} games</span>
+        </div>
+        {
+          data.recent.length === 0 ? (
+            <p class="border border-[#27272a] bg-[#0c0c0d] p-6 text-center font-mono text-[10px] text-zinc-600">
+              No rated games found in the window.
+            </p>
+          ) : (
+            <div class="border-y border-[#27272a]">
+              {data.recent.map((game) => (
+                <a
+                  href={game.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="compact-row group flex items-center gap-3 border-b border-[#27272a] p-2 last:border-b-0"
+                >
+                  <span
+                    class:list={[
+                      "flex size-6 shrink-0 items-center justify-center border font-mono text-[10px]",
+                      outcomeStyles[game.outcome].class,
+                    ]}
+                  >
+                    {outcomeStyles[game.outcome].text}
+                  </span>
+                  <span
+                    class:list={[
+                      "size-2.5 shrink-0 rounded-none",
+                      game.color === "white"
+                        ? "border border-zinc-400 bg-white"
+                        : "border border-zinc-600 bg-black",
+                    ]}
+                    title={`Played ${game.color}`}
+                  />
+                  <div class="min-w-0 flex-1">
+                    <p class="line-clamp-1 text-xs text-zinc-300 transition-colors group-hover:text-[#eab308]">
+                      vs{" "}
+                      <span class="font-medium">{game.opponent}</span>
+                      <span class="ml-1.5 font-mono text-[10px] text-zinc-500">
+                        ({game.opponentRating})
+                      </span>
+                    </p>
+                    <p class="line-clamp-1 font-mono text-[9px] text-zinc-700">
+                      {game.opening ?? game.timeClass}
+                    </p>
+                  </div>
+                  <div class="shrink-0 text-right">
+                    <p class="font-mono text-[10px] text-zinc-500">
+                      {format(game.endTime, "MMM d, HH:mm")}
+                    </p>
+                    <p class="font-mono text-[9px] text-zinc-700">
+                      {game.timeClass}
+                      {" · "}
+                      {formatDistanceToNow(new Date(game.endTime), { addSuffix: true })}
+                    </p>
+                  </div>
+                  {
+                    game.delta !== null && (
+                      <span
+                        class:list={[
+                          "w-9 shrink-0 text-right font-mono text-[10px]",
+                          game.delta > 0 ? "text-[#4ade80]" : game.delta < 0 ? "text-[#f87171]" : "text-zinc-600",
+                        ]}
+                      >
+                        {formatDelta(game.delta)}
+                      </span>
+                    )
+                  }
+                </a>
+              ))}
+            </div>
+          )
+        }
+      </section>
+
+      <p
+        class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-[10px] text-zinc-600"
+      >
+        Updated <time id="last-updated" datetime={now.toISOString()}></time>
+      </p>
+    </div>
+  </Container>
+
+  <script>
+    function initChessToggles() {
+      document
+        .querySelectorAll<HTMLButtonElement>("[data-series-toggle]")
+        .forEach((btn) => {
+          if (btn.dataset.toggleInitialized === "true") return;
+          btn.dataset.toggleInitialized = "true";
+
+          btn.addEventListener("click", () => {
+            const key = btn.dataset.seriesToggle;
+            if (!key) return;
+
+            const isOn = btn.getAttribute("aria-pressed") === "true";
+            btn.setAttribute("aria-pressed", String(!isOn));
+            btn.classList.toggle("opacity-40", isOn);
+
+            document
+              .querySelectorAll(`[data-series="${key}"]`)
+              .forEach((el) => el.classList.toggle("hidden", isOn));
+          });
+        });
+    }
+
+    function formatLastUpdated() {
+      const timeEl = document.getElementById("last-updated");
+      if (!timeEl) return;
+      const dt = timeEl.getAttribute("datetime");
+      if (!dt) return;
+      const date = new Date(dt);
+      if (isNaN(date.getTime())) return;
+
+      const datePart = date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      });
+      const timePart = date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      });
+      timeEl.textContent = `${datePart} at ${timePart}`;
+    }
+
+    document.addEventListener("astro:page-load", () => {
+      initChessToggles();
+      formatLastUpdated();
+    });
+  </script>
+</Layout>
