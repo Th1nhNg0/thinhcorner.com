@@ -5,3 +5,6 @@
 SPOTIFY_CLIENT_ID=your-spotify-client-id
 SPOTIFY_CLIENT_SECRET=your-spotify-client-secret
 SPOTIFY_REFRESH_TOKEN=your-spotify-refresh-token
+
+# Required for the /data/steam page — free key from steamcommunity.com/dev/apikey
+STEAM_API_KEY=your-steam-web-api-key
