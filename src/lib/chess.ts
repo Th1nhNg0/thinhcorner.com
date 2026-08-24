@@ -2,7 +2,7 @@ import { withCache } from "@/lib/cache";
 
 const API_BASE = "https://api.chess.com/pub";
 const HISTORY_MONTHS = 6;
-const RECENT_GAMES_LIMIT = 12;
+const RECENT_GAMES_LIMIT = 10;
 
 // Chess.com's Published-Data API requires clients to identify themselves
 // with a descriptive User-Agent (https://www.chess.com/news/view/published-data-api).
@@ -54,6 +54,20 @@ export interface OpeningCount {
   count: number;
 }
 
+export interface ChessStreak {
+  outcome: GameOutcome;
+  length: number;
+}
+
+export interface ColorPerformance {
+  games: number;
+  win: number;
+  loss: number;
+  draw: number;
+  avgOpponentRating: number;
+  avgAccuracy?: number;
+}
+
 export interface HistoryPoint {
   t: number; // epoch ms
   r: number; // rating after playing at time t
@@ -67,6 +81,11 @@ export interface ChessOverview {
   openings: OpeningCount[];
   gamesFetched: number;
   monthsCovered: number;
+  currentStreak: ChessStreak | null;
+  bestWinStreak: number;
+  avgOpponentRating: number;
+  ratingChange: number; // net points across all time classes in window
+  byColor: { white: ColorPerformance; black: ColorPerformance };
 }
 
 interface RawPlayerSide {
@@ -114,7 +133,6 @@ const TIME_CLASSES = [
   { key: "chess_rapid", label: "Rapid" },
   { key: "chess_blitz", label: "Blitz" },
   { key: "chess_bullet", label: "Bullet" },
-  { key: "chess_daily", label: "Daily" },
 ] as const;
 
 // Result codes that count as a draw for the player holding them.
@@ -231,7 +249,8 @@ export async function getChessOverview(
   username: string,
   kv: KVNamespace | undefined | null,
 ): Promise<ChessOverview> {
-  return withCache(kv, `chess_overview_${username}`, 3600, async () => {
+  // Key is versioned: bump when the cached payload shape changes.
+  return withCache(kv, `chess_overview_v3_${username}`, 3600, async () => {
     // The Chess.com API rejects mixed-case usernames in paths — always lowercase.
     const usernameLower = username.toLowerCase();
     const rawProfile = await fetchJson<RawProfile>(`/player/${usernameLower}`);
@@ -314,6 +333,84 @@ export async function getChessOverview(
       .sort((a, b) => b.count - a.count)
       .slice(0, 5) satisfies OpeningCount[];
 
+    // Outcome runs across the whole window, chronological.
+    const outcomes = games.map((g) => outcomeFrom(meOf(g).result));
+
+    let currentStreak: ChessStreak | null = null;
+    const lastOutcome = outcomes.at(-1);
+    if (lastOutcome) {
+      let length = 0;
+      for (
+        let i = outcomes.length - 1;
+        i >= 0 && outcomes[i] === lastOutcome;
+        i--
+      ) {
+        length++;
+      }
+      currentStreak = { outcome: lastOutcome, length };
+    }
+
+    let bestWinStreak = 0;
+    let winRun = 0;
+    for (const o of outcomes) {
+      winRun = o === "win" ? winRun + 1 : 0;
+      if (winRun > bestWinStreak) bestWinStreak = winRun;
+    }
+
+    const avgOpponentRating =
+      games.length > 0
+        ? Math.round(
+            games.reduce((sum, g) => sum + themOf(g).rating, 0) / games.length,
+          )
+        : 0;
+
+    // Net rating change per time class across the window (last minus first), summed.
+    const ratingChange = Object.values(history).reduce((total, points) => {
+      if (points.length < 2) return total;
+      return total + points[points.length - 1].r - points[0].r;
+    }, 0);
+
+    const colorPerf = (side: "white" | "black"): ColorPerformance => {
+      const subset = games.filter(
+        (g) =>
+          (side === "white" ? g.white : g.black).username.toLowerCase() ===
+          lowerUsername,
+      );
+      const wins = subset.filter(
+        (g) =>
+          outcomeFrom((side === "white" ? g.white : g.black).result) === "win",
+      ).length;
+      const losses = subset.filter(
+        (g) =>
+          outcomeFrom((side === "white" ? g.white : g.black).result) === "loss",
+      ).length;
+      const draws = subset.length - wins - losses;
+      const accuracies = subset
+        .map((g) => g.accuracies?.[side])
+        .filter((a): a is number => typeof a === "number");
+      return {
+        games: subset.length,
+        win: wins,
+        loss: losses,
+        draw: draws,
+        avgOpponentRating:
+          subset.length > 0
+            ? Math.round(
+                subset.reduce((sum, g) => sum + themOf(g).rating, 0) /
+                  subset.length,
+              )
+            : 0,
+        avgAccuracy:
+          accuracies.length > 0
+            ? Math.round(
+                (accuracies.reduce((sum, a) => sum + a, 0) /
+                  accuracies.length) *
+                  10,
+              ) / 10
+            : undefined,
+      };
+    };
+
     return {
       profile,
       stats: mapStats(rawStats),
@@ -322,6 +419,11 @@ export async function getChessOverview(
       openings,
       gamesFetched: games.length,
       monthsCovered: monthList(profile.joined).length,
+      currentStreak,
+      bestWinStreak,
+      avgOpponentRating,
+      ratingChange,
+      byColor: { white: colorPerf("white"), black: colorPerf("black") },
     } satisfies ChessOverview;
   });
 }

@@ -3,6 +3,7 @@ export const prerender = false;
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
 import { getChessOverview } from "@/lib/chess";
+import type { GameOutcome } from "@/lib/chess";
 import { CHESS_PROFILE_URL, CHESS_USERNAME } from "../../../data/consts";
 import { format, formatDistanceToNow } from "date-fns";
 import { env } from "cloudflare:workers";
@@ -32,7 +33,6 @@ const SERIES_META = [
   { key: "rapid", label: "Rapid", color: "#eab308" },
   { key: "blitz", label: "Blitz", color: "#38bdf8" },
   { key: "bullet", label: "Bullet", color: "#f472b6" },
-  { key: "daily", label: "Daily", color: "#a78bfa" },
 ] as const;
 
 const chartSeries = SERIES_META.map((meta) => ({
@@ -90,6 +90,42 @@ const outcomeStyles = {
 
 const formatDelta = (delta: number) =>
   `${delta > 0 ? "+" : ""}${delta}`;
+
+// --- Form tiles --------------------------------------------------------------
+const streakStyles = {
+  win: { class: "text-[#4ade80]" },
+  loss: { class: "text-[#f87171]" },
+  draw: { class: "text-zinc-300" },
+} as const satisfies Record<GameOutcome, { class: string }>;
+
+const streakSuffix = { win: "W", loss: "L", draw: "D" } as const;
+
+const hasGames = data.gamesFetched > 0;
+
+// --- Performance by colour ----------------------------------------------------
+const perfViews = [
+  {
+    side: "white" as const,
+    label: "As White",
+    swatchClass: "border border-zinc-400 bg-white",
+  },
+  {
+    side: "black" as const,
+    label: "As Black",
+    swatchClass: "border border-zinc-600 bg-black",
+  },
+].map(({ side, label, swatchClass }) => {
+  const perf = data.byColor[side];
+  return {
+    side,
+    label,
+    swatchClass,
+    ...perf,
+    winPct: perf.games > 0 ? (perf.win / perf.games) * 100 : 0,
+    drawPct: perf.games > 0 ? (perf.draw / perf.games) * 100 : 0,
+    lossPct: perf.games > 0 ? (perf.loss / perf.games) * 100 : 0,
+  };
+});
 ---
 
 <Layout
@@ -164,7 +200,10 @@ const formatDelta = (delta: number) =>
                 {data.gamesFetched.toLocaleString()} rated games in window
               </span>
             </div>
-            <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-4">
+            <div
+              class="grid grid-cols-2 border-l border-t border-[#27272a] md:[grid-template-columns:repeat(var(--stat-cols),minmax(0,1fr))]"
+              style={`--stat-cols:${Math.max(statViews.length, 1)}`}
+            >
               {statViews.map((stat) => (
                 <div class="border-b border-r border-[#27272a] p-3">
                   <p class="font-mono text-[9px] uppercase tracking-wide text-zinc-500">
@@ -185,6 +224,133 @@ const formatDelta = (delta: number) =>
                     <span class="text-[#4ade80]">{stat.win}W</span>{" "}
                     <span class="text-zinc-500">{stat.draw}D</span>{" "}
                     <span class="text-[#f87171]">{stat.loss}L</span>
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <!-- Form tiles -->
+      {
+        hasGames && (
+          <section class="mb-8">
+            <div class="mb-3 flex items-center justify-between">
+              <h2 class="text-sm font-medium text-zinc-200">Form</h2>
+              <span class="font-mono text-[10px] text-zinc-600">
+                last {data.monthsCovered} months
+              </span>
+            </div>
+            <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-4">
+              <div class="border-b border-r border-[#27272a] p-3">
+                <p class="font-mono text-[9px] uppercase tracking-wide text-zinc-500">
+                  Current streak
+                </p>
+                <p
+                  class:list={[
+                    "mt-1 text-xl font-medium",
+                    data.currentStreak
+                      ? streakStyles[data.currentStreak.outcome].class
+                      : "text-zinc-100",
+                  ]}
+                >
+                  {data.currentStreak
+                    ? `${data.currentStreak.length}${streakSuffix[data.currentStreak.outcome]}`
+                    : "—"}
+                </p>
+                <p class="mt-1 font-mono text-[9px] text-zinc-600">
+                  {data.currentStreak
+                    ? data.currentStreak.length === 1
+                      ? `1 ${data.currentStreak.outcome}`
+                      : `${data.currentStreak.length} ${data.currentStreak.outcome}s`
+                    : "no games yet"}
+                </p>
+              </div>
+              <div class="border-b border-r border-[#27272a] p-3">
+                <p class="font-mono text-[9px] uppercase tracking-wide text-zinc-500">
+                  Best streak
+                </p>
+                <p class="mt-1 text-xl font-medium text-[#4ade80]">
+                  {data.bestWinStreak}W
+                </p>
+                <p class="mt-1 font-mono text-[9px] text-zinc-600">
+                  longest win run
+                </p>
+              </div>
+              <div class="border-b border-r border-[#27272a] p-3">
+                <p class="font-mono text-[9px] uppercase tracking-wide text-zinc-500">
+                  Avg opponent
+                </p>
+                <p class="mt-1 text-xl font-medium text-zinc-100">
+                  {data.avgOpponentRating || "—"}
+                </p>
+                <p class="mt-1 font-mono text-[9px] text-zinc-600">
+                  avg opponent rating
+                </p>
+              </div>
+              <div class="border-b border-r border-[#27272a] p-3">
+                <p class="font-mono text-[9px] uppercase tracking-wide text-zinc-500">
+                  Rating change
+                </p>
+                <p
+                  class:list={[
+                    "mt-1 text-xl font-medium",
+                    data.ratingChange > 0
+                      ? "text-[#4ade80]"
+                      : data.ratingChange < 0
+                        ? "text-[#f87171]"
+                        : "text-zinc-100",
+                  ]}
+                >
+                  {formatDelta(data.ratingChange)}
+                </p>
+                <p class="mt-1 font-mono text-[9px] text-zinc-600">
+                  net points, this window
+                </p>
+              </div>
+            </div>
+          </section>
+        )
+      }
+
+      <!-- Performance by colour -->
+      {
+        hasGames && (
+          <section class="mb-8">
+            <div class="mb-3 flex items-center justify-between">
+              <h2 class="text-sm font-medium text-zinc-200">Performance</h2>
+              <span class="font-mono text-[10px] text-zinc-600">
+                as white / as black · last {data.monthsCovered} months
+              </span>
+            </div>
+            <div class="grid border-l border-t border-[#27272a] md:grid-cols-2">
+              {perfViews.map((perf) => (
+                <div class="border-b border-r border-[#27272a] p-3">
+                  <div class="flex items-center justify-between gap-3">
+                    <p class="flex items-center gap-2 font-mono text-[9px] uppercase tracking-wide text-zinc-500">
+                      <span class:list={["size-2.5 shrink-0", perf.swatchClass]} />
+                      {perf.label}
+                    </p>
+                    <span class="shrink-0 font-mono text-[9px] text-zinc-600">
+                      {perf.games} {perf.games === 1 ? "game" : "games"}
+                    </span>
+                  </div>
+                  <p class="mt-2 text-xl font-medium text-zinc-100">
+                    <span class="text-[#4ade80]">{perf.win}W</span>{" "}
+                    <span class="text-zinc-500">{perf.draw}D</span>{" "}
+                    <span class="text-[#f87171]">{perf.loss}L</span>
+                  </p>
+                  <div class="mt-2 flex h-1 overflow-hidden bg-[#27272a]">
+                    <div class="bg-[#4ade80]/70" style={`width:${perf.winPct}%`} />
+                    <div class="bg-zinc-600/70" style={`width:${perf.drawPct}%`} />
+                    <div class="bg-[#f87171]/70" style={`width:${perf.lossPct}%`} />
+                  </div>
+                  <p class="mt-1.5 flex flex-wrap gap-x-3 font-mono text-[9px] text-zinc-600">
+                    <span>avg opponent {perf.avgOpponentRating || "—"}</span>
+                    {perf.avgAccuracy !== undefined && (
+                      <span>avg accuracy {perf.avgAccuracy}%</span>
+                    )}
                   </p>
                 </div>
               ))}
