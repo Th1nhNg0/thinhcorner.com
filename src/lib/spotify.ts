@@ -86,7 +86,8 @@ const getTopTracks = async (
         artist: track.artists.map((artist) => artist.name).join(", "),
         songUrl: track.external_urls.spotify,
         title: track.name,
-        imageUrl: track.album?.images?.[1]?.url || track.album?.images?.[0]?.url || "",
+        imageUrl:
+          track.album?.images?.[1]?.url || track.album?.images?.[0]?.url || "",
       })) || [];
     return tracks;
   });
@@ -126,7 +127,10 @@ const getRecentlyPlayed = async (
         artist: item.track.artists.map((artist) => artist.name).join(", "),
         songUrl: item.track.external_urls.spotify,
         title: item.track.name,
-        imageUrl: item.track.album?.images?.[1]?.url || item.track.album?.images?.[0]?.url || "",
+        imageUrl:
+          item.track.album?.images?.[1]?.url ||
+          item.track.album?.images?.[0]?.url ||
+          "",
         played_at: item.played_at,
       })) || [];
     return tracks;
@@ -184,5 +188,14 @@ const getTopArtists = async (
     return artists;
   });
 };
+
+/** True when all three Spotify credentials are present in the environment. */
+export function isSpotifyConfigured(env: Env): boolean {
+  return Boolean(
+    env.SPOTIFY_CLIENT_ID &&
+      env.SPOTIFY_CLIENT_SECRET &&
+      env.SPOTIFY_REFRESH_TOKEN,
+  );
+}
 
 export { getTopTracks, getRecentlyPlayed, getTopArtists };

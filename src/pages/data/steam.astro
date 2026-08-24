@@ -1,0 +1,409 @@
+---
+export const prerender = false;
+import Container from "@/components/Container.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getSteamOverview } from "@/lib/steam";
+import { STEAM_PROFILE_URL, STEAM_VANITY_ID } from "../../../data/consts";
+import { format, formatDistanceToNow } from "date-fns";
+import { env } from "cloudflare:workers";
+
+const data = await getSteamOverview(env, env.CACHE, STEAM_VANITY_ID);
+const now = new Date();
+
+Astro.response.headers.set(
+  "Cache-Control",
+  "public, s-maxage=600, stale-while-revalidate=300",
+);
+
+const maxTierCount = Math.max(1, ...(data?.tiers.map((t) => t.count) ?? [1]));
+
+const statCells = data
+  ? [
+      {
+        label: "Games owned",
+        value: data.totals.games.toLocaleString(),
+      },
+      {
+        label: "Hours played",
+        value: data.totals.hours.toLocaleString(),
+      },
+      {
+        label: "Avg h / game",
+        value: data.totals.avgHours.toLocaleString(),
+      },
+      {
+        label: "Typical game",
+        value: `${data.totals.medianHours.toLocaleString()} h`,
+      },
+    ]
+  : [];
+
+// Palette for the stacked hour-concentration bar.
+const SHARE_COLORS = ["#eab308", "#38bdf8", "#f472b6", "#a78bfa", "#4ade80"];
+---
+
+<Layout
+  title="Steam — Thinh's Corner"
+  description="My Steam stats: game library, total hours, playtime distribution and recent games."
+  structuredData={{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Steam",
+    description:
+      "My Steam stats: game library, total hours, playtime distribution and recent games.",
+    url: new URL("/data/steam", Astro.site).toString(),
+  }}
+>
+  <Container>
+    <div class="collection-page">
+      <header class="page-header">
+        <p class="font-mono text-[10px] uppercase tracking-wide text-zinc-600">
+          <a href="/data" class="transition-colors hover:text-zinc-400">← All data</a>
+        </p>
+        <h1 class="page-title">Steam</h1>
+        {
+          data && (
+            <p class="page-intro">
+              A live snapshot of my game library, synced from my{" "}
+              <a href={STEAM_PROFILE_URL} class="text-link">Steam profile</a>.
+            </p>
+          )
+        }
+      </header>
+
+      {
+        !data ? (
+          <section class="mb-8">
+            <div class="space-y-2 border border-[#27272a] bg-[#0c0c0d] p-6 font-mono text-[11px] leading-relaxed text-zinc-400">
+              <p class="text-[#eab308]">
+                One secret away from coming alive — STEAM_API_KEY is not set.
+              </p>
+              <p>
+                1 · Grab a free key at{" "}
+                <a
+                  href="https://steamcommunity.com/dev/apikey"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-link"
+                >
+                  steamcommunity.com/dev/apikey
+                </a>
+              </p>
+              <p>
+                2 · Local dev → add{" "}
+                <span class="text-zinc-200">STEAM_API_KEY=…</span> to{" "}
+                <span class="text-zinc-200">.dev.vars</span>, restart dev server
+              </p>
+              <p>
+                3 · Production →{" "}
+                <span class="text-zinc-200">
+                  bunx wrangler secret put STEAM_API_KEY
+                </span>{" "}
+                and redeploy
+              </p>
+            </div>
+          </section>
+        ) : (
+          <>
+            <!-- Profile -->
+            <section class="mb-8">
+              <div class="flex items-center gap-4 border border-[#27272a] bg-[#0c0c0d] p-3">
+                {
+                  data.profile.avatarUrl ? (
+                    <img
+                      src={data.profile.avatarUrl}
+                      alt={data.profile.personaName}
+                      width="64"
+                      height="64"
+                      loading="lazy"
+                      decoding="async"
+                      class="size-14 shrink-0 rounded-full border border-[#27272a]"
+                    />
+                  ) : (
+                    <div class="size-14 shrink-0 rounded-full border border-[#27272a]" />
+                  )
+                }
+                <div class="min-w-0 flex-1">
+                  <h2 class="text-sm font-medium text-zinc-200">
+                    {data.profile.personaName}
+                  </h2>
+                  <a
+                    href={STEAM_PROFILE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="font-mono text-[10px] text-zinc-500 transition-colors hover:text-zinc-300"
+                  >
+                    @{STEAM_VANITY_ID}
+                  </a>
+                  <p class="mt-1 flex flex-wrap gap-x-3 font-mono text-[9px] uppercase tracking-wide text-zinc-600">
+                    {
+                      data.profile.countryCode && (
+                        <span>{data.profile.countryCode}</span>
+                      )
+                    }
+                    <span>
+                      member since {format(data.profile.memberSince, "MMM yyyy")}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Totals -->
+            <section class="mb-8">
+              <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-4">
+                {statCells.map((cell) => (
+                  <div class="border-b border-r border-[#27272a] p-3">
+                    <p class="font-mono text-[9px] uppercase tracking-wide text-zinc-500">
+                      {cell.label}
+                    </p>
+                    <p class="mt-1 text-xl font-medium text-zinc-100">
+                      {cell.value}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <!-- Most played -->
+            {
+              data.topGames.length > 0 && (
+                <section class="mb-8">
+                  <div class="mb-3 flex items-center justify-between">
+                    <h2 class="text-sm font-medium text-zinc-200">
+                      Most played
+                    </h2>
+                    <span class="font-mono text-[10px] text-zinc-600">
+                      lifetime hours
+                    </span>
+                  </div>
+                  <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-4">
+                    {data.topGames.map((game) => (
+                      <div class="group border-b border-r border-[#27272a] p-2">
+                        <img
+                          src={game.headerUrl}
+                          alt={game.name}
+                          width="460"
+                          height="215"
+                          loading="lazy"
+                          decoding="async"
+                          class="mb-2 aspect-[460/215] w-full border border-[#27272a] object-cover transition-opacity group-hover:opacity-85"
+                        />
+                        <p class="line-clamp-1 text-[11px] font-medium text-zinc-200">
+                          {game.name}
+                        </p>
+                        <div class="flex items-baseline justify-between gap-2">
+                          <p class="font-mono text-[10px] text-[#eab308]/90">
+                            {game.hours.toLocaleString()} h
+                          </p>
+                          {game.lastPlayed && (
+                            <p class="line-clamp-1 font-mono text-[9px] text-zinc-700">
+                              {formatDistanceToNow(new Date(game.lastPlayed), {
+                                addSuffix: true,
+                              })}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )
+            }
+
+            <!-- Where your hours live -->
+            {
+              data.hourShares.length > 0 && (
+                <section class="mb-8">
+                  <div class="mb-3 flex items-center justify-between">
+                    <h2 class="text-sm font-medium text-zinc-200">
+                      Where your hours live
+                    </h2>
+                    <span class="font-mono text-[10px] text-zinc-600">
+                      concentration
+                    </span>
+                  </div>
+                  <div class="space-y-3 border border-[#27272a] bg-[#0c0c0d] p-4">
+                    <p class="text-xs leading-relaxed text-zinc-400">
+                      <span class="font-mono text-base text-[#eab308]">
+                        {data.topSharePct}%
+                      </span>{" "}
+                      of all lifetime hours sit inside your{" "}
+                      {data.hourShares.length} most-played games.
+                    </p>
+                    <div class="flex h-2 overflow-hidden bg-[#27272a]">
+                      {data.hourShares.map((share, i) => (
+                        <div
+                          style={`width:${share.pct}%;background:${SHARE_COLORS[i % SHARE_COLORS.length]}`}
+                          title={`${share.name} — ${share.pct}%`}
+                        />
+                      ))}
+                    </div>
+                    <div class="space-y-1">
+                      {data.hourShares.map((share, i) => (
+                        <div class="flex items-center gap-2 text-[11px]">
+                          <span
+                            class="size-1.5 shrink-0 rounded-full"
+                            style={`background:${SHARE_COLORS[i % SHARE_COLORS.length]}`}
+                            aria-hidden="true"
+                          />
+                          <span class="min-w-0 flex-1 truncate text-zinc-300">
+                            {share.name}
+                          </span>
+                          <span class="shrink-0 font-mono text-[10px] text-zinc-500">
+                            {share.hours.toLocaleString()} h · {share.pct}%
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    {
+                      data.platforms && (
+                        <div class="border-t border-[#27272a] pt-2">
+                          <p class="mb-1 font-mono text-[9px] uppercase tracking-wide text-zinc-600">
+                            by platform
+                          </p>
+                          <div class="flex h-1.5 overflow-hidden bg-[#27272a]">
+                            <div
+                              class="bg-[#38bdf8]/80"
+                              style={`width:${data.platforms.windowsPct}%`}
+                            />
+                            <div
+                              class="bg-[#a78bfa]/80"
+                              style={`width:${data.platforms.macPct}%`}
+                            />
+                            <div
+                              class="bg-[#4ade80]/70"
+                              style={`width:${data.platforms.linuxPct}%`}
+                            />
+                          </div>
+                          <p class="mt-1 flex gap-3 font-mono text-[9px] uppercase tracking-wide text-zinc-600">
+                            <span>Windows {data.platforms.windowsPct}%</span>
+                            <span>macOS {data.platforms.macPct}%</span>
+                            <span>Linux {data.platforms.linuxPct}%</span>
+                          </p>
+                        </div>
+                      )
+                    }
+                  </div>
+                </section>
+              )
+            }
+
+            <!-- Playtime distribution -->
+            {
+              data.tiers.length > 0 && (
+                <section class="mb-8">
+                  <div class="mb-3 flex items-center justify-between">
+                    <h2 class="text-sm font-medium text-zinc-200">
+                      Playtime distribution
+                    </h2>
+                    <span class="font-mono text-[10px] text-zinc-600">
+                      games by lifetime hours
+                    </span>
+                  </div>
+                  <div class="border-y border-[#27272a]">
+                    {data.tiers.map((tier) => (
+                      <div class="border-b border-[#27272a] px-1 py-2 last:border-b-0">
+                        <div class="flex items-baseline justify-between gap-3">
+                          <p class="text-xs text-zinc-300">{tier.label}</p>
+                          <span class="shrink-0 font-mono text-[10px] text-zinc-600">
+                            {tier.count}
+                          </span>
+                        </div>
+                        <div class="mt-1 h-0.5 w-full bg-[#27272a]">
+                          <div
+                            class="h-full bg-[#eab308]/80"
+                            style={`width:${(tier.count / maxTierCount) * 100}%`}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )
+            }
+
+            <!-- Recent -->
+            <section class="mb-8">
+              <div class="mb-3 flex items-center justify-between">
+                <h2 class="text-sm font-medium text-zinc-200">
+                  Played recently
+                </h2>
+                <span class="font-mono text-[10px] text-zinc-600">
+                  last 2 weeks
+                </span>
+              </div>
+              {
+                data.recent.length === 0 ? (
+                  <p class="border border-[#27272a] bg-[#0c0c0d] p-6 text-center font-mono text-[10px] text-zinc-600">
+                    Nothing played in the last two weeks.
+                  </p>
+                ) : (
+                  <div class="border-y border-[#27272a]">
+                    {data.recent.map((game) => (
+                      <a
+                        href={`https://steamcommunity.com/app/${game.appId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="compact-row group flex items-center gap-3 border-b border-[#27272a] p-2 last:border-b-0"
+                      >
+                        <img
+                          src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/capsule_184x69.jpg`}
+                          alt={game.name}
+                          width="92"
+                          height="35"
+                          loading="lazy"
+                          decoding="async"
+                          class="hidden w-[69px] shrink-0 border border-[#27272a] object-cover sm:block"
+                        />
+                        <p class="min-w-0 flex-1 truncate text-xs text-zinc-300 transition-colors group-hover:text-[#eab308]">
+                          {game.name}
+                        </p>
+                        <span class="shrink-0 font-mono text-[10px] text-zinc-500">
+                          {game.hoursLastTwoWeeks.toLocaleString()} h
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                )
+              }
+            </section>
+          </>
+        )
+      }
+
+      <p
+        class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-[10px] text-zinc-600"
+      >
+        Updated <time id="last-updated" datetime={now.toISOString()}></time>
+      </p>
+    </div>
+  </Container>
+
+  <script>
+    function formatLastUpdated() {
+      const timeEl = document.getElementById("last-updated");
+      if (!timeEl) return;
+      const dt = timeEl.getAttribute("datetime");
+      if (!dt) return;
+      const date = new Date(dt);
+      if (isNaN(date.getTime())) return;
+
+      const datePart = date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      });
+      const timePart = date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      });
+      timeEl.textContent = `${datePart} at ${timePart}`;
+    }
+
+    document.addEventListener("astro:page-load", () => {
+      formatLastUpdated();
+    });
+  </script>
+</Layout>
