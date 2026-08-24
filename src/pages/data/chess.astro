@@ -173,7 +173,14 @@ const perfViews = [
           }
           <div class="min-w-0 flex-1">
             <h2 class="text-sm font-medium text-zinc-200">{data.profile.name}</h2>
-            <p class="font-mono text-[10px] text-zinc-500">@{data.profile.username}</p>
+            <a
+              href={CHESS_PROFILE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="self-start font-mono text-[10px] text-zinc-500 transition-colors hover:text-zinc-300"
+            >
+              @{data.profile.username}
+            </a>
             <p class="mt-1 flex flex-wrap gap-x-3 font-mono text-[9px] uppercase tracking-wide text-zinc-600">
               <span>{data.profile.followers.toLocaleString()} followers</span>
               <span>since {format(data.profile.joined * 1000, "MMM yyyy")}</span>

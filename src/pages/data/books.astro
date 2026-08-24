@@ -100,8 +100,6 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
 <Layout
   title="Books — Thinh's Corner"
   description="A list of books I've read and recommend."
-  lang="en"
-  locale="en_US"
   structuredData={{
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -153,32 +151,38 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
         hasBooks && (
           <>
       <!-- Stats Bar -->
-      <div class="mb-7 grid grid-cols-2 border border-[#27272a] sm:grid-cols-4">
-        {
-          [
-            [read.length, "books total"],
-            [booksThisYear, `books in ${currentYear}`],
-            [totalPages.toLocaleString(), "pages read"],
-            [`~${totalHours.toLocaleString()}h`, "time spent"],
-          ].map(([value, label]) => (
-            <div class="border-b border-r border-[#27272a] p-3 even:border-r-0 sm:border-b-0 sm:even:border-r sm:last:border-r-0">
-              <div class="font-mono text-lg text-zinc-200">{value}</div>
-              <div class="mt-0.5 font-mono text-[9px] uppercase tracking-wider text-zinc-600">
-                {label}
+      <section class="mb-8">
+        <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-4">
+          {
+            [
+              ["books total", read.length],
+              [`books in ${currentYear}`, booksThisYear],
+              ["pages read", totalPages.toLocaleString()],
+              ["time spent", `~${totalHours.toLocaleString()}h`],
+            ].map(([label, value]) => (
+              <div class="border-b border-r border-[#27272a] p-3">
+                <p class="font-mono text-[9px] uppercase tracking-wide text-zinc-500">
+                  {label}
+                </p>
+                <p class="mt-1 text-xl font-medium text-zinc-100">{value}</p>
               </div>
-            </div>
-          ))
-        }
-      </div>
+            ))
+          }
+        </div>
+      </section>
 
       <!-- Currently Reading -->
       {
         books.current_reads.length > 0 && (
-          <section class="mb-7 border border-[#27272a] bg-[#111113] p-3">
-            <h2 class="mb-2 font-mono text-[9px] uppercase tracking-wider text-[#eab308]">
-              Currently reading
-            </h2>
-            <div class="flex flex-wrap gap-2">
+          <section class="mb-8">
+            <div class="mb-3 flex items-center justify-between">
+              <h2 class="text-sm font-medium text-zinc-200">Currently reading</h2>
+              <span class="font-mono text-[10px] text-zinc-600">
+                {books.current_reads.length}{" "}
+                {books.current_reads.length === 1 ? "book" : "books"}
+              </span>
+            </div>
+            <div class="flex flex-wrap gap-x-4 gap-y-1.5 border border-[#27272a] bg-[#0c0c0d] p-3">
               {books.current_reads.map((book) => (
                 <a
                   href={book.url}
@@ -197,50 +201,48 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
       }
 
       <!-- Charts Section -->
-      <section class="mb-9 grid grid-cols-1 gap-3 md:grid-cols-2">
+      <section class="mb-8 grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2">
         <!-- Year-over-year chart -->
-        <div class="border border-[#27272a] bg-[#111113] p-4">
-          <h3
-            class="text-sm font-mono text-zinc-500 uppercase tracking-wider mb-4"
-          >
-            Books per year
-          </h3>
-          <div class="flex items-end gap-1" style="height: 7rem;">
-            {
-              booksPerYear.map((d) => {
-                const barH = Math.max((d.count / maxBooksInYear) * 5, 0.25);
-                return (
-                  <div
-                    class="flex-1 flex flex-col items-center justify-end gap-1 group"
-                    style="height: 100%;"
-                  >
-                    <span class="text-[10px] font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                      {d.count}
-                    </span>
+        <div>
+          <div class="mb-3 flex items-center justify-between">
+            <h2 class="text-sm font-medium text-zinc-200">Books per year</h2>
+            <span class="font-mono text-[10px] text-zinc-600">
+              {numericYears.length} years
+            </span>
+          </div>
+          <div class="border border-[#27272a] bg-[#0c0c0d] p-4">
+            <div class="flex items-end gap-1" style="height: 7rem;">
+              {
+                booksPerYear.map((d) => {
+                  const barH = Math.max((d.count / maxBooksInYear) * 5, 0.25);
+                  return (
                     <div
-                      class="w-full bg-[#eab308]/70 transition-colors hover:bg-[#eab308]"
-                      style={`height: ${barH}rem;`}
-                      title={`${d.year}: ${d.count} books`}
-                    />
-                    <span class="text-[10px] font-mono text-zinc-600">
-                      {String(d.year).slice(-2)}
-                    </span>
-                  </div>
-                );
-              })
-            }
+                      class="flex-1 flex flex-col items-center justify-end gap-1 group"
+                      style="height: 100%;"
+                    >
+                      <span class="text-[10px] font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                        {d.count}
+                      </span>
+                      <div
+                        class="w-full bg-[#eab308]/70 transition-colors hover:bg-[#eab308]"
+                        style={`height: ${barH}rem;`}
+                        title={`${d.year}: ${d.count} books`}
+                      />
+                      <span class="text-[10px] font-mono text-zinc-600">
+                        {String(d.year).slice(-2)}
+                      </span>
+                    </div>
+                  );
+                })
+              }
+            </div>
           </div>
         </div>
 
         <!-- Monthly chart with toggle -->
-        <div
-          class="border border-[#27272a] bg-[#111113] p-4"
-          id="monthly-chart"
-        >
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-sm text-zinc-500 uppercase tracking-wider">
-              Monthly
-            </h3>
+        <div id="monthly-chart">
+          <div class="mb-3 flex items-center justify-between">
+            <h2 class="text-sm font-medium text-zinc-200">Monthly</h2>
             <div class="flex border border-[#27272a] bg-[#0c0c0d] p-0.5">
               <button
                 id="btn-this-year"
@@ -260,6 +262,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
               </button>
             </div>
           </div>
+          <div class="border border-[#27272a] bg-[#0c0c0d] p-4">
           <!-- This year view -->
           <div
             id="chart-this-year"
@@ -326,6 +329,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
               })
             }
           </div>
+          </div>
         </div>
       </section>
 
@@ -333,13 +337,13 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
       <section id="book-list">
         {
           years.map((year) => (
-            <div class="mb-9" data-year={year}>
+            <div class="mb-8" data-year={year}>
               <div class="mb-3 flex items-center gap-3">
-                <h2 class="font-mono text-xs font-semibold text-zinc-300">
+                <h2 class="text-sm font-medium text-zinc-200 whitespace-nowrap">
                   {year}
                 </h2>
-                <div class="flex-1 h-px bg-zinc-800" />
-                <span class="text-xs font-mono text-zinc-500 whitespace-nowrap">
+                <div class="h-px flex-1 bg-[#27272a]" />
+                <span class="whitespace-nowrap font-mono text-[10px] text-zinc-600">
                   {readByYear[year].length}{" "}
                   {readByYear[year].length === 1 ? "book" : "books"}
                 </span>
