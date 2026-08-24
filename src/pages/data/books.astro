@@ -4,11 +4,12 @@ import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
 import { get_book } from "@/lib/goodread";
 import { format } from "date-fns";
-import { GOODREADS_USER_URL } from "../../data/consts";
+import { GOODREADS_USER_URL } from "../../../data/consts";
 import { env } from "cloudflare:workers";
 
 const books = await get_book(env.CACHE);
 const read = books.read;
+const hasBooks = read.length > 0 || books.current_reads.length > 0;
 
 Astro.response.headers.set(
   "Cache-Control",
@@ -106,12 +107,15 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
     "@type": "CollectionPage",
     name: "Books",
     description: "A list of books I've read and recommend.",
-    url: new URL("/books", Astro.site).toString(),
+    url: new URL("/data/books", Astro.site).toString(),
   }}
 >
   <Container>
     <div class="collection-page">
       <header class="page-header">
+        <p class="font-mono text-[10px] uppercase tracking-wide text-zinc-600">
+          <a href="/data" class="transition-colors hover:text-zinc-400">← All data</a>
+        </p>
         <h1 class="page-title">Bookshelf</h1>
         <p class="page-intro">
           A record of what I’ve read over the years, synced from my{" "}
@@ -119,6 +123,35 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
         </p>
       </header>
 
+      {
+        !hasBooks && (
+          <section class="mb-8">
+            <div class="space-y-2 border border-[#27272a] bg-[#0c0c0d] p-6 font-mono text-[11px] leading-relaxed text-zinc-400">
+              <p class="text-[#eab308]">Goodreads isn’t sharing right now.</p>
+              <p>
+                The RSS feed came back empty — Goodreads sometimes blocks
+                server-side requests. This page caches its data, so it will
+                recover on its own within a few hours.
+              </p>
+              <p>
+                Meanwhile, everything lives on my{" "}
+                <a
+                  href={GOODREADS_USER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-link"
+                >
+                  Goodreads profile
+                </a>.
+              </p>
+            </div>
+          </section>
+        )
+      }
+
+      {
+        hasBooks && (
+          <>
       <!-- Stats Bar -->
       <div class="mb-7 grid grid-cols-2 border border-[#27272a] sm:grid-cols-4">
         {
@@ -377,6 +410,10 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
           ))
         }
       </section>
+
+          </>
+        )
+      }
 
       <!-- Footer -->
       <p
