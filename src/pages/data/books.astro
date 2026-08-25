@@ -112,7 +112,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
   <Container>
     <div class="collection-page">
       <header class="page-header">
-        <p class="font-mono text-[10px] uppercase tracking-wide text-zinc-600">
+        <p class="font-mono text-xs uppercase tracking-wide text-zinc-600">
           <a href="/data" class="transition-colors hover:text-zinc-400">← All data</a>
         </p>
         <h1 class="page-title">Bookshelf</h1>
@@ -125,7 +125,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
       {
         !hasBooks && (
           <section class="mb-8">
-            <div class="space-y-2 border border-[#27272a] bg-[#0c0c0d] p-6 font-mono text-[11px] leading-relaxed text-zinc-400">
+            <div class="space-y-2 border border-[#27272a] bg-[#0c0c0d] p-6 font-mono text-xs leading-relaxed text-zinc-400">
               <p class="text-[#eab308]">Goodreads isn’t sharing right now.</p>
               <p>
                 The RSS feed came back empty — Goodreads sometimes blocks
@@ -162,7 +162,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
               ["time spent", `~${totalHours.toLocaleString()}h`],
             ].map(([label, value]) => (
               <div class="border-b border-r border-[#27272a] p-3">
-                <p class="font-mono text-[9px] uppercase tracking-wide text-zinc-500">
+                <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
                   {label}
                 </p>
                 <p class="mt-1 text-xl font-medium text-zinc-100">{value}</p>
@@ -178,7 +178,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
           <section class="mb-8">
             <div class="mb-3 flex items-center justify-between">
               <h2 class="text-sm font-medium text-zinc-200">Currently reading</h2>
-              <span class="font-mono text-[10px] text-zinc-600">
+              <span class="font-mono text-xs text-zinc-600">
                 {books.current_reads.length}{" "}
                 {books.current_reads.length === 1 ? "book" : "books"}
               </span>
@@ -207,7 +207,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
         <div>
           <div class="mb-3 flex items-center justify-between">
             <h2 class="text-sm font-medium text-zinc-200">Books per year</h2>
-            <span class="font-mono text-[10px] text-zinc-600">
+            <span class="font-mono text-xs text-zinc-600">
               {numericYears.length} years
             </span>
           </div>
@@ -221,7 +221,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                       class="flex-1 flex flex-col items-center justify-end gap-1 group"
                       style="height: 100%;"
                     >
-                      <span class="text-[10px] font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span class="text-xs font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
                         {d.count}
                       </span>
                       <div
@@ -229,7 +229,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                         style={`height: ${barH}rem;`}
                         title={`${d.year}: ${d.count} books`}
                       />
-                      <span class="text-[10px] font-mono text-zinc-600">
+                      <span class="text-xs font-mono text-zinc-600">
                         {String(d.year).slice(-2)}
                       </span>
                     </div>
@@ -247,7 +247,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
             <div class="flex border border-[#27272a] bg-[#0c0c0d] p-0.5">
               <button
                 id="btn-this-year"
-                class="bg-[#eab308] px-2 py-0.5 font-mono text-[9px] uppercase text-black transition-colors"
+                class="bg-[#eab308] px-2 py-0.5 font-mono text-xs uppercase text-black transition-colors"
                 type="button"
                 aria-pressed="true"
               >
@@ -255,7 +255,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
               </button>
               <button
                 id="btn-all-years"
-                class="px-2 py-0.5 font-mono text-[9px] uppercase text-zinc-500 transition-colors hover:text-zinc-300"
+                class="px-2 py-0.5 font-mono text-xs uppercase text-zinc-500 transition-colors hover:text-zinc-300"
                 type="button"
                 aria-pressed="false"
               >
@@ -280,7 +280,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                     class="flex-1 flex flex-col items-center justify-end gap-1 group"
                     style="height: 100%;"
                   >
-                    <span class="text-[10px] font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span class="text-xs font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
                       {count}
                     </span>
                     <div
@@ -295,7 +295,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                       style={`height: ${isFuture ? 0.25 : barH}rem;`}
                       title={`${m}: ${count} books`}
                     />
-                    <span class="text-[10px] font-mono text-zinc-600">{m}</span>
+                    <span class="text-xs font-mono text-zinc-600">{m}</span>
                   </div>
                 );
               })
@@ -316,7 +316,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                     class="flex-1 flex flex-col items-center justify-end gap-1 group"
                     style="height: 100%;"
                   >
-                    <span class="text-[10px] font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span class="text-xs font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
                       {count}
                     </span>
                     <div
@@ -324,7 +324,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                       style={`height: ${barH}rem;`}
                       title={`${m}: ${count} books`}
                     />
-                    <span class="text-[10px] font-mono text-zinc-600">{m}</span>
+                    <span class="text-xs font-mono text-zinc-600">{m}</span>
                   </div>
                 );
               })
@@ -344,7 +344,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                   {year}
                 </h2>
                 <div class="h-px flex-1 bg-[#27272a]" />
-                <span class="whitespace-nowrap font-mono text-[10px] text-zinc-600">
+                <span class="whitespace-nowrap font-mono text-xs text-zinc-600">
                   {readByYear[year].length}{" "}
                   {readByYear[year].length === 1 ? "book" : "books"}
                 </span>
@@ -363,7 +363,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                         decoding="async"
                       />
                     ) : (
-                      <div class="flex h-[96px] w-[64px] shrink-0 items-center justify-center border border-[#27272a] bg-zinc-900 font-mono text-[8px] uppercase tracking-wide text-zinc-700">
+                      <div class="flex h-[96px] w-[64px] shrink-0 items-center justify-center border border-[#27272a] bg-zinc-900 font-mono text-xs uppercase tracking-wide text-zinc-700">
                         No cover
                       </div>
                     )}
@@ -390,16 +390,16 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
                           const r = Math.round(book.rating);
                           return (
                             <span class="flex items-center gap-1.5 mt-1.5">
-                              <span class="font-mono text-[10px] text-[#eab308]">
+                              <span class="font-mono text-xs text-[#eab308]">
                                 {r}/5
                               </span>
-                              <span class="text-[10px] text-zinc-500 font-mono">
+                              <span class="text-xs text-zinc-500 font-mono">
                                 {ratingLabels[r as keyof typeof ratingLabels]}
                               </span>
                             </span>
                           );
                         })()}
-                      <div class="mt-auto pt-2 flex items-center gap-2 text-[11px] text-zinc-600 font-mono">
+                      <div class="mt-auto pt-2 flex items-center gap-2 text-xs text-zinc-600 font-mono">
                         {book.num_pages && <span>Pages: {book.num_pages}</span>}
                         {book.user_read_at && (
                           <span class="ml-auto">
@@ -422,7 +422,7 @@ const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
 
       <!-- Footer -->
       <p
-        class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-[10px] text-zinc-600"
+        class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-xs text-zinc-600"
       >
         Updated <time id="last-updated" datetime={now.toISOString()}></time>
       </p>

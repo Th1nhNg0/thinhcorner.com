@@ -143,7 +143,7 @@ const perfViews = [
   <Container>
     <div class="collection-page">
       <header class="page-header">
-        <p class="font-mono text-[10px] uppercase tracking-wide text-zinc-600">
+        <p class="font-mono text-xs uppercase tracking-wide text-zinc-600">
           <a href="/data" class="transition-colors hover:text-zinc-400">← All data</a>
         </p>
         <h1 class="page-title">Chess</h1>
@@ -178,11 +178,11 @@ const perfViews = [
               href={CHESS_PROFILE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              class="self-start font-mono text-[10px] text-zinc-500 transition-colors hover:text-zinc-300"
+              class="self-start font-mono text-xs text-zinc-500 transition-colors hover:text-zinc-300"
             >
               @{data.profile.username}
             </a>
-            <p class="mt-1 flex flex-wrap gap-x-3 font-mono text-[9px] uppercase tracking-wide text-zinc-600">
+            <p class="mt-1 flex flex-wrap gap-x-3 font-mono text-xs uppercase tracking-wide text-zinc-600">
               <span>{data.profile.followers.toLocaleString()} followers</span>
               <span>since {format(data.profile.joined * 1000, "MMM yyyy")}</span>
               {
@@ -204,7 +204,7 @@ const perfViews = [
           <section class="mb-8">
             <div class="mb-3 flex items-center justify-between">
               <h2 class="text-sm font-medium text-zinc-200">Ratings &amp; record</h2>
-              <span class="font-mono text-[10px] text-zinc-600">
+              <span class="font-mono text-xs text-zinc-600">
                 {data.gamesFetched.toLocaleString()} rated games in window
               </span>
             </div>
@@ -214,12 +214,12 @@ const perfViews = [
             >
               {statViews.map((stat) => (
                 <div class="border-b border-r border-[#27272a] p-3">
-                  <p class="font-mono text-[9px] uppercase tracking-wide text-zinc-500">
+                  <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
                     {stat.label}
                   </p>
                   <p class="mt-1 text-xl font-medium text-zinc-100">{stat.rating}</p>
                   {stat.best && (
-                    <p class="font-mono text-[9px] text-zinc-600">
+                    <p class="font-mono text-xs text-zinc-600">
                       peak {stat.best}
                     </p>
                   )}
@@ -228,7 +228,7 @@ const perfViews = [
                     <div class="bg-zinc-600/70" style={`width:${stat.drawPct}%`} />
                     <div class="bg-[#f87171]/70" style={`width:${stat.lossPct}%`} />
                   </div>
-                  <p class="mt-1.5 font-mono text-[9px] text-zinc-600">
+                  <p class="mt-1.5 font-mono text-xs text-zinc-600">
                     <span class="text-[#4ade80]">{stat.win}W</span>{" "}
                     <span class="text-zinc-500">{stat.draw}D</span>{" "}
                     <span class="text-[#f87171]">{stat.loss}L</span>
@@ -246,13 +246,13 @@ const perfViews = [
           <section class="mb-8">
             <div class="mb-3 flex items-center justify-between">
               <h2 class="text-sm font-medium text-zinc-200">Form</h2>
-              <span class="font-mono text-[10px] text-zinc-600">
+              <span class="font-mono text-xs text-zinc-600">
                 last {data.monthsCovered} months
               </span>
             </div>
             <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-4">
               <div class="border-b border-r border-[#27272a] p-3">
-                <p class="font-mono text-[9px] uppercase tracking-wide text-zinc-500">
+                <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
                   Current streak
                 </p>
                 <p
@@ -267,7 +267,7 @@ const perfViews = [
                     ? `${data.currentStreak.length}${streakSuffix[data.currentStreak.outcome]}`
                     : "—"}
                 </p>
-                <p class="mt-1 font-mono text-[9px] text-zinc-600">
+                <p class="mt-1 font-mono text-xs text-zinc-600">
                   {data.currentStreak
                     ? data.currentStreak.length === 1
                       ? `1 ${data.currentStreak.outcome}`
@@ -276,29 +276,29 @@ const perfViews = [
                 </p>
               </div>
               <div class="border-b border-r border-[#27272a] p-3">
-                <p class="font-mono text-[9px] uppercase tracking-wide text-zinc-500">
+                <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
                   Best streak
                 </p>
                 <p class="mt-1 text-xl font-medium text-[#4ade80]">
                   {data.bestWinStreak}W
                 </p>
-                <p class="mt-1 font-mono text-[9px] text-zinc-600">
+                <p class="mt-1 font-mono text-xs text-zinc-600">
                   longest win run
                 </p>
               </div>
               <div class="border-b border-r border-[#27272a] p-3">
-                <p class="font-mono text-[9px] uppercase tracking-wide text-zinc-500">
+                <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
                   Avg opponent
                 </p>
                 <p class="mt-1 text-xl font-medium text-zinc-100">
                   {data.avgOpponentRating || "—"}
                 </p>
-                <p class="mt-1 font-mono text-[9px] text-zinc-600">
+                <p class="mt-1 font-mono text-xs text-zinc-600">
                   avg opponent rating
                 </p>
               </div>
               <div class="border-b border-r border-[#27272a] p-3">
-                <p class="font-mono text-[9px] uppercase tracking-wide text-zinc-500">
+                <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
                   Rating change
                 </p>
                 <p
@@ -313,7 +313,7 @@ const perfViews = [
                 >
                   {formatDelta(data.ratingChange)}
                 </p>
-                <p class="mt-1 font-mono text-[9px] text-zinc-600">
+                <p class="mt-1 font-mono text-xs text-zinc-600">
                   net points, this window
                 </p>
               </div>
@@ -328,7 +328,7 @@ const perfViews = [
           <section class="mb-8">
             <div class="mb-3 flex items-center justify-between">
               <h2 class="text-sm font-medium text-zinc-200">Performance</h2>
-              <span class="font-mono text-[10px] text-zinc-600">
+              <span class="font-mono text-xs text-zinc-600">
                 as white / as black · last {data.monthsCovered} months
               </span>
             </div>
@@ -336,11 +336,11 @@ const perfViews = [
               {perfViews.map((perf) => (
                 <div class="border-b border-r border-[#27272a] p-3">
                   <div class="flex items-center justify-between gap-3">
-                    <p class="flex items-center gap-2 font-mono text-[9px] uppercase tracking-wide text-zinc-500">
+                    <p class="flex items-center gap-2 font-mono text-xs uppercase tracking-wide text-zinc-500">
                       <span class:list={["size-2.5 shrink-0", perf.swatchClass]} />
                       {perf.label}
                     </p>
-                    <span class="shrink-0 font-mono text-[9px] text-zinc-600">
+                    <span class="shrink-0 font-mono text-xs text-zinc-600">
                       {perf.games} {perf.games === 1 ? "game" : "games"}
                     </span>
                   </div>
@@ -354,7 +354,7 @@ const perfViews = [
                     <div class="bg-zinc-600/70" style={`width:${perf.drawPct}%`} />
                     <div class="bg-[#f87171]/70" style={`width:${perf.lossPct}%`} />
                   </div>
-                  <p class="mt-1.5 flex flex-wrap gap-x-3 font-mono text-[9px] text-zinc-600">
+                  <p class="mt-1.5 flex flex-wrap gap-x-3 font-mono text-xs text-zinc-600">
                     <span>avg opponent {perf.avgOpponentRating || "—"}</span>
                     {perf.avgAccuracy !== undefined && (
                       <span>avg accuracy {perf.avgAccuracy}%</span>
@@ -384,7 +384,7 @@ const perfViews = [
                     data-series-toggle={series.key}
                     aria-pressed="true"
                     class:list={[
-                      "flex items-center gap-1.5 border border-[#27272a] bg-[#0c0c0d] px-2 py-0.5 font-mono text-[9px] uppercase transition-opacity",
+                      "flex items-center gap-1.5 border border-[#27272a] bg-[#0c0c0d] px-2 py-0.5 font-mono text-xs uppercase transition-opacity",
                     ]}
                   >
                     <span
@@ -467,7 +467,7 @@ const perfViews = [
               ))}
             </svg>
           ) : (
-            <p class="border border-[#27272a] bg-[#0c0c0d] p-6 text-center font-mono text-[10px] text-zinc-600">
+            <p class="border border-[#27272a] bg-[#0c0c0d] p-6 text-center font-mono text-xs text-zinc-600">
               Not enough rated games in the window to draw a chart yet.
             </p>
           )
@@ -480,14 +480,14 @@ const perfViews = [
           <section class="mb-8">
             <div class="mb-3 flex items-center justify-between">
               <h2 class="text-sm font-medium text-zinc-200">Most played openings</h2>
-              <span class="font-mono text-[10px] text-zinc-600">last {data.monthsCovered} months</span>
+              <span class="font-mono text-xs text-zinc-600">last {data.monthsCovered} months</span>
             </div>
             <div class="border-y border-[#27272a]">
               {data.openings.map((opening) => (
                 <div class="border-b border-[#27272a] px-1 py-2 last:border-b-0">
                   <div class="flex items-baseline justify-between gap-3">
                     <p class="line-clamp-1 text-xs text-zinc-300">{opening.name}</p>
-                    <span class="shrink-0 font-mono text-[10px] text-zinc-600">
+                    <span class="shrink-0 font-mono text-xs text-zinc-600">
                       {opening.count}
                     </span>
                   </div>
@@ -508,11 +508,11 @@ const perfViews = [
       <section class="mb-8">
         <div class="mb-3 flex items-center justify-between">
           <h2 class="text-sm font-medium text-zinc-200">Recent games</h2>
-          <span class="font-mono text-[10px] text-zinc-600">{data.recent.length} games</span>
+          <span class="font-mono text-xs text-zinc-600">{data.recent.length} games</span>
         </div>
         {
           data.recent.length === 0 ? (
-            <p class="border border-[#27272a] bg-[#0c0c0d] p-6 text-center font-mono text-[10px] text-zinc-600">
+            <p class="border border-[#27272a] bg-[#0c0c0d] p-6 text-center font-mono text-xs text-zinc-600">
               No rated games found in the window.
             </p>
           ) : (
@@ -526,7 +526,7 @@ const perfViews = [
                 >
                   <span
                     class:list={[
-                      "flex size-6 shrink-0 items-center justify-center border font-mono text-[10px]",
+                      "flex size-6 shrink-0 items-center justify-center border font-mono text-xs",
                       outcomeStyles[game.outcome].class,
                     ]}
                   >
@@ -545,19 +545,19 @@ const perfViews = [
                     <p class="line-clamp-1 text-xs text-zinc-300 transition-colors group-hover:text-[#eab308]">
                       vs{" "}
                       <span class="font-medium">{game.opponent}</span>
-                      <span class="ml-1.5 font-mono text-[10px] text-zinc-500">
+                      <span class="ml-1.5 font-mono text-xs text-zinc-500">
                         ({game.opponentRating})
                       </span>
                     </p>
-                    <p class="line-clamp-1 font-mono text-[9px] text-zinc-700">
+                    <p class="line-clamp-1 font-mono text-xs text-zinc-700">
                       {game.opening ?? game.timeClass}
                     </p>
                   </div>
                   <div class="shrink-0 text-right">
-                    <p class="font-mono text-[10px] text-zinc-500">
+                    <p class="font-mono text-xs text-zinc-500">
                       {format(game.endTime, "MMM d, HH:mm")}
                     </p>
-                    <p class="font-mono text-[9px] text-zinc-700">
+                    <p class="font-mono text-xs text-zinc-700">
                       {game.timeClass}
                       {" · "}
                       {formatDistanceToNow(new Date(game.endTime), { addSuffix: true })}
@@ -567,7 +567,7 @@ const perfViews = [
                     game.delta !== null && (
                       <span
                         class:list={[
-                          "w-9 shrink-0 text-right font-mono text-[10px]",
+                          "w-9 shrink-0 text-right font-mono text-xs",
                           game.delta > 0 ? "text-[#4ade80]" : game.delta < 0 ? "text-[#f87171]" : "text-zinc-600",
                         ]}
                       >
@@ -583,7 +583,7 @@ const perfViews = [
       </section>
 
       <p
-        class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-[10px] text-zinc-600"
+        class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-xs text-zinc-600"
       >
         Updated <time id="last-updated" datetime={now.toISOString()}></time>
       </p>
