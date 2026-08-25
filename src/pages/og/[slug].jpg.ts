@@ -2,40 +2,104 @@ export const prerender = true;
 
 import type { APIRoute } from "astro";
 import { experimental_getFontFileURL, fontData } from "astro:assets";
-import { getCollection } from "astro:content";
 import satori from "satori";
 import sharp from "sharp";
 import { readFileSync } from "node:fs";
 
-// Render at 2x the standard Open Graph dimensions so platforms have more detail to downsample.
 const SCALE = 2;
 const WIDTH = 1200 * SCALE;
 const HEIGHT = 630 * SCALE;
 const px = (value: number) => value * SCALE;
 const bgImage = readFileSync("./src/assets/og-background.png");
 
-const posts = await getCollection("writing");
-const postMap = new Map(posts.map((p) => [p.id, p.data]));
+type Page = {
+  slug: string;
+  section: string;
+  label: string;
+  title: string;
+  footer: string;
+};
+
+const pages: Page[] = [
+  {
+    slug: "home",
+    section: "home",
+    label: "en",
+    title: "Thinh's Corner",
+    footer: "PERSONAL BLOG",
+  },
+  {
+    slug: "writing",
+    section: "writing",
+    label: "en",
+    title: "Writing",
+    footer: "NOTES & ESSAYS",
+  },
+  {
+    slug: "projects",
+    section: "projects",
+    label: "en",
+    title: "Projects",
+    footer: "THINGS I BUILD",
+  },
+  {
+    slug: "now",
+    section: "now",
+    label: "en",
+    title: "Now & then",
+    footer: "A LIFE IN PROGRESS",
+  },
+  {
+    slug: "data",
+    section: "data",
+    label: "en",
+    title: "Data",
+    footer: "TRACKED INTERESTS",
+  },
+  {
+    slug: "books",
+    section: "data",
+    label: "books",
+    title: "Books",
+    footer: "GOODREADS",
+  },
+  {
+    slug: "music",
+    section: "data",
+    label: "music",
+    title: "Music",
+    footer: "SPOTIFY",
+  },
+  {
+    slug: "chess",
+    section: "data",
+    label: "chess",
+    title: "Chess",
+    footer: "CHESS.COM",
+  },
+  {
+    slug: "steam",
+    section: "data",
+    label: "steam",
+    title: "Steam",
+    footer: "STEAM",
+  },
+  {
+    slug: "404",
+    section: "error",
+    label: "404",
+    title: "Nothing here.",
+    footer: "END OF LINE",
+  },
+];
+
+const pageMap = new Map(pages.map((page) => [page.slug, page]));
 
 export function getStaticPaths() {
-  return posts.map((post) => ({ params: { id: post.id } }));
+  return pages.map((page) => ({ params: { slug: page.slug } }));
 }
 
 const fallbackSubsets = ["latin", "latin-ext", "vietnamese"];
-const months = [
-  "JAN",
-  "FEB",
-  "MAR",
-  "APR",
-  "MAY",
-  "JUN",
-  "JUL",
-  "AUG",
-  "SEP",
-  "OCT",
-  "NOV",
-  "DEC",
-];
 
 type OgFont = {
   name: string;
@@ -44,11 +108,6 @@ type OgFont = {
   style: "normal";
 };
 
-/**
- * Inter is the closest portable equivalent to the blog's system-ui stack.
- * Each unicode subset gets its own family because Satori does not merge
- * duplicate family names when resolving missing Vietnamese glyphs.
- */
 async function loadInter600(url: URL): Promise<OgFont[]> {
   const variants = fontData["--font-inter"]?.filter(
     (font) => String(font.weight) === "600" && font.style === "normal",
@@ -60,7 +119,6 @@ async function loadInter600(url: URL): Promise<OgFont[]> {
 
   return Promise.all(
     variants.map(async (variant, index) => {
-      // Satori's OpenType parser needs WOFF here; it cannot parse WOFF2.
       const source = variant.src.find((src) => src.format === "woff");
       if (!source) {
         throw new Error("Cannot find a WOFF source for Inter 600.");
@@ -92,27 +150,18 @@ async function loadInter600(url: URL): Promise<OgFont[]> {
 }
 
 function getTitleFontSize(title: string) {
-  if (title.length > 90) return 46;
-  if (title.length > 56) return 52;
   if (title.length > 34) return 62;
   return 68;
 }
 
-function formatDate(date: Date) {
-  return `${String(date.getDate()).padStart(2, "0")} ${months[date.getMonth()]} ${date.getFullYear()}`;
-}
-
 export const GET: APIRoute = async ({ params, url }) => {
-  const data = postMap.get(params.id as string);
-  if (!data) return new Response("Not found", { status: 404 });
+  const page = pageMap.get(params.slug ?? "");
+  if (!page) return new Response("Not found", { status: 404 });
 
   const fonts = await loadInter600(url);
   const fontFamily = fonts.map((font) => font.name).join(", ");
-  const titleFontSize = getTitleFontSize(data.title) * SCALE;
-  const dateLabel = formatDate(data.date);
-  const languageLabel = data.lang === "vi" ? "vi" : "en";
+  const titleFontSize = getTitleFontSize(page.title) * SCALE;
 
-  // Keep the universe artwork, but add a restrained wash for title contrast.
   const backgroundOverlay = Buffer.from(`
     <svg width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -139,7 +188,6 @@ export const GET: APIRoute = async ({ params, url }) => {
           fontFamily,
         },
         children: [
-          // This mirrors the article kicker used by the current blog layout.
           {
             type: "div",
             props: {
@@ -166,7 +214,7 @@ export const GET: APIRoute = async ({ params, url }) => {
                         type: "div",
                         props: {
                           style: { color: "#eab308" },
-                          children: "writing",
+                          children: page.section,
                         },
                       },
                       {
@@ -180,7 +228,7 @@ export const GET: APIRoute = async ({ params, url }) => {
                         type: "div",
                         props: {
                           style: { marginLeft: px(10) },
-                          children: languageLabel,
+                          children: page.label,
                         },
                       },
                     ],
@@ -200,7 +248,6 @@ export const GET: APIRoute = async ({ params, url }) => {
               ],
             },
           },
-          // The title follows the same tight, semibold treatment as article h1s.
           {
             type: "div",
             props: {
@@ -228,13 +275,12 @@ export const GET: APIRoute = async ({ params, url }) => {
                       lineHeight: 1.08,
                       letterSpacing: px(-1.4),
                     },
-                    children: data.title,
+                    children: page.title,
                   },
                 },
               ],
             },
           },
-          // Article metadata uses the same restrained, mono-like visual language.
           {
             type: "div",
             props: {
@@ -258,10 +304,7 @@ export const GET: APIRoute = async ({ params, url }) => {
                   props: {
                     style: { display: "flex", alignItems: "center" },
                     children: [
-                      {
-                        type: "div",
-                        props: { children: dateLabel },
-                      },
+                      { type: "div", props: { children: page.footer } },
                       {
                         type: "div",
                         props: {
@@ -273,7 +316,7 @@ export const GET: APIRoute = async ({ params, url }) => {
                         type: "div",
                         props: {
                           style: { marginLeft: px(10), color: "#eab308" },
-                          children: languageLabel,
+                          children: page.label,
                         },
                       },
                     ],
@@ -292,11 +335,7 @@ export const GET: APIRoute = async ({ params, url }) => {
         ],
       },
     } as any,
-    {
-      width: WIDTH,
-      height: HEIGHT,
-      fonts,
-    },
+    { width: WIDTH, height: HEIGHT, fonts },
   );
 
   const jpeg = await sharp(bgImage)
@@ -305,11 +344,7 @@ export const GET: APIRoute = async ({ params, url }) => {
       { input: backgroundOverlay, top: 0, left: 0 },
       { input: Buffer.from(svg), top: 0, left: 0 },
     ])
-    .jpeg({
-      quality: 100,
-      chromaSubsampling: "4:4:4",
-      progressive: true,
-    })
+    .jpeg({ quality: 100, chromaSubsampling: "4:4:4", progressive: true })
     .toBuffer();
 
   return new Response(new Uint8Array(jpeg), {
