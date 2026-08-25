@@ -101,6 +101,8 @@ const streakStyles = {
 const streakSuffix = { win: "W", loss: "L", draw: "D" } as const;
 
 const hasGames = data.gamesFetched > 0;
+const pageDescription =
+  "Production chess analytics from chess.com: ratings, history, openings and recent games.";
 
 // --- Performance by colour ----------------------------------------------------
 const perfViews = [
@@ -130,13 +132,13 @@ const perfViews = [
 
 <Layout
   title="Chess — Thinh's Corner"
-  description="My chess.com stats: ratings, rating history, openings and recent games."
+  description={pageDescription}
   image="/og/chess.jpg"
   structuredData={{
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: "Chess",
-    description: "My chess.com stats: ratings, rating history, openings and recent games.",
+    description: pageDescription,
     url: new URL("/data/chess", Astro.site).toString(),
   }}
 >
@@ -148,9 +150,8 @@ const perfViews = [
         </p>
         <h1 class="page-title">Chess</h1>
         <p class="page-intro">
-          A live snapshot of my games, synced from my{" "}
-          <a href={CHESS_PROFILE_URL} class="text-link">chess.com profile</a> — the last{" "}
-          {data.monthsCovered} months of rated play.
+          A production view of my rated chess activity from the last {data.monthsCovered} months, synced from{" "}
+          <a href={CHESS_PROFILE_URL} class="text-link">chess.com</a>.
         </p>
       </header>
 
@@ -244,11 +245,8 @@ const perfViews = [
       {
         hasGames && (
           <section class="mb-8">
-            <div class="mb-3 flex items-center justify-between">
+            <div class="mb-3">
               <h2 class="text-sm font-medium text-zinc-200">Form</h2>
-              <span class="font-mono text-xs text-zinc-600">
-                last {data.monthsCovered} months
-              </span>
             </div>
             <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-4">
               <div class="border-b border-r border-[#27272a] p-3">
@@ -326,11 +324,8 @@ const perfViews = [
       {
         hasGames && (
           <section class="mb-8">
-            <div class="mb-3 flex items-center justify-between">
+            <div class="mb-3">
               <h2 class="text-sm font-medium text-zinc-200">Performance</h2>
-              <span class="font-mono text-xs text-zinc-600">
-                as white / as black · last {data.monthsCovered} months
-              </span>
             </div>
             <div class="grid border-l border-t border-[#27272a] md:grid-cols-2">
               {perfViews.map((perf) => (
@@ -478,9 +473,8 @@ const perfViews = [
       {
         data.openings.length > 0 && (
           <section class="mb-8">
-            <div class="mb-3 flex items-center justify-between">
+            <div class="mb-3">
               <h2 class="text-sm font-medium text-zinc-200">Most played openings</h2>
-              <span class="font-mono text-xs text-zinc-600">last {data.monthsCovered} months</span>
             </div>
             <div class="border-y border-[#27272a]">
               {data.openings.map((opening) => (

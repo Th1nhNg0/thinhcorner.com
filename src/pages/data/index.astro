@@ -12,6 +12,9 @@ import ChartIcon from "@/assets/icons/chart-bar.svg";
 // rendered with fill=currentColor so they inherit the card styling.
 // Books & Music use the Solar set (https://icones.js.org/collection/solar,
 // CC BY 4.0); Steam & Chess use simple-icons brand marks (CC0) for accuracy.
+const pageDescription =
+  "Production data views for what I play, read, listen to and measure across the services I use.";
+
 const analyses = [
   {
     href: "/data/books",
@@ -19,7 +22,7 @@ const analyses = [
     title: "Books",
     source: "goodreads",
     description:
-      "Reading log with yearly stats and ratings, synced from my Goodreads shelves.",
+      "Production reading analytics with yearly trends and ratings.",
   },
   {
     href: "/data/music",
@@ -27,7 +30,7 @@ const analyses = [
     title: "Music",
     source: "spotify",
     description:
-      "Recently played tracks, top songs and top artists across multiple time ranges.",
+      "Production listening analytics for recent tracks, top songs and artists.",
   },
   {
     href: "/data/chess",
@@ -35,7 +38,7 @@ const analyses = [
     title: "Chess",
     source: "chess.com",
     description:
-      "Ratings, rating history, most played openings and recent games from my chess.com profile.",
+      "Production chess analytics for ratings, history, openings and recent games.",
   },
   {
     href: "/data/steam",
@@ -43,7 +46,7 @@ const analyses = [
     title: "Steam",
     source: "steam web api",
     description:
-      "Game library, total hours, playtime distribution and recently played games from my Steam account.",
+      "Production analytics for library size, playtime and recent activity.",
   },
   {
     href: "/data/token-usage",
@@ -51,21 +54,20 @@ const analyses = [
     title: "Token usage",
     source: "ccusage",
     description:
-      "Production analytics for daily token volume, token mix, agent usage and model distribution from ccusage exports.",
+      "Production analytics for daily token volume, token mix, agent usage and model distribution.",
   },
 ];
 ---
 
 <Layout
   title="Data — Thinh's Corner"
-  description="What I'm playing, reading, and listening to — tracked across the services I use."
+  description={pageDescription}
   image="/og/data.jpg"
   structuredData={{
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: "Data",
-    description:
-      "What I'm playing, reading, and listening to — tracked across the services I use.",
+    description: pageDescription,
     url: new URL("/data", Astro.site).toString(),
   }}
 >
@@ -74,8 +76,7 @@ const analyses = [
       <header class="page-header">
         <h1 class="page-title">Data</h1>
         <p class="page-intro">
-          What I'm playing, reading, and listening to — pulled live or
-          exported from each service and visualized here.
+          Production views sourced from the services I use.
         </p>
       </header>
 
