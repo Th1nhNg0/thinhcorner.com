@@ -38,8 +38,16 @@ type NamedDay = [
   models: NamedModel[],
   agents: NamedAgent[],
 ];
-type IndexedModel = [modelIndex: number, totalTokens: number, costCents: number];
-type IndexedAgent = [agentIndex: number, totalTokens: number, costCents: number];
+type IndexedModel = [
+  modelIndex: number,
+  totalTokens: number,
+  costCents: number,
+];
+type IndexedAgent = [
+  agentIndex: number,
+  totalTokens: number,
+  costCents: number,
+];
 type IndexedDay = [
   inputTokens: number,
   outputTokens: number,
@@ -55,10 +63,12 @@ type EncodedDay = [
   models: IndexedModel[],
   agents: IndexedAgent[],
 ];
-type StoredSource = {
-  daily?: RawDay[] | Record<string, NamedDay | IndexedDay>;
-  [period: string]: unknown;
-} | EncodedDay[];
+type StoredSource =
+  | {
+      daily?: RawDay[] | Record<string, NamedDay | IndexedDay>;
+      [period: string]: unknown;
+    }
+  | EncodedDay[];
 type StoredReport = {
   daily?: RawDay[];
   b?: number;
@@ -217,15 +227,17 @@ const normalizeSource = (
     Object.entries(source).flatMap(([period, day]) =>
       period === "daily"
         ? []
-        : [[
-            period,
-            normalizeStoredDay(
-              day as RawDay | NamedDay | IndexedDay,
-              indexed,
-              modelNames,
-              agentNames,
-            ),
-          ]],
+        : [
+            [
+              period,
+              normalizeStoredDay(
+                day as RawDay | NamedDay | IndexedDay,
+                indexed,
+                modelNames,
+                agentNames,
+              ),
+            ],
+          ],
     ),
   );
 };
@@ -238,26 +250,28 @@ const encodeSource = (
 ): IndexedSource =>
   Object.entries(source)
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([period, day]): EncodedDay => [
-      toDayNumber(period) - baseDay,
-      day[0],
-      day[1],
-      day[2],
-      day[3].map(
-        ([modelName, totalTokens, costCents]): IndexedModel => [
-          modelIndexes.get(modelName) ?? 0,
-          totalTokens,
-          costCents,
-        ],
-      ),
-      day[4].map(
-        ([agent, totalTokens, costCents]): IndexedAgent => [
-          agentIndexes.get(agent) ?? 0,
-          totalTokens,
-          costCents,
-        ],
-      ),
-    ]);
+    .map(
+      ([period, day]): EncodedDay => [
+        toDayNumber(period) - baseDay,
+        day[0],
+        day[1],
+        day[2],
+        day[3].map(
+          ([modelName, totalTokens, costCents]): IndexedModel => [
+            modelIndexes.get(modelName) ?? 0,
+            totalTokens,
+            costCents,
+          ],
+        ),
+        day[4].map(
+          ([agent, totalTokens, costCents]): IndexedAgent => [
+            agentIndexes.get(agent) ?? 0,
+            totalTokens,
+            costCents,
+          ],
+        ),
+      ],
+    );
 
 let output: string;
 try {
