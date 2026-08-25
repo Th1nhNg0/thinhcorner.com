@@ -24,7 +24,7 @@ const navLinks = [
 <header>
   <Container>
     <nav
-      class="scrollbar-hide flex h-12 items-center gap-5 overflow-x-auto"
+      class="scrollbar-hide flex h-14 items-center gap-5 overflow-x-auto"
       aria-label="Main navigation"
     >
       {
@@ -32,7 +32,7 @@ const navLinks = [
           <a
             href={link.href}
             class:list={[
-              "whitespace-nowrap text-sm transition-colors focus-visible:outline-none",
+              "inline-flex min-h-11 items-center whitespace-nowrap text-base transition-colors focus-visible:outline-none",
               isActive(link.href)
                 ? "text-[#eab308]"
                 : "text-zinc-500 hover:text-zinc-200",
