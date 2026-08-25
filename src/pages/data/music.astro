@@ -73,17 +73,20 @@ Astro.response.headers.set(
   "Cache-Control",
   "public, s-maxage=600, stale-while-revalidate=300",
 );
+
+const pageDescription =
+  "Production listening analytics from Spotify: recent tracks, top songs and artists.";
 ---
 
 <Layout
   title="Music — Thinh's Corner"
-  description="A list of music I've listened to and recommend."
+  description={pageDescription}
   image="/og/music.jpg"
   structuredData={{
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: "Music",
-    description: "A list of music I've listened to and recommend.",
+    description: pageDescription,
     url: new URL("/data/music", Astro.site).toString(),
   }}
 >
@@ -95,7 +98,7 @@ Astro.response.headers.set(
         </p>
         <h1 class="page-title">Music library</h1>
         <p class="page-intro">
-          A live snapshot of what I’ve been listening to, synced from my{" "}
+          A production view of recent listening and long-term favorites from my{" "}
           <a href={SOCIAL_MEDIA.spotify} class="text-link">Spotify profile</a>.
         </p>
       </header>
@@ -105,8 +108,7 @@ Astro.response.headers.set(
           <section class="mb-8">
             <div class="space-y-2 border border-[#27272a] bg-[#0c0c0d] p-6 font-mono text-xs leading-relaxed text-zinc-400">
               <p class="text-[#eab308]">
-                One secret away from coming alive — Spotify credentials are not
-                set.
+                This view needs a Spotify connection.
               </p>
               <p>
                 1 · Create an app at{" "}

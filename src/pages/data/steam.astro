@@ -40,18 +40,19 @@ const statCells = data
 
 // Palette for the stacked hour-concentration bar.
 const SHARE_COLORS = ["#eab308", "#38bdf8", "#f472b6", "#a78bfa", "#4ade80"];
+const pageDescription =
+  "Production Steam analytics: library size, playtime distribution and recent activity.";
 ---
 
 <Layout
   title="Steam — Thinh's Corner"
-  description="My Steam stats: game library, total hours, playtime distribution and recent games."
+  description={pageDescription}
   image="/og/steam.jpg"
   structuredData={{
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: "Steam",
-    description:
-      "My Steam stats: game library, total hours, playtime distribution and recent games.",
+    description: pageDescription,
     url: new URL("/data/steam", Astro.site).toString(),
   }}
 >
@@ -65,7 +66,7 @@ const SHARE_COLORS = ["#eab308", "#38bdf8", "#f472b6", "#a78bfa", "#4ade80"];
         {
           data && (
             <p class="page-intro">
-              A live snapshot of my game library, synced from my{" "}
+              A production view of my library and playtime, synced from my{" "}
               <a href={STEAM_PROFILE_URL} class="text-link">Steam profile</a>.
             </p>
           )
@@ -77,7 +78,7 @@ const SHARE_COLORS = ["#eab308", "#38bdf8", "#f472b6", "#a78bfa", "#4ade80"];
           <section class="mb-8">
             <div class="space-y-2 border border-[#27272a] bg-[#0c0c0d] p-6 font-mono text-xs leading-relaxed text-zinc-400">
               <p class="text-[#eab308]">
-                One secret away from coming alive — STEAM_API_KEY is not set.
+                This view needs a Steam API key.
               </p>
               <p>
                 1 · Grab a free key at{" "}
