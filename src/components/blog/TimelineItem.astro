@@ -17,14 +17,14 @@ const dateTimeAttr = isValidDate ? new Date(time).toISOString() : undefined;
 <li class="grid gap-1 border-t border-[#27272a] pt-3 sm:grid-cols-[8rem_1fr] sm:gap-4">
   {
     isValidDate ? (
-      <time class="font-mono text-[9px] uppercase tracking-wider text-zinc-600" datetime={dateTimeAttr}>{formattedTime}</time>
+      <time class="font-mono text-xs uppercase tracking-wider text-zinc-600" datetime={dateTimeAttr}>{formattedTime}</time>
     ) : (
-      <span class="font-mono text-[9px] uppercase tracking-wider text-zinc-600">{formattedTime}</span>
+      <span class="font-mono text-xs uppercase tracking-wider text-zinc-600">{formattedTime}</span>
     )
   }
   <div>
-    <h2 class="max-w-2xl text-sm font-medium leading-5 text-zinc-300">{title}</h2>
-    <div class="mt-2 max-w-2xl text-xs leading-5 text-zinc-500 [&_a]:text-zinc-300 [&_a]:underline [&_a]:decoration-zinc-700 [&_a]:underline-offset-2 [&_a:hover]:text-[#eab308] [&_img]:mt-3 [&_img]:border [&_img]:border-[#27272a]">
+    <h2 class="max-w-2xl text-base font-medium leading-6 text-zinc-300">{title}</h2>
+    <div class="mt-2 max-w-2xl text-sm leading-6 text-zinc-500 [&_a]:text-zinc-300 [&_a]:underline [&_a]:decoration-zinc-700 [&_a]:underline-offset-2 [&_a:hover]:text-[#eab308] [&_img]:mt-3 [&_img]:border [&_img]:border-[#27272a]">
       <slot />
     </div>
   </div>

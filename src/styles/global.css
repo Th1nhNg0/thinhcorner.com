@@ -6,6 +6,8 @@
 @theme inline {
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  --text-sm: 0.9375rem;
+  --text-xs: 0.8125rem;
 }
 
 :root {
@@ -39,8 +41,8 @@ body {
   background: var(--page);
   color: var(--ink);
   font-family: var(--font-sans);
-  font-size: 0.9375rem;
-  line-height: 1.6;
+  font-size: 1rem;
+  line-height: 1.65;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
@@ -88,7 +90,7 @@ img {
 
 .page-kicker {
   color: var(--faint);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0;
   line-height: 1.4;
@@ -107,8 +109,8 @@ img {
   max-width: 38rem;
   margin-top: 0.75rem;
   color: var(--muted);
-  font-size: 0.9rem;
-  line-height: 1.65;
+  font-size: 1rem;
+  line-height: 1.7;
 }
 
 .text-link {
@@ -214,7 +216,6 @@ img {
 @media (max-width: 48rem) {
   body {
     background: var(--page);
-    font-size: 0.9rem;
   }
 
   .page-header {

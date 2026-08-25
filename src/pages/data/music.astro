@@ -90,7 +90,7 @@ Astro.response.headers.set(
   <Container>
     <div class="collection-page">
       <header class="page-header">
-        <p class="font-mono text-[10px] uppercase tracking-wide text-zinc-600">
+        <p class="font-mono text-xs uppercase tracking-wide text-zinc-600">
           <a href="/data" class="transition-colors hover:text-zinc-400">← All data</a>
         </p>
         <h1 class="page-title">Music library</h1>
@@ -103,7 +103,7 @@ Astro.response.headers.set(
       {
         !configured && (
           <section class="mb-8">
-            <div class="space-y-2 border border-[#27272a] bg-[#0c0c0d] p-6 font-mono text-[11px] leading-relaxed text-zinc-400">
+            <div class="space-y-2 border border-[#27272a] bg-[#0c0c0d] p-6 font-mono text-xs leading-relaxed text-zinc-400">
               <p class="text-[#eab308]">
                 One secret away from coming alive — Spotify credentials are not
                 set.
@@ -146,7 +146,7 @@ Astro.response.headers.set(
       <section class="mb-8">
         <div class="mb-3 flex items-center justify-between">
           <h2 class="text-sm font-medium text-zinc-200">Recently played</h2>
-          <span class="font-mono text-[10px] text-zinc-600"
+          <span class="font-mono text-xs text-zinc-600"
             >{recentlyPlayed.length} tracks</span
           >
         </div>
@@ -174,10 +174,10 @@ Astro.response.headers.set(
                   <h3 class="line-clamp-1 text-xs font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
                     {track.title}
                   </h3>
-                  <p class="line-clamp-1 text-[10px] text-zinc-500">
+                  <p class="line-clamp-1 text-xs text-zinc-500">
                     {track.artist}
                   </p>
-                  <p class="mt-0.5 font-mono text-[9px] text-zinc-700">
+                  <p class="mt-0.5 font-mono text-xs text-zinc-700">
                     Played{" "}
                     {formatDistanceToNow(new Date(track.played_at), {
                       addSuffix: true,
@@ -204,7 +204,7 @@ Astro.response.headers.set(
                   type="button"
                   data-track-range={range.key}
                   class:list={[
-                    "px-2 py-0.5 font-mono text-[9px] uppercase transition-colors",
+                    "px-2 py-0.5 font-mono text-xs uppercase transition-colors",
                     i === 0
                       ? "bg-[#eab308] text-black"
                       : "text-zinc-500 hover:text-zinc-300",
@@ -244,7 +244,7 @@ Astro.response.headers.set(
                       class="h-full w-full border border-[#27272a] object-cover"
                     />
                   </div>
-                  <h3 class="line-clamp-1 text-[11px] font-medium text-zinc-300 transition-colors group-hover:text-[#eab308]">
+                  <h3 class="line-clamp-1 text-xs font-medium text-zinc-300 transition-colors group-hover:text-[#eab308]">
                     {track.title}
                   </h3>
                   <p class="text-zinc-400 text-xs line-clamp-1">
@@ -271,7 +271,7 @@ Astro.response.headers.set(
                   type="button"
                   data-artist-range={range.key}
                   class:list={[
-                    "px-2 py-0.5 font-mono text-[9px] uppercase transition-colors",
+                    "px-2 py-0.5 font-mono text-xs uppercase transition-colors",
                     i === 0
                       ? "bg-[#eab308] text-black"
                       : "text-zinc-500 hover:text-zinc-300",
@@ -322,7 +322,7 @@ Astro.response.headers.set(
                       <h3 class="mb-1 text-sm font-medium text-white">
                         {artist.name}
                       </h3>
-                      <div class="flex flex-col gap-0.5 font-mono text-[8px] uppercase tracking-wide text-zinc-300 sm:flex-row sm:gap-3">
+                      <div class="flex flex-col gap-0.5 font-mono text-xs uppercase tracking-wide text-zinc-300 sm:flex-row sm:gap-3">
                         <span>
                           {artist.followers.toLocaleString()} followers
                         </span>
@@ -342,7 +342,7 @@ Astro.response.headers.set(
       }
 
       <p
-        class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-[10px] text-zinc-600"
+        class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-xs text-zinc-600"
       >
         Updated <time id="last-updated" datetime={now.toISOString()}></time>
       </p>
