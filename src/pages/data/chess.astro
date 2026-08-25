@@ -199,20 +199,19 @@ const perfViews = [
         </div>
       </section>
 
-      <!-- Rating cards -->
+      <!-- Ratings & form -->
       {
-        statViews.length > 0 && (
+        (statViews.length > 0 || hasGames) && (
           <section class="mb-8">
             <div class="mb-3 flex items-center justify-between">
               <h2 class="text-sm font-medium text-zinc-200">Ratings &amp; record</h2>
-              <span class="font-mono text-xs text-zinc-600">
-                {data.gamesFetched.toLocaleString()} rated games in window
-              </span>
+              {data.gamesFetched > 0 && (
+                <span class="font-mono text-xs text-zinc-600">
+                  {data.gamesFetched.toLocaleString()} rated games in window
+                </span>
+              )}
             </div>
-            <div
-              class="grid grid-cols-2 border-l border-t border-[#27272a] md:[grid-template-columns:repeat(var(--stat-cols),minmax(0,1fr))]"
-              style={`--stat-cols:${Math.max(statViews.length, 1)}`}
-            >
+            <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-3">
               {statViews.map((stat) => (
                 <div class="border-b border-r border-[#27272a] p-3">
                   <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
@@ -236,85 +235,71 @@ const perfViews = [
                   </p>
                 </div>
               ))}
-            </div>
-          </section>
-        )
-      }
-
-      <!-- Form tiles -->
-      {
-        hasGames && (
-          <section class="mb-8">
-            <div class="mb-3">
-              <h2 class="text-sm font-medium text-zinc-200">Form</h2>
-            </div>
-            <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-4">
-              <div class="border-b border-r border-[#27272a] p-3">
-                <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
-                  Current streak
-                </p>
-                <p
-                  class:list={[
-                    "mt-1 text-xl font-medium",
-                    data.currentStreak
-                      ? streakStyles[data.currentStreak.outcome].class
-                      : "text-zinc-100",
-                  ]}
-                >
-                  {data.currentStreak
-                    ? `${data.currentStreak.length}${streakSuffix[data.currentStreak.outcome]}`
-                    : "—"}
-                </p>
-                <p class="mt-1 font-mono text-xs text-zinc-600">
-                  {data.currentStreak
-                    ? data.currentStreak.length === 1
-                      ? `1 ${data.currentStreak.outcome}`
-                      : `${data.currentStreak.length} ${data.currentStreak.outcome}s`
-                    : "no games yet"}
-                </p>
-              </div>
-              <div class="border-b border-r border-[#27272a] p-3">
-                <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
-                  Best streak
-                </p>
-                <p class="mt-1 text-xl font-medium text-[#4ade80]">
-                  {data.bestWinStreak}W
-                </p>
-                <p class="mt-1 font-mono text-xs text-zinc-600">
-                  longest win run
-                </p>
-              </div>
-              <div class="border-b border-r border-[#27272a] p-3">
-                <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
-                  Avg opponent
-                </p>
-                <p class="mt-1 text-xl font-medium text-zinc-100">
-                  {data.avgOpponentRating || "—"}
-                </p>
-                <p class="mt-1 font-mono text-xs text-zinc-600">
-                  avg opponent rating
-                </p>
-              </div>
-              <div class="border-b border-r border-[#27272a] p-3">
-                <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
-                  Rating change
-                </p>
-                <p
-                  class:list={[
-                    "mt-1 text-xl font-medium",
-                    data.ratingChange > 0
-                      ? "text-[#4ade80]"
-                      : data.ratingChange < 0
-                        ? "text-[#f87171]"
-                        : "text-zinc-100",
-                  ]}
-                >
-                  {formatDelta(data.ratingChange)}
-                </p>
-                <p class="mt-1 font-mono text-xs text-zinc-600">
-                  net points, this window
-                </p>
-              </div>
+              {hasGames && (
+                <>
+                  <div class="border-b border-r border-[#27272a] p-3">
+                    <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
+                      Streaks
+                    </p>
+                    <div class="mt-1 grid grid-cols-2 gap-2">
+                      <div>
+                        <p
+                          class:list={[
+                            "text-xl font-medium",
+                            data.currentStreak
+                              ? streakStyles[data.currentStreak.outcome].class
+                              : "text-zinc-100",
+                          ]}
+                        >
+                          {data.currentStreak
+                            ? `${data.currentStreak.length}${streakSuffix[data.currentStreak.outcome]}`
+                            : "—"}
+                        </p>
+                        <p class="mt-1 font-mono text-xs text-zinc-600">
+                          current
+                        </p>
+                      </div>
+                      <div>
+                        <p class="text-xl font-medium text-[#4ade80]">
+                          {data.bestWinStreak}W
+                        </p>
+                        <p class="mt-1 font-mono text-xs text-zinc-600">best</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="border-b border-r border-[#27272a] p-3">
+                    <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
+                      Avg opponent
+                    </p>
+                    <p class="mt-1 text-xl font-medium text-zinc-100">
+                      {data.avgOpponentRating || "—"}
+                    </p>
+                    <p class="mt-1 font-mono text-xs text-zinc-600">
+                      average rating
+                    </p>
+                  </div>
+                  <div class="border-b border-r border-[#27272a] p-3">
+                    <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
+                      Rating change
+                    </p>
+                    <p
+                      class:list={[
+                        "mt-1 text-xl font-medium",
+                        data.ratingChange > 0
+                          ? "text-[#4ade80]"
+                          : data.ratingChange < 0
+                            ? "text-[#f87171]"
+                            : "text-zinc-100",
+                      ]}
+                    >
+                      {formatDelta(data.ratingChange)}
+                    </p>
+                    <p class="mt-1 font-mono text-xs text-zinc-600">
+                      net points, this window
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
           </section>
         )
