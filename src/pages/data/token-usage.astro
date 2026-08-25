@@ -50,7 +50,7 @@ type DailyUsage = {
   agents: DailyAgent[];
 };
 
-const snapshot = usage as UsageSnapshot;
+const snapshot = usage as unknown as UsageSnapshot;
 const modelNames = snapshot.m ?? [];
 const agentNames = snapshot.a ?? [];
 const baseDay = snapshot.b ?? 0;
@@ -277,6 +277,9 @@ const agentTokenTotal = Math.max(
   1,
   agents.reduce((sum, agent) => sum + agent.totalTokens, 0),
 );
+const averageTokensPerDay = days.length
+  ? Math.round(totals.totalTokens / days.length)
+  : 0;
 
 const statCells = [
   {
@@ -288,6 +291,11 @@ const statCells = [
     label: "active days",
     value: formatNumber(days.length),
     detail: "days with usage",
+  },
+  {
+    label: "avg tokens / day",
+    value: formatCompact(averageTokensPerDay),
+    detail: "across active days",
   },
   {
     label: "estimated cost",
@@ -341,7 +349,7 @@ const pageDescription =
 
       <!-- Totals -->
       <section class="mb-8">
-        <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-3">
+        <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-4">
           {statCells.map((cell) => (
             <div class="border-b border-r border-[#27272a] p-3">
               <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
@@ -463,16 +471,20 @@ const pageDescription =
                   calendarWeeks.map((week) => (
                     <div class="flex shrink-0 flex-col gap-0.5">
                       {week.map((day) => (
-                        <div
-                          class:list={[
-                            "size-[0.5625rem] shrink-0 cursor-help transition hover:brightness-125 hover:outline hover:outline-1 hover:outline-zinc-100/80 focus-visible:outline focus-visible:outline-1 focus-visible:outline-zinc-100",
-                            intensityClasses[day.level],
-                          ]}
-                          role="img"
-                          tabindex={day.totalTokens > 0 ? 0 : -1}
-                          aria-label={`${formatDay(day.period, true)}: ${formatNumber(day.totalTokens)} tokens`}
-                          title={`${formatDay(day.period, true)}: ${formatNumber(day.totalTokens)} tokens`}
-                        />
+                        <div class="group relative size-[0.5625rem] shrink-0">
+                          <span
+                            class:list={[
+                              "block size-full cursor-help transition hover:brightness-125 hover:outline hover:outline-1 hover:outline-zinc-100/80 focus-visible:outline focus-visible:outline-1 focus-visible:outline-zinc-100",
+                              intensityClasses[day.level],
+                            ]}
+                            role="img"
+                            tabindex={day.totalTokens > 0 ? 0 : -1}
+                            aria-describedby="daily-usage-tooltip"
+                            aria-label={`${formatDay(day.period, true)}: ${formatNumber(day.totalTokens)} tokens`}
+                            data-daily-tooltip={`${formatDay(day.period, true)} · ${formatNumber(day.totalTokens)} tokens`}
+                            title={`${formatDay(day.period, true)}: ${formatNumber(day.totalTokens)} tokens`}
+                          />
+                        </div>
                       ))}
                     </div>
                   ))
@@ -492,6 +504,12 @@ const pageDescription =
           </div>
         </div>
       </section>
+
+      <div
+        id="daily-usage-tooltip"
+        role="tooltip"
+        class="pointer-events-none fixed z-50 hidden whitespace-nowrap border border-[#3f3f46] bg-[#18181b] px-2 py-1 font-mono text-[10px] text-zinc-200 shadow-lg"
+      ></div>
 
       <!-- Model mix -->
       <section class="mb-8">
@@ -545,4 +563,57 @@ const pageDescription =
       </p>
     </div>
   </Container>
+
+  <script>
+    function initDailyUsageTooltips() {
+      const tooltip = document.getElementById("daily-usage-tooltip");
+      const cells = document.querySelectorAll<HTMLElement>("[data-daily-tooltip]");
+      if (!tooltip || cells.length === 0 || tooltip.dataset.initialized === "true") return;
+
+      tooltip.dataset.initialized = "true";
+      let activeCell: HTMLElement | null = null;
+
+      const hideTooltip = () => {
+        tooltip.classList.add("hidden");
+        activeCell = null;
+      };
+
+      const showTooltip = (cell: HTMLElement) => {
+        const text = cell.dataset.dailyTooltip;
+        if (!text) return;
+
+        tooltip.textContent = text;
+        tooltip.classList.remove("hidden");
+        const cellRect = cell.getBoundingClientRect();
+        const tooltipRect = tooltip.getBoundingClientRect();
+        const margin = 8;
+        const left = Math.min(
+          Math.max(cellRect.left + cellRect.width / 2 - tooltipRect.width / 2, margin),
+          window.innerWidth - tooltipRect.width - margin,
+        );
+        const above = cellRect.top - tooltipRect.height - margin;
+        tooltip.style.left = `${left}px`;
+        tooltip.style.top = `${above >= margin ? above : cellRect.bottom + margin}px`;
+        activeCell = cell;
+      };
+
+      cells.forEach((cell) => {
+        cell.addEventListener("pointerenter", () => showTooltip(cell));
+        cell.addEventListener("pointerleave", () => {
+          if (document.activeElement !== cell) hideTooltip();
+        });
+        cell.addEventListener("focus", () => showTooltip(cell));
+        cell.addEventListener("blur", hideTooltip);
+      });
+
+      window.addEventListener("scroll", () => {
+        if (activeCell) showTooltip(activeCell);
+      }, { passive: true });
+      window.addEventListener("resize", () => {
+        if (activeCell) showTooltip(activeCell);
+      });
+    }
+
+    document.addEventListener("astro:page-load", initDailyUsageTooltips);
+  </script>
 </Layout>
