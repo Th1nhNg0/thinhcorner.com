@@ -3,7 +3,7 @@ export const prerender = false;
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
 import { getChessOverview } from "@/lib/chess";
-import type { GameOutcome } from "@/lib/chess";
+import type { GameOutcome, HistoryPoint } from "@/lib/chess";
 import { CHESS_PROFILE_URL, CHESS_USERNAME } from "../../../data/consts";
 import { format, formatDistanceToNow } from "date-fns";
 import { env } from "cloudflare:workers";
@@ -35,9 +35,23 @@ const SERIES_META = [
   { key: "bullet", label: "Bullet", color: "#f472b6" },
 ] as const;
 
+// One point per day — the last game played that day — so sessions with many
+// quick games don't pile up on a single x position.
+const dailyPoints = (points: HistoryPoint[]): HistoryPoint[] => {
+  const byDay = new Map<number, HistoryPoint>();
+  for (const p of [...points].sort((a, b) => a.t - b.t)) {
+    const d = new Date(p.t);
+    byDay.set(
+      Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()),
+      p,
+    );
+  }
+  return [...byDay.values()];
+};
+
 const chartSeries = SERIES_META.map((meta) => ({
   ...meta,
-  points: [...(data.history[meta.key] ?? [])].sort((a, b) => a.t - b.t),
+  points: dailyPoints(data.history[meta.key] ?? []),
 })).filter((series) => series.points.length > 0);
 
 const allPoints = chartSeries.flatMap((s) => s.points);
@@ -385,7 +399,7 @@ const perfViews = [
               viewBox={`0 0 ${W} ${H}`}
               class="w-full border border-[#27272a] bg-[#0c0c0d]"
               role="img"
-              aria-label="Rating history over time per time class"
+              aria-label="Daily rating history per time class"
               preserveAspectRatio="xMidYMid meet"
             >
               {yTicks.map((tick) => (
