@@ -8,7 +8,9 @@ const TOP_SHARE_LIMIT = 5;
 // Library/playtime endpoints require a free Web API key
 // (https://steamcommunity.com/dev/apikey). Without it the page renders a
 // setup notice instead of failing.
-interface SteamEnv extends Env {
+// Standalone on purpose: the generated Cloudflare `Env` marks the key as
+// required, but local/dev deployments may legitimately omit it.
+interface SteamEnv {
   STEAM_API_KEY?: string;
 }
 

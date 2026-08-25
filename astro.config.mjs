@@ -36,6 +36,10 @@ export default defineConfig({
   ],
   adapter: cloudflare({
     prerenderEnvironment: "node",
+    // Pre-optimize images with sharp at build time. The default "cloudflare-binding"
+    // mode optimizes only at request time, so prerendered pages ship passthrough
+    // (unprocessed) copies of every image.
+    imageService: "compile",
   }),
   integrations: [sitemap(), mdx({ processor: markdownProcessor })],
   vite: {

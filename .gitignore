@@ -31,3 +31,5 @@ pnpm-debug.log*
 # generated cloudflare worker types (regenerate via `bun run generate-types`)
 worker-configuration.d.ts
 .claude/
+# lighthouse artifacts
+lighthouse-reports/
