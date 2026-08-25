@@ -456,7 +456,7 @@ const pageDescription =
               </div>
               <div
                 class="flex gap-0.5"
-                role="img"
+                role="group"
                 aria-label="Daily token usage calendar"
               >
                 {
@@ -464,7 +464,13 @@ const pageDescription =
                     <div class="flex shrink-0 flex-col gap-0.5">
                       {week.map((day) => (
                         <div
-                          class:list={["size-[0.5625rem] shrink-0", intensityClasses[day.level]]}
+                          class:list={[
+                            "size-[0.5625rem] shrink-0 cursor-help transition hover:brightness-125 hover:outline hover:outline-1 hover:outline-zinc-100/80 focus-visible:outline focus-visible:outline-1 focus-visible:outline-zinc-100",
+                            intensityClasses[day.level],
+                          ]}
+                          role="img"
+                          tabindex={day.totalTokens > 0 ? 0 : -1}
+                          aria-label={`${formatDay(day.period, true)}: ${formatNumber(day.totalTokens)} tokens`}
                           title={`${formatDay(day.period, true)}: ${formatNumber(day.totalTokens)} tokens`}
                         />
                       ))}
