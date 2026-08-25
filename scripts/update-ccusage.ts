@@ -5,80 +5,76 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 
-type ModelBreakdown = {
+type RawModel = {
   modelName: string;
   cacheCreationTokens?: number;
   cacheReadTokens?: number;
   inputTokens?: number;
   outputTokens?: number;
   cost?: number;
-  [key: string]: unknown;
 };
 
-type UsageAgent = {
+type RawAgent = {
   agent: string;
-  cacheCreationTokens?: number;
-  cacheReadTokens?: number;
-  inputTokens?: number;
-  outputTokens?: number;
-  totalCost?: number;
-  totalTokens?: number;
-  modelBreakdowns?: ModelBreakdown[];
-  modelsUsed?: string[];
-  [key: string]: unknown;
-};
-
-type UsageNumericRow = {
-  cacheCreationTokens?: number;
-  cacheReadTokens?: number;
-  inputTokens?: number;
-  outputTokens?: number;
-  cost?: number;
   totalCost?: number;
   totalTokens?: number;
 };
 
-type UsageMetadata = {
-  agents?: string[];
-  [key: string]: unknown;
-};
-
-type UsageDay = {
+type RawDay = {
   period: string;
-  agent?: string;
-  cacheCreationTokens?: number;
-  cacheReadTokens?: number;
   inputTokens?: number;
   outputTokens?: number;
-  totalCost?: number;
-  totalTokens?: number;
-  agents?: UsageAgent[];
-  metadata?: UsageMetadata;
-  modelBreakdowns?: ModelBreakdown[];
-  modelsUsed?: string[];
-  [key: string]: unknown;
+  cacheReadTokens?: number;
+  modelBreakdowns?: RawModel[];
+  agents?: RawAgent[];
 };
 
-type SourceReport = {
-  daily?: UsageDay[];
-  [key: string]: unknown;
+type NamedModel = [modelName: string, totalTokens: number, costCents: number];
+type NamedAgent = [agent: string, totalTokens: number, costCents: number];
+type NamedDay = [
+  inputTokens: number,
+  outputTokens: number,
+  cacheReadTokens: number,
+  models: NamedModel[],
+  agents: NamedAgent[],
+];
+type IndexedModel = [modelIndex: number, totalTokens: number, costCents: number];
+type IndexedAgent = [agentIndex: number, totalTokens: number, costCents: number];
+type IndexedDay = [
+  inputTokens: number,
+  outputTokens: number,
+  cacheReadTokens: number,
+  models: IndexedModel[],
+  agents: IndexedAgent[],
+];
+type EncodedDay = [
+  dayOffset: number,
+  inputTokens: number,
+  outputTokens: number,
+  cacheReadTokens: number,
+  models: IndexedModel[],
+  agents: IndexedAgent[],
+];
+type StoredSource = {
+  daily?: RawDay[] | Record<string, NamedDay | IndexedDay>;
+  [period: string]: unknown;
+} | EncodedDay[];
+type StoredReport = {
+  daily?: RawDay[];
+  b?: number;
+  m?: string[];
+  a?: string[];
+  sources?: Record<string, StoredSource>;
 };
 
-type UsageReport = {
-  daily?: UsageDay[];
-  totals?: Record<string, number>;
-  sources?: Record<string, SourceReport>;
-  [key: string]: unknown;
-};
+type NamedSource = Record<string, NamedDay>;
+type IndexedSource = EncodedDay[];
 
-type UsageTotals = {
-  cacheCreationTokens: number;
-  cacheReadTokens: number;
-  inputTokens: number;
-  outputTokens: number;
-  totalCost: number;
-  totalTokens: number;
-};
+const DAY_MS = 86_400_000;
+const toDayNumber = (period: string) =>
+  Math.floor(Date.parse(`${period}T00:00:00Z`) / DAY_MS);
+const fromDayNumber = (dayNumber: number) =>
+  new Date(dayNumber * DAY_MS).toISOString().slice(0, 10);
 
 const execFileAsync = promisify(execFile);
 const dataPath = resolve(
@@ -86,94 +82,182 @@ const dataPath = resolve(
 );
 const extraArgs = process.argv.slice(2);
 const sourceId = process.env.CCUSAGE_SOURCE?.trim() || hostname() || "local";
+const toCents = (value?: number) => Math.round((value ?? 0) * 100);
+const normalizeModelName = (modelName: string) =>
+  modelName.replace(/^\[[^\]]+\]\s*/, "");
 
-const sumField = (rows: UsageNumericRow[], field: keyof UsageNumericRow) =>
-  rows.reduce((sum, row) => sum + (row[field] ?? 0), 0);
+const mergeModels = (models: NamedModel[]) => {
+  const merged = new Map<string, NamedModel>();
+  for (const [modelName, totalTokens, costCents] of models) {
+    const normalizedName = normalizeModelName(modelName);
+    const current = merged.get(normalizedName);
+    if (current) {
+      current[1] += totalTokens;
+      current[2] += costCents;
+    } else {
+      merged.set(normalizedName, [normalizedName, totalTokens, costCents]);
+    }
+  }
+  return [...merged.values()];
+};
 
-const uniqueStrings = (values: Array<string | undefined>) => [
-  ...new Set(values.filter((value): value is string => Boolean(value))),
+const normalizeRawDay = (day: RawDay): NamedDay => [
+  day.inputTokens ?? 0,
+  day.outputTokens ?? 0,
+  day.cacheReadTokens ?? 0,
+  mergeModels(
+    (day.modelBreakdowns ?? []).map(
+      (model): NamedModel => [
+        model.modelName,
+        (model.inputTokens ?? 0) +
+          (model.outputTokens ?? 0) +
+          (model.cacheReadTokens ?? 0) +
+          (model.cacheCreationTokens ?? 0),
+        toCents(model.cost),
+      ],
+    ),
+  ),
+  (day.agents ?? []).map(
+    (agent): NamedAgent => [
+      agent.agent,
+      agent.totalTokens ?? 0,
+      toCents(agent.totalCost),
+    ],
+  ),
 ];
 
-const mergeModelBreakdowns = (rows: ModelBreakdown[]) => {
-  const groups = new Map<string, ModelBreakdown[]>();
-  for (const row of rows) {
-    const group = groups.get(row.modelName) ?? [];
-    group.push(row);
-    groups.set(row.modelName, group);
+const normalizeNamedDay = (day: NamedDay): NamedDay => [
+  day[0],
+  day[1],
+  day[2],
+  mergeModels(day[3]),
+  day[4],
+];
+
+const decodeIndexedDay = (
+  day: IndexedDay,
+  modelNames: string[],
+  agentNames: string[],
+): NamedDay => [
+  day[0],
+  day[1],
+  day[2],
+  mergeModels(
+    day[3].map(
+      ([modelIndex, totalTokens, costCents]): NamedModel => [
+        modelNames[modelIndex] ?? `model-${modelIndex}`,
+        totalTokens,
+        costCents,
+      ],
+    ),
+  ),
+  day[4].map(
+    ([agentIndex, totalTokens, costCents]): NamedAgent => [
+      agentNames[agentIndex] ?? `agent-${agentIndex}`,
+      totalTokens,
+      costCents,
+    ],
+  ),
+];
+
+const normalizeStoredDay = (
+  day: RawDay | NamedDay | IndexedDay,
+  indexed: boolean,
+  modelNames: string[],
+  agentNames: string[],
+): NamedDay => {
+  if (!Array.isArray(day)) return normalizeRawDay(day);
+  return indexed
+    ? decodeIndexedDay(day as IndexedDay, modelNames, agentNames)
+    : normalizeNamedDay(day as NamedDay);
+};
+
+const normalizeSource = (
+  source: StoredSource,
+  indexed: boolean,
+  modelNames: string[],
+  agentNames: string[],
+  baseDay: number,
+): NamedSource => {
+  if (Array.isArray(source)) {
+    return Object.fromEntries(
+      source.map((row) => [
+        fromDayNumber(baseDay + row[0]),
+        decodeIndexedDay(
+          [row[1], row[2], row[3], row[4], row[5]],
+          modelNames,
+          agentNames,
+        ),
+      ]),
+    );
   }
 
-  return [...groups.entries()].map(([modelName, group]) => ({
-    ...group[0],
-    modelName,
-    cacheCreationTokens: sumField(group, "cacheCreationTokens"),
-    cacheReadTokens: sumField(group, "cacheReadTokens"),
-    inputTokens: sumField(group, "inputTokens"),
-    outputTokens: sumField(group, "outputTokens"),
-    cost: sumField(group, "cost"),
-  }));
-};
-
-const mergeAgents = (rows: UsageAgent[]) => {
-  const groups = new Map<string, UsageAgent[]>();
-  for (const row of rows) {
-    const group = groups.get(row.agent) ?? [];
-    group.push(row);
-    groups.set(row.agent, group);
+  if (Array.isArray(source.daily)) {
+    return Object.fromEntries(
+      source.daily.map((day) => [day.period, normalizeRawDay(day)]),
+    );
   }
 
-  return [...groups.entries()].map(([agent, group]) => ({
-    ...group[0],
-    agent,
-    cacheCreationTokens: sumField(group, "cacheCreationTokens"),
-    cacheReadTokens: sumField(group, "cacheReadTokens"),
-    inputTokens: sumField(group, "inputTokens"),
-    outputTokens: sumField(group, "outputTokens"),
-    totalCost: sumField(group, "totalCost"),
-    totalTokens: sumField(group, "totalTokens"),
-    modelBreakdowns: mergeModelBreakdowns(
-      group.flatMap((row) => row.modelBreakdowns ?? []),
+  const daily = source.daily;
+  if (daily) {
+    return Object.fromEntries(
+      Object.entries(daily).map(([period, day]) => [
+        period,
+        normalizeStoredDay(
+          day as RawDay | NamedDay | IndexedDay,
+          indexed,
+          modelNames,
+          agentNames,
+        ),
+      ]),
+    );
+  }
+
+  return Object.fromEntries(
+    Object.entries(source).flatMap(([period, day]) =>
+      period === "daily"
+        ? []
+        : [[
+            period,
+            normalizeStoredDay(
+              day as RawDay | NamedDay | IndexedDay,
+              indexed,
+              modelNames,
+              agentNames,
+            ),
+          ]],
     ),
-    modelsUsed: uniqueStrings(group.flatMap((row) => row.modelsUsed ?? [])),
-  }));
-};
-
-const aggregateDay = (period: string, rows: UsageDay[]): UsageDay => {
-  const first = rows[0];
-  if (!first)
-    throw new Error(`Cannot aggregate an empty day group for ${period}`);
-
-  const agents = mergeAgents(rows.flatMap((row) => row.agents ?? []));
-  const agentNames = agents.map((agent) => agent.agent);
-  const metadata: UsageMetadata = { ...first.metadata };
-  if (agentNames.length > 0) metadata.agents = agentNames;
-
-  return {
-    ...first,
-    period,
-    agent: "all",
-    cacheCreationTokens: sumField(rows, "cacheCreationTokens"),
-    cacheReadTokens: sumField(rows, "cacheReadTokens"),
-    inputTokens: sumField(rows, "inputTokens"),
-    outputTokens: sumField(rows, "outputTokens"),
-    totalCost: sumField(rows, "totalCost"),
-    totalTokens: sumField(rows, "totalTokens"),
-    agents,
-    metadata,
-    modelBreakdowns: mergeModelBreakdowns(
-      rows.flatMap((row) => row.modelBreakdowns ?? []),
-    ),
-    modelsUsed: uniqueStrings(rows.flatMap((row) => row.modelsUsed ?? [])),
-  };
-};
-
-const upsertDays = (existingDays: UsageDay[], incomingDays: UsageDay[]) => {
-  const daysByPeriod = new Map<string, UsageDay>();
-  for (const day of existingDays) daysByPeriod.set(day.period, day);
-  for (const day of incomingDays) daysByPeriod.set(day.period, day);
-  return [...daysByPeriod.values()].sort((a, b) =>
-    a.period.localeCompare(b.period),
   );
 };
+
+const encodeSource = (
+  source: NamedSource,
+  modelIndexes: Map<string, number>,
+  agentIndexes: Map<string, number>,
+  baseDay: number,
+): IndexedSource =>
+  Object.entries(source)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([period, day]): EncodedDay => [
+      toDayNumber(period) - baseDay,
+      day[0],
+      day[1],
+      day[2],
+      day[3].map(
+        ([modelName, totalTokens, costCents]): IndexedModel => [
+          modelIndexes.get(modelName) ?? 0,
+          totalTokens,
+          costCents,
+        ],
+      ),
+      day[4].map(
+        ([agent, totalTokens, costCents]): IndexedAgent => [
+          agentIndexes.get(agent) ?? 0,
+          totalTokens,
+          costCents,
+        ],
+      ),
+    ]);
 
 let output: string;
 try {
@@ -189,9 +273,9 @@ try {
   throw error;
 }
 
-let incoming: UsageReport;
+let incoming: { daily?: RawDay[] };
 try {
-  incoming = JSON.parse(output) as UsageReport;
+  incoming = JSON.parse(output) as { daily?: RawDay[] };
 } catch {
   throw new Error("ccusage did not return valid JSON");
 }
@@ -201,62 +285,77 @@ if (incomingDays.length === 0) {
   throw new Error("ccusage returned no daily usage rows");
 }
 
-let existing: UsageReport = { daily: [] };
+let existing: StoredReport = {};
 try {
-  existing = JSON.parse(await readFile(dataPath, "utf8")) as UsageReport;
+  existing = JSON.parse(await readFile(dataPath, "utf8")) as StoredReport;
 } catch (error) {
   if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
 }
 
-const sources = { ...existing.sources };
-if (!existing.sources && (existing.daily ?? []).length > 0) {
-  // The first source-aware run migrates the old single-source snapshot.
-  sources[sourceId] = { daily: existing.daily };
+const indexed = "m" in existing || "a" in existing;
+const modelNames = existing.m ?? [];
+const agentNames = existing.a ?? [];
+const existingBaseDay = existing.b ?? 0;
+const namedSources: Record<string, NamedSource> = Object.create(null);
+for (const [id, source] of Object.entries(existing.sources ?? {})) {
+  namedSources[id] = normalizeSource(
+    source,
+    indexed,
+    modelNames,
+    agentNames,
+    existingBaseDay,
+  );
+}
+if (!existing.sources && existing.daily) {
+  namedSources[sourceId] = Object.fromEntries(
+    existing.daily.map((day) => [day.period, normalizeRawDay(day)]),
+  );
 }
 
-const previousSourceDays = sources[sourceId]?.daily ?? [];
-sources[sourceId] = {
-  ...sources[sourceId],
-  daily: upsertDays(previousSourceDays, incomingDays),
-};
-
-const rowsByPeriod = new Map<string, UsageDay[]>();
-for (const source of Object.values(sources)) {
-  for (const day of source.daily ?? []) {
-    const rows = rowsByPeriod.get(day.period) ?? [];
-    rows.push(day);
-    rowsByPeriod.set(day.period, rows);
-  }
+const currentSource = namedSources[sourceId] ?? {};
+const previousPeriods = new Set(Object.keys(currentSource));
+for (const day of incomingDays) {
+  currentSource[day.period] = normalizeRawDay(day);
 }
+namedSources[sourceId] = currentSource;
 
-const daily = [...rowsByPeriod.entries()]
-  .map(([period, rows]) => aggregateDay(period, rows))
-  .sort((a, b) => a.period.localeCompare(b.period));
+const allModelNames = [
+  ...new Set(
+    Object.values(namedSources).flatMap((source) =>
+      Object.values(source).flatMap((day) => day[3].map(([name]) => name)),
+    ),
+  ),
+];
+const allAgentNames = [
+  ...new Set(
+    Object.values(namedSources).flatMap((source) =>
+      Object.values(source).flatMap((day) => day[4].map(([name]) => name)),
+    ),
+  ),
+];
+const modelIndexes = new Map(allModelNames.map((name, index) => [name, index]));
+const agentIndexes = new Map(allAgentNames.map((name, index) => [name, index]));
+const allPeriods = Object.values(namedSources).flatMap((source) =>
+  Object.keys(source),
+);
+const baseDay = Math.min(...allPeriods.map(toDayNumber));
+const sources = Object.fromEntries(
+  Object.entries(namedSources).map(([id, source]) => [
+    id,
+    encodeSource(source, modelIndexes, agentIndexes, baseDay),
+  ]),
+);
 
-const totals: UsageTotals = {
-  cacheCreationTokens: sumField(daily, "cacheCreationTokens"),
-  cacheReadTokens: sumField(daily, "cacheReadTokens"),
-  inputTokens: sumField(daily, "inputTokens"),
-  outputTokens: sumField(daily, "outputTokens"),
-  totalCost: sumField(daily, "totalCost"),
-  totalTokens: sumField(daily, "totalTokens"),
-};
+await writeFile(
+  dataPath,
+  JSON.stringify({ b: baseDay, m: allModelNames, a: allAgentNames, sources }),
+  "utf8",
+);
 
-const merged: UsageReport = {
-  ...existing,
-  ...incoming,
-  sources,
-  daily,
-  totals,
-};
-
-await writeFile(dataPath, `${JSON.stringify(merged, null, 2)}\n`, "utf8");
-
-const previousPeriods = new Set(previousSourceDays.map((day) => day.period));
 const newPeriods = incomingDays.filter(
   (day) => !previousPeriods.has(day.period),
 ).length;
 const refreshedPeriods = incomingDays.length - newPeriods;
 process.stdout.write(
-  `Upserted ${incomingDays.length} days from ${sourceId}: ${newPeriods} new, ${refreshedPeriods} refreshed, ${daily.length} aggregated total.\n`,
+  `Upserted ${incomingDays.length} days from ${sourceId}: ${newPeriods} new, ${refreshedPeriods} refreshed, ${Object.values(namedSources).reduce((sum, source) => sum + Object.keys(source).length, 0)} stored source-days.\n`,
 );

@@ -18,8 +18,114 @@ type AgentTotal = {
   totalCost: number;
 };
 
-const days = usage.daily;
-const totals = usage.totals;
+type CompactModel = [modelIndex: number, totalTokens: number, costCents: number];
+type CompactAgent = [agentIndex: number, totalTokens: number, costCents: number];
+type CompactDay = [
+  dayOffset: number,
+  inputTokens: number,
+  outputTokens: number,
+  cacheReadTokens: number,
+  models: CompactModel[],
+  agents: CompactAgent[],
+];
+type UsageSnapshot = {
+  b?: number;
+  m?: string[];
+  a?: string[];
+  sources?: Record<string, CompactDay[]>;
+};
+type DailyAgent = {
+  agent: string;
+  totalTokens: number;
+  totalCost: number;
+};
+type DailyUsage = {
+  period: string;
+  inputTokens: number;
+  outputTokens: number;
+  cacheReadTokens: number;
+  totalTokens: number;
+  totalCost: number;
+  modelBreakdowns: ModelTotal[];
+  agents: DailyAgent[];
+};
+
+const snapshot = usage as UsageSnapshot;
+const modelNames = snapshot.m ?? [];
+const agentNames = snapshot.a ?? [];
+const baseDay = snapshot.b ?? 0;
+const fromDayNumber = (dayNumber: number) =>
+  new Date(dayNumber * 86_400_000).toISOString().slice(0, 10);
+const daysByPeriod = new Map<string, DailyUsage>();
+for (const source of Object.values(snapshot.sources ?? {})) {
+  for (const row of source) {
+    const [dayOffset, inputTokens, outputTokens, cacheReadTokens, models, sourceAgents] = row;
+    const period = fromDayNumber(baseDay + dayOffset);
+    const modelBreakdowns = models.map(([modelIndex, totalTokens, costCents]) => ({
+      modelName: modelNames[modelIndex] ?? `model-${modelIndex}`,
+      totalTokens,
+      cost: costCents / 100,
+    }));
+    const agents = sourceAgents.map(([agentIndex, totalTokens, costCents]) => ({
+      agent: agentNames[agentIndex] ?? `agent-${agentIndex}`,
+      totalTokens,
+      totalCost: costCents / 100,
+    }));
+    const totalTokens = modelBreakdowns.reduce(
+      (sum, model) => sum + model.totalTokens,
+      0,
+    );
+    const totalCost = modelBreakdowns.reduce(
+      (sum, model) => sum + model.cost,
+      0,
+    );
+    const day = {
+      period,
+      inputTokens,
+      outputTokens,
+      cacheReadTokens,
+      totalTokens,
+      totalCost,
+      modelBreakdowns,
+      agents,
+    } satisfies DailyUsage;
+    const current = daysByPeriod.get(period);
+
+    if (!current) {
+      daysByPeriod.set(period, day);
+      continue;
+    }
+
+    current.inputTokens += day.inputTokens;
+    current.outputTokens += day.outputTokens;
+    current.cacheReadTokens += day.cacheReadTokens;
+    current.totalTokens += day.totalTokens;
+    current.totalCost += day.totalCost;
+    current.modelBreakdowns.push(...day.modelBreakdowns);
+    current.agents.push(...day.agents);
+  }
+}
+
+const days = [...daysByPeriod.values()].sort((a, b) =>
+  a.period.localeCompare(b.period),
+);
+const totals = days.reduce(
+  (sum, day) => {
+    sum.inputTokens += day.inputTokens;
+    sum.outputTokens += day.outputTokens;
+    sum.cacheReadTokens += day.cacheReadTokens;
+    sum.totalTokens += day.totalTokens;
+    sum.totalCost += day.totalCost;
+    return sum;
+  },
+  {
+    inputTokens: 0,
+    outputTokens: 0,
+    cacheReadTokens: 0,
+    totalTokens: 0,
+    totalCost: 0,
+  },
+);
 const latestDay = days[days.length - 1];
 const usageByPeriod = new Map(days.map((day) => [day.period, day]));
 
@@ -134,11 +240,7 @@ for (const day of days) {
       cost: 0,
     };
 
-    current.totalTokens +=
-      model.inputTokens +
-      model.outputTokens +
-      model.cacheReadTokens +
-      model.cacheCreationTokens;
+    current.totalTokens += model.totalTokens;
     current.cost += model.cost;
     modelTotals.set(displayModelName, current);
   }
