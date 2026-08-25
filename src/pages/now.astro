@@ -4,6 +4,11 @@ import Layout from "@/layouts/Layout.astro";
 import TimelineItem from "@/components/blog/TimelineItem.astro";
 import { Image } from "astro:assets";
 import YouTubeEmbed from "@/components/YouTubeEmbed.astro";
+import imgWebdev2022 from "@/assets/timeline/webdev2022.jpg";
+import imgHcmus from "@/assets/timeline/hcmus.jpg";
+import imgOlp from "@/assets/timeline/olp.jpg";
+import imgCpnh from "@/assets/timeline/cpnh.jpg";
+import imgVts from "@/assets/timeline/vts.jpg";
 ---
 
 <Layout
@@ -104,10 +109,9 @@ import YouTubeEmbed from "@/components/YouTubeEmbed.astro";
           <span class="sr-only">(opens in new tab)</span>
         </a>
         <Image
-          inferSize={true}
           width={800}
           height={450}
-          src="/timeline/webdev2022.jpg"
+          src={imgWebdev2022}
           alt="First prize award at WebDev Adventure 2022"
           loading="lazy"
           decoding="async"
@@ -123,10 +127,9 @@ import YouTubeEmbed from "@/components/YouTubeEmbed.astro";
         time="2019-08-15"
       >
         <Image
-          inferSize={true}
           width={800}
           height={450}
-          src="/timeline/hcmus.jpg"
+          src={imgHcmus}
           alt="University of Science, Vietnam National University Ho Chi Minh City campus"
           loading="lazy"
           decoding="async"
@@ -150,10 +153,9 @@ import YouTubeEmbed from "@/components/YouTubeEmbed.astro";
         time="2017-04-16"
       >
         <Image
-          inferSize={true}
           width={800}
           height={450}
-          src="/timeline/olp.jpg"
+          src={imgOlp}
           alt="Silver medal at Olympic competition 30/4 XXIII"
           loading="lazy"
           decoding="async"
@@ -165,10 +167,9 @@ import YouTubeEmbed from "@/components/YouTubeEmbed.astro";
         time="2016-09-10"
       >
         <Image
-          inferSize={true}
           width={800}
           height={450}
-          src="/timeline/cpnh.jpg"
+          src={imgCpnh}
           alt="Phan Ngoc Hien High School for the Gifted"
           loading="lazy"
           decoding="async"
@@ -185,10 +186,9 @@ import YouTubeEmbed from "@/components/YouTubeEmbed.astro";
         time="2012"
       >
         <Image
-          inferSize={true}
           width={800}
           height={450}
-          src="/timeline/vts.jpg"
+          src={imgVts}
           alt="Vo Thi Sau Secondary School"
           loading="lazy"
           decoding="async"
