@@ -7,6 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "data:usage": "bun scripts/update-ccusage.ts",
     "generate-types": "wrangler types"
   },
   "dependencies": {

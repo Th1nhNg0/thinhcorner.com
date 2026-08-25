@@ -5,6 +5,7 @@ import BookIcon from "@/assets/icons/book-bookmark-bold.svg";
 import MusicIcon from "@/assets/icons/music-note-bold.svg";
 import ChessIcon from "@/assets/icons/chess-com.svg";
 import SteamIcon from "@/assets/icons/steam.svg";
+import ChartIcon from "@/assets/icons/chart-bar.svg";
 
 // One entry per analysis — add new ones here and they show up automatically.
 // Icons are .svg files in src/assets/icons, imported as Astro components and
@@ -44,6 +45,14 @@ const analyses = [
     description:
       "Game library, total hours, playtime distribution and recently played games from my Steam account.",
   },
+  {
+    href: "/data/token-usage",
+    Icon: ChartIcon,
+    title: "Token usage",
+    source: "ccusage",
+    description:
+      "Daily token volume, token mix and model usage from an exported ccusage snapshot.",
+  },
 ];
 ---
 
@@ -65,8 +74,8 @@ const analyses = [
       <header class="page-header">
         <h1 class="page-title">Data</h1>
         <p class="page-intro">
-          What I'm playing, reading, and listening to — pulled live from each
-          service and visualized here.
+          What I'm playing, reading, and listening to — pulled live or
+          exported from each service and visualized here.
         </p>
       </header>
 
