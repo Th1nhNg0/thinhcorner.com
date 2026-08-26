@@ -84,6 +84,7 @@ export interface ChessOverview {
   currentStreak: ChessStreak | null;
   bestWinStreak: number;
   avgOpponentRating: number;
+  avgAccuracy?: number;
   ratingChange: number; // net points across all time classes in window
   byColor: { white: ColorPerformance; black: ColorPerformance };
 }
@@ -250,7 +251,7 @@ export async function getChessOverview(
   kv: KVNamespace | undefined | null,
 ): Promise<ChessOverview> {
   // Key is versioned: bump when the cached payload shape changes.
-  return withCache(kv, `chess_overview_v3_${username}`, 3600, async () => {
+  return withCache(kv, `chess_overview_v4_${username}`, 3600, async () => {
     // The Chess.com API rejects mixed-case usernames in paths — always lowercase.
     const usernameLower = username.toLowerCase();
     const rawProfile = await fetchJson<RawProfile>(`/player/${usernameLower}`);
@@ -364,6 +365,22 @@ export async function getChessOverview(
           )
         : 0;
 
+    const allAccuracies = games
+      .map((g) => {
+        const isWhite = g.white.username.toLowerCase() === lowerUsername;
+        return g.accuracies?.[isWhite ? "white" : "black"];
+      })
+      .filter((a): a is number => typeof a === "number");
+
+    const avgAccuracy =
+      allAccuracies.length > 0
+        ? Math.round(
+            (allAccuracies.reduce((sum, a) => sum + a, 0) /
+              allAccuracies.length) *
+              10,
+          ) / 10
+        : undefined;
+
     // Net rating change per time class across the window (last minus first), summed.
     const ratingChange = Object.values(history).reduce((total, points) => {
       if (points.length < 2) return total;
@@ -422,6 +439,7 @@ export async function getChessOverview(
       currentStreak,
       bestWinStreak,
       avgOpponentRating,
+      avgAccuracy,
       ratingChange,
       byColor: { white: colorPerf("white"), black: colorPerf("black") },
     } satisfies ChessOverview;
