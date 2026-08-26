@@ -15,31 +15,32 @@ Astro.response.headers.set(
   "public, s-maxage=600, stale-while-revalidate=300",
 );
 
-const maxTierCount = Math.max(1, ...(data?.tiers.map((t) => t.count) ?? [1]));
+const allGames = data?.allGames ?? [];
+const recentGames = data?.recent ?? [];
 
 const statCells = data
   ? [
       {
         label: "Games owned",
-        value: data.totals.games.toLocaleString(),
+        value: (data.totals?.games ?? allGames.length).toLocaleString(),
       },
       {
         label: "Hours played",
-        value: data.totals.hours.toLocaleString(),
+        value: (data.totals?.hours ?? 0).toLocaleString(),
       },
       {
         label: "Avg h / game",
-        value: data.totals.avgHours.toLocaleString(),
+        value: (data.totals?.avgHours ?? 0).toLocaleString(),
       },
       {
         label: "Typical game",
-        value: `${data.totals.medianHours.toLocaleString()} h`,
+        value: `${(data.totals?.medianHours ?? 0).toLocaleString()} h`,
       },
     ]
   : [];
 
 const pageDescription =
-  "Production Steam analytics: library size, playtime distribution and recent activity.";
+  "Production Steam analytics: library size, playtime, recent activity and full games list.";
 ---
 
 <Layout
@@ -141,9 +142,13 @@ const pageDescription =
                         <span>{data.profile.countryCode}</span>
                       )
                     }
-                    <span>
-                      member since {format(data.profile.memberSince, "MMM yyyy")}
-                    </span>
+                    {
+                      data.profile.memberSince && !isNaN(new Date(data.profile.memberSince).getTime()) && (
+                        <span>
+                          member since {format(new Date(data.profile.memberSince), "MMM yyyy")}
+                        </span>
+                      )
+                    }
                   </p>
                 </div>
               </div>
@@ -165,131 +170,270 @@ const pageDescription =
               </div>
             </section>
 
-            <!-- Most played -->
-            {
-              data.topGames.length > 0 && (
-                <section class="mb-8">
-                  <div class="mb-3 flex items-center justify-between">
-                    <h2 class="text-sm font-medium text-zinc-200">
-                      Most played
-                    </h2>
-                    <span class="font-mono text-xs text-zinc-600">
-                      lifetime hours
-                    </span>
-                  </div>
-                  <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-4">
-                    {data.topGames.map((game) => (
-                      <div class="group border-b border-r border-[#27272a] p-2">
-                        <img
-                          src={game.headerUrl}
-                          alt={game.name}
-                          width="460"
-                          height="215"
-                          loading="lazy"
-                          decoding="async"
-                          class="mb-2 aspect-[460/215] w-full border border-[#27272a] object-cover transition-opacity group-hover:opacity-85"
-                        />
-                        <p class="line-clamp-1 text-xs font-medium text-zinc-200">
-                          {game.name}
-                        </p>
-                        <div class="flex items-baseline justify-between gap-2">
-                          <p class="font-mono text-xs text-[#eab308]/90">
-                            {game.hours.toLocaleString()} h
-                          </p>
-                          {game.lastPlayed && (
-                            <p class="line-clamp-1 font-mono text-xs text-zinc-700">
-                              {formatDistanceToNow(new Date(game.lastPlayed), {
-                                addSuffix: true,
-                              })}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )
-            }
-
-            <!-- Playtime distribution -->
-            {
-              data.tiers.length > 0 && (
-                <section class="mb-8">
-                  <div class="mb-3 flex items-center justify-between">
-                    <h2 class="text-sm font-medium text-zinc-200">
-                      Playtime distribution
-                    </h2>
-                    <span class="font-mono text-xs text-zinc-600">
-                      games by lifetime hours
-                    </span>
-                  </div>
-                  <div class="border-y border-[#27272a]">
-                    {data.tiers.map((tier) => (
-                      <div class="border-b border-[#27272a] px-1 py-2 last:border-b-0">
-                        <div class="flex items-baseline justify-between gap-3">
-                          <p class="text-xs text-zinc-300">{tier.label}</p>
-                          <span class="shrink-0 font-mono text-xs text-zinc-600">
-                            {tier.count}
-                          </span>
-                        </div>
-                        <div class="mt-1 h-0.5 w-full bg-[#27272a]">
-                          <div
-                            class="h-full bg-[#eab308]/80"
-                            style={`width:${(tier.count / maxTierCount) * 100}%`}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )
-            }
-
             <!-- Recent -->
             <section class="mb-8">
               <div class="mb-3 flex items-center justify-between">
-                <h2 class="text-sm font-medium text-zinc-200">
-                  Played recently
-                </h2>
+                <div class="flex items-center gap-2">
+                  <h2 class="text-sm font-medium text-zinc-200">
+                    Played recently
+                  </h2>
+                  <span class="border border-[#27272a] bg-[#0c0c0d] px-1.5 py-0.5 font-mono text-[10px] uppercase text-zinc-500">
+                    last 2 weeks
+                  </span>
+                </div>
                 <span class="font-mono text-xs text-zinc-600">
-                  last 2 weeks
+                  {recentGames.length}{" "}
+                  {recentGames.length === 1 ? "game" : "games"}
                 </span>
               </div>
               {
-                data.recent.length === 0 ? (
+                recentGames.length === 0 ? (
                   <p class="border border-[#27272a] bg-[#0c0c0d] p-6 text-center font-mono text-xs text-zinc-600">
                     Nothing played in the last two weeks.
                   </p>
                 ) : (
                   <div class="border-y border-[#27272a]">
-                    {data.recent.map((game) => (
+                    {recentGames.map((game) => (
                       <a
-                        href={`https://steamcommunity.com/app/${game.appId}`}
+                        href={`https://store.steampowered.com/app/${game.appId}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="compact-row group flex items-center gap-3 border-b border-[#27272a] p-2 last:border-b-0"
+                        class="compact-row group flex items-center gap-3.5 border-b border-[#27272a] p-2.5 last:border-b-0 transition-colors"
                       >
-                        <img
-                          src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/capsule_184x69.jpg`}
-                          alt={game.name}
-                          width="92"
-                          height="35"
-                          loading="lazy"
-                          decoding="async"
-                          class="hidden w-[69px] shrink-0 border border-[#27272a] object-cover sm:block"
-                        />
-                        <p class="min-w-0 flex-1 truncate text-xs text-zinc-300 transition-colors group-hover:text-[#eab308]">
-                          {game.name}
-                        </p>
-                        <span class="shrink-0 font-mono text-xs text-zinc-500">
-                          {game.hoursLastTwoWeeks.toLocaleString()} h
-                        </span>
+                        <div class="relative h-[42px] w-[90px] shrink-0 overflow-hidden border border-[#27272a] bg-zinc-900 sm:h-[48px] sm:w-[102px]">
+                          <img
+                            src={game.headerUrl || `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/header.jpg`}
+                            data-fallback={game.iconUrl || `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/capsule_184x69.jpg`}
+                            alt={game.name}
+                            width="460"
+                            height="215"
+                            loading="lazy"
+                            decoding="async"
+                            class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                        </div>
+                        <div class="min-w-0 flex-1">
+                          <h3 class="truncate text-xs font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
+                            {game.name}
+                          </h3>
+                          <p class="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs font-mono text-zinc-600">
+                            {game.lastPlayed ? (
+                              <span>
+                                Played{" "}
+                                {formatDistanceToNow(
+                                  new Date(game.lastPlayed),
+                                  { addSuffix: true },
+                                )}
+                              </span>
+                            ) : (
+                              <span>Recent session</span>
+                            )}
+                            <span class="text-zinc-700">·</span>
+                            <span>
+                              {(game.hoursTotal ?? 0).toLocaleString()} h total
+                            </span>
+                          </p>
+                        </div>
+                        <div class="shrink-0 text-right font-mono">
+                          <p class="text-xs font-medium text-[#eab308]">
+                            +{(game.hoursLastTwoWeeks ?? 0).toLocaleString()} h
+                          </p>
+                          <p class="text-[10px] text-zinc-600">
+                            past 2w
+                          </p>
+                        </div>
                       </a>
                     ))}
                   </div>
                 )
               }
             </section>
+
+            <!-- All games -->
+            {
+              allGames.length > 0 && (
+                <section class="mb-8" id="steam-all-games">
+                  <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                      <h2 class="text-sm font-medium text-zinc-200">
+                        All games
+                      </h2>
+                      <span class="border border-[#27272a] bg-[#0c0c0d] px-1.5 py-0.5 font-mono text-xs text-zinc-500">
+                        {allGames.length}
+                      </span>
+                    </div>
+                    <span
+                      id="steam-count-display"
+                      class="font-mono text-xs text-zinc-500"
+                    >
+                      Showing {allGames.length} games
+                    </span>
+                  </div>
+
+                  <!-- Search and filter controls -->
+                  <div class="mb-4 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="relative flex-1">
+                      <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5 text-zinc-600">
+                        <svg
+                          class="size-3.5"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <circle cx="11" cy="11" r="8" />
+                          <path d="m21 21-4.3-4.3" />
+                        </svg>
+                      </div>
+                      <input
+                        type="text"
+                        id="steam-search-input"
+                        placeholder="Search games by title..."
+                        class="w-full border border-[#27272a] bg-[#0c0c0d] py-1.5 pl-8 pr-8 font-mono text-xs text-zinc-200 placeholder:text-zinc-600 focus:border-[#eab308] focus:outline-none transition-colors"
+                        autocomplete="off"
+                        spellcheck="false"
+                      />
+                      <button
+                        type="button"
+                        id="steam-search-clear"
+                        class="hidden absolute inset-y-0 right-0 items-center pr-2.5 text-zinc-600 hover:text-zinc-300 font-mono text-xs"
+                        aria-label="Clear search"
+                      >
+                        ✕
+                      </button>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                      <!-- Filter status -->
+                      <div
+                        class="flex border border-[#27272a] bg-[#0c0c0d] p-0.5"
+                        role="group"
+                        aria-label="Filter games"
+                      >
+                        <button
+                          type="button"
+                          data-filter="all"
+                          class="steam-filter-btn bg-[#eab308] px-2 py-0.5 font-mono text-xs text-black transition-colors"
+                          aria-pressed="true"
+                        >
+                          All
+                        </button>
+                        <button
+                          type="button"
+                          data-filter="played"
+                          class="steam-filter-btn px-2 py-0.5 font-mono text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+                          aria-pressed="false"
+                        >
+                          Played
+                        </button>
+                        <button
+                          type="button"
+                          data-filter="unplayed"
+                          class="steam-filter-btn px-2 py-0.5 font-mono text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+                          aria-pressed="false"
+                        >
+                          Unplayed
+                        </button>
+                      </div>
+
+                      <!-- Sort dropdown -->
+                      <div>
+                        <select
+                          id="steam-sort-select"
+                          class="border border-[#27272a] bg-[#0c0c0d] px-2 py-1 font-mono text-xs text-zinc-300 focus:border-[#eab308] focus:outline-none cursor-pointer"
+                          aria-label="Sort games"
+                        >
+                          <option value="hours-desc">Sort: Most played</option>
+                          <option value="hours-asc">Sort: Least played</option>
+                          <option value="name-asc">Sort: Title (A–Z)</option>
+                          <option value="name-desc">Sort: Title (Z–A)</option>
+                          <option value="recent-desc">
+                            Sort: Recently played
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Games grid -->
+                  <div
+                    id="steam-games-list"
+                    class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-4"
+                  >
+                    {allGames.map((game, index) => (
+                      <a
+                        href={`https://store.steampowered.com/app/${game.appId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="steam-game-item compact-row group flex flex-col justify-between border-b border-r border-[#27272a] p-2.5 transition-colors"
+                        data-name={game.name.toLowerCase()}
+                        data-hours={game.hours ?? 0}
+                        data-last-played={game.lastPlayed ?? 0}
+                        data-default-order={index}
+                      >
+                        <div>
+                          <div class="relative mb-2 aspect-[460/215] w-full overflow-hidden border border-[#27272a] bg-zinc-900">
+                            <img
+                              src={game.headerUrl || `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/header.jpg`}
+                              data-fallback={game.iconUrl || `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/capsule_184x69.jpg`}
+                              alt={game.name}
+                              width="460"
+                              height="215"
+                              loading="lazy"
+                              decoding="async"
+                              class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                            {game.hoursLastTwoWeeks !== undefined &&
+                              game.hoursLastTwoWeeks > 0 && (
+                                <span class="absolute bottom-1.5 right-1.5 border border-[#eab308]/40 bg-black/85 px-1 py-0.5 font-mono text-[10px] text-[#eab308]">
+                                  +{game.hoursLastTwoWeeks}h
+                                </span>
+                              )}
+                          </div>
+                          <p class="line-clamp-1 text-xs font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
+                            {game.name}
+                          </p>
+                        </div>
+                        <div class="mt-1.5 flex items-baseline justify-between gap-2">
+                          <p
+                            class:list={[
+                              "font-mono text-xs",
+                              (game.hours ?? 0) > 0
+                                ? "text-[#eab308]"
+                                : "text-zinc-600",
+                            ]}
+                          >
+                            {(game.hours ?? 0) > 0
+                              ? `${(game.hours ?? 0).toLocaleString()} h`
+                              : "0 h"}
+                          </p>
+                          {game.lastPlayed ? (
+                            <p class="line-clamp-1 font-mono text-[11px] text-zinc-600">
+                              {formatDistanceToNow(new Date(game.lastPlayed), {
+                                addSuffix: true,
+                              })}
+                            </p>
+                          ) : (
+                            <p class="font-mono text-[11px] text-zinc-700">
+                              Unplayed
+                            </p>
+                          )}
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+
+                  <div
+                    id="steam-no-results"
+                    class="hidden border border-[#27272a] bg-[#0c0c0d] p-8 text-center font-mono text-xs text-zinc-600"
+                  >
+                    No games match your search or filter.
+                  </div>
+                </section>
+              )
+            }
           </>
         )
       }
@@ -303,6 +447,168 @@ const pageDescription =
   </Container>
 
   <script>
+    function initSteamLibrary() {
+      const searchInput = document.getElementById(
+        "steam-search-input",
+      ) as HTMLInputElement | null;
+      const clearBtn = document.getElementById(
+        "steam-search-clear",
+      ) as HTMLButtonElement | null;
+      const countEl = document.getElementById("steam-count-display");
+      const noResultsEl = document.getElementById("steam-no-results");
+      const listContainer = document.getElementById("steam-games-list");
+      const filterBtns =
+        document.querySelectorAll<HTMLButtonElement>(".steam-filter-btn");
+      const sortSelect = document.getElementById(
+        "steam-sort-select",
+      ) as HTMLSelectElement | null;
+
+      if (!listContainer || !searchInput) return;
+      if (searchInput.dataset.initialized === "true") return;
+      searchInput.dataset.initialized = "true";
+
+      const rows = Array.from(
+        listContainer.querySelectorAll<HTMLElement>(".steam-game-item"),
+      );
+      const totalCount = rows.length;
+      let currentFilter = "all";
+
+      function applyFilterAndSearch() {
+        const query = (searchInput?.value ?? "").trim().toLowerCase();
+
+        if (clearBtn) {
+          if (query.length > 0) {
+            clearBtn.classList.remove("hidden");
+            clearBtn.classList.add("flex");
+          } else {
+            clearBtn.classList.add("hidden");
+            clearBtn.classList.remove("flex");
+          }
+        }
+
+        let matchCount = 0;
+
+        rows.forEach((row) => {
+          const name = row.dataset.name || "";
+          const hours = parseFloat(row.dataset.hours || "0");
+
+          const matchesSearch = query === "" || name.includes(query);
+
+          let matchesFilter = true;
+          if (currentFilter === "played") {
+            matchesFilter = hours > 0;
+          } else if (currentFilter === "unplayed") {
+            matchesFilter = hours === 0;
+          }
+
+          const visible = matchesSearch && matchesFilter;
+          row.classList.toggle("hidden", !visible);
+          if (visible) {
+            matchCount++;
+          }
+        });
+
+        if (countEl) {
+          if (query || currentFilter !== "all") {
+            countEl.textContent = `Showing ${matchCount} of ${totalCount} games`;
+          } else {
+            countEl.textContent = `Showing ${totalCount} games`;
+          }
+        }
+
+        if (noResultsEl) {
+          if (matchCount === 0) {
+            noResultsEl.classList.remove("hidden");
+          } else {
+            noResultsEl.classList.add("hidden");
+          }
+        }
+      }
+
+      function applySort() {
+        const sortValue = sortSelect?.value || "hours-desc";
+
+        const sortedRows = [...rows].sort((a, b) => {
+          const hoursA = parseFloat(a.dataset.hours || "0");
+          const hoursB = parseFloat(b.dataset.hours || "0");
+          const nameA = a.dataset.name || "";
+          const nameB = b.dataset.name || "";
+          const playedA = parseInt(a.dataset.lastPlayed || "0", 10);
+          const playedB = parseInt(b.dataset.lastPlayed || "0", 10);
+
+          switch (sortValue) {
+            case "hours-desc":
+              return hoursB - hoursA || nameA.localeCompare(nameB);
+            case "hours-asc":
+              return hoursA - hoursB || nameA.localeCompare(nameB);
+            case "name-asc":
+              return nameA.localeCompare(nameB);
+            case "name-desc":
+              return nameB.localeCompare(nameA);
+            case "recent-desc":
+              return playedB - playedA || hoursB - hoursA;
+            default:
+              return 0;
+          }
+        });
+
+        sortedRows.forEach((row) => {
+          listContainer?.appendChild(row);
+        });
+
+        applyFilterAndSearch();
+      }
+
+      searchInput.addEventListener("input", applyFilterAndSearch);
+
+      clearBtn?.addEventListener("click", () => {
+        if (searchInput) {
+          searchInput.value = "";
+          searchInput.focus();
+        }
+        applyFilterAndSearch();
+      });
+
+      filterBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          currentFilter = btn.dataset.filter || "all";
+          filterBtns.forEach((b) => {
+            const active = b === btn;
+            b.setAttribute("aria-pressed", String(active));
+            if (active) {
+              b.classList.add("bg-[#eab308]", "text-black");
+              b.classList.remove("text-zinc-500", "hover:text-zinc-300");
+            } else {
+              b.classList.remove("bg-[#eab308]", "text-black");
+              b.classList.add("text-zinc-500", "hover:text-zinc-300");
+            }
+          });
+          applyFilterAndSearch();
+        });
+      });
+
+      sortSelect?.addEventListener("change", applySort);
+    }
+
+    function initImageFallbacks() {
+      window.addEventListener(
+        "error",
+        (e) => {
+          const target = e.target as HTMLElement | null;
+          if (target instanceof HTMLImageElement && target.dataset.fallback) {
+            if (target.src !== target.dataset.fallback) {
+              target.src = target.dataset.fallback;
+              target.classList.remove("object-cover");
+              target.classList.add("object-contain", "p-3", "bg-zinc-900/80");
+            } else {
+              target.style.opacity = "0.2";
+            }
+          }
+        },
+        true,
+      );
+    }
+
     function formatLastUpdated() {
       const timeEl = document.getElementById("last-updated");
       if (!timeEl) return;
@@ -325,6 +631,8 @@ const pageDescription =
     }
 
     document.addEventListener("astro:page-load", () => {
+      initImageFallbacks();
+      initSteamLibrary();
       formatLastUpdated();
     });
   </script>
