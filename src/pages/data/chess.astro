@@ -17,7 +17,9 @@ Astro.response.headers.set(
 );
 
 // --- Rating cards -----------------------------------------------------------
-const statViews = data.stats.map((s) => {
+const statViews = data.stats
+  .filter((s) => s.key !== "chess_bullet")
+  .map((s) => {
   const total = s.win + s.loss + s.draw;
   return {
     ...s,
@@ -32,7 +34,6 @@ const statViews = data.stats.map((s) => {
 const SERIES_META = [
   { key: "rapid", label: "Rapid", color: "#eab308" },
   { key: "blitz", label: "Blitz", color: "#38bdf8" },
-  { key: "bullet", label: "Bullet", color: "#f472b6" },
 ] as const;
 
 // One point per day — the last game played that day — so sessions with many
@@ -169,45 +170,48 @@ const perfViews = [
         </p>
       </header>
 
-      <!-- Profile -->
+      <!-- Profile / Player Card -->
       <section class="mb-8">
-        <div class="flex items-center gap-4 border border-[#27272a] bg-[#0c0c0d] p-3">
+        <div class="flex items-center gap-3.5 border border-[#27272a] bg-[#0c0c0d] p-3">
           {
             data.profile.avatar ? (
               <img
                 src={data.profile.avatar}
                 alt={data.profile.name}
-                width="64"
-                height="64"
+                width="48"
+                height="48"
                 loading="lazy"
                 decoding="async"
-                class="size-14 shrink-0 border border-[#27272a]"
+                class="size-12 shrink-0 border border-[#27272a] object-cover"
               />
             ) : (
-              <div class="size-14 shrink-0 border border-[#27272a]" />
+              <div class="size-12 shrink-0 border border-[#27272a] bg-zinc-900" />
             )
           }
-          <div class="min-w-0 flex-1">
-            <h2 class="text-sm font-medium text-zinc-200">{data.profile.name}</h2>
-            <a
-              href={CHESS_PROFILE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="self-start font-mono text-xs text-zinc-500 transition-colors hover:text-zinc-300"
-            >
-              @{data.profile.username}
-            </a>
-            <p class="mt-1 flex flex-wrap gap-x-3 font-mono text-xs uppercase tracking-wide text-zinc-600">
-              <span>{data.profile.followers.toLocaleString()} followers</span>
-              <span>since {format(data.profile.joined * 1000, "MMM yyyy")}</span>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2">
+              <h2 class="truncate text-sm font-medium text-zinc-200">
+                {data.profile.name}
+              </h2>
               {
-                data.profile.league && <span>{data.profile.league} league</span>
+                data.profile.league && (
+                  <span class="shrink-0 border border-[#27272a] bg-zinc-900/60 px-1.5 py-0.5 font-mono text-[10px] uppercase text-zinc-500">
+                    {data.profile.league}
+                  </span>
+                )
               }
-              <span>
-                online {formatDistanceToNow(new Date(data.profile.lastOnline * 1000), {
-                  addSuffix: true,
-                })}
-              </span>
+            </div>
+            <p class="font-mono text-xs text-zinc-500">
+              <a
+                href={CHESS_PROFILE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="transition-colors hover:text-zinc-300"
+              >
+                @{data.profile.username}
+              </a>
+              {data.profile.country && <span class="text-zinc-600"> · {data.profile.country}</span>}
+              <span class="text-zinc-600"> · since {format(data.profile.joined * 1000, "yyyy")}</span>
             </p>
           </div>
         </div>
@@ -251,6 +255,17 @@ const perfViews = [
               ))}
               {hasGames && (
                 <>
+                  <div class="border-b border-r border-[#27272a] p-3">
+                    <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
+                      Avg accuracy
+                    </p>
+                    <p class="mt-1 text-xl font-medium text-zinc-100">
+                      {data.avgAccuracy !== undefined ? `${data.avgAccuracy}%` : "—"}
+                    </p>
+                    <p class="mt-1 font-mono text-xs text-zinc-600">
+                      across analyzed games
+                    </p>
+                  </div>
                   <div class="border-b border-r border-[#27272a] p-3">
                     <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
                       Streaks
