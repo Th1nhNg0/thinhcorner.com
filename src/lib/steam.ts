@@ -35,6 +35,22 @@ export interface SteamRecentGame {
   appId: number;
   name: string;
   hoursLastTwoWeeks: number;
+  hoursTotal: number;
+  lastPlayed: number | null; // epoch ms
+  headerUrl: string;
+  capsuleUrl: string;
+  iconUrl?: string;
+}
+
+export interface SteamGameItem {
+  appId: number;
+  name: string;
+  hours: number;
+  lastPlayed: number | null; // epoch ms
+  headerUrl: string;
+  capsuleUrl: string;
+  iconUrl?: string;
+  hoursLastTwoWeeks?: number;
 }
 
 export interface SteamPlaytimeTier {
@@ -68,8 +84,9 @@ export interface SteamOverview {
   hourShares: SteamHourShare[];
   topSharePct: number;
   platforms: SteamPlatformSplit | null;
-  tiers: SteamPlaytimeTier[];
+  tiers?: SteamPlaytimeTier[];
   recent: SteamRecentGame[];
+  allGames: SteamGameItem[];
 }
 
 interface RawPlayer {
@@ -78,7 +95,7 @@ interface RawPlayer {
   avatarfull: string;
   profileurl: string;
   loccountrycode?: string;
-  timecreated?: string;
+  timecreated?: number | string;
 }
 
 interface RawOwnedGame {
@@ -89,12 +106,18 @@ interface RawOwnedGame {
   playtime_windows?: number;
   playtime_mac?: number;
   playtime_linux?: number;
+  img_icon_url?: string;
 }
 
 interface RawRecentGame {
   appid: number;
   name?: string;
   playtime_2weeks?: number;
+  playtime_forever?: number;
+  playtime_windows_forever?: number;
+  playtime_mac_forever?: number;
+  playtime_linux_forever?: number;
+  img_icon_url?: string;
 }
 
 const PLAYTIME_TIERS = [
@@ -139,6 +162,16 @@ async function steamApi<T>(
   return (await response.json()) as T;
 }
 
+function parseMemberSince(timecreated: number | string | undefined): number {
+  if (!timecreated) return Date.now();
+  const num = Number(timecreated);
+  if (!Number.isNaN(num) && Number.isFinite(num)) {
+    return num > 1e11 ? num : num * 1000;
+  }
+  const parsed = Date.parse(String(timecreated));
+  return Number.isNaN(parsed) ? Date.now() : parsed;
+}
+
 function headerImage(appId: number): string {
   return `https://cdn.cloudflare.steamstatic.com/steam/apps/${appId}/header.jpg`;
 }
@@ -155,7 +188,7 @@ export async function getSteamOverview(
 ): Promise<SteamOverview | null> {
   if (!env.STEAM_API_KEY) return null;
 
-  return withCache(kv, `steam_overview_${vanity}_v3`, 21600, async () => {
+  return withCache(kv, `steam_overview_${vanity}_v9`, 21600, async () => {
     const steamId = await resolveSteamId(vanity, env);
     const [playersResult, ownedResult, recentResult] = await Promise.allSettled(
       [
@@ -212,8 +245,8 @@ export async function getSteamOverview(
       (game) => (game.playtime_forever ?? 0) < 60,
     ).length;
 
-    const hoursTo1dp = (minutes: number) =>
-      Math.round((minutes / 60) * 10) / 10;
+    const hoursTo1dp = (minutes: number | undefined | null) =>
+      Math.round(((minutes ?? 0) / 60) * 10) / 10;
 
     // Median lifetime hours — more honest than the mean for skewed libraries.
     const sortedMinutes = owned
@@ -288,18 +321,66 @@ export async function getSteamOverview(
         headerUrl: headerImage(game.appid),
       }));
 
-    const recent: SteamRecentGame[] = (
+    const recentRaw =
       recentResult.status === "fulfilled"
         ? (recentResult.value.response.games ?? [])
-        : []
-    )
+        : [];
+
+    const recentMap = new Map<number, RawRecentGame>();
+    for (const g of recentRaw) {
+      recentMap.set(g.appid, g);
+    }
+
+    const ownedMap = new Map<number, RawOwnedGame>();
+    for (const g of owned) {
+      ownedMap.set(g.appid, g);
+    }
+
+    const recent: SteamRecentGame[] = recentRaw
       .slice(0, RECENT_GAMES_LIMIT)
-      .map((game) => ({
+      .map((game) => {
+        const ownedGame = ownedMap.get(game.appid);
+        const totalMinutes =
+          game.playtime_forever ?? ownedGame?.playtime_forever ?? 0;
+        const lastPlayed = ownedGame?.rtime_last_played
+          ? ownedGame.rtime_last_played * 1000
+          : null;
+        const iconHash = game.img_icon_url || ownedGame?.img_icon_url;
+
+        return {
+          appId: game.appid,
+          name: game.name ?? ownedGame?.name ?? `App ${game.appid}`,
+          hoursLastTwoWeeks: hoursTo1dp(game.playtime_2weeks ?? 0),
+          hoursTotal: hoursTo1dp(totalMinutes),
+          lastPlayed,
+          headerUrl: headerImage(game.appid),
+          capsuleUrl: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/capsule_184x69.jpg`,
+          iconUrl: iconHash
+            ? `https://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${iconHash}.jpg`
+            : undefined,
+        };
+      });
+
+    const allGames: SteamGameItem[] = owned.map((game) => {
+      const recentInfo = recentMap.get(game.appid);
+      const iconHash = game.img_icon_url || recentInfo?.img_icon_url;
+      return {
         appId: game.appid,
         name: game.name ?? `App ${game.appid}`,
-        hoursLastTwoWeeks:
-          Math.round(((game.playtime_2weeks ?? 0) / 60) * 10) / 10,
-      }));
+        hours: hoursTo1dp(game.playtime_forever ?? 0),
+        lastPlayed: game.rtime_last_played
+          ? game.rtime_last_played * 1000
+          : null,
+        headerUrl: headerImage(game.appid),
+        capsuleUrl: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/capsule_184x69.jpg`,
+        iconUrl: iconHash
+          ? `https://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${iconHash}.jpg`
+          : undefined,
+        hoursLastTwoWeeks: recentInfo?.playtime_2weeks
+          ? hoursTo1dp(recentInfo.playtime_2weeks)
+          : undefined,
+      };
+    });
 
     return {
       profile: {
@@ -308,9 +389,7 @@ export async function getSteamOverview(
         avatarUrl: player.avatarfull,
         profileUrl: player.profileurl,
         countryCode: player.loccountrycode,
-        memberSince: player.timecreated
-          ? Date.parse(player.timecreated)
-          : Date.now(),
+        memberSince: parseMemberSince(player.timecreated),
       },
       totals: {
         games: owned.length,
@@ -326,6 +405,7 @@ export async function getSteamOverview(
       platforms,
       tiers,
       recent,
+      allGames,
     } satisfies SteamOverview;
   });
 }
