@@ -1,0 +1,19 @@
+{
+  "id": "b4af48a51",
+  "name": "bun dev",
+  "command": "bun dev",
+  "status": "failed",
+  "outputPath": ".pi/tasks/session-35749-35749/b4af48a51.output",
+  "cwd": "/mnt/c/Users/KA META/Desktop/me/thinhcorner.com",
+  "startTime": 1788407326555,
+  "endTime": 1788407326623,
+  "exitCode": 127,
+  "signal": null,
+  "pid": 35964,
+  "bytesWritten": 42,
+  "isAgent": false,
+  "error": "Exited with code 127",
+  "notified": true,
+  "notifyOnCompletion": true,
+  "triggerOnCompletion": false
+}

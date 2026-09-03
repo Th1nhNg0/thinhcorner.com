@@ -1,0 +1,20 @@
+{
+  "id": "b067bffc3",
+  "name": "restart dev server",
+  "command": "npm run dev -- --host 0.0.0.0",
+  "description": "Restart Astro with watcher exclusions to prevent reload loops",
+  "status": "killed",
+  "outputPath": ".pi/tasks/session-36179-36179/b067bffc3.output",
+  "cwd": "/mnt/c/Users/KA META/Desktop/me/thinhcorner.com",
+  "startTime": 1788408142529,
+  "endTime": 1788408225145,
+  "exitCode": null,
+  "signal": "SIGTERM",
+  "pid": 48364,
+  "bytesWritten": 1097,
+  "isAgent": false,
+  "notified": true,
+  "notifyOnCompletion": true,
+  "triggerOnCompletion": true,
+  "timeoutSeconds": 2147483
+}

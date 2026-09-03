@@ -1,0 +1,72 @@
+
+> my-blog@0.0.1 dev
+> astro dev --host 0.0.0.0
+
+11:05:12 [@astrojs/cloudflare] Enabling compile-time image optimization. Images will be pre-optimized at build time.
+11:05:12 [@astrojs/cloudflare] Enabling sessions with Cloudflare KV with the "SESSION" KV binding.
+11:05:12 [vite] Re-optimizing dependencies because vite config has changed
+11:05:17 [vite] connected.
+11:05:17 [vite] [optimizer] scanning dependencies...
+11:05:18 [vite] [optimizer] bundling dependencies...
+11:05:22 [vite] connected.
+11:05:27 [types] Generated 25ms
+11:05:28 [content] Syncing content
+11:05:28 [content] Synced content
+11:05:28 [vite] Re-optimizing dependencies because vite config has changed
+11:05:28 [vite] Re-optimizing dependencies because vite config has changed
+11:05:28 [vite] Re-optimizing dependencies because vite config has changed
+11:05:30 [vite] [optimizer] bundling dependencies...
+11:05:31 [vite] [optimizer] bundling dependencies...
+11:05:31 [vite] [optimizer] bundling dependencies...
+ astro  v7.2.2 ready in 29610 ms
+┃ Local    http://localhost:4321/
+┃ Network  http://10.255.255.254:4321/
+           http://172.19.114.188:4321/
+11:05:33 watching for file changes...
+11:05:37 [200] /data/token-usage 85ms
+11:05:39 [vite] [optimizer] bundling dependencies...
+11:05:42 [vite] ✨ new dependencies optimized: astro/virtual-modules/transitions-events.js, astro/virtual-modules/transitions-router.js, astro/virtual-modules/transitions-swap-functions.js, astro/virtual-modules/transitions-types.js
+11:05:42 [200] / 368ms
+11:05:47 [200] /data/token-usage 6ms
+11:06:56 [watch] /src/styles/global.css
+11:06:57 [200] /data/token-usage 26ms
+11:07:29 [200] /data/token-usage 6ms
+11:07:45 [watch] /src/styles/global.css
+11:07:46 [200] /data/token-usage 23ms
+11:08:31 [200] /data/token-usage 6ms
+11:08:33 [watch] /src/styles/global.css
+11:08:34 [200] /data/token-usage 22ms
+11:08:43 [200] /data/token-usage 6ms
+11:08:50 [watch] /src/styles/global.css
+11:08:51 [200] /data/token-usage 22ms
+11:09:10 [200] /data/token-usage 9ms
+11:09:54 [200] /data/token-usage 6ms
+11:10:38 [watch] /src/styles/global.css
+11:10:39 [200] /data/token-usage 57ms
+11:10:43 [watch] /src/styles/global.css
+11:10:44 [200] /data/token-usage 47ms
+11:10:50 [watch] /src/styles/global.css
+11:10:50 [200] /data/token-usage 48ms
+11:11:00 [200] /data/token-usage 46ms
+11:14:05 [200] /data/token-usage 65ms
+11:14:42 [watch] /src/styles/global.css
+11:14:43 [200] /data/token-usage 49ms
+11:14:57 [watch] /src/styles/global.css
+11:14:59 [200] /data/token-usage 49ms
+11:15:27 [watch] /src/styles/global.css
+11:15:28 [200] /data/token-usage 453ms
+11:15:31 [200] /data/token-usage 34ms
+11:16:23 [watch] /src/styles/global.css
+11:16:24 [200] /data/token-usage 51ms
+11:16:49 [watch] /src/styles/global.css
+11:16:49 [watch] /src/styles/global.css
+11:16:50 [200] /data/token-usage 50ms
+11:17:03 [watch] /src/styles/global.css
+11:17:04 [200] /data/token-usage 50ms
+11:17:20 [200] /data/token-usage 32ms
+11:17:29 [200] /data/token-usage 38ms
+11:17:30 [watch] /src/styles/global.css
+11:17:31 [200] /data/token-usage 49ms
+11:17:37 [watch] /src/styles/global.css
+11:17:38 [200] /data/token-usage 48ms
+11:17:51 [200] /data/token-usage 34ms

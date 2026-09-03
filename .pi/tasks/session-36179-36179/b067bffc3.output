@@ -1,0 +1,24 @@
+
+> my-blog@0.0.1 dev
+> astro dev --host 0.0.0.0
+
+11:02:47 [@astrojs/cloudflare] Enabling compile-time image optimization. Images will be pre-optimized at build time.
+11:02:47 [@astrojs/cloudflare] Enabling sessions with Cloudflare KV with the "SESSION" KV binding.
+11:02:51 [vite] connected.
+11:02:51 [vite] [optimizer] scanning dependencies...
+11:02:53 [vite] [optimizer] bundling dependencies...
+11:02:56 [vite] connected.
+11:03:02 [types] Generated 12ms
+11:03:03 [content] Syncing content
+11:03:03 [content] Synced content
+11:03:03 [vite] Re-optimizing dependencies because vite config has changed
+11:03:03 [vite] Re-optimizing dependencies because vite config has changed
+11:03:03 [vite] Re-optimizing dependencies because vite config has changed
+11:03:05 [vite] [optimizer] bundling dependencies...
+11:03:06 [vite] [optimizer] bundling dependencies...
+11:03:06 [vite] [optimizer] bundling dependencies...
+ astro  v7.2.2 ready in 31464 ms
+┃ Local    http://localhost:4321/
+┃ Network  http://10.255.255.254:4321/
+           http://172.19.114.188:4321/
+11:03:09 watching for file changes...

@@ -1,0 +1,12 @@
+
+> my-blog@0.0.1 dev
+> astro dev
+
+10:49:32 [@astrojs/cloudflare] Enabling compile-time image optimization. Images will be pre-optimized at build time.
+10:49:32 [@astrojs/cloudflare] Enabling sessions with Cloudflare KV with the "SESSION" KV binding.
+10:49:32 [vite] Re-optimizing dependencies because vite config has changed
+10:49:37 [vite] connected.
+10:49:37 [vite] [optimizer] scanning dependencies...
+10:49:38 [vite] [optimizer] bundling dependencies...
+
+[background task timeout: Timed out after 30s]
