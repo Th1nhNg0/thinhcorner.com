@@ -1,0 +1,21 @@
+{
+  "id": "b684a064a",
+  "name": "start stable dev server",
+  "command": "npm run dev -- --host 0.0.0.0",
+  "description": "Start the Astro dev server with ignored runtime artifacts",
+  "status": "killed",
+  "outputPath": ".pi/tasks/session-36179-36179/b684a064a.output",
+  "cwd": "/mnt/c/Users/KA META/Desktop/me/thinhcorner.com",
+  "startTime": 1788408292227,
+  "endTime": 1788409088144,
+  "exitCode": null,
+  "signal": "SIGTERM",
+  "pid": 48727,
+  "bytesWritten": 3181,
+  "isAgent": false,
+  "error": "Killed during Pi session shutdown/reload",
+  "notified": false,
+  "notifyOnCompletion": true,
+  "triggerOnCompletion": true,
+  "timeoutSeconds": 2147483
+}
