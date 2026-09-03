@@ -1,0 +1,21 @@
+{
+  "id": "bc7edc77e",
+  "name": "verify token usage",
+  "command": "npm run build",
+  "description": "Build the Astro site after adding usage range toggles",
+  "status": "failed",
+  "outputPath": ".pi/tasks/session-36179-36179/bc7edc77e.output",
+  "cwd": "/mnt/c/Users/KA META/Desktop/me/thinhcorner.com",
+  "startTime": 1788408034349,
+  "endTime": 1788408083638,
+  "exitCode": 1,
+  "signal": null,
+  "pid": 46418,
+  "bytesWritten": 2623,
+  "isAgent": false,
+  "error": "Exited with code 1",
+  "notified": true,
+  "notifyOnCompletion": true,
+  "triggerOnCompletion": true,
+  "timeoutSeconds": 1200
+}

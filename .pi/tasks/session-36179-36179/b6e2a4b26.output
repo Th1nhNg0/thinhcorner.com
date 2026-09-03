@@ -1,0 +1,964 @@
+
+> my-blog@0.0.1 dev
+> astro dev --host 0.0.0.0
+
+10:50:36 [@astrojs/cloudflare] Enabling compile-time image optimization. Images will be pre-optimized at build time.
+10:50:36 [@astrojs/cloudflare] Enabling sessions with Cloudflare KV with the "SESSION" KV binding.
+10:50:40 [vite] connected.
+10:50:40 [vite] [optimizer] scanning dependencies...
+10:50:41 [vite] [optimizer] bundling dependencies...
+10:50:45 [vite] connected.
+10:50:50 [types] Generated 9ms
+10:50:51 [content] Syncing content
+10:50:51 [content] Astro config changed
+10:50:51 [content] Clearing content store
+[Shiki] The language "YAML" doesn't exist, falling back to "plaintext".
+[Shiki] The language "YAML" doesn't exist, falling back to "plaintext".
+10:50:52 [content] Synced content
+10:50:52 [vite] Re-optimizing dependencies because vite config has changed
+10:50:52 [vite] Re-optimizing dependencies because vite config has changed
+10:50:52 [vite] Re-optimizing dependencies because vite config has changed
+10:50:54 [vite] [optimizer] bundling dependencies...
+10:50:55 [vite] [optimizer] bundling dependencies...
+10:50:55 [vite] [optimizer] bundling dependencies...
+ astro  v7.2.2 ready in 30420 ms
+┃ Local    http://localhost:4321/
+┃ Network  http://10.255.255.254:4321/
+           http://172.19.114.188:4321/
+10:50:58 watching for file changes...
+10:51:04 [200] / 444ms
+10:51:04 [vite] program reload
+10:51:04 [ERROR] [vite] An error happened during full reload
+Failed to load url astro:server-app.js (resolved id: astro:server-app.js). Does the file exist?
+Error: Failed to load url astro:server-app.js (resolved id: astro:server-app.js). Does the file exist?
+    at loadAndTransform (file:///mnt/c/Users/KA%20META/Desktop/me/thinhcorner.com/node_modules/vite/dist/node/chunks/node.js:19714:31)
+10:51:05 [vite] program reload
+10:51:06 [vite] program reload
+10:51:06 [vite] program reload
+10:51:08 [vite] [optimizer] bundling dependencies...
+10:51:08 [vite] program reload
+10:51:09 [vite] program reload
+10:51:10 [vite] program reload
+10:51:10 [vite] ✨ new dependencies optimized: astro/virtual-modules/transitions-events.js, astro/virtual-modules/transitions-router.js, astro/virtual-modules/transitions-swap-functions.js, astro/virtual-modules/transitions-types.js
+10:51:10 [vite] program reload
+10:51:11 [vite] program reload
+10:51:11 [200] HEAD / 1658ms
+10:51:12 [vite] program reload
+10:51:13 [vite] program reload
+10:51:13 [200] / 1535ms
+10:51:14 [vite] program reload
+10:51:14 [200] / 2199ms
+10:51:14 [200] / 1422ms
+10:51:14 [vite] program reload
+10:51:16 [vite] program reload
+10:51:16 [vite] program reload
+10:51:17 [200] /data 1473ms
+10:51:17 [vite] program reload
+10:51:19 [200] /data/token-usage 65ms
+10:51:19 [vite] program reload
+10:51:19 [vite] [vite] program reload
+10:51:20 [200] /data/token-usage 44ms
+10:51:20 [vite] program reload
+10:51:22 [vite] program reload
+10:51:22 [200] /data/token-usage 68ms
+10:51:23 [vite] program reload
+10:51:26 [vite] [vite] program reload
+10:51:26 [vite] program reload
+10:51:27 [vite] [vite] program reload
+10:51:27 [vite] program reload
+10:51:28 [200] /data/token-usage 46ms
+10:51:28 [vite] program reload
+10:51:29 [vite] [vite] program reload
+10:51:29 [vite] program reload
+10:51:30 [200] /data/token-usage 43ms
+10:51:30 [vite] program reload
+10:51:32 [vite] [vite] program reload
+10:51:32 [vite] program reload
+10:51:33 [200] /data/token-usage 42ms
+10:51:33 [vite] program reload
+10:51:35 [vite] [vite] program reload
+10:51:35 [vite] program reload
+10:51:36 [vite] program reload
+10:51:36 [200] /data/token-usage 609ms
+10:51:36 [vite] program reload
+10:51:38 [vite] [vite] program reload
+10:51:38 [vite] program reload
+10:51:39 [200] /data/token-usage 88ms
+10:51:39 [200] /data/token-usage 88ms
+10:51:39 [vite] program reload
+10:51:41 [vite] program reload
+10:51:41 [200] /data/token-usage 64ms
+10:51:41 [vite] program reload
+10:51:43 [vite] [vite] program reload
+10:51:43 [vite] program reload
+10:51:44 [200] /data/token-usage 78ms
+10:51:44 [200] /data/token-usage 78ms
+10:51:44 [vite] program reload
+10:51:46 [vite] program reload
+10:51:46 [200] /data/token-usage 63ms
+10:51:46 [vite] program reload
+10:51:48 [vite] [vite] program reload
+10:51:48 [vite] program reload
+10:51:49 [200] /data/token-usage 74ms
+10:51:49 [200] /data/token-usage 74ms
+10:51:49 [vite] program reload
+10:51:51 [vite] program reload
+10:51:51 [200] /data/token-usage 64ms
+10:51:51 [vite] program reload
+10:51:54 [vite] program reload
+10:51:54 [200] /data/token-usage 66ms
+10:51:55 [vite] program reload
+10:51:56 [vite] [vite] program reload
+10:51:56 [vite] program reload
+10:51:57 [200] /data/token-usage 41ms
+10:51:57 [vite] program reload
+10:51:59 [vite] [vite] program reload
+10:51:59 [vite] program reload
+10:52:00 [vite] program reload
+10:52:00 [200] /data/token-usage 584ms
+10:52:00 [vite] program reload
+10:52:02 [vite] [vite] program reload
+10:52:02 [vite] program reload
+10:52:03 [200] /data/token-usage 52ms
+10:52:03 [vite] program reload
+10:52:05 [vite] [vite] program reload
+10:52:05 [vite] program reload
+10:52:06 [200] /data/token-usage 39ms
+10:52:06 [vite] program reload
+10:52:08 [vite] [vite] program reload
+10:52:08 [vite] program reload
+10:52:09 [vite] [vite] program reload
+10:52:09 [vite] program reload
+10:52:10 [200] /data/token-usage 44ms
+10:52:10 [vite] program reload
+10:52:12 [vite] [vite] program reload
+10:52:12 [vite] program reload
+10:52:13 [vite] [vite] program reload
+10:52:13 [vite] program reload
+10:52:14 [200] /data/token-usage 43ms
+10:52:14 [vite] program reload
+10:52:16 [vite] [vite] program reload
+10:52:16 [vite] program reload
+10:52:17 [200] /data/token-usage 43ms
+10:52:17 [vite] program reload
+10:52:19 [vite] program reload
+10:52:19 [200] /data/token-usage 67ms
+10:52:19 [vite] program reload
+10:52:21 [vite] [vite] program reload
+10:52:21 [vite] program reload
+10:52:22 [200] /data/token-usage 41ms
+10:52:22 [vite] program reload
+10:52:23 [vite] [vite] program reload
+10:52:23 [vite] program reload
+10:52:25 [200] /data/token-usage 41ms
+10:52:25 [vite] program reload
+10:52:27 [vite] [vite] program reload
+10:52:27 [vite] program reload
+10:52:28 [200] /data/token-usage 45ms
+10:52:28 [vite] program reload
+10:52:30 [vite] [vite] program reload
+10:52:30 [vite] program reload
+10:52:31 [200] /data/token-usage 42ms
+10:52:31 [vite] program reload
+10:52:33 [vite] [vite] program reload
+10:52:33 [vite] program reload
+10:52:34 [vite] [vite] program reload
+10:52:34 [vite] program reload
+10:52:35 [vite] program reload
+10:52:35 [200] /data/token-usage 760ms
+10:52:35 [vite] program reload
+10:52:37 [vite] [vite] program reload
+10:52:37 [vite] program reload
+10:52:38 [200] /data/token-usage 45ms
+10:52:38 [vite] program reload
+10:52:40 [vite] [vite] program reload
+10:52:40 [vite] program reload
+10:52:41 [200] /data/token-usage 44ms
+10:52:41 [vite] program reload
+10:52:43 [vite] [vite] program reload
+10:52:43 [vite] program reload
+10:52:44 [200] /data/token-usage 43ms
+10:52:44 [vite] program reload
+10:52:46 [vite] program reload
+10:52:46 [200] /data/token-usage 41ms
+10:52:46 [vite] program reload
+10:52:48 [vite] program reload
+10:52:48 [vite] program reload
+10:52:49 [200] /data/token-usage 46ms
+10:52:49 [vite] program reload
+10:52:51 [vite] program reload
+10:52:51 [vite] program reload
+10:52:52 [200] /data/token-usage 44ms
+10:52:52 [vite] program reload
+10:52:54 [vite] [vite] program reload
+10:52:54 [vite] program reload
+10:52:55 [200] /data/token-usage 39ms
+10:52:55 [vite] program reload
+10:52:57 [vite] [vite] program reload
+10:52:57 [vite] program reload
+10:52:58 [200] /data/token-usage 42ms
+10:52:58 [vite] program reload
+10:53:00 [vite] [vite] program reload
+10:53:00 [vite] program reload
+10:53:00 [200] /data/token-usage 43ms
+10:53:00 [vite] program reload
+10:53:02 [vite] program reload
+10:53:03 [vite] program reload
+10:53:03 [200] /data/token-usage 45ms
+10:53:03 [vite] program reload
+10:53:05 [vite] [vite] program reload
+10:53:05 [vite] program reload
+10:53:06 [200] /data/token-usage 43ms
+10:53:06 [vite] program reload
+10:53:08 [vite] [vite] program reload
+10:53:08 [vite] program reload
+10:53:09 [200] /data/token-usage 77ms
+10:53:09 [200] /data/token-usage 77ms
+10:53:09 [vite] program reload
+10:53:11 [vite] program reload
+10:53:11 [200] /data/token-usage 69ms
+10:53:12 [vite] program reload
+10:53:13 [vite] [vite] program reload
+10:53:13 [vite] program reload
+10:53:14 [200] /data/token-usage 76ms
+10:53:14 [200] /data/token-usage 76ms
+10:53:14 [vite] program reload
+10:53:15 [200] / 856ms
+10:53:16 [vite] program reload
+10:53:17 [200] /data/token-usage 1325ms
+10:53:17 [200] / 2636ms
+10:53:19 [vite] program reload
+10:53:19 [vite] program reload
+10:53:19 [vite] program reload
+10:53:19 [vite] program reload
+10:53:20 [200] /data/token-usage 44ms
+10:53:20 [200] / 45ms
+10:53:20 [vite] program reload
+10:53:22 [vite] [vite] program reload
+10:53:22 [vite] program reload
+10:53:23 [vite] program reload
+10:53:23 [200] / 38ms
+10:53:23 [200] / 38ms
+10:53:23 [vite] program reload
+10:53:25 [200] /data 1430ms
+10:53:25 [200] /data 1430ms
+10:53:26 [vite] program reload
+10:53:27 [200] /data/token-usage 1145ms
+10:53:30 [vite] program reload
+10:53:30 [vite] program reload
+10:53:30 [vite] program reload
+10:53:30 [vite] program reload
+10:53:31 [200] /data/token-usage 41ms
+10:53:31 [vite] program reload
+10:53:33 [vite] [vite] program reload
+10:53:33 [vite] program reload
+10:53:34 [200] /data/token-usage 46ms
+10:53:34 [vite] program reload
+10:53:36 [vite] [vite] program reload
+10:53:36 [vite] program reload
+10:53:37 [200] /data/token-usage 41ms
+10:53:37 [vite] program reload
+10:53:39 [vite] program reload
+10:53:39 [vite] program reload
+10:53:40 [200] /data/token-usage 41ms
+10:53:40 [vite] program reload
+10:53:40 [vite] [vite] program reload
+10:53:42 [vite] [vite] program reload
+10:53:42 [vite] program reload
+10:53:43 [200] /data/token-usage 42ms
+10:53:43 [vite] program reload
+10:53:45 [vite] [vite] program reload
+10:53:45 [vite] program reload
+10:53:46 [200] /data/token-usage 42ms
+10:53:46 [vite] program reload
+10:53:48 [vite] [vite] program reload
+10:53:48 [vite] program reload
+10:53:48 [200] /data/token-usage 43ms
+10:53:48 [vite] program reload
+10:53:50 [vite] [vite] program reload
+10:53:50 [vite] program reload
+10:53:51 [200] /data/token-usage 43ms
+10:53:51 [vite] program reload
+10:53:53 [vite] program reload
+10:53:53 [vite] program reload
+10:53:54 [200] /data/token-usage 42ms
+10:53:54 [vite] program reload
+10:53:56 [vite] [vite] program reload
+10:53:56 [vite] program reload
+10:53:57 [200] /data/token-usage 42ms
+10:53:57 [vite] program reload
+10:53:58 [vite] [vite] program reload
+10:53:58 [vite] program reload
+10:53:59 [200] /data/token-usage 46ms
+10:53:59 [vite] program reload
+10:54:01 [vite] [vite] program reload
+10:54:01 [vite] program reload
+10:54:02 [200] /data/token-usage 42ms
+10:54:02 [vite] program reload
+10:54:03 [vite] [vite] program reload
+10:54:04 [vite] program reload
+10:54:05 [vite] [vite] program reload
+10:54:05 [vite] program reload
+10:54:05 [200] /data/token-usage 42ms
+10:54:05 [vite] program reload
+10:54:07 [vite] [vite] program reload
+10:54:07 [vite] program reload
+10:54:08 [200] /data/token-usage 41ms
+10:54:08 [vite] program reload
+10:54:10 [vite] [vite] program reload
+10:54:10 [vite] program reload
+10:54:11 [vite] [vite] program reload
+10:54:11 [vite] program reload
+10:54:11 [200] /data/token-usage 42ms
+10:54:11 [vite] program reload
+10:54:13 [vite] [vite] program reload
+10:54:13 [vite] program reload
+10:54:14 [200] /data/token-usage 44ms
+10:54:14 [vite] program reload
+10:54:16 [vite] [vite] program reload
+10:54:16 [vite] program reload
+10:54:17 [200] /data/token-usage 41ms
+10:54:17 [vite] program reload
+10:54:19 [vite] [vite] program reload
+10:54:19 [vite] program reload
+10:54:20 [vite] [vite] program reload
+10:54:20 [vite] program reload
+10:54:20 [200] /data/token-usage 43ms
+10:54:21 [vite] program reload
+10:54:22 [vite] [vite] program reload
+10:54:22 [vite] program reload
+10:54:23 [200] /data/token-usage 43ms
+10:54:23 [vite] program reload
+10:54:25 [vite] [vite] program reload
+10:54:25 [vite] program reload
+10:54:25 [200] /data/token-usage 48ms
+10:54:25 [vite] program reload
+10:54:27 [vite] [vite] program reload
+10:54:27 [vite] program reload
+10:54:28 [200] /data/token-usage 45ms
+10:54:28 [vite] program reload
+10:54:30 [vite] [vite] program reload
+10:54:30 [vite] program reload
+10:54:31 [200] /data/token-usage 43ms
+10:54:31 [vite] program reload
+10:54:32 [vite] [vite] program reload
+10:54:32 [vite] program reload
+10:54:34 [vite] [vite] program reload
+10:54:34 [vite] program reload
+10:54:35 [200] /data/token-usage 42ms
+10:54:35 [vite] program reload
+10:54:37 [vite] program reload
+10:54:37 [vite] program reload
+10:54:38 [200] /data/token-usage 40ms
+10:54:38 [vite] program reload
+10:54:41 [vite] program reload
+10:54:41 [vite] program reload
+10:54:42 [vite] [vite] program reload
+10:54:42 [vite] program reload
+10:54:43 [200] /data/token-usage 45ms
+10:54:43 [vite] program reload
+10:54:44 [vite] [vite] program reload
+10:54:44 [vite] program reload
+10:54:45 [200] /data/token-usage 44ms
+10:54:45 [vite] program reload
+10:54:47 [vite] [vite] program reload
+10:54:47 [vite] program reload
+10:54:48 [200] /data/token-usage 40ms
+10:54:48 [vite] program reload
+10:54:50 [vite] [vite] program reload
+10:54:50 [vite] program reload
+10:54:51 [vite] [vite] program reload
+10:54:51 [vite] program reload
+10:54:51 [200] /data/token-usage 44ms
+10:54:51 [vite] program reload
+10:54:53 [vite] [vite] program reload
+10:54:53 [vite] program reload
+10:54:54 [200] /data/token-usage 42ms
+10:54:54 [vite] program reload
+10:54:56 [vite] [vite] program reload
+10:54:56 [vite] program reload
+10:54:57 [200] /data/token-usage 45ms
+10:54:57 [vite] program reload
+10:54:58 [vite] [vite] program reload
+10:54:58 [vite] program reload
+10:54:59 [200] /data/token-usage 42ms
+10:54:59 [vite] program reload
+10:55:01 [vite] program reload
+10:55:01 [vite] program reload
+10:55:02 [200] /data/token-usage 44ms
+10:55:02 [vite] program reload
+10:55:04 [vite] [vite] program reload
+10:55:04 [vite] program reload
+10:55:05 [200] /data/token-usage 43ms
+10:55:05 [vite] program reload
+10:55:07 [vite] [vite] program reload
+10:55:07 [vite] program reload
+10:55:08 [200] /data/token-usage 42ms
+10:55:08 [vite] program reload
+10:55:10 [vite] [vite] program reload
+10:55:10 [vite] program reload
+10:55:11 [200] /data/token-usage 46ms
+10:55:11 [vite] program reload
+10:55:13 [vite] [vite] program reload
+10:55:13 [vite] program reload
+10:55:13 [200] /data/token-usage 46ms
+10:55:13 [vite] program reload
+10:55:16 [vite] [vite] program reload
+10:55:16 [vite] program reload
+10:55:17 [200] /data/token-usage 40ms
+10:55:17 [vite] program reload
+10:55:19 [vite] [vite] program reload
+10:55:19 [vite] program reload
+10:55:20 [200] /data/token-usage 39ms
+10:55:20 [vite] program reload
+10:55:22 [vite] [vite] program reload
+10:55:22 [vite] program reload
+10:55:23 [200] /data/token-usage 41ms
+10:55:23 [vite] program reload
+10:55:25 [vite] [vite] program reload
+10:55:25 [vite] program reload
+10:55:26 [200] /data/token-usage 42ms
+10:55:26 [vite] program reload
+10:55:28 [vite] [vite] program reload
+10:55:28 [vite] program reload
+10:55:28 [200] /data/token-usage 42ms
+10:55:28 [vite] program reload
+10:55:31 [vite] program reload
+10:55:31 [200] /data/token-usage 67ms
+10:55:31 [vite] program reload
+10:55:33 [vite] [vite] program reload
+10:55:33 [vite] program reload
+10:55:34 [200] /data/token-usage 47ms
+10:55:34 [vite] program reload
+10:55:36 [vite] [vite] program reload
+10:55:36 [vite] program reload
+10:55:37 [200] /data/token-usage 47ms
+10:55:37 [vite] program reload
+10:55:39 [vite] [vite] program reload
+10:55:39 [vite] program reload
+10:55:40 [200] /data/token-usage 64ms
+10:55:40 [vite] program reload
+10:55:43 [vite] program reload
+10:55:43 [vite] program reload
+10:55:44 [200] /data/token-usage 48ms
+10:55:44 [vite] program reload
+10:55:46 [vite] [vite] program reload
+10:55:46 [vite] program reload
+10:55:47 [200] /data/token-usage 46ms
+10:55:47 [vite] program reload
+10:55:49 [vite] program reload
+10:55:50 [vite] program reload
+10:55:50 [200] /data/token-usage 43ms
+10:55:50 [vite] program reload
+10:55:52 [vite] [vite] program reload
+10:55:52 [vite] program reload
+10:55:53 [200] /data/token-usage 47ms
+10:55:53 [vite] program reload
+10:55:56 [vite] program reload
+10:55:56 [vite] program reload
+10:55:57 [200] /data/token-usage 44ms
+10:55:57 [vite] program reload
+10:55:59 [vite] [vite] program reload
+10:55:59 [vite] program reload
+10:55:59 [200] /data/token-usage 42ms
+10:56:00 [vite] program reload
+10:56:02 [vite] [vite] program reload
+10:56:02 [vite] program reload
+10:56:03 [200] /data/token-usage 42ms
+10:56:03 [vite] program reload
+10:56:04 [vite] [vite] program reload
+10:56:04 [vite] program reload
+10:56:05 [200] /data/token-usage 44ms
+10:56:05 [vite] program reload
+10:56:07 [vite] [vite] program reload
+10:56:07 [vite] program reload
+10:56:08 [200] /data/token-usage 72ms
+10:56:08 [vite] program reload
+10:56:10 [vite] [vite] program reload
+10:56:10 [vite] program reload
+10:56:11 [200] /data/token-usage 43ms
+10:56:11 [vite] program reload
+10:56:13 [vite] [vite] program reload
+10:56:13 [vite] program reload
+10:56:14 [200] /data/token-usage 44ms
+10:56:14 [vite] program reload
+10:56:16 [vite] [vite] program reload
+10:56:16 [vite] program reload
+10:56:17 [200] /data/token-usage 43ms
+10:56:17 [vite] program reload
+10:56:19 [vite] program reload
+10:56:19 [vite] program reload
+10:56:20 [200] /data/token-usage 45ms
+10:56:20 [vite] program reload
+10:56:22 [vite] [vite] program reload
+10:56:22 [vite] program reload
+10:56:23 [200] /data/token-usage 51ms
+10:56:23 [vite] program reload
+10:56:25 [vite] [vite] program reload
+10:56:25 [vite] program reload
+10:56:26 [200] /data/token-usage 47ms
+10:56:26 [vite] program reload
+10:56:28 [vite] [vite] program reload
+10:56:28 [vite] program reload
+10:56:29 [200] /data/token-usage 43ms
+10:56:29 [vite] program reload
+10:56:31 [vite] program reload
+10:56:31 [vite] program reload
+10:56:32 [200] /data/token-usage 39ms
+10:56:32 [vite] program reload
+10:56:34 [vite] [vite] program reload
+10:56:34 [vite] program reload
+10:56:35 [200] /data/token-usage 41ms
+10:56:35 [vite] program reload
+10:56:37 [vite] [vite] program reload
+10:56:37 [vite] program reload
+10:56:38 [200] /data/token-usage 42ms
+10:56:38 [vite] program reload
+10:56:40 [vite] [vite] program reload
+10:56:40 [vite] program reload
+10:56:41 [200] /data/token-usage 42ms
+10:56:41 [vite] program reload
+10:56:43 [vite] [vite] program reload
+10:56:43 [vite] program reload
+10:56:44 [200] /data/token-usage 40ms
+10:56:44 [vite] program reload
+10:56:46 [vite] [vite] program reload
+10:56:46 [vite] program reload
+10:56:47 [200] /data/token-usage 43ms
+10:56:47 [vite] program reload
+10:56:49 [vite] [vite] program reload
+10:56:49 [vite] program reload
+10:56:49 [200] /data/token-usage 42ms
+10:56:50 [vite] program reload
+10:56:51 [vite] [vite] program reload
+10:56:51 [vite] program reload
+10:56:52 [200] /data/token-usage 44ms
+10:56:52 [vite] program reload
+10:56:54 [vite] [vite] program reload
+10:56:54 [vite] program reload
+10:56:55 [200] /data/token-usage 41ms
+10:56:55 [vite] program reload
+10:56:57 [200] /data/token-usage 38ms
+10:56:57 [vite] program reload
+10:56:58 [vite] [vite] program reload
+10:56:58 [vite] program reload
+10:57:00 [200] /data/token-usage 43ms
+10:57:00 [vite] program reload
+10:57:02 [vite] [vite] program reload
+10:57:02 [vite] program reload
+10:57:02 [200] /data/token-usage 43ms
+10:57:02 [vite] program reload
+10:57:04 [vite] [vite] program reload
+10:57:04 [vite] program reload
+10:57:05 [200] /data/token-usage 42ms
+10:57:05 [vite] program reload
+10:57:07 [vite] [vite] program reload
+10:57:07 [vite] program reload
+10:57:08 [200] /data/token-usage 42ms
+10:57:08 [vite] program reload
+10:57:10 [vite] [vite] program reload
+10:57:10 [vite] program reload
+10:57:11 [vite] [vite] program reload
+10:57:11 [vite] program reload
+10:57:12 [200] /data/token-usage 47ms
+10:57:12 [vite] program reload
+10:57:13 [vite] [vite] program reload
+10:57:13 [vite] program reload
+10:57:14 [200] /data/token-usage 79ms
+10:57:14 [200] /data/token-usage 79ms
+10:57:14 [vite] program reload
+10:57:16 [vite] program reload
+10:57:16 [200] /data/token-usage 66ms
+10:57:16 [vite] program reload
+10:57:18 [vite] program reload
+10:57:18 [vite] program reload
+10:57:19 [200] /data/token-usage 41ms
+10:57:19 [vite] program reload
+10:57:21 [vite] [vite] program reload
+10:57:21 [vite] program reload
+10:57:22 [200] /data/token-usage 41ms
+10:57:22 [vite] program reload
+10:57:24 [vite] [vite] program reload
+10:57:24 [vite] program reload
+10:57:25 [200] /data/token-usage 40ms
+10:57:25 [vite] program reload
+10:57:27 [vite] [vite] program reload
+10:57:27 [vite] program reload
+10:57:28 [200] /data/token-usage 47ms
+10:57:28 [vite] program reload
+10:57:30 [vite] [vite] program reload
+10:57:30 [vite] program reload
+10:57:31 [200] /data/token-usage 43ms
+10:57:31 [vite] program reload
+10:57:33 [vite] program reload
+10:57:33 [vite] program reload
+10:57:33 [200] /data/token-usage 44ms
+10:57:33 [vite] program reload
+10:57:35 [vite] program reload
+10:57:36 [vite] program reload
+10:57:36 [200] /data/token-usage 45ms
+10:57:36 [vite] program reload
+10:57:38 [vite] program reload
+10:57:38 [vite] program reload
+10:57:39 [200] /data/token-usage 44ms
+10:57:39 [vite] program reload
+10:57:41 [vite] [vite] program reload
+10:57:41 [vite] program reload
+10:57:42 [200] /data/token-usage 39ms
+10:57:42 [vite] program reload
+10:57:44 [vite] [vite] program reload
+10:57:44 [vite] program reload
+10:57:45 [200] /data/token-usage 40ms
+10:57:45 [vite] program reload
+10:57:47 [vite] [vite] program reload
+10:57:47 [vite] program reload
+10:57:47 [200] /data/token-usage 42ms
+10:57:47 [vite] program reload
+10:57:49 [vite] [vite] program reload
+10:57:49 [vite] program reload
+10:57:50 [200] /data/token-usage 39ms
+10:57:50 [vite] program reload
+10:57:52 [vite] program reload
+10:57:52 [vite] program reload
+10:57:53 [200] /data/token-usage 42ms
+10:57:53 [vite] program reload
+10:57:55 [vite] [vite] program reload
+10:57:55 [vite] program reload
+10:57:56 [200] /data/token-usage 42ms
+10:57:56 [vite] program reload
+10:57:58 [vite] program reload
+10:57:58 [vite] program reload
+10:57:59 [200] /data/token-usage 42ms
+10:57:59 [vite] program reload
+10:58:01 [vite] [vite] program reload
+10:58:01 [vite] program reload
+10:58:01 [200] /data/token-usage 43ms
+10:58:01 [vite] program reload
+10:58:03 [vite] [vite] program reload
+10:58:03 [vite] program reload
+10:58:04 [200] /data/token-usage 46ms
+10:58:04 [vite] program reload
+10:58:07 [vite] [vite] program reload
+10:58:07 [vite] program reload
+10:58:08 [200] /data/token-usage 54ms
+10:58:08 [vite] program reload
+10:58:10 [vite] [vite] program reload
+10:58:10 [vite] program reload
+10:58:11 [200] /data/token-usage 43ms
+10:58:11 [vite] program reload
+10:58:13 [vite] [vite] program reload
+10:58:13 [vite] program reload
+10:58:14 [200] /data/token-usage 45ms
+10:58:14 [vite] program reload
+10:58:16 [vite] [vite] program reload
+10:58:16 [vite] program reload
+10:58:18 [vite] program reload
+10:58:18 [200] /data/token-usage 1323ms
+10:58:18 [vite] program reload
+10:58:20 [vite] [vite] program reload
+10:58:20 [vite] program reload
+10:58:21 [200] /data/token-usage 43ms
+10:58:21 [vite] program reload
+10:58:23 [vite] [vite] program reload
+10:58:23 [vite] program reload
+10:58:24 [200] /data/token-usage 42ms
+10:58:24 [vite] program reload
+10:58:26 [vite] [vite] program reload
+10:58:26 [vite] program reload
+10:58:26 [200] /data/token-usage 45ms
+10:58:26 [vite] program reload
+10:58:28 [vite] [vite] program reload
+10:58:28 [vite] program reload
+10:58:29 [200] /data/token-usage 41ms
+10:58:29 [vite] program reload
+10:58:31 [vite] [vite] program reload
+10:58:31 [vite] program reload
+10:58:32 [200] /data/token-usage 42ms
+10:58:32 [vite] program reload
+10:58:34 [vite] [vite] program reload
+10:58:34 [vite] program reload
+10:58:35 [200] /data/token-usage 43ms
+10:58:35 [vite] program reload
+10:58:37 [vite] [vite] program reload
+10:58:37 [vite] program reload
+10:58:38 [200] /data/token-usage 44ms
+10:58:38 [vite] program reload
+10:58:40 [vite] [vite] program reload
+10:58:40 [vite] program reload
+10:58:41 [200] /data/token-usage 43ms
+10:58:41 [vite] program reload
+10:58:42 [vite] [vite] program reload
+10:58:42 [vite] program reload
+10:58:44 [vite] [vite] program reload
+10:58:44 [vite] program reload
+10:58:44 [200] /data/token-usage 45ms
+10:58:44 [vite] program reload
+10:58:46 [vite] [vite] program reload
+10:58:46 [vite] program reload
+10:58:47 [200] /data/token-usage 44ms
+10:58:47 [vite] program reload
+10:58:49 [vite] [vite] program reload
+10:58:49 [vite] program reload
+10:58:50 [200] /data/token-usage 45ms
+10:58:50 [vite] program reload
+10:58:52 [vite] [vite] program reload
+10:58:52 [vite] program reload
+10:58:52 [200] /data/token-usage 42ms
+10:58:52 [vite] program reload
+10:58:54 [vite] [vite] program reload
+10:58:54 [vite] program reload
+10:58:55 [200] /data/token-usage 40ms
+10:58:55 [vite] program reload
+10:58:57 [vite] [vite] program reload
+10:58:57 [vite] program reload
+10:58:58 [vite] [vite] program reload
+10:58:58 [vite] program reload
+10:58:58 [200] /data/token-usage 53ms
+10:58:58 [vite] program reload
+10:59:00 [vite] [vite] program reload
+10:59:00 [vite] program reload
+10:59:01 [200] /data/token-usage 39ms
+10:59:01 [vite] program reload
+10:59:03 [vite] [vite] program reload
+10:59:03 [vite] program reload
+10:59:04 [200] /data/token-usage 40ms
+10:59:04 [vite] program reload
+10:59:05 [vite] [vite] program reload
+10:59:05 [vite] program reload
+10:59:07 [200] /data/token-usage 41ms
+10:59:07 [vite] program reload
+10:59:09 [vite] [vite] program reload
+10:59:09 [vite] program reload
+10:59:10 [vite] [vite] program reload
+10:59:10 [vite] program reload
+10:59:11 [200] /data/token-usage 44ms
+10:59:11 [vite] program reload
+10:59:12 [vite] [vite] program reload
+10:59:12 [vite] program reload
+10:59:13 [200] /data/token-usage 54ms
+10:59:13 [vite] program reload
+10:59:15 [vite] [vite] program reload
+10:59:15 [vite] program reload
+10:59:16 [200] /data/token-usage 44ms
+10:59:16 [vite] program reload
+10:59:18 [vite] [vite] program reload
+10:59:18 [vite] program reload
+10:59:18 [200] /data/token-usage 43ms
+10:59:18 [vite] program reload
+10:59:20 [vite] [vite] program reload
+10:59:20 [vite] program reload
+10:59:21 [200] /data/token-usage 44ms
+10:59:21 [vite] program reload
+10:59:23 [200] /data/token-usage 40ms
+10:59:23 [vite] program reload
+10:59:23 [vite] [vite] program reload
+10:59:25 [vite] [vite] program reload
+10:59:25 [vite] program reload
+10:59:26 [200] /data/token-usage 43ms
+10:59:26 [vite] program reload
+10:59:27 [vite] [vite] program reload
+10:59:27 [vite] program reload
+10:59:28 [vite] [vite] program reload
+10:59:28 [vite] program reload
+10:59:29 [200] /data/token-usage 43ms
+10:59:29 [vite] program reload
+10:59:31 [vite] [vite] program reload
+10:59:31 [vite] program reload
+10:59:32 [200] /data/token-usage 55ms
+10:59:32 [vite] program reload
+10:59:34 [vite] program reload
+10:59:35 [vite] program reload
+10:59:35 [200] /data/token-usage 42ms
+10:59:35 [vite] program reload
+10:59:37 [vite] [vite] program reload
+10:59:37 [vite] program reload
+10:59:38 [200] /data/token-usage 46ms
+10:59:38 [vite] program reload
+10:59:41 [vite] [vite] program reload
+10:59:41 [vite] program reload
+10:59:42 [200] /data/token-usage 41ms
+10:59:42 [vite] program reload
+10:59:44 [vite] [vite] program reload
+10:59:44 [vite] program reload
+10:59:45 [200] /data/token-usage 41ms
+10:59:45 [vite] program reload
+10:59:46 [vite] [vite] program reload
+10:59:46 [vite] program reload
+10:59:48 [vite] [vite] program reload
+10:59:48 [vite] program reload
+10:59:49 [200] /data/token-usage 43ms
+10:59:49 [vite] program reload
+10:59:50 [vite] [vite] program reload
+10:59:50 [vite] program reload
+10:59:51 [200] /data/token-usage 43ms
+10:59:51 [vite] program reload
+10:59:53 [vite] [vite] program reload
+10:59:53 [vite] program reload
+10:59:54 [200] /data/token-usage 44ms
+10:59:54 [vite] program reload
+10:59:56 [vite] [vite] program reload
+10:59:56 [vite] program reload
+10:59:57 [200] /data/token-usage 41ms
+10:59:57 [vite] program reload
+10:59:59 [vite] [vite] program reload
+10:59:59 [vite] program reload
+11:00:00 [200] /data/token-usage 64ms
+11:00:00 [vite] program reload
+11:00:02 [vite] program reload
+11:00:02 [200] /data/token-usage 66ms
+11:00:02 [vite] program reload
+11:00:04 [vite] [vite] program reload
+11:00:04 [vite] program reload
+11:00:05 [200] /data/token-usage 46ms
+11:00:05 [vite] program reload
+11:00:07 [vite] program reload
+11:00:07 [vite] program reload
+11:00:08 [200] /data/token-usage 56ms
+11:00:08 [vite] program reload
+11:00:10 [vite] program reload
+11:00:10 [vite] program reload
+11:00:11 [200] /data/token-usage 47ms
+11:00:11 [vite] program reload
+11:00:13 [vite] [vite] program reload
+11:00:13 [vite] program reload
+11:00:14 [200] /data/token-usage 49ms
+11:00:14 [vite] program reload
+11:00:16 [vite] [vite] program reload
+11:00:16 [vite] program reload
+11:00:17 [200] /data/token-usage 44ms
+11:00:17 [vite] program reload
+11:00:19 [vite] program reload
+11:00:19 [vite] program reload
+11:00:20 [200] /data/token-usage 44ms
+11:00:20 [vite] program reload
+11:00:22 [vite] program reload
+11:00:22 [vite] program reload
+11:00:23 [200] /data/token-usage 40ms
+11:00:24 [vite] program reload
+11:00:25 [200] /data/token-usage 43ms
+11:00:25 [vite] program reload
+11:00:27 [vite] [vite] program reload
+11:00:27 [vite] program reload
+11:00:28 [200] /data/token-usage 43ms
+11:00:28 [vite] program reload
+11:00:30 [vite] program reload
+11:00:30 [vite] program reload
+11:00:31 [200] /data/token-usage 43ms
+11:00:31 [vite] program reload
+11:00:33 [vite] [vite] program reload
+11:00:33 [vite] program reload
+11:00:34 [200] /data/token-usage 43ms
+11:00:34 [vite] program reload
+11:00:36 [vite] [vite] program reload
+11:00:36 [vite] program reload
+11:00:37 [200] /data/token-usage 40ms
+11:00:37 [vite] program reload
+11:00:39 [vite] [vite] program reload
+11:00:39 [vite] program reload
+11:00:40 [200] /data/token-usage 43ms
+11:00:40 [vite] program reload
+11:00:42 [200] /data/token-usage 40ms
+11:00:42 [vite] program reload
+11:00:44 [vite] [vite] program reload
+11:00:44 [vite] program reload
+11:00:45 [vite] program reload
+11:00:45 [200] /data/token-usage 826ms
+11:00:45 [200] /data/token-usage 102ms
+11:00:45 [vite] program reload
+11:00:48 [vite] program reload
+11:00:48 [200] /data/token-usage 43ms
+11:00:48 [vite] program reload
+11:00:50 [vite] [vite] program reload
+11:00:50 [vite] program reload
+11:00:52 [vite] program reload
+11:00:52 [200] /data/token-usage 834ms
+11:00:52 [vite] program reload
+11:00:54 [200] /data/token-usage 44ms
+11:00:54 [vite] program reload
+11:00:55 [vite] [vite] program reload
+11:00:55 [vite] program reload
+11:00:56 [200] /data/token-usage 43ms
+11:00:56 [vite] program reload
+11:00:58 [vite] [vite] program reload
+11:00:58 [vite] program reload
+11:00:59 [200] /data/token-usage 45ms
+11:00:59 [vite] program reload
+11:01:01 [vite] [vite] program reload
+11:01:01 [vite] program reload
+11:01:03 [vite] program reload
+11:01:03 [200] /data/token-usage 977ms
+11:01:03 [vite] program reload
+11:01:07 [vite] program reload
+11:01:07 [vite] program reload
+11:01:07 [vite] program reload
+11:01:10 [vite] program reload
+11:01:10 [200] /data/token-usage 788ms
+11:01:10 [vite] program reload
+11:01:10 [vite] program reload
+11:01:13 [vite] [vite] program reload
+11:01:13 [vite] program reload
+11:01:14 [200] /data/token-usage 43ms
+11:01:14 [vite] program reload
+11:01:15 [vite] program reload
+11:01:16 [200] /data/token-usage 53ms
+11:01:16 [vite] program reload
+11:01:20 [vite] program reload
+11:01:20 [200] /data/token-usage 86ms
+11:01:20 [vite] program reload
+11:01:20 [vite] program reload
+11:01:23 [watch] /src/styles/global.css
+11:01:28 [vite] program reload
+11:01:28 [200] /data/token-usage 78ms
+11:01:28 [vite] program reload
+11:01:28 [vite] program reload
+11:01:28 [vite] program reload
+11:01:32 [vite] program reload
+11:01:32 [vite] program reload
+11:01:34 [200] /data/token-usage 44ms
+11:01:34 [vite] program reload
+11:01:37 [vite] [vite] program reload
+11:01:37 [vite] program reload
+11:01:38 [200] /data/token-usage 42ms
+11:01:38 [vite] program reload
+11:01:41 [vite] program reload
+11:01:41 [vite] program reload
+11:01:43 [200] /data/token-usage 45ms
+11:01:43 [vite] program reload
+11:01:46 [vite] [vite] program reload
+11:01:46 [vite] program reload
+11:01:47 [200] /data/token-usage 50ms
+11:01:47 [vite] program reload
+11:01:50 [vite] [vite] program reload
+11:01:50 [vite] program reload
+11:01:51 [200] /data/token-usage 45ms
+11:01:51 [vite] program reload
+11:01:53 [vite] [vite] program reload
+11:01:53 [vite] program reload
+11:01:55 [200] /data/token-usage 45ms
+11:01:55 [vite] program reload
+11:01:57 [vite] [vite] program reload
+11:01:57 [vite] program reload
+11:01:59 [200] /data/token-usage 43ms
+11:01:59 [vite] program reload
+11:02:01 [vite] [vite] program reload
+11:02:01 [vite] program reload
+11:02:02 [200] /data/token-usage 46ms
+11:02:02 [vite] program reload
+11:02:05 Configuration file updated. Restarting...
+11:02:05 [@astrojs/cloudflare] Enabling compile-time image optimization. Images will be pre-optimized at build time.
+11:02:05 [@astrojs/cloudflare] Enabling sessions with Cloudflare KV with the "SESSION" KV binding.
+11:02:05 [watch] /src/styles/global.css
+11:02:05 [watch] /src/styles/global.css
+11:02:05 [vite] program reload
+11:02:09 [vite] program reload
+11:02:09 [vite] program reload
+11:02:10 [200] /data/token-usage 50ms
+11:02:10 [vite] program reload
+11:02:12 [vite] Re-optimizing dependencies because vite config has changed
+11:02:13 [vite] program reload
+11:02:13 [vite] [vite] program reload
+11:02:14 [vite] [vite] program reload
+11:02:17 [vite] program reload
+11:02:17 [200] /data/token-usage 1057ms
+11:02:17 [vite] program reload
+11:02:17 [vite] program reload

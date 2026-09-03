@@ -1,0 +1,20 @@
+{
+  "id": "b6e2a4b26",
+  "name": "start dev server",
+  "command": "npm run dev -- --host 0.0.0.0",
+  "description": "Start the Astro development server",
+  "status": "killed",
+  "outputPath": ".pi/tasks/session-36179-36179/b6e2a4b26.output",
+  "cwd": "/mnt/c/Users/KA META/Desktop/me/thinhcorner.com",
+  "startTime": 1788407414955,
+  "endTime": 1788408138771,
+  "exitCode": null,
+  "signal": "SIGTERM",
+  "pid": 36418,
+  "bytesWritten": 33834,
+  "isAgent": false,
+  "notified": true,
+  "notifyOnCompletion": true,
+  "triggerOnCompletion": true,
+  "timeoutSeconds": 2147483
+}

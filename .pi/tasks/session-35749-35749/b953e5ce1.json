@@ -1,0 +1,21 @@
+{
+  "id": "b953e5ce1",
+  "name": "astro dev",
+  "command": "npm run dev",
+  "description": "Start the Astro development server",
+  "status": "failed",
+  "outputPath": ".pi/tasks/session-35749-35749/b953e5ce1.output",
+  "cwd": "/mnt/c/Users/KA META/Desktop/me/thinhcorner.com",
+  "startTime": 1788407351373,
+  "endTime": 1788407381400,
+  "exitCode": null,
+  "signal": "SIGTERM",
+  "pid": 36017,
+  "bytesWritten": 506,
+  "isAgent": false,
+  "error": "Timed out after 30s",
+  "notified": true,
+  "notifyOnCompletion": true,
+  "triggerOnCompletion": true,
+  "timeoutSeconds": 30
+}

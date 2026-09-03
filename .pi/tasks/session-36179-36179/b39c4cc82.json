@@ -1,0 +1,21 @@
+{
+  "id": "b39c4cc82",
+  "name": "verify production build",
+  "command": "npm run build",
+  "description": "Run a clean production build after the dev-server watcher fix",
+  "status": "failed",
+  "outputPath": ".pi/tasks/session-36179-36179/b39c4cc82.output",
+  "cwd": "/mnt/c/Users/KA META/Desktop/me/thinhcorner.com",
+  "startTime": 1788408233571,
+  "endTime": 1788408270323,
+  "exitCode": 1,
+  "signal": null,
+  "pid": 48507,
+  "bytesWritten": 2621,
+  "isAgent": false,
+  "error": "Exited with code 1",
+  "notified": true,
+  "notifyOnCompletion": true,
+  "triggerOnCompletion": true,
+  "timeoutSeconds": 1200
+}

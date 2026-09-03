@@ -1,0 +1,37 @@
+
+> my-blog@0.0.1 build
+> astro build
+
+11:04:13 [@astrojs/cloudflare] Enabling compile-time image optimization. Images will be pre-optimized at build time.
+11:04:13 [@astrojs/cloudflare] Enabling sessions with Cloudflare KV with the "SESSION" KV binding.
+11:04:13 [vite] Re-optimizing dependencies because vite config has changed
+11:04:13 [vite] Re-optimizing dependencies because vite config has changed
+11:04:16 [vite] [optimizer] bundling dependencies...
+11:04:17 [vite] [optimizer] bundling dependencies...
+11:04:23 [content] Syncing content
+11:04:23 [content] Synced content
+11:04:23 [types] Generated 9.35s
+11:04:23 [build] output: "static"
+11:04:23 [build] mode: "server"
+11:04:23 [build] directory: /mnt/c/Users/KA META/Desktop/me/thinhcorner.com/dist/
+11:04:23 [build] adapter: @astrojs/cloudflare
+11:04:23 [build] Collecting build info...
+11:04:23 [build] ✓ Completed in 9.50s.
+11:04:23 [build] Building server entrypoints...
+11:04:26 [assets] Copying fonts (3 files)...
+11:04:27 [vite] ✓ built in 4.15s
+11:04:29 [vite] ✓ built in 2.35s
+11:04:29 [ERROR] [vite] ✗ Build failed in 154ms
+EPERM: operation not permitted, copyfile '/mnt/c/Users/KA META/Desktop/me/thinhcorner.com/public/_redirects' -> '/mnt/c/Users/KA META/Desktop/me/thinhcorner.com/dist/client/_redirects'
+  Location:
+    /mnt/c/Users/KA META/Desktop/me/thinhcorner.com/node_modules/vite/dist/node/chunks/node.js:2158:11
+  Stack trace:
+    at Object.copyFileSync (node:fs:3090:11)
+    at prepareOutDir (file:///mnt/c/Users/KA%20META/Desktop/me/thinhcorner.com/node_modules/vite/dist/node/chunks/node.js:32305:4)
+    at PluginContextImpl.handler (file:///mnt/c/Users/KA%20META/Desktop/me/thinhcorner.com/node_modules/vite/dist/node/chunks/node.js:32835:13)
+    at plugin.<computed> (file:///mnt/c/Users/KA%20META/Desktop/me/thinhcorner.com/node_modules/rolldown/dist/shared/bindingify-input-options-CzVhGygm.mjs:1961:18)
+    at unwrapBindingResult (file:///mnt/c/Users/KA%20META/Desktop/me/thinhcorner.com/node_modules/rolldown/dist/shared/error-B68YLzl3.mjs:18:128)
+    at async buildEnvironment (file:///mnt/c/Users/KA%20META/Desktop/me/thinhcorner.com/node_modules/vite/dist/node/chunks/node.js:32575:66)
+    at async Object.buildApp (file:///mnt/c/Users/KA%20META/Desktop/me/thinhcorner.com/node_modules/astro/dist/core/build/static-build.js:181:9)
+    at async buildEnvironments (file:///mnt/c/Users/KA%20META/Desktop/me/thinhcorner.com/node_modules/astro/dist/core/build/static-build.js:196:3)
+    at async AstroBuilder.build (file:///mnt/c/Users/KA%20META/Desktop/me/thinhcorner.com/node_modules/astro/dist/core/build/index.js:160:5)
