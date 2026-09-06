@@ -8,6 +8,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "data:usage": "bun scripts/update-ccusage.ts",
+    "data:sync": "bun scripts/update-ccusage.ts",
     "generate-types": "wrangler types"
   },
   "dependencies": {
