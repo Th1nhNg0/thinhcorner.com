@@ -109,12 +109,12 @@ const statCells = [
   },
 ];
 
-// --- Daily spend by model -------------------------------------------------
-// Stacked by model, so the chart shows composition as well as magnitude. The
-// metric is cost: see buildDailyStack for why tokens cannot be stacked here.
-const stack = buildDailyStack(report, 6);
-const stackSeries = stack.series;
-const maxDayCost = stack.maxDayCost;
+// --- Daily use by model ---------------------------------------------------
+// Stacked by model so the chart shows composition as well as magnitude. Both
+// metrics are built so the page can toggle between them; see buildDailyStack for
+// why cost is linear and tokens need a log scale.
+const costStack = buildDailyStack(report, { topN: 6, metric: "cost" });
+const tokenStack = buildDailyStack(report, { topN: 6, metric: "tokens" });
 
 
 const peakDay = [...days].sort((a, b) => b.totalTokens - a.totalTokens)[0];
@@ -250,60 +250,107 @@ const pageDescription =
         </div>
       </section>
 
-      <!-- Daily spend by model -->
-      <section class="mb-10">
-        <div class="mb-3 flex flex-wrap items-baseline justify-between gap-x-3">
-          <h2 class="text-sm font-medium text-zinc-200">Daily spend by model</h2>
-          <span class="font-mono text-xs text-zinc-600">
-            {activeDayCount} active days · height = cost
-          </span>
-        </div>
+      <!--
+        Daily use by model, toggleable between cost and tokens.
 
-        <div class="border border-[#27272a] bg-[#0c0c0d] p-4">
-          <ModelStackChart
-            series={stackSeries}
-            days={stack.days}
-            maxDayCost={maxDayCost}
-            formatCost={formatCost}
-            formatCompact={formatCompact}
-            formatDay={formatDay}
+        CSS-only toggle: the radio inputs are the first children of the flex
+        wrapper, so every element that reacts to them (titles, toggle labels,
+        panels) is a following sibling and can use peer-checked. No JS, and it
+        still works with scripting disabled.
+      -->
+      <section class="mb-10">
+        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-2">
+          <input
+            id="stack-metric-cost"
+            type="radio"
+            name="stack-metric"
+            class="peer/cost sr-only"
+            checked
+          />
+          <input
+            id="stack-metric-tokens"
+            type="radio"
+            name="stack-metric"
+            class="peer/tokens sr-only"
           />
 
-          <!-- Legend: totals per series, so slivers stay accountable -->
-          <ul class="mt-4 grid grid-cols-1 gap-x-4 gap-y-1.5 border-t border-[#27272a] pt-3 font-mono text-[11px] sm:grid-cols-2">
-            {
-              stackSeries.map((entry) => (
-                <li class="flex items-baseline gap-2">
-                  <span
-                    class="size-2 shrink-0 translate-y-px"
-                    style={`background:${entry.color}`}
-                    aria-hidden="true"
-                  />
-                  <span class="min-w-0 flex-1 truncate text-zinc-400" title={entry.modelName}>
-                    {entry.modelName}
-                  </span>
-                  <span class="shrink-0 text-zinc-500">
-                    {formatCost(entry.cost)} · {formatPercent(entry.costShare, 1)}
-                  </span>
-                </li>
-              ))
-            }
-          </ul>
+          <h2
+            class="hidden flex-1 text-sm font-medium text-zinc-200 peer-checked/cost:block"
+          >
+            Daily spend by model
+          </h2>
+          <h2
+            class="hidden flex-1 text-sm font-medium text-zinc-200 peer-checked/tokens:block"
+          >
+            Daily tokens by model
+          </h2>
 
-          <dl class="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-mono text-[11px]">
-            <div class="flex items-baseline gap-2">
-              <dt class="text-zinc-600">priciest</dt>
-              <dd class="text-zinc-400">
-                {formatDay(priciestDay.period, true)} · {formatCost(priciestDay.totalCost)}
-              </dd>
+          <div class="flex border border-[#27272a] font-mono text-[11px]">
+            <label
+              for="stack-metric-cost"
+              class="cursor-pointer px-2.5 py-1 text-zinc-500 transition-colors hover:text-zinc-300 peer-checked/cost:bg-[#eab308] peer-checked/cost:text-[#0c0c0d]"
+            >
+              Cost
+            </label>
+            <label
+              for="stack-metric-tokens"
+              class="cursor-pointer border-l border-[#27272a] px-2.5 py-1 text-zinc-500 transition-colors hover:text-zinc-300 peer-checked/tokens:bg-[#eab308] peer-checked/tokens:text-[#0c0c0d]"
+            >
+              Tokens
+            </label>
+          </div>
+
+          <div class="hidden basis-full peer-checked/cost:block">
+            <div class="border border-[#27272a] bg-[#0c0c0d] p-4">
+              <ModelStackChart
+                metric="cost"
+                series={costStack.series}
+                days={costStack.days}
+                maxDayValue={costStack.maxDayValue}
+                formatCost={formatCost}
+                formatCompact={formatCompact}
+                formatDay={formatDay}
+              />
+              <dl class="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-mono text-[11px]">
+                <div class="flex items-baseline gap-2">
+                  <dt class="text-zinc-600">priciest</dt>
+                  <dd class="text-zinc-400">
+                    {formatDay(priciestDay.period, true)} · {formatCost(priciestDay.totalCost)}
+                  </dd>
+                </div>
+                <div class="flex items-baseline gap-2">
+                  <dt class="text-zinc-600">days</dt>
+                  <dd class="text-zinc-400">{activeDayCount} with usage</dd>
+                </div>
+              </dl>
             </div>
-            <div class="flex items-baseline gap-2">
-              <dt class="text-zinc-600">busiest</dt>
-              <dd class="text-zinc-400">
-                {formatDay(peakDay.period, true)} · {formatCompact(peakDay.totalTokens)} tokens
-              </dd>
+          </div>
+
+          <div class="hidden basis-full peer-checked/tokens:block">
+            <div class="border border-[#27272a] bg-[#0c0c0d] p-4">
+              <ModelStackChart
+                metric="tokens"
+                series={tokenStack.series}
+                days={tokenStack.days}
+                maxDayValue={tokenStack.maxDayValue}
+                formatCost={formatCost}
+                formatCompact={formatCompact}
+                formatDay={formatDay}
+              />
+              <dl class="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-mono text-[11px]">
+                <div class="flex items-baseline gap-2">
+                  <dt class="text-zinc-600">busiest</dt>
+                  <dd class="text-zinc-400">
+                    {formatDay(peakDay.period, true)} · {formatCompact(peakDay.totalTokens)} tokens
+                  </dd>
+                </div>
+                <div class="flex items-baseline gap-2">
+                  <dt class="text-zinc-600">median day</dt>
+                  <dd class="text-zinc-400">{formatCompact(medianTokensPerDay)} tokens</dd>
+                </div>
+              </dl>
             </div>
-          </dl>
+          </div>
         </div>
       </section>
 
