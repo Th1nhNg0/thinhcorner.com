@@ -3,202 +3,41 @@ export const prerender = true;
 
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
+import ModelStackChart from "@/components/charts/ModelStackChart.astro";
+import {
+  buildCalendar,
+  buildDailyStack,
+  buildIntensityThresholds,
+  buildUsageReport,
+  usageLevel,
+} from "@/lib/ccusage";
 import usage from "../../../data/ccusage.json";
 
-type ModelTotal = {
-  modelName: string;
-  totalTokens: number;
-  cost: number;
-};
-
-type AgentTotal = {
-  agent: string;
-  activeDays: number;
-  totalTokens: number;
-  totalCost: number;
-};
-
-type CompactModel = [modelIndex: number, totalTokens: number, costCents: number];
-type CompactAgent = [agentIndex: number, totalTokens: number, costCents: number];
-type CompactDay = [
-  dayOffset: number,
-  inputTokens: number,
-  outputTokens: number,
-  cacheReadTokens: number,
-  models: CompactModel[],
-  agents: CompactAgent[],
-];
-type UsageSnapshot = {
-  b?: number;
-  m?: string[];
-  a?: string[];
-  sources?: Record<string, CompactDay[]>;
-};
-type DailyAgent = {
-  agent: string;
-  totalTokens: number;
-  totalCost: number;
-};
-type DailyUsage = {
-  period: string;
-  inputTokens: number;
-  outputTokens: number;
-  cacheReadTokens: number;
-  totalTokens: number;
-  totalCost: number;
-  modelBreakdowns: ModelTotal[];
-  agents: DailyAgent[];
-};
-
-const snapshot = usage as unknown as UsageSnapshot;
-const modelNames = snapshot.m ?? [];
-const agentNames = snapshot.a ?? [];
-const baseDay = snapshot.b ?? 0;
-const fromDayNumber = (dayNumber: number) =>
-  new Date(dayNumber * 86_400_000).toISOString().slice(0, 10);
-const daysByPeriod = new Map<string, DailyUsage>();
-for (const source of Object.values(snapshot.sources ?? {})) {
-  for (const row of source) {
-    const [dayOffset, inputTokens, outputTokens, cacheReadTokens, models, sourceAgents] = row;
-    const period = fromDayNumber(baseDay + dayOffset);
-    const modelBreakdowns = models.map(([modelIndex, totalTokens, costCents]) => ({
-      modelName: modelNames[modelIndex] ?? `model-${modelIndex}`,
-      totalTokens,
-      cost: costCents / 100,
-    }));
-    const agents = sourceAgents.map(([agentIndex, totalTokens, costCents]) => ({
-      agent: agentNames[agentIndex] ?? `agent-${agentIndex}`,
-      totalTokens,
-      totalCost: costCents / 100,
-    }));
-    const totalTokens = modelBreakdowns.reduce(
-      (sum, model) => sum + model.totalTokens,
-      0,
-    );
-    const totalCost = modelBreakdowns.reduce(
-      (sum, model) => sum + model.cost,
-      0,
-    );
-    const day = {
-      period,
-      inputTokens,
-      outputTokens,
-      cacheReadTokens,
-      totalTokens,
-      totalCost,
-      modelBreakdowns,
-      agents,
-    } satisfies DailyUsage;
-    const current = daysByPeriod.get(period);
-
-    if (!current) {
-      daysByPeriod.set(period, day);
-      continue;
-    }
-
-    current.inputTokens += day.inputTokens;
-    current.outputTokens += day.outputTokens;
-    current.cacheReadTokens += day.cacheReadTokens;
-    current.totalTokens += day.totalTokens;
-    current.totalCost += day.totalCost;
-    current.modelBreakdowns.push(...day.modelBreakdowns);
-    current.agents.push(...day.agents);
-  }
-}
-
-const days = [...daysByPeriod.values()].sort((a, b) =>
-  a.period.localeCompare(b.period),
+// The JSON import widens to loose nested arrays, so assert the encoded shape.
+const report = buildUsageReport(
+  usage as unknown as import("@/lib/ccusage").UsageSnapshot,
 );
-const totals = days.reduce(
-  (sum, day) => {
-    sum.inputTokens += day.inputTokens;
-    sum.outputTokens += day.outputTokens;
-    sum.cacheReadTokens += day.cacheReadTokens;
-    sum.totalTokens += day.totalTokens;
-    sum.totalCost += day.totalCost;
-    return sum;
-  },
-  {
-    inputTokens: 0,
-    outputTokens: 0,
-    cacheReadTokens: 0,
-    totalTokens: 0,
-    totalCost: 0,
-  },
-);
+
+const {
+  days,
+  activeDayCount,
+  firstPeriod,
+  lastPeriod,
+  daysStale,
+  totals,
+  averageTokensPerDay,
+  averageCostPerDay,
+  costPerMillion,
+  outputShare,
+  tokenMix,
+  models,
+  agents,
+  medianTokensPerDay,
+} = report;
+
 const latestDay = days[days.length - 1];
-const usageByPeriod = new Map(days.map((day) => [day.period, day]));
 
-const lastDate = new Date(
-  `${latestDay?.period ?? "1970-01-01"}T00:00:00Z`,
-);
-const calendarEnd = new Date(lastDate);
-calendarEnd.setUTCDate(
-  calendarEnd.getUTCDate() + (6 - calendarEnd.getUTCDay()),
-);
-const calendarStart = new Date(calendarEnd);
-calendarStart.setUTCDate(calendarStart.getUTCDate() - (52 * 7 - 1));
-
-const activeTokenValues = days
-  .map((day) => day.totalTokens)
-  .filter((value) => value > 0)
-  .sort((a, b) => a - b);
-const percentile = (position: number) =>
-  activeTokenValues[
-    Math.min(
-      activeTokenValues.length - 1,
-      Math.floor((activeTokenValues.length - 1) * position),
-    )
-  ] ?? 1;
-const tokenThresholds = [percentile(0.25), percentile(0.5), percentile(0.75)];
-const getUsageLevel = (value: number) => {
-  if (value === 0) return 0;
-  if (value >= tokenThresholds[2]) return 4;
-  if (value >= tokenThresholds[1]) return 3;
-  if (value >= tokenThresholds[0]) return 2;
-  return 1;
-};
-
-const calendarWeeks: Array<
-  Array<{ date: Date; period: string; totalTokens: number; level: number }>
-> = [];
-for (
-  let weekStart = new Date(calendarStart);
-  weekStart <= calendarEnd;
-  weekStart.setUTCDate(weekStart.getUTCDate() + 7)
-) {
-  calendarWeeks.push(
-    Array.from({ length: 7 }, (_, dayIndex) => {
-      const date = new Date(weekStart);
-      date.setUTCDate(date.getUTCDate() + dayIndex);
-      const period = date.toISOString().slice(0, 10);
-      const day = usageByPeriod.get(period);
-      const totalTokens = day?.totalTokens ?? 0;
-      return {
-        date,
-        period,
-        totalTokens,
-        level: getUsageLevel(totalTokens),
-      };
-    }),
-  );
-}
-
-let previousMonthKey = -1;
-const monthLabels = calendarWeeks.map((week) => {
-  const monthDay = week.find((day) => day.date.getUTCDate() <= 7) ?? week[0];
-  const monthKey = monthDay.date.getUTCFullYear() * 12 + monthDay.date.getUTCMonth();
-  const label =
-    monthKey !== previousMonthKey
-      ? monthDay.date.toLocaleDateString("en-US", {
-          month: "short",
-          timeZone: "UTC",
-        })
-      : "";
-  previousMonthKey = monthKey;
-  return label;
-});
-
+// --- Formatting -----------------------------------------------------------
 const formatNumber = (value: number) => value.toLocaleString("en-US");
 
 const formatCompact = (value: number) => {
@@ -209,14 +48,20 @@ const formatCompact = (value: number) => {
 };
 
 const formatCost = (value: number) =>
-  `$${value.toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
+  value >= 100 ? `$${Math.round(value).toLocaleString("en-US")}` : `$${value.toFixed(2)}`;
 
-const formatPercent = (value: number, total: number) => {
-  const share = (value / Math.max(total, 1)) * 100;
-  return share < 0.1 ? "<0.1%" : `${share.toFixed(1)}%`;
+/** Sub-cent rates need more precision than dollar totals. */
+const formatRate = (value: number) => {
+  if (value === 0) return "$0";
+  if (value < 0.01) return `$${value.toFixed(4)}`;
+  if (value < 1) return `$${value.toFixed(3)}`;
+  return `$${value.toFixed(2)}`;
+};
+
+const formatPercent = (share: number, digits = 0) => {
+  const pct = share * 100;
+  if (pct > 0 && pct < 0.1) return "<0.1%";
+  return `${pct.toFixed(digits)}%`;
 };
 
 const formatDay = (period: string, includeYear = false) =>
@@ -227,92 +72,94 @@ const formatDay = (period: string, includeYear = false) =>
     timeZone: "UTC",
   });
 
-const normalizeModelName = (modelName: string) =>
-  modelName.replace(/^\[[^\]]+\]\s*/, "");
+// --- Freshness ------------------------------------------------------------
+// This export is refreshed by hand (`bun run data:usage`), so the page states
+// plainly how current it is instead of implying it is live.
+const freshnessCopy =
+  daysStale === 0
+    ? "synced today"
+    : daysStale === 1
+      ? "synced yesterday"
+      : `${daysStale} days stale`;
+const isStale = daysStale > 2;
 
-const modelTotals = new Map<string, ModelTotal>();
-for (const day of days) {
-  for (const model of day.modelBreakdowns ?? []) {
-    const displayModelName = normalizeModelName(model.modelName);
-    const current = modelTotals.get(displayModelName) ?? {
-      modelName: displayModelName,
-      totalTokens: 0,
-      cost: 0,
-    };
-
-    current.totalTokens += model.totalTokens;
-    current.cost += model.cost;
-    modelTotals.set(displayModelName, current);
-  }
-}
-
-const models = [...modelTotals.values()].sort(
-  (a, b) => b.totalTokens - a.totalTokens,
-);
-const modelTokenTotal = Math.max(
-  1,
-  models.reduce((sum, model) => sum + model.totalTokens, 0),
-);
-
-const agentTotals = new Map<string, AgentTotal>();
-for (const day of days) {
-  for (const agent of day.agents ?? []) {
-    const current = agentTotals.get(agent.agent) ?? {
-      agent: agent.agent,
-      activeDays: 0,
-      totalTokens: 0,
-      totalCost: 0,
-    };
-    current.activeDays += 1;
-    current.totalTokens += agent.totalTokens;
-    current.totalCost += agent.totalCost;
-    agentTotals.set(agent.agent, current);
-  }
-}
-
-const agents = [...agentTotals.values()].sort(
-  (a, b) => b.totalTokens - a.totalTokens,
-);
-const agentTokenTotal = Math.max(
-  1,
-  agents.reduce((sum, agent) => sum + agent.totalTokens, 0),
-);
-const averageTokensPerDay = days.length
-  ? Math.round(totals.totalTokens / days.length)
-  : 0;
-
+// --- Headline stats -------------------------------------------------------
 const statCells = [
   {
-    label: "total tokens",
+    label: "tokens",
     value: formatCompact(totals.totalTokens),
-    detail: `${formatNumber(totals.totalTokens)} exact`,
+    detail: formatNumber(totals.totalTokens),
   },
+  { label: "est. cost", value: formatCost(totals.totalCost), detail: "ccusage pricing" },
   {
-    label: "active days",
-    value: formatNumber(days.length),
-    detail: "days with usage",
+    label: "blended rate",
+    value: `${formatRate(costPerMillion)}/M`,
+    detail: "per million tokens",
   },
+  { label: "active days", value: formatNumber(activeDayCount), detail: "days with usage" },
   {
-    label: "avg tokens / day",
+    label: "per active day",
     value: formatCompact(averageTokensPerDay),
-    detail: "across active days",
+    detail: `${formatCost(averageCostPerDay)} · median ${formatCompact(medianTokensPerDay)}`,
   },
   {
-    label: "estimated cost",
-    value: formatCost(totals.totalCost),
-    detail: "from ccusage",
+    label: "output share",
+    value: formatPercent(outputShare, 1),
+    detail: `${formatCompact(totals.outputTokens)} generated`,
   },
 ];
 
-const tokenMix = [
-  { label: "input", value: totals.inputTokens, color: "#eab308" },
-  { label: "output", value: totals.outputTokens, color: "#38bdf8" },
-  { label: "cache read", value: totals.cacheReadTokens, color: "#a78bfa" },
-];
-const mixTotal = Math.max(
-  1,
-  tokenMix.reduce((sum, part) => sum + part.value, 0),
+// --- Daily spend by model -------------------------------------------------
+// Stacked by model, so the chart shows composition as well as magnitude. The
+// metric is cost: see buildDailyStack for why tokens cannot be stacked here.
+const stack = buildDailyStack(report, 6);
+const stackSeries = stack.series;
+const maxDayCost = stack.maxDayCost;
+
+
+const peakDay = [...days].sort((a, b) => b.totalTokens - a.totalTokens)[0];
+const priciestDay = [...days].sort((a, b) => b.totalCost - a.totalCost)[0];
+
+// --- Token mix ------------------------------------------------------------
+// Rendered as a single 100% stacked bar. Segment widths come straight from the
+// token counts, so they are exact shares rather than a visual approximation.
+const mixRows = tokenMix.map((slice) => ({
+  ...slice,
+  // One decimal: at zero decimals the 0.39% output slice renders as "0%".
+  shareLabel: formatPercent(slice.share, 1),
+  displayValue: formatNumber(slice.value),
+  compactValue: formatCompact(slice.value),
+  displayCost: formatCost(slice.cost),
+}));
+// --- Calendar -------------------------------------------------------------
+// A fixed 52-week grid would be ~80% empty here; this covers just the span.
+const calendarWeeks = buildCalendar(report);
+const usageByPeriod = new Map(days.map((day) => [day.period, day]));
+const tokenThresholds = buildIntensityThresholds(days);
+
+// Label each week that contains the 1st of a month, so labels cannot drift.
+const weekMonths = calendarWeeks.map((week, index) => {
+  const firstOfMonth = week.find((period) => period.endsWith("-01"));
+  if (index === 0) {
+    return new Date(`${week[0]}T00:00:00Z`).toLocaleDateString("en-US", {
+      month: "short",
+      timeZone: "UTC",
+    });
+  }
+  if (!firstOfMonth) return "";
+  return new Date(`${firstOfMonth}T00:00:00Z`).toLocaleDateString("en-US", {
+    month: "short",
+    timeZone: "UTC",
+  });
+});
+
+// Transposed to row-major (7 weekday rows x N week columns) so each row can be a
+// flex row that fills the card width, with its weekday label on the same line.
+const WEEKDAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const calendarRows = WEEKDAY_LABELS.map((_, dayIndex) =>
+  calendarWeeks.map((week) => week[dayIndex] ?? ""),
 );
+
 const intensityClasses = [
   "bg-[#27272a]",
   "bg-[#713f12]",
@@ -320,8 +167,38 @@ const intensityClasses = [
   "bg-[#ca8a04]",
   "bg-[#eab308]",
 ] as const;
+
+// --- Models ---------------------------------------------------------------
+// Token volume and spend rank very differently, so the table folds both into
+// one readable row per model rather than two competing bar columns.
+// The library returns models ranked by token volume. The table is presented by
+// spend instead, because that is what the cost bars and the callout below it
+// describe, and the two rankings disagree sharply.
+const paidModels = models
+  .filter((model) => model.cost > 0)
+  .sort((a, b) => b.cost - a.cost);
+const freeModels = models.filter((model) => model.cost === 0);
+const freeTokens = freeModels.reduce((sum, model) => sum + model.totalTokens, 0);
+
+const modelRows = paidModels.map((model) => ({
+  ...model,
+  displayTokens: formatCompact(model.totalTokens),
+  displayCost: formatCost(model.cost),
+  costShareLabel: formatPercent(model.costShare, 1),
+  tokenShareLabel: formatPercent(model.tokenShare, 1),
+  rate: formatRate(model.costPerMillion),
+  costBar: model.costShare * 100,
+}));
+
+const freeModelRows = freeModels.map((model) => ({
+  ...model,
+  displayTokens: formatCompact(model.totalTokens),
+  tokenShareLabel: formatPercent(model.tokenShare, 1),
+  rate: formatRate(model.costPerMillion),
+}));
+
 const pageDescription =
-  "Production AI coding usage analytics aggregated from ccusage exports.";
+  "AI coding token usage across models, agents and token types, with daily volume and blended cost rates.";
 ---
 
 <Layout
@@ -332,6 +209,7 @@ const pageDescription =
     "@type": "Dataset",
     name: "AI coding token usage",
     description: pageDescription,
+    temporalCoverage: `${firstPeriod}/${lastPeriod}`,
     url: new URL("/data/token-usage", Astro.site).toString(),
   }}
 >
@@ -343,164 +221,253 @@ const pageDescription =
         </p>
         <h1 class="page-title">Token usage</h1>
         <p class="page-intro">
-          A production view of coding activity by day, agent, model, and token type.
+          Every token my coding agents have processed, by day, model, agent and token
+          type — including how much of it was cheap cache traffic rather than generated
+          output.
+        </p>
+        <p class="mt-3 font-mono text-xs text-zinc-600">
+          {formatDay(firstPeriod, true)} – {formatDay(lastPeriod, true)} ·{" "}
+          <span class={isStale ? "text-[#ca8a04]" : "text-zinc-500"}>{freshnessCopy}</span>
         </p>
       </header>
 
-      <!-- Totals -->
-      <section class="mb-8">
-        <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-4">
-          {statCells.map((cell) => (
-            <div class="border-b border-r border-[#27272a] p-3">
-              <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
-                {cell.label}
-              </p>
-              <p class="mt-1 text-xl font-medium text-zinc-100" title={cell.detail}>
-                {cell.value}
-              </p>
-              <p class="mt-1 font-mono text-xs text-zinc-600">{cell.detail}</p>
+      <!-- Headline stats -->
+      <section class="mb-10">
+        <div class="grid grid-cols-2 border-l border-t border-[#27272a] sm:grid-cols-3">
+          {
+            statCells.map((cell) => (
+              <div class="border-b border-r border-[#27272a] p-3">
+                <p class="font-mono text-[10px] uppercase tracking-wide text-zinc-500">
+                  {cell.label}
+                </p>
+                <p class="mt-1.5 text-lg font-medium text-zinc-100">{cell.value}</p>
+                <p class="mt-1 font-mono text-[11px] leading-snug text-zinc-600">
+                  {cell.detail}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- Daily spend by model -->
+      <section class="mb-10">
+        <div class="mb-3 flex flex-wrap items-baseline justify-between gap-x-3">
+          <h2 class="text-sm font-medium text-zinc-200">Daily spend by model</h2>
+          <span class="font-mono text-xs text-zinc-600">
+            {activeDayCount} active days · height = cost
+          </span>
+        </div>
+
+        <div class="border border-[#27272a] bg-[#0c0c0d] p-4">
+          <ModelStackChart
+            series={stackSeries}
+            days={stack.days}
+            maxDayCost={maxDayCost}
+            formatCost={formatCost}
+            formatCompact={formatCompact}
+            formatDay={formatDay}
+          />
+
+          <!-- Legend: totals per series, so slivers stay accountable -->
+          <ul class="mt-4 grid grid-cols-1 gap-x-4 gap-y-1.5 border-t border-[#27272a] pt-3 font-mono text-[11px] sm:grid-cols-2">
+            {
+              stackSeries.map((entry) => (
+                <li class="flex items-baseline gap-2">
+                  <span
+                    class="size-2 shrink-0 translate-y-px"
+                    style={`background:${entry.color}`}
+                    aria-hidden="true"
+                  />
+                  <span class="min-w-0 flex-1 truncate text-zinc-400" title={entry.modelName}>
+                    {entry.modelName}
+                  </span>
+                  <span class="shrink-0 text-zinc-500">
+                    {formatCost(entry.cost)} · {formatPercent(entry.costShare, 1)}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+
+          <dl class="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-mono text-[11px]">
+            <div class="flex items-baseline gap-2">
+              <dt class="text-zinc-600">priciest</dt>
+              <dd class="text-zinc-400">
+                {formatDay(priciestDay.period, true)} · {formatCost(priciestDay.totalCost)}
+              </dd>
             </div>
-          ))}
+            <div class="flex items-baseline gap-2">
+              <dt class="text-zinc-600">busiest</dt>
+              <dd class="text-zinc-400">
+                {formatDay(peakDay.period, true)} · {formatCompact(peakDay.totalTokens)} tokens
+              </dd>
+            </div>
+          </dl>
         </div>
       </section>
 
       <!-- Token mix -->
-      <section class="mb-8">
-        <div class="mb-3">
+      <section class="mb-10">
+        <div class="mb-3 flex flex-wrap items-baseline justify-between gap-x-3">
           <h2 class="text-sm font-medium text-zinc-200">Token mix</h2>
+          <span class="font-mono text-xs text-zinc-600">{formatCost(totals.totalCost)} total</span>
         </div>
-        <div class="grid grid-cols-1 border-l border-t border-[#27272a] bg-[#0c0c0d] md:grid-cols-5">
-          <div class="border-b border-r border-[#27272a] p-4 md:col-span-5">
-            <div class="mb-4">
-              <h3 class="text-xs font-medium uppercase tracking-wide text-zinc-400">
-                By token type
-              </h3>
-            </div>
-            <div
-              class="flex h-2 overflow-hidden bg-[#27272a]"
-              role="img"
-              aria-label="Token usage by token type"
-            >
-              {
-                tokenMix.map((part) => (
-                  <div
-                    style={`width:${(part.value / mixTotal) * 100}%;background:${part.color}`}
-                    title={`${part.label}: ${formatNumber(part.value)} tokens`}
+
+        <div class="border border-[#27272a] bg-[#0c0c0d]">
+          <!--
+            One bar, as a true 100% stack: flex-grow is the raw token count, so
+            segment widths are exact shares. Cache write is 0.01% of the total and
+            would round to nothing, so each segment carries a 2px floor — about
+            0.6% of the bar, against exact figures in the legend below.
+          -->
+          <div
+            class="flex h-9 w-full"
+            role="img"
+            aria-label={`Token mix: ${mixRows
+              .map((row) => `${row.label} ${row.shareLabel}`)
+              .join(", ")}`}
+          >
+            {
+              mixRows.map((row) => (
+                <div
+                  class="min-w-[2px] transition-[filter] hover:brightness-125"
+                  style={`flex:${row.value} 1 0%;background:${row.color}`}
+                  title={`${row.label}: ${row.displayValue} tokens · ${row.shareLabel} · ${row.displayCost}`}
+                />
+              ))
+            }
+          </div>
+
+          <ul class="grid grid-cols-1 gap-x-5 gap-y-1.5 border-t border-[#27272a] p-3.5 font-mono text-[11px] sm:grid-cols-2">
+            {
+              mixRows.map((row) => (
+                <li class="flex items-baseline gap-2">
+                  <span
+                    class="size-2 shrink-0 translate-y-px"
+                    style={`background:${row.color}`}
+                    aria-hidden="true"
                   />
-                ))
-              }
-            </div>
-            <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2">
-              {
-                tokenMix.map((part) => (
-                  <div class="flex items-center gap-1.5 font-mono text-xs text-zinc-500">
-                    <span
-                      class="size-1.5 shrink-0"
-                      style={`background:${part.color}`}
-                      aria-hidden="true"
-                    />
-                    <span>{part.label}</span>
-                    <span class="text-zinc-300">
-                      {formatCompact(part.value)} · {formatPercent(part.value, mixTotal)}
-                    </span>
-                  </div>
-                ))
-              }
-            </div>
-          </div>
-          <div class="border-b border-r border-[#27272a] p-4 md:col-span-5">
-            <div class="mb-4">
-              <h3 class="text-xs font-medium uppercase tracking-wide text-zinc-400">
-                Agents used
-              </h3>
-            </div>
-            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {
-                agents.map((agent) => (
-                  <div class="border border-[#27272a] bg-[#111113] p-3">
-                    <div class="flex items-baseline justify-between gap-3">
-                      <p class="text-sm text-zinc-200">{agent.agent}</p>
-                      <span class="font-mono text-xs text-zinc-500">
-                        {formatPercent(agent.totalTokens, agentTokenTotal)}
-                      </span>
-                    </div>
-                    <p class="mt-1 font-mono text-xs text-zinc-500">
-                      {formatCompact(agent.totalTokens)} tokens · {formatCost(agent.totalCost)}
-                    </p>
-                    <p class="mt-1 font-mono text-xs text-zinc-600">
-                      {agent.activeDays} active {agent.activeDays === 1 ? "day" : "days"}
-                    </p>
-                  </div>
-                ))
-              }
-            </div>
-          </div>
+                  <span class="min-w-0 flex-1 truncate text-zinc-300">{row.label}</span>
+                  <span class="shrink-0 text-zinc-500">
+                    {row.shareLabel} · {row.compactValue} · {row.displayCost}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
         </div>
       </section>
 
-      <!-- Daily usage -->
-      <section class="mb-8">
-        <div class="mb-3 flex items-center justify-between gap-3">
-          <h2 class="text-sm font-medium text-zinc-200">Daily usage</h2>
-          <span class="font-mono text-xs text-zinc-600">52-week view</span>
+      <!-- Agents -->
+      <section class="mb-10">
+        <div class="mb-3 flex flex-wrap items-baseline justify-between gap-x-3">
+          <h2 class="text-sm font-medium text-zinc-200">Agents</h2>
+          <span class="font-mono text-xs text-zinc-600">by tokens</span>
         </div>
-        <div class="overflow-x-auto border border-[#27272a] bg-[#0c0c0d]">
-          <div class="min-w-max p-4">
-            <div class="grid grid-cols-[2rem_max-content] gap-2">
-              <div aria-hidden="true" />
-              <div class="flex gap-0.5 font-mono text-[10px] text-zinc-600">
-                {monthLabels.map((label) => <span class="w-[0.5625rem] shrink-0">{label}</span>)}
+
+        <div class="grid grid-cols-1 border-l border-t border-[#27272a] sm:grid-cols-2">
+          {
+            agents.map((agent) => (
+              <div class="border-b border-r border-[#27272a] bg-[#0c0c0d] p-3.5">
+                <div class="flex items-baseline justify-between gap-2">
+                  <p class="text-sm text-zinc-200">{agent.agent}</p>
+                  <span class="font-mono text-xs text-zinc-500">
+                    {formatPercent(agent.tokenShare, 1)}
+                  </span>
+                </div>
+                <div class="mt-2 h-1.5 bg-[#18181b]">
+                  <div class="h-full bg-[#a78bfa]" style={`width:${agent.tokenShare * 100}%`} />
+                </div>
+                <p class="mt-2 font-mono text-[11px] leading-snug text-zinc-500">
+                  {formatCompact(agent.totalTokens)} tokens
+                </p>
+                <p class="mt-0.5 font-mono text-[11px] leading-snug text-zinc-600">
+                  {formatCost(agent.totalCost)} · {formatRate(agent.costPerMillion)}/M ·{" "}
+                  {agent.activeDays} {agent.activeDays === 1 ? "day" : "days"}
+                </p>
               </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- Calendar -->
+      <section class="mb-10">
+        <div class="mb-3 flex flex-wrap items-baseline justify-between gap-x-3">
+          <h2 class="text-sm font-medium text-zinc-200">Active days</h2>
+          <span class="font-mono text-xs text-zinc-600">
+            {calendarWeeks.length} weeks · {activeDayCount} with usage
+          </span>
+        </div>
+
+        <div class="border border-[#27272a] bg-[#0c0c0d] p-4">
+          <!--
+            Row-major layout: one flex row per weekday, so the weekday label sits
+            on the same line as its cells and cells can be flex-1.
+            The previous column-major version used fixed 14px cells, which filled
+            only 320px of this 672px card and left half of it empty.
+          -->
+          <div class="flex items-center gap-1">
+            <span class="w-9 shrink-0" aria-hidden="true" />
+            <!-- h-4 gives this row height: the labels are absolutely positioned
+                 (they overhang their column, since "May" is wider than a cell)
+                 and an absolutely positioned child contributes no height. -->
+            <div class="flex h-4 flex-1 gap-1 font-mono text-[10px] text-zinc-600">
+              {
+                weekMonths.map((label) => (
+                  <div class="relative min-w-0 flex-1">
+                    <span class="absolute left-0 top-0 whitespace-nowrap">{label}</span>
+                  </div>
+                ))
+              }
             </div>
-            <div class="mt-1 grid grid-cols-[2rem_max-content] gap-2">
-              <div class="grid grid-rows-[repeat(7,0.5625rem)] gap-0.5 font-mono text-[10px] leading-[0.5625rem] text-zinc-600">
-                <span class="invisible">Sun</span>
-                <span>Mon</span>
-                <span class="invisible">Tue</span>
-                <span>Wed</span>
-                <span class="invisible">Thu</span>
-                <span>Fri</span>
-                <span class="invisible">Sat</span>
-              </div>
-              <div
-                class="flex gap-0.5"
-                role="group"
-                aria-label="Daily token usage calendar"
-              >
-                {
-                  calendarWeeks.map((week) => (
-                    <div class="flex shrink-0 flex-col gap-0.5">
-                      {week.map((day) => (
-                        <div class="group relative size-[0.5625rem] shrink-0">
-                          <span
-                            class:list={[
-                              "block size-full cursor-help transition hover:brightness-125 hover:outline hover:outline-1 hover:outline-zinc-100/80 focus-visible:outline focus-visible:outline-1 focus-visible:outline-zinc-100",
-                              intensityClasses[day.level],
-                            ]}
-                            role="img"
-                            tabindex={day.totalTokens > 0 ? 0 : -1}
-                            aria-describedby="daily-usage-tooltip"
-                            aria-label={`${formatDay(day.period, true)}: ${formatNumber(day.totalTokens)} tokens`}
-                            data-daily-tooltip={`${formatDay(day.period, true)} · ${formatNumber(day.totalTokens)} tokens`}
-                            title={`${formatDay(day.period, true)}: ${formatNumber(day.totalTokens)} tokens`}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  ))
-                }
-              </div>
-            </div>
-            <div class="mt-4 flex items-center justify-end gap-1.5 font-mono text-[10px] text-zinc-600">
-              <span>Less</span>
+          </div>
+
+          <div class="mt-1 flex flex-col gap-1" role="group" aria-label="Daily token usage calendar">
+            {
+              calendarRows.map((row, dayIndex) => (
+                <div class="flex items-center gap-1">
+                  <span class="w-9 shrink-0 font-mono text-[10px] text-zinc-600">
+                    {WEEKDAY_LABELS[dayIndex]}
+                  </span>
+                  {row.map((period) => {
+                    const day = usageByPeriod.get(period);
+                    const totalTokens = day?.totalTokens ?? 0;
+                    const level = usageLevel(totalTokens, tokenThresholds);
+                    return (
+                      <span
+                        class:list={[
+                          "aspect-square min-w-0 flex-1 cursor-help transition hover:brightness-125 hover:outline hover:outline-1 hover:outline-zinc-100/80 focus-visible:outline focus-visible:outline-1 focus-visible:outline-zinc-100",
+                          intensityClasses[level],
+                        ]}
+                        role="img"
+                        tabindex={totalTokens > 0 ? 0 : -1}
+                        aria-label={`${formatDay(period, true)}: ${formatNumber(totalTokens)} tokens`}
+                        data-daily-tooltip={`${formatDay(period, true)} · ${formatNumber(totalTokens)} tokens${day ? ` · ${formatCost(day.totalCost)}` : ""}`}
+                      />
+                    );
+                  })}
+                </div>
+              ))
+            }
+          </div>
+
+          <div class="mt-4 flex flex-wrap items-center justify-end gap-x-3 gap-y-2 font-mono text-[10px] text-zinc-600">
+            <span>
+              quartiles {formatCompact(tokenThresholds[0])} / {formatCompact(tokenThresholds[1])} /{" "}
+              {formatCompact(tokenThresholds[2])} tokens
+            </span>
+            <span class="flex items-center gap-1.5">
+              Less
               {[0, 1, 2, 3, 4].map((level) => (
                 <span
-                  class:list={["size-[0.5625rem] shrink-0", intensityClasses[level]]}
+                  class:list={["size-[0.875rem] shrink-0", intensityClasses[level]]}
                   aria-hidden="true"
                 />
               ))}
-              <span>More</span>
-            </div>
+              More
+            </span>
           </div>
         </div>
       </section>
@@ -509,57 +476,131 @@ const pageDescription =
         id="daily-usage-tooltip"
         role="tooltip"
         class="pointer-events-none fixed z-50 hidden whitespace-nowrap border border-[#3f3f46] bg-[#18181b] px-2 py-1 font-mono text-[10px] text-zinc-200 shadow-lg"
-      ></div>
+      >
+      </div>
 
-      <!-- Model mix -->
-      <section class="mb-8">
-        <div class="mb-3 flex items-center justify-between gap-3">
-          <h2 class="text-sm font-medium text-zinc-200">Model mix</h2>
-          <span class="font-mono text-xs text-zinc-600">{models.length} models</span>
+      <!-- Models -->
+      <section class="mb-10">
+        <div class="mb-3 flex flex-wrap items-baseline justify-between gap-x-3">
+          <h2 class="text-sm font-medium text-zinc-200">Models</h2>
+          <span class="font-mono text-xs text-zinc-600">
+            {models.length} total · by spend
+          </span>
         </div>
-        <div class="overflow-x-auto border border-[#27272a] bg-[#0c0c0d]">
-          <table class="w-full min-w-[32rem] border-collapse text-left">
+
+        <div class="border border-[#27272a] bg-[#0c0c0d]">
+          <table class="w-full table-fixed border-collapse text-left">
             <thead>
-              <tr class="border-b border-[#27272a] font-mono text-xs uppercase tracking-wide text-zinc-600">
-                <th scope="col" class="p-2.5 font-normal">Model</th>
-                <th scope="col" class="p-2.5 text-right font-normal">Tokens</th>
-                <th scope="col" class="p-2.5 text-right font-normal">Cost</th>
-                <th scope="col" class="p-2.5 text-right font-normal">Share</th>
+              <tr class="border-b border-[#27272a] font-mono text-[10px] uppercase tracking-wide text-zinc-600">
+                <th scope="col" class="w-[34%] p-2.5 font-normal">Model</th>
+                <th
+                  scope="col"
+                  class="w-[18%] p-2.5 text-right font-normal"
+                  title="Tokens processed, and share of all tokens"
+                >
+                  Tokens
+                </th>
+                <th
+                  scope="col"
+                  class="w-[20%] p-2.5 text-right font-normal"
+                  title="Estimated cost, and share of total spend"
+                >
+                  Cost
+                </th>
+                <th
+                  scope="col"
+                  class="w-[16%] p-2.5 text-right font-normal"
+                  title="Blended cost per million tokens"
+                >
+                  Rate
+                </th>
+                <th scope="col" class="w-[12%] p-2.5 text-right font-normal">Days</th>
               </tr>
             </thead>
             <tbody>
               {
-                models.map((model) => (
-                  <tr class="border-b border-[#27272a] last:border-b-0">
-                    <th
-                      scope="row"
-                      class="max-w-[14rem] truncate p-2.5 text-left text-xs font-normal text-zinc-300"
-                      title={model.modelName}
-                    >
-                      {model.modelName}
+                modelRows.map((model) => (
+                  <tr class="border-b border-[#27272a] transition-colors last:border-b-0 hover:bg-[#111113]">
+                    <th scope="row" class="p-2.5 text-left font-normal" title={model.modelName}>
+                      <span class="block truncate text-xs text-zinc-300">
+                        {model.modelName}
+                      </span>
+                      <span class="mt-1.5 block h-1 bg-[#18181b]">
+                        <span
+                          class="block h-full bg-[#eab308]"
+                          style={`width:${model.costBar}%`}
+                        />
+                      </span>
                     </th>
-                    <td
-                      class="whitespace-nowrap p-2.5 text-right font-mono text-xs text-zinc-400"
-                      title={`${formatNumber(model.totalTokens)} tokens`}
-                    >
-                      {formatNumber(model.totalTokens)}
-                    </td>
                     <td class="whitespace-nowrap p-2.5 text-right font-mono text-xs text-zinc-400">
-                      {formatCost(model.cost)}
+                      {model.displayTokens}
+                      <span class="mt-0.5 block text-[10px] text-zinc-600">
+                        {model.tokenShareLabel}
+                      </span>
                     </td>
-                    <td class="whitespace-nowrap p-2.5 text-right font-mono text-xs text-zinc-400">
-                      {formatPercent(model.totalTokens, modelTokenTotal)}
+                    <td class="whitespace-nowrap p-2.5 text-right font-mono text-xs text-zinc-300">
+                      {model.displayCost}
+                      <span class="mt-0.5 block text-[10px] text-zinc-600">
+                        {model.costShareLabel}
+                      </span>
+                    </td>
+                    <td class="whitespace-nowrap p-2.5 text-right font-mono text-xs text-zinc-500">
+                      {model.rate}
+                    </td>
+                    <td class="whitespace-nowrap p-2.5 text-right font-mono text-xs text-zinc-600">
+                      {model.activeDays}
                     </td>
                   </tr>
                 ))
               }
             </tbody>
           </table>
+
+          {
+            freeModelRows.length > 0 && (
+              <details class="border-t border-[#27272a]">
+                <summary class="cursor-pointer p-2.5 font-mono text-[11px] text-zinc-500 transition-colors hover:text-zinc-300">
+                  + {freeModelRows.length} free-tier models · {formatCompact(freeTokens)} tokens ·
+                  $0.00
+                </summary>
+                <table class="w-full table-fixed border-collapse text-left">
+                  <tbody>
+                    {freeModelRows.map((model) => (
+                      <tr class="border-t border-[#27272a]">
+                        <th
+                          scope="row"
+                          class="w-[42%] p-2.5 text-left text-xs font-normal text-zinc-500"
+                          title={model.modelName}
+                        >
+                          <span class="block truncate">{model.modelName}</span>
+                        </th>
+                        <td class="w-[16%] whitespace-nowrap p-2.5 text-right font-mono text-xs text-zinc-600">
+                          {model.displayTokens}
+                        </td>
+                        <td class="w-[18%] p-2.5 text-right font-mono text-xs text-[#4ade80]">
+                          free
+                        </td>
+                        <td class="w-[16%] p-2.5 text-right font-mono text-xs text-zinc-700">
+                          —
+                        </td>
+                        <td class="w-[8%] p-2.5 text-right font-mono text-xs text-zinc-700">
+                          {model.activeDays}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </details>
+            )
+          }
         </div>
       </section>
 
-      <p class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-xs text-zinc-600">
-        Data source: ccusage · through {latestDay ? formatDay(latestDay.period, true) : "—"}
+      <p class="mb-8 border-t border-[#27272a] pt-3 text-right font-mono text-[11px] leading-relaxed text-zinc-600">
+        Data source: ccusage · through {latestDay ? formatDay(latestDay.period, true) : "—"} ·{" "}
+        <span class={isStale ? "text-[#ca8a04]" : "text-zinc-500"}>{freshnessCopy}</span>
+        <br />
+        Refresh with <span class="text-zinc-500">bun run data:usage</span>
       </p>
     </div>
   </Container>
@@ -606,9 +647,13 @@ const pageDescription =
         cell.addEventListener("blur", hideTooltip);
       });
 
-      window.addEventListener("scroll", () => {
-        if (activeCell) showTooltip(activeCell);
-      }, { passive: true });
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (activeCell) showTooltip(activeCell);
+        },
+        { passive: true },
+      );
       window.addEventListener("resize", () => {
         if (activeCell) showTooltip(activeCell);
       });

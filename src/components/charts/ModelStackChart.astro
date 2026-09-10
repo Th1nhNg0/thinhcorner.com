@@ -1,0 +1,122 @@
+---
+/**
+ * Daily spend stacked by model.
+ *
+ * Height is estimated cost, not tokens: a stacked bar's segments must sum to the
+ * bar height, which rules out a log scale, and token volume is far too spiky for
+ * a linear one (41 of 71 days would render under 2px because cache reads
+ * dominate). Cost spans a ~7x range instead of ~13,000x, so a linear scale reads
+ * properly here while staying honest about the stacking.
+ *
+ * Segments inside each column use flex-grow proportional to cost rather than
+ * percentage heights, so they always fill the column exactly with no rounding
+ * gaps. The stack order is fixed globally (largest spender at the bottom), so a
+ * given model sits at the same position in every column.
+ */
+import type { StackDay, StackSeries } from "@/lib/ccusage";
+
+type Props = {
+  series: StackSeries[];
+  days: StackDay[];
+  maxDayCost: number;
+  formatCost: (value: number) => string;
+  formatCompact: (value: number) => string;
+  formatDay: (period: string, includeYear?: boolean) => string;
+};
+
+const { series, days, maxDayCost, formatCost, formatCompact, formatDay } = Astro.props;
+
+const TRACK_HEIGHT = 112;
+/** Readability floor so the cheapest days remain a visible hairline. */
+const MIN_COLUMN_PX = 1.5;
+
+const columnPercent = (totalCost: number) => {
+  if (totalCost <= 0 || maxDayCost <= 0) return 0;
+  const px = Math.max(MIN_COLUMN_PX, (totalCost / maxDayCost) * TRACK_HEIGHT);
+  return (px / TRACK_HEIGHT) * 100;
+};
+
+// Segments are resolved in frontmatter so the template only needs expression-form
+// maps. Astro's compiler rejects a multi-line `return (` of JSX nested inside a
+// map callback.
+const columns = days.map((day) => ({
+  period: day.period,
+  percent: columnPercent(day.totalCost),
+  segments: series
+    .map((entry, index) => {
+      const cost = day.costs[index] ?? 0;
+      const tokens = day.tokens[index] ?? 0;
+      return {
+        color: entry.color,
+        modelName: entry.modelName,
+        cost,
+        tokens,
+        dayShare: day.totalCost > 0 ? (cost / day.totalCost) * 100 : 0,
+      };
+    })
+    .filter((segment) => segment.cost > 0),
+}));
+
+const monthGroups: Array<{ key: string; label: string; days: number }> = [];
+for (const day of days) {
+  const key = day.period.slice(0, 7);
+  const current = monthGroups[monthGroups.length - 1];
+  if (current && current.key === key) {
+    current.days += 1;
+  } else {
+    monthGroups.push({
+      key,
+      label: new Date(`${day.period}T00:00:00Z`).toLocaleDateString("en-US", {
+        month: "short",
+        timeZone: "UTC",
+      }),
+      days: 1,
+    });
+  }
+}
+---
+
+<div>
+  <div class="flex items-baseline justify-between font-mono text-[10px] text-zinc-600">
+    <span>stacked by model</span>
+    <span>peak {formatCost(maxDayCost)}/day</span>
+  </div>
+
+  <div
+    class="mt-2 flex items-end gap-px"
+    style={`height:${TRACK_HEIGHT}px`}
+    role="img"
+    aria-label="Daily estimated cost, stacked by model"
+  >
+    {
+      columns.map((column) => (
+        <div
+          class="flex flex-1 flex-col-reverse"
+          style={`height:${column.percent}%`}
+        >
+          {column.segments.map((segment) => (
+            <div
+              class="w-full transition-[filter] hover:brightness-150 focus-visible:outline focus-visible:outline-1 focus-visible:outline-zinc-100"
+              style={`flex:${segment.cost} 1 0%;background:${segment.color}`}
+              tabindex="0"
+              role="img"
+              aria-label={`${formatDay(column.period, true)}, ${segment.modelName}: ${formatCost(segment.cost)}`}
+              data-daily-tooltip={`${formatDay(column.period, true)} · ${segment.modelName} · ${formatCost(segment.cost)} · ${segment.dayShare.toFixed(0)}% of day · ${formatCompact(segment.tokens)} tokens`}
+            />
+          ))}
+        </div>
+      ))
+    }
+  </div>
+
+  <!-- Month axis: flex-grow proportional to each month's active-day count -->
+  <div class="mt-1.5 flex font-mono text-[10px] text-zinc-600">
+    {
+      monthGroups.map((group) => (
+        <div class="relative min-w-0" style={`flex:${group.days} 1 0%`}>
+          <span class="absolute left-0 top-0 whitespace-nowrap">{group.label}</span>
+        </div>
+      ))
+    }
+  </div>
+</div>
