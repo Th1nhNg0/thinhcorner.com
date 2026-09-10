@@ -1,60 +1,78 @@
 ---
 /**
- * Daily spend stacked by model.
+ * Daily value stacked by model. Serves both metrics, which need opposite scales.
  *
- * Height is estimated cost, not tokens: a stacked bar's segments must sum to the
- * bar height, which rules out a log scale, and token volume is far too spiky for
- * a linear one (41 of 71 days would render under 2px because cache reads
- * dominate). Cost spans a ~7x range instead of ~13,000x, so a linear scale reads
- * properly here while staying honest about the stacking.
+ * Stacked segments must sum to the bar height, which rules out a log scale. The
+ * two metrics pull in opposite directions:
  *
- * Segments inside each column use flex-grow proportional to cost rather than
- * percentage heights, so they always fill the column exactly with no rounding
- * gaps. The stack order is fixed globally (largest spender at the bottom), so a
- * given model sits at the same position in every column.
+ *   cost   — spans ~7x (median day $19.80 against a $140 peak), so a linear
+ *            scale reads properly and the stacking stays strictly honest.
+ *   tokens — spans ~13,000x because cache reads dominate. Linear leaves 41 of 71
+ *            days under 2px (median 1.5px), so tokens use a log scale: the median
+ *            day then renders at ~71px. The trade-off is that segment heights
+ *            encode each model's share of that day rather than an absolute amount,
+ *            so the caption states the scale and tooltips carry exact figures.
+ *
+ * Columns are flex children, so the series always fits its container without the
+ * fixed-width overflow an SVG would introduce. Segments grow proportionally, so
+ * they fill each column exactly with no rounding gaps.
  */
-import type { StackDay, StackSeries } from "@/lib/ccusage";
+import type { StackDay, StackMetric, StackSeries } from "@/lib/ccusage";
 
 type Props = {
+  metric: StackMetric;
   series: StackSeries[];
   days: StackDay[];
-  maxDayCost: number;
+  maxDayValue: number;
+  /** Caption for the scale, shown beside the chart. */
   formatCost: (value: number) => string;
   formatCompact: (value: number) => string;
   formatDay: (period: string, includeYear?: boolean) => string;
 };
 
-const { series, days, maxDayCost, formatCost, formatCompact, formatDay } = Astro.props;
+const { metric, series, days, maxDayValue, formatCost, formatCompact, formatDay } =
+  Astro.props;
 
 const TRACK_HEIGHT = 112;
-/** Readability floor so the cheapest days remain a visible hairline. */
 const MIN_COLUMN_PX = 1.5;
+const isCost = metric === "cost";
 
-const columnPercent = (totalCost: number) => {
-  if (totalCost <= 0 || maxDayCost <= 0) return 0;
-  const px = Math.max(MIN_COLUMN_PX, (totalCost / maxDayCost) * TRACK_HEIGHT);
+const formatValue = (value: number) => (isCost ? formatCost(value) : formatCompact(value));
+
+// Log floor sits a decade below the smallest active day, so the quietest day is
+// still a readable 20px rather than a hairline.
+const positives = days.map((day) => day.total).filter((value) => value > 0);
+const logFloor = Math.log10(Math.max(1, (positives.length ? Math.min(...positives) : 1) / 10));
+const logMax = Math.log10(Math.max(maxDayValue, 2));
+const logSpan = Math.max(1e-6, logMax - logFloor);
+
+const columnPercent = (total: number) => {
+  if (total <= 0 || maxDayValue <= 0) return 0;
+  const ratio = isCost
+    ? total / maxDayValue
+    : (Math.log10(total) - logFloor) / logSpan;
+  const px = Math.max(MIN_COLUMN_PX, Math.min(1, ratio) * TRACK_HEIGHT);
   return (px / TRACK_HEIGHT) * 100;
 };
 
-// Segments are resolved in frontmatter so the template only needs expression-form
-// maps. Astro's compiler rejects a multi-line `return (` of JSX nested inside a
-// map callback.
+// Resolved in frontmatter: Astro's compiler rejects a multi-line `return (` of
+// JSX nested inside a map callback.
 const columns = days.map((day) => ({
   period: day.period,
-  percent: columnPercent(day.totalCost),
+  percent: columnPercent(day.total),
   segments: series
     .map((entry, index) => {
-      const cost = day.costs[index] ?? 0;
-      const tokens = day.tokens[index] ?? 0;
+      const value = day.values[index] ?? 0;
       return {
         color: entry.color,
         modelName: entry.modelName,
-        cost,
-        tokens,
-        dayShare: day.totalCost > 0 ? (cost / day.totalCost) * 100 : 0,
+        value,
+        cost: day.costs[index] ?? 0,
+        tokens: day.tokens[index] ?? 0,
+        dayShare: day.total > 0 ? (value / day.total) * 100 : 0,
       };
     })
-    .filter((segment) => segment.cost > 0),
+    .filter((segment) => segment.value > 0),
 }));
 
 const monthGroups: Array<{ key: string; label: string; days: number }> = [];
@@ -78,30 +96,27 @@ for (const day of days) {
 
 <div>
   <div class="flex items-baseline justify-between font-mono text-[10px] text-zinc-600">
-    <span>stacked by model</span>
-    <span>peak {formatCost(maxDayCost)}/day</span>
+    <span>stacked by model · {isCost ? "linear scale" : "log scale"}</span>
+    <span>peak {formatValue(maxDayValue)}/day</span>
   </div>
 
   <div
     class="mt-2 flex items-end gap-px"
     style={`height:${TRACK_HEIGHT}px`}
     role="img"
-    aria-label="Daily estimated cost, stacked by model"
+    aria-label={`Daily ${isCost ? "estimated cost" : "token volume"}, stacked by model`}
   >
     {
       columns.map((column) => (
-        <div
-          class="flex flex-1 flex-col-reverse"
-          style={`height:${column.percent}%`}
-        >
+        <div class="flex flex-1 flex-col-reverse" style={`height:${column.percent}%`}>
           {column.segments.map((segment) => (
             <div
               class="w-full transition-[filter] hover:brightness-150 focus-visible:outline focus-visible:outline-1 focus-visible:outline-zinc-100"
-              style={`flex:${segment.cost} 1 0%;background:${segment.color}`}
+              style={`flex:${segment.value} 1 0%;background:${segment.color}`}
               tabindex="0"
               role="img"
-              aria-label={`${formatDay(column.period, true)}, ${segment.modelName}: ${formatCost(segment.cost)}`}
-              data-daily-tooltip={`${formatDay(column.period, true)} · ${segment.modelName} · ${formatCost(segment.cost)} · ${segment.dayShare.toFixed(0)}% of day · ${formatCompact(segment.tokens)} tokens`}
+              aria-label={`${formatDay(column.period, true)}, ${segment.modelName}: ${formatValue(segment.value)}`}
+              data-daily-tooltip={`${formatDay(column.period, true)} · ${segment.modelName} · ${formatValue(segment.value)} · ${segment.dayShare.toFixed(0)}% of day · ${isCost ? `${formatCompact(segment.tokens)} tokens` : `${formatCost(segment.cost)}`}`}
             />
           ))}
         </div>
@@ -119,4 +134,24 @@ for (const day of days) {
       ))
     }
   </div>
+
+  <ul class="mt-4 grid grid-cols-1 gap-x-5 gap-y-1.5 border-t border-[#27272a] pt-3 font-mono text-[11px] sm:grid-cols-2">
+    {
+      series.map((entry) => (
+        <li class="flex items-baseline gap-2">
+          <span
+            class="size-2 shrink-0 translate-y-px"
+            style={`background:${entry.color}`}
+            aria-hidden="true"
+          />
+          <span class="min-w-0 flex-1 truncate text-zinc-400" title={entry.modelName}>
+            {entry.modelName}
+          </span>
+          <span class="shrink-0 text-zinc-500">
+            {formatValue(entry.value)} · {(entry.share * 100).toFixed(1)}%
+          </span>
+        </li>
+      ))
+    }
+  </ul>
 </div>

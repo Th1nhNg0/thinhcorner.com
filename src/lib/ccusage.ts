@@ -438,45 +438,64 @@ export const MODEL_STACK_COLORS = [
 /** Neutral colour for the grouped remainder of low-volume models. */
 export const MODEL_OTHER_COLOR = "#3f3f46";
 
+export type StackMetric = "cost" | "tokens";
+
 export type StackSeries = {
   modelName: string;
   color: string;
   cost: number;
   totalTokens: number;
+  /** Total for the active metric — what the stack height and legend report. */
+  value: number;
   /** Days this model recorded usage on. */
   activeDays: number;
-  costShare: number;
+  /** Share of the active metric's total, 0–1. */
+  share: number;
 };
 
 export type StackDay = {
   period: string;
   totalCost: number;
   totalTokens: number;
+  /** Per-series value for the active metric, aligned index-for-index. */
+  values: number[];
   /** Per-series cost, aligned index-for-index with `series`. */
   costs: number[];
   /** Per-series tokens, aligned index-for-index with `series`. */
   tokens: number[];
+  /** Day total for the active metric. */
+  total: number;
 };
 
 export type DailyStack = {
+  metric: StackMetric;
   series: StackSeries[];
   days: StackDay[];
-  /** Largest single-day cost, i.e. the full height of the chart. */
-  maxDayCost: number;
+  /** Largest single-day value for the active metric: the full chart height. */
+  maxDayValue: number;
 };
 
 /**
- * Builds a per-day, per-model cost breakdown for a stacked chart.
+ * Builds a per-day, per-model breakdown for a stacked chart.
  *
  * Only active days are included, so the x-axis is a sequence of working days
  * rather than true calendar time — the calendar heatmap covers gaps separately.
  *
- * Stacked bars must sum to the bar height, which rules out a log scale. Cost is
- * the metric that survives that constraint: on a linear scale the median day
- * renders at ~16px of a 112px track, where a token-based stack would leave 41
- * of 71 days under 2px because cache traffic makes token volume far spikier.
+ * The metric matters because a stacked bar's segments must sum to the bar
+ * height, which rules out a log scale on cost. The two metrics need opposing
+ * treatments:
+ *
+ *   cost   — spans ~7x (median day $19.80 against a $140 peak), so a linear
+ *            scale reads properly and stacking stays strictly honest.
+ *   tokens — spans ~13,000x because cache reads dominate, so linear renders 41
+ *            of 71 days under 2px (median day 1.5px). Tokens therefore use a log
+ *            scale, which is honest about the total height but means segment
+ *            heights encode share-of-day rather than absolute magnitude.
  */
-export function buildDailyStack(report: UsageReport, topN = 6): DailyStack {
+export function buildDailyStack(
+  report: UsageReport,
+  { topN = 6, metric = "cost" }: { topN?: number; metric?: StackMetric } = {},
+): DailyStack {
   const totalsByModel = new Map<
     string,
     { cost: number; totalTokens: number; days: Set<string> }
@@ -496,43 +515,55 @@ export function buildDailyStack(report: UsageReport, topN = 6): DailyStack {
     }
   }
 
+  const valueOf = (entry: { cost: number; totalTokens: number }) =>
+    metric === "cost" ? entry.cost : entry.totalTokens;
+
   const ranked = [...totalsByModel.entries()]
     .map(([modelName, acc]) => ({ modelName, ...acc }))
-    .filter((entry) => entry.cost > 0)
-    .sort((a, b) => b.cost - a.cost);
+    .filter((entry) => valueOf(entry) > 0)
+    .sort((a, b) => valueOf(b) - valueOf(a));
 
   const named = ranked.slice(0, topN);
   const seriesKeys = [...named.map((entry) => entry.modelName), "Other"];
 
-  const totalCost = ranked.reduce((sum, entry) => sum + entry.cost, 0);
-  const series: StackSeries[] = [...named, undefined].map((entry, index) => {
-    const isOther = index >= named.length;
-    const otherAcc = isOther
-      ? ranked
-          .slice(topN)
-          .reduce(
-            (acc, item) => ({
-              cost: acc.cost + item.cost,
-              totalTokens: acc.totalTokens + item.totalTokens,
-              days: acc.days + item.days.size,
-            }),
-            { cost: 0, totalTokens: 0, days: 0 },
-          )
-      : null;
+  const namedValue = named.reduce((sum, entry) => sum + valueOf(entry), 0);
+  const otherValue = ranked
+    .slice(topN)
+    .reduce((sum, entry) => sum + valueOf(entry), 0);
+  const totalValue = namedValue + otherValue;
 
-    return {
-      modelName: isOther ? "Other" : (entry?.modelName ?? ""),
-      color: isOther
-        ? MODEL_OTHER_COLOR
-        : (MODEL_STACK_COLORS[index] ?? MODEL_OTHER_COLOR),
-      cost: otherAcc ? otherAcc.cost : (entry?.cost ?? 0),
-      totalTokens: otherAcc ? otherAcc.totalTokens : (entry?.totalTokens ?? 0),
-      activeDays: otherAcc ? otherAcc.days : (entry?.days.size ?? 0),
-      costShare: totalCost > 0 ? (otherAcc ? otherAcc.cost : (entry?.cost ?? 0)) / totalCost : 0,
-    };
-  });
+  const otherAcc = ranked.slice(topN).reduce(
+    (acc, item) => ({
+      cost: acc.cost + item.cost,
+      totalTokens: acc.totalTokens + item.totalTokens,
+      activeDays: acc.activeDays + item.days.size,
+    }),
+    { cost: 0, totalTokens: 0, activeDays: 0 },
+  );
+
+  const series: StackSeries[] = [
+    ...named.map((entry, index) => ({
+      modelName: entry.modelName,
+      color: MODEL_STACK_COLORS[index] ?? MODEL_OTHER_COLOR,
+      cost: entry.cost,
+      totalTokens: entry.totalTokens,
+      value: valueOf(entry),
+      activeDays: entry.days.size,
+      share: totalValue > 0 ? valueOf(entry) / totalValue : 0,
+    })),
+    {
+      modelName: "Other",
+      color: MODEL_OTHER_COLOR,
+      cost: otherAcc.cost,
+      totalTokens: otherAcc.totalTokens,
+      value: otherValue,
+      activeDays: otherAcc.activeDays,
+      share: totalValue > 0 ? otherValue / totalValue : 0,
+    },
+  ];
 
   const days: StackDay[] = report.days.map((day) => {
+    const values = new Array<number>(series.length).fill(0);
     const costs = new Array<number>(series.length).fill(0);
     const tokens = new Array<number>(series.length).fill(0);
 
@@ -542,19 +573,25 @@ export function buildDailyStack(report: UsageReport, topN = 6): DailyStack {
       costs[target] = (costs[target] ?? 0) + model.cost;
       tokens[target] = (tokens[target] ?? 0) + model.totalTokens;
     }
+    for (let i = 0; i < series.length; i += 1) {
+      values[i] = metric === "cost" ? (costs[i] ?? 0) : (tokens[i] ?? 0);
+    }
 
     return {
       period: day.period,
       totalCost: day.totalCost,
       totalTokens: day.totalTokens,
+      values,
       costs,
       tokens,
+      total: metric === "cost" ? day.totalCost : day.totalTokens,
     };
   });
 
   return {
+    metric,
     series,
     days,
-    maxDayCost: Math.max(...days.map((day) => day.totalCost), 0),
+    maxDayValue: Math.max(...days.map((day) => day.total), 0),
   };
 }
