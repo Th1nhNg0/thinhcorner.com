@@ -8,14 +8,20 @@
 #   curl -fsSL .../sync-ccusage.sh | sh -s -- --install-cron --at 08:30
 #   curl -fsSL .../sync-ccusage.sh | sh -s -- --status
 #   curl -fsSL .../sync-ccusage.sh | sh -s -- --uninstall-cron
+#   curl -fsSL .../sync-ccusage.sh | sh -s -- --yes        # skip the menu, sync now
 #
 # What it does
-#   1. shallow-clones the repo into a temp dir (nothing is left behind)
+#   1. sparse-clones only what it needs (data/ccusage.json + scripts/) into a temp
+#      dir - the blog posts and images are never downloaded (nothing left behind)
 #   2. runs `bun scripts/update-ccusage.ts`, which reads ccusage for every agent
 #      home on this machine, merges it into data/ccusage.json, commits, pushes
 #   3. Cloudflare Workers rebuilds the site from the pushed commit
 #
 # Options
+#   (no arguments + a terminal)  interactive menu:
+#       0) sync now          2) turn auto-sync on/off
+#       1) dry run           3) exit
+#   --yes               skip the menu and sync now (for scripts)
 #   --dry-run           compute + write data in the temp clone, never commit/push
 #   --install-cron      install a daily scheduler for this machine, then sync once
 #   --no-sync           with --install-cron: install the schedule only
@@ -23,6 +29,7 @@
 #   --at HH:MM          schedule time, 24h, default 23:55 (also THINHCORNER_AT)
 #   --status            show config, cached copy, schedule and recent log
 #   --help              this text
+#   THINHCORNER_MENU_INPUT=<file>   force the menu, read answers from <file>
 #   anything else       passed through to scripts/update-ccusage.ts
 #                       (e.g. --no-commit, --since 2026-01-01)
 #
@@ -64,10 +71,12 @@ install_cron=0
 uninstall_cron=0
 do_sync=1
 show_status=0
+yes_flag=0
 extra_args=""
 
 usage() {
-  sed -n '2,40p' "$0" 2>/dev/null | sed 's/^# \{0,1\}//' || printf 'see the script header for usage\n'
+  awk 'NR == 1 { next } /^#/ { sub(/^# ?/, ""); print; next } { exit }' "$0" 2>/dev/null ||
+    printf 'see the script header for usage\n'
 }
 
 while [ $# -gt 0 ]; do
@@ -100,6 +109,9 @@ while [ $# -gt 0 ]; do
       show_status=1
       do_sync=0
       ;;
+    --yes | -y | --non-interactive)
+      yes_flag=1
+      ;;
     --help | -h)
       usage
       exit 0
@@ -110,6 +122,23 @@ while [ $# -gt 0 ]; do
   esac
   shift
 done
+
+# --- interactive or scripted ------------------------------------------------
+# Explicit flags mean the caller knows what it wants; only a bare invocation
+# with a terminal gets the menu. Scheduled runs have no tty, so they sync.
+explicit=1
+if [ "$dry_run" = 0 ] && [ "$install_cron" = 0 ] && [ "$uninstall_cron" = 0 ] &&
+  [ "$show_status" = 0 ] && [ "$do_sync" = 1 ] && [ "$yes_flag" = 0 ] &&
+  [ -z "$extra_args" ]; then
+  explicit=0
+fi
+
+menu_input=""
+if [ -n "${THINHCORNER_MENU_INPUT:-}" ]; then
+  menu_input="$THINHCORNER_MENU_INPUT"
+elif [ "$explicit" = 0 ] && [ -t 1 ] && [ -r /dev/tty ]; then
+  menu_input=/dev/tty
+fi
 
 # --- normalise paths (MSYS/Cygwin may hand us C:\... style paths) ----------
 if command -v cygpath >/dev/null 2>&1; then
@@ -130,6 +159,8 @@ data_home="${XDG_DATA_HOME:-$HOME/.local/share}/thinhcorner"
 state_home="${XDG_STATE_HOME:-$HOME/.local/state}/thinhcorner"
 cache_path="$data_home/sync-ccusage.sh"
 log_path="$state_home/sync.log"
+schedule_at_file="$state_home/schedule_at"
+plist="$HOME/Library/LaunchAgents/com.thinhcorner.ccusage-sync.plist"
 
 # --- config file -----------------------------------------------------------
 [ -f "$config_path" ] && . "$config_path"
@@ -164,6 +195,25 @@ schtasks_run() {
 }
 
 # --- schedule helpers ------------------------------------------------------
+schedule_installed() {
+  case "$platform" in
+    linux)
+      command -v crontab >/dev/null 2>&1 &&
+        crontab -l 2>/dev/null | grep -q -e "$MARKER" -e "$cache_path"
+      ;;
+    macos) [ -f "$plist" ] ;;
+    windows) schtasks_run /Query /TN "$TASK_NAME" >/dev/null 2>&1 ;;
+    *) return 1 ;;
+  esac
+}
+
+scheduled_at() {
+  if [ -f "$schedule_at_file" ]; then
+    sed -n '1p' "$schedule_at_file"
+  else
+    printf '%s' "$DEFAULT_AT"
+  fi
+}
 # HH:MM -> printable + cron fields, rejecting junk before it reaches cron.
 validate_at() {
   case "$at" in
@@ -204,6 +254,7 @@ install_schedule() {
   validate_at
   cache_script
   mkdir -p "$state_home"
+  printf '%s\n' "$at_pretty" >"$schedule_at_file"
   if [ -z "$token" ]; then
     warn "scheduled runs are headless: if git has no stored credentials on this machine,"
     warn "pushes will fail. Put GH_TOKEN=... in $config_path to make them work."
@@ -226,7 +277,6 @@ install_schedule() {
       fi
       ;;
     macos)
-      plist="$HOME/Library/LaunchAgents/com.thinhcorner.ccusage-sync.plist"
       mkdir -p "$HOME/Library/LaunchAgents"
       cat >"$plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -308,7 +358,6 @@ uninstall_schedule() {
       say "removed cron entry"
       ;;
     macos)
-      plist="$HOME/Library/LaunchAgents/com.thinhcorner.ccusage-sync.plist"
       launchctl unload -w "$plist" >/dev/null 2>&1 || true
       rm -f "$plist"
       say "removed launchd agent"
@@ -318,7 +367,7 @@ uninstall_schedule() {
       say "removed Task Scheduler job '$TASK_NAME'"
       ;;
   esac
-  rm -f "$cache_path" "$state_home/run.sh" "$state_home/run.cmd" 2>/dev/null || true
+  rm -f "$cache_path" "$schedule_at_file" "$state_home/run.sh" "$state_home/run.cmd" 2>/dev/null || true
 }
 
 print_status() {
@@ -326,22 +375,11 @@ print_status() {
   printf 'config file   : %s%s\n' "$config_path" "$([ -f "$config_path" ] && printf ' (found)' || printf ' (absent)')"
   printf 'cached script : %s%s\n' "$cache_path" "$([ -f "$cache_path" ] && printf ' (present)' || printf ' (absent)')"
   printf 'log file      : %s\n' "$log_path"
-  case "$platform" in
-    linux)
-      printf 'schedule      : '
-      if command -v crontab >/dev/null 2>&1 && crontab -l 2>/dev/null | grep -q -e "$MARKER" -e "$cache_path"; then
-        crontab -l 2>/dev/null | grep -e "$MARKER" -e "$cache_path" | sed 's/^/                /'
-      else
-        printf 'none (--install-cron to add one)\n'
-      fi
-      ;;
-    macos)
-      printf 'schedule      : %s\n' "$([ -f "$HOME/Library/LaunchAgents/com.thinhcorner.ccusage-sync.plist" ] && printf 'launchd agent installed' || printf 'none')"
-      ;;
-    windows)
-      printf 'schedule      : %s\n' "$(schtasks_run /Query /TN "$TASK_NAME" >/dev/null 2>&1 && printf 'Task Scheduler job installed' || printf 'none')"
-      ;;
-  esac
+  if schedule_installed; then
+    printf 'schedule      : on (daily %s)\n' "$(scheduled_at)"
+  else
+    printf 'schedule      : off (menu option 2, or --install-cron)\n'
+  fi
   if [ -f "$log_path" ]; then
     printf -- '--- last log lines ---\n'
     tail -n 15 "$log_path" 2>/dev/null || true
@@ -368,11 +406,54 @@ resolve_bun() {
   return 1
 }
 
-run_sync() {
+check_prereqs() {
   command -v git >/dev/null 2>&1 || die "git is required"
   bun_bin=$(resolve_bun) || die "bun is not installed. Install it with:
   curl -fsSL https://bun.sh/install | bash
 then re-run this script."
+}
+
+# Only the files the sync touches are downloaded: a blobless partial clone plus a
+# sparse checkout. Blog posts, images and pages never leave the server. Pushing
+# still works because every other path is unchanged, so the remote already has it.
+lean_clone() {
+  git clone --quiet --depth 1 --branch "$BRANCH" --filter=blob:none --no-checkout \
+    "$repo_url" "$tmp_dir/repo" >/dev/null 2>&1 || return 1
+  cd "$tmp_dir/repo" || return 1
+  if ! git sparse-checkout set --no-cone data/ccusage.json scripts/update-ccusage.ts package.json >/dev/null 2>&1; then
+    cd "$tmp_dir"
+    rm -rf "$tmp_dir/repo"
+    return 1
+  fi
+  # Older git may need an explicit checkout after configuring the sparse paths.
+  git checkout --quiet >/dev/null 2>&1 || true
+  if [ -f data/ccusage.json ] && [ -f scripts/update-ccusage.ts ]; then
+    return 0
+  fi
+  cd "$tmp_dir"
+  rm -rf "$tmp_dir/repo"
+  return 1
+}
+
+clone_repo() {
+  if lean_clone; then
+    say "cloned ${REPO_SLUG}#${BRANCH} (sparse: data/ccusage.json + scripts/)"
+    return 0
+  fi
+  warn "sparse partial clone unavailable here; falling back to a full shallow clone"
+  cd "$tmp_dir"
+  rm -rf "$tmp_dir/repo"
+  git clone --quiet --depth 1 --branch "$BRANCH" "$repo_url" "$tmp_dir/repo"
+  cd "$tmp_dir/repo" || die "could not enter the temp clone"
+  say "cloned ${REPO_SLUG}#${BRANCH}"
+}
+
+run_sync() {
+  if [ "${1:-}" = "--dry-run" ]; then
+    dry_run=1
+    extra_args="$extra_args --dry-run"
+  fi
+  check_prereqs
 
   if [ -z "$source_id" ] && [ "$is_wsl" = 1 ]; then
     warn "CCUSAGE_SOURCE is unset in WSL, so the hostname '$(hostname)' will be used as the"
@@ -383,9 +464,7 @@ then re-run this script."
 
   tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/thinhcorner-sync.XXXXXX") || die "mktemp failed"
   trap 'rm -rf "$tmp_dir"' EXIT INT TERM
-  say "cloning ${REPO_SLUG}#${BRANCH} into a temp dir"
-  git clone --quiet --depth 1 --branch "$BRANCH" "$repo_url" "$tmp_dir/repo"
-  cd "$tmp_dir/repo"
+  clone_repo
 
   # A fresh clone has no identity; reuse whatever authored the last commit.
   git config user.name >/dev/null 2>&1 || git config user.name "$(git log -1 --format=%an)"
@@ -408,12 +487,12 @@ then re-run this script."
 
   if [ "$dry_run" = 1 ]; then
     say "dry run: nothing was committed or pushed"
-    exit 0
+    return 0
   fi
 
   if [ "$(git rev-parse HEAD)" = "$head_before" ]; then
     say "no data changes on this machine; nothing to push"
-    exit 0
+    return 0
   fi
 
   attempt=1
@@ -436,8 +515,68 @@ then re-run this script."
   fi
 }
 
+# --- menu -------------------------------------------------------------------
+menu() {
+  # Open the input once: a per-iteration redirect would re-read line 1 forever.
+  exec 3<"$menu_input" || return 1
+  while :; do
+    printf '\nthinhcorner token usage sync\n'
+    printf '  source id : %s\n' "${source_id:-$(hostname 2>/dev/null || printf unknown)}"
+    if schedule_installed; then
+      printf '  auto-sync : on (daily %s)\n' "$(scheduled_at)"
+    else
+      printf '  auto-sync : off\n'
+    fi
+    printf '\n  0) sync now\n'
+    printf '  1) dry run (collect + merge, no commit or push)\n'
+    if schedule_installed; then
+      printf '  2) turn off auto-sync\n'
+    else
+      printf '  2) turn on auto-sync (daily %s)\n' "$(scheduled_at)"
+    fi
+    printf '  3) exit\n\n'
+    printf 'choose [0-3]: '
+    if ! read answer <&3; then
+      printf '\n'
+      break
+    fi
+    case "$answer" in
+      0)
+        printf '\n'
+        ( run_sync ) || say "sync failed - see the message above"
+        ;;
+      1)
+        printf '\n'
+        ( run_sync --dry-run ) || say "dry run failed - see the message above"
+        ;;
+      2)
+        if schedule_installed; then
+          ( uninstall_schedule ) || say "could not remove the schedule"
+        else
+          ( install_schedule ) || say "could not install the schedule"
+        fi
+        ;;
+      3 | '' | q | Q | quit | exit)
+        break
+        ;;
+      *)
+        say "not an option: '$answer' (choose 0-3)"
+        ;;
+    esac
+  done
+  exec 3<&-
+}
+
 # --- main ------------------------------------------------------------------
 [ "$install_cron" = 0 ] || install_schedule
 [ "$uninstall_cron" = 0 ] || uninstall_schedule
 [ "$show_status" = 0 ] || print_status
-[ "$do_sync" = 0 ] || run_sync
+
+if [ "$do_sync" = 1 ]; then
+  if [ -n "$menu_input" ]; then
+    check_prereqs
+    menu
+  else
+    run_sync
+  fi
+fi
