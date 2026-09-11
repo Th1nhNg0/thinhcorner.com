@@ -110,6 +110,55 @@ bun run build
 bunx wrangler deploy
 ```
 
+## Token usage sync
+
+The `/data/token-usage` page renders `data/ccusage.json`, a compact snapshot of local
+[ccusage](https://github.com/ryoppippi/ccusage) data merged from every machine I use.
+Machines push their own slice with a one-liner — no manual clone:
+
+```bash
+# sync this machine's usage, commit and push
+curl -fsSL https://raw.githubusercontent.com/Th1nhNg0/thinhcorner.com/master/scripts/sync-ccusage.sh | sh
+
+# same script, served from the deployed site (public/sync.sh)
+curl -fsSL https://thinhcorner.com/sync.sh | sh
+
+# also install a daily scheduler (cron / launchd / Task Scheduler)
+curl -fsSL https://thinhcorner.com/sync.sh | sh -s -- --install-cron
+curl -fsSL https://thinhcorner.com/sync.sh | sh -s -- --install-cron --at 08:30
+curl -fsSL https://thinhcorner.com/sync.sh | sh -s -- --uninstall-cron
+
+# inspect the setup, or compute without committing
+curl -fsSL https://thinhcorner.com/sync.sh | sh -s -- --status
+curl -fsSL https://thinhcorner.com/sync.sh | sh -s -- --dry-run
+```
+
+The bootstrap shallow-clones this repo into a temp dir, runs
+`bun scripts/update-ccusage.ts` (same as `bun run data:usage`), commits, pushes;
+Cloudflare Workers then rebuilds the site. Nothing is left behind except the cached
+copy the scheduler runs, and `--help` lists the passthrough flags (`--no-commit`,
+`--no-push`, `ccusage` filters, …). `bun` and `git` are required, and git needs push
+credentials: a stored credential helper, or `GH_TOKEN` in the config file below.
+
+### Machine identity
+
+`data/ccusage.json` keys usage by source id, defaulting to the hostname, and the site
+sums sources per day. Keep the id stable per machine — two ids for one box double-count
+every overlapping day. To pin it (and give headless runs a token):
+
+```bash
+mkdir -p ~/.config/thinhcorner
+cat > ~/.config/thinhcorner/ccusage-sync.env <<'EOF'
+CCUSAGE_SOURCE=DESKTOP-3CH2JO3
+# GH_TOKEN=github_pat_...   # needed for cron/launchd/Task Scheduler runs
+# THINHCORNER_AT=23:55
+EOF
+```
+
+Scripts: [`scripts/sync-ccusage.sh`](scripts/sync-ccusage.sh) is the bootstrap and the
+scheduler payload; [`public/sync.sh`](public/sync.sh) is a thin `curl | sh` shim served
+at `/sync.sh` so the script has a single source of truth in the repo.
+
 ## License
 
 MIT
