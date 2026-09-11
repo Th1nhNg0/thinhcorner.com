@@ -133,7 +133,8 @@ curl -fsSL https://thinhcorner.com/sync.sh | sh -s -- --status
 curl -fsSL https://thinhcorner.com/sync.sh | sh -s -- --dry-run
 ```
 
-The bootstrap shallow-clones this repo into a temp dir, runs
+The bootstrap sparse-clones only what it needs into a temp dir — `data/ccusage.json`
+and `scripts/` — runs
 `bun scripts/update-ccusage.ts` (same as `bun run data:usage`), commits, pushes;
 Cloudflare Workers then rebuilds the site. Nothing is left behind except the cached
 copy the scheduler runs, and `--help` lists the passthrough flags (`--no-commit`,
