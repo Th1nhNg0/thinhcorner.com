@@ -43,7 +43,12 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
           <h1 class="page-title">Writing</h1>
           <p class="page-intro">Notes and essays on technology, research, and things I’m learning.</p>
         </div>
-        <a href="/rss.xml" class="mt-2 text-sm text-zinc-500 transition-colors hover:text-[#eab308]">RSS</a>
+        <div class="mt-2 flex gap-2 text-sm text-zinc-500">
+          <a href="/rss.xml" class="transition-colors hover:text-[#eab308]">RSS</a>
+          <span aria-hidden="true">·</span>
+          <a href="/rss/en.xml" hreflang="en" title="English posts only" class="transition-colors hover:text-[#eab308]">EN</a>
+          <a href="/rss/vi.xml" hreflang="vi" title="Vietnamese posts only" class="transition-colors hover:text-[#eab308]">VI</a>
+        </div>
       </div>
     </header>
 

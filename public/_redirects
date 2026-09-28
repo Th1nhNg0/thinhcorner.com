@@ -1,3 +1,5 @@
-/reading    /books            301
+/reading    /data/books       301
 /blog       /writing          301
 /blog/*     /writing/:splat   301
+/writing/metaverse-future.mdx    /writing/metaverse-future          301
+/writing/metaverse-future.mdx/*  /writing/metaverse-future/:splat   301
