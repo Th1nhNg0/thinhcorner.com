@@ -1,5 +1,7 @@
 import { withCache } from "./cache";
 import type { UsageSnapshot } from "./ccusage";
+// Frozen copy from master, used only if the data branch can't be fetched. It is
+// expected to lag behind; the live data is on the ccusage-data branch.
 import bundledSnapshot from "../../data/ccusage.json";
 
 // Machines push usage to this branch (scripts/sync-ccusage.sh), so syncing never

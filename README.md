@@ -2,15 +2,16 @@
 
 > My blog tone is curious, analytical, and nerdy-intellectual—mixing computer science depth, systems thinking, and reflective explorations of tech, games, and society in a way that's both technical and philosophical.
 
-A personal website built with [Astro](https://astro.build/), featuring a blog with MDX support, and integrations with Spotify and Goodreads.
+A personal website built with [Astro](https://astro.build/), featuring a blog with MDX support and a set of live personal data pages.
 
 ## Features
 
 - **Blog:** Content managed using Astro's Content Collections with MD/MDX support (`data/writing`).
 - **RSS Feeds:** Full-content feeds at `/rss.xml` (all posts), `/rss/en.xml` and `/rss/vi.xml`.
-- **Dynamic Open Graph Images:** Auto-generates OG images for blog posts using `@vercel/og`.
-- **Spotify Integration:** Shows listening activity (`/music` page).
-- **Goodreads Integration:** Displays reading activity (`/reading` page).
+- **Dynamic Open Graph Images:** Generated for every post with [Satori](https://github.com/vercel/satori) and `sharp`.
+- **Data pages (`/data`):** live pages for Spotify (`/data/music`), Goodreads (`/data/books`),
+  Chess.com (`/data/chess`), Steam (`/data/steam`) and AI token usage (`/data/token-usage`),
+  rendered on request and cached in Cloudflare KV.
 - **Math Support:** KaTeX integration on Astro's Sätteri Markdown pipeline.
 - **Reading Time:** Auto-calculated reading time for blog posts.
 - **Tailwind CSS v4:** Modern styling with typography plugin.
@@ -40,10 +41,11 @@ A personal website built with [Astro](https://astro.build/), featuring a blog wi
     bun install
     ```
 
-3. **Set up environment variables:**
+3. **Set up secrets** (read by the Cloudflare runtime, locally from `.dev.vars`):
 
     ```bash
-    cp .env.example .env
+    cp .dev.vars.example .dev.vars
+    bun run generate-types   # regenerate worker-configuration.d.ts
     ```
 
     | Variable | Description |
@@ -51,7 +53,10 @@ A personal website built with [Astro](https://astro.build/), featuring a blog wi
     | `SPOTIFY_CLIENT_ID` | Spotify app client ID |
     | `SPOTIFY_CLIENT_SECRET` | Spotify app client secret |
     | `SPOTIFY_REFRESH_TOKEN` | Spotify OAuth refresh token |
-    | `PUBLIC_GOOGLE_ANALYTICS_ID` | Google Analytics measurement ID |
+    | `STEAM_API_KEY` | Steam Web API key for `/data/steam` |
+
+    Site settings (author, social links, Goodreads/Chess.com/Steam usernames, Google
+    Analytics ID) live in `data/consts.ts`.
 
 4. **Run the development server:**
 
@@ -65,6 +70,12 @@ A personal website built with [Astro](https://astro.build/), featuring a blog wi
 
     ```bash
     bun run build
+    ```
+
+6. **Type check** (CI runs this and the build on every PR):
+
+    ```bash
+    bunx astro check
     ```
 
 ## Creating Blog Posts
@@ -102,7 +113,8 @@ Connect the repo in **Cloudflare Dashboard → Workers & Pages → Create → Co
 
 - Build command: `bun run build`
 - Build output directory: `dist`
-- Add environment variables under **Settings → Environment variables**
+- Add the secrets above under **Settings → Variables and Secrets**
+- Exclude the `ccusage-data` branch from non-production branch builds (it only holds data)
 
 ### Manual deploy
 
@@ -118,6 +130,8 @@ The `/data/token-usage` page renders `data/ccusage.json`, a compact snapshot of 
 The live copy lives on the orphan `ccusage-data` branch, so syncs never add commits to
 `master` or trigger a rebuild: the page fetches it at request time (KV-cached ~15 min)
 and falls back to the snapshot bundled from `master` if GitHub is unreachable.
+`master`'s `data/ccusage.json` is that frozen fallback: it is expected to lag behind,
+so don't update it by hand.
 Machines push their own slice with a one-liner — no manual clone:
 
 ```bash
