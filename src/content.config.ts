@@ -8,6 +8,8 @@ const writing = defineCollection({
     title: z.string(),
     description: z.string(),
     date: z.coerce.date(),
+    // Optional: set when a post is substantially revised.
+    updated: z.coerce.date().optional(),
     draft: z.boolean().optional(),
     lang: z.string().optional(),
   }),

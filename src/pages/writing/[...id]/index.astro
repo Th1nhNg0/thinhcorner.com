@@ -7,8 +7,7 @@ import { AUTHOR_NAME } from "../../../../data/consts";
 import { getCollection, render } from "astro:content";
 import { format } from "date-fns";
 import getReadingTime from "reading-time";
-import { statSync, existsSync } from "node:fs";
-import { join } from "node:path";
+import { getModifiedDate } from "@/lib/post-dates";
 import EditOnGithub from "../../../components/EditOnGithub.astro";
 
 export async function getStaticPaths() {
@@ -43,13 +42,7 @@ const post = Astro.props;
 const { Content } = await render(post);
 const minutesRead = post.body ? getReadingTime(post.body).text : undefined;
 
-const postDir = join(process.cwd(), "data/writing", post.id);
-const postFile = ["index.md", "index.mdx"].find((f) =>
-  existsSync(join(postDir, f)),
-);
-const modifiedTime = postFile
-  ? statSync(join(postDir, postFile)).mtime.toISOString()
-  : post.data.date.toISOString();
+const modifiedTime = getModifiedDate(post).toISOString();
 
 // Detect math content without mistaking escaped currency or MDX `${...}` expressions for math.
 const hasMath = post.body
@@ -76,12 +69,6 @@ let slug = Array.isArray(Astro.params.id)
   publishedTime={post.data.date.toISOString()}
   modifiedTime={modifiedTime}
   imageAlt={post.data.title}
-  prevUrl={prevPost
-    ? new URL(`/writing/${prevPost.id}`, Astro.site)
-    : undefined}
-  nextUrl={nextPost
-    ? new URL(`/writing/${nextPost.id}`, Astro.site)
-    : undefined}
   structuredData={[
     {
       "@context": "https://schema.org",
@@ -167,6 +154,19 @@ let slug = Array.isArray(Astro.params.id)
           >
             {format(new Date(post.data.date), "dd MMMM yyyy")}
           </time>
+          {
+            post.data.updated && (
+              <>
+                <span aria-hidden="true">/</span>
+                <span>
+                  Updated{" "}
+                  <time datetime={post.data.updated.toISOString()}>
+                    {format(post.data.updated, "dd MMMM yyyy")}
+                  </time>
+                </span>
+              </>
+            )
+          }
           {
             post.body && (
               <>
