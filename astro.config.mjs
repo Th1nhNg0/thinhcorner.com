@@ -5,12 +5,13 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { satteri } from "@astrojs/markdown-satteri";
 import satteriKatex from "./remark/satteri-katex.mjs";
+import satteriImageAlt from "./remark/satteri-image-alt.mjs";
 
 import cloudflare from "@astrojs/cloudflare";
 
 const markdownProcessor = satteri({
   features: { math: true },
-  mdastPlugins: [satteriKatex],
+  mdastPlugins: [satteriKatex, satteriImageAlt],
   hastPlugins: [],
 });
 
