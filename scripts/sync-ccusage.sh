@@ -11,11 +11,13 @@
 #   curl -fsSL .../sync-ccusage.sh | sh -s -- --yes        # skip the menu, sync now
 #
 # What it does
-#   1. sparse-clones only what it needs (data/ccusage.json + scripts/) into a temp
-#      dir - the blog posts and images are never downloaded (nothing left behind)
+#   1. clones the tiny `ccusage-data` branch (only data/ccusage.json) into a temp
+#      dir and downloads scripts/update-ccusage.ts from master (nothing left behind)
 #   2. runs `bun scripts/update-ccusage.ts`, which reads ccusage for every agent
-#      home on this machine, merges it into data/ccusage.json, commits, pushes
-#   3. Cloudflare Workers rebuilds the site from the pushed commit
+#      home on this machine, merges it into data/ccusage.json, commits, pushes to
+#      `ccusage-data` - master's history stays free of sync commits
+#   3. the /data/token-usage page reads that branch at request time (cached
+#      ~15 min), so no site rebuild is needed
 #
 # Options
 #   (no arguments + a terminal)  interactive menu:
@@ -43,9 +45,12 @@
 #     GIT_AUTHOR_NAME=... / GIT_AUTHOR_EMAIL=...
 # ---------------------------------------------------------------------------
 set -eu
+orig_argc=$#
 
 REPO_SLUG="Th1nhNg0/thinhcorner.com"
 BRANCH="master"
+DATA_BRANCH="ccusage-data"
+RAW_BASE="${THINHCORNER_RAW_BASE:-https://raw.githubusercontent.com/${REPO_SLUG}}"
 SCRIPT_URL="${THINHCORNER_SCRIPT_URL:-https://raw.githubusercontent.com/${REPO_SLUG}/${BRANCH}/scripts/sync-ccusage.sh}"
 DEFAULT_AT="23:55"
 TASK_NAME="ThinhCornerCcusageSync"
@@ -408,44 +413,40 @@ resolve_bun() {
 
 check_prereqs() {
   command -v git >/dev/null 2>&1 || die "git is required"
+  command -v curl >/dev/null 2>&1 || die "curl is required"
   bun_bin=$(resolve_bun) || die "bun is not installed. Install it with:
   curl -fsSL https://bun.sh/install | bash
 then re-run this script."
 }
 
-# Only the files the sync touches are downloaded: a blobless partial clone plus a
-# sparse checkout. Blog posts, images and pages never leave the server. Pushing
-# still works because every other path is unchanged, so the remote already has it.
-lean_clone() {
-  git clone --quiet --depth 1 --branch "$BRANCH" --filter=blob:none --no-checkout \
-    "$repo_url" "$tmp_dir/repo" >/dev/null 2>&1 || return 1
-  cd "$tmp_dir/repo" || return 1
-  if ! git sparse-checkout set --no-cone data/ccusage.json scripts/update-ccusage.ts package.json >/dev/null 2>&1; then
-    cd "$tmp_dir"
-    rm -rf "$tmp_dir/repo"
-    return 1
-  fi
-  # Older git may need an explicit checkout after configuring the sparse paths.
-  git checkout --quiet >/dev/null 2>&1 || true
-  if [ -f data/ccusage.json ] && [ -f scripts/update-ccusage.ts ]; then
-    return 0
-  fi
-  cd "$tmp_dir"
-  rm -rf "$tmp_dir/repo"
-  return 1
+fetch_master_file() {
+  mkdir -p "$(dirname "$1")"
+  curl -fsSL "${RAW_BASE}/${BRANCH}/$1" -o "$1" ||
+    die "could not download $1 from ${REPO_SLUG}#${BRANCH}"
 }
 
+# Usage data lives on its own orphan branch holding just data/ccusage.json, so the
+# clone is a few KB and sync commits never land on master. The updater script is
+# downloaded from master next to it and kept out of data-branch commits.
 clone_repo() {
-  if lean_clone; then
-    say "cloned ${REPO_SLUG}#${BRANCH} (sparse: data/ccusage.json + scripts/)"
-    return 0
+  if git ls-remote --exit-code --heads "$repo_url" "$DATA_BRANCH" >/dev/null 2>&1; then
+    git clone --quiet --depth 1 --branch "$DATA_BRANCH" "$repo_url" "$tmp_dir/repo" ||
+      die "could not clone ${REPO_SLUG}#${DATA_BRANCH}"
+    cd "$tmp_dir/repo" || die "could not enter the temp clone"
+    say "cloned ${REPO_SLUG}#${DATA_BRANCH}"
+  else
+    # First sync since the move: seed the branch from master's last snapshot.
+    git init --quiet "$tmp_dir/repo"
+    cd "$tmp_dir/repo" || die "could not enter the temp clone"
+    git remote add origin "$repo_url"
+    git symbolic-ref HEAD "refs/heads/$DATA_BRANCH"
+    fetch_master_file data/ccusage.json
+    git add data/ccusage.json
+    say "${DATA_BRANCH} does not exist yet; seeding it from ${BRANCH}'s data/ccusage.json"
   fi
-  warn "sparse partial clone unavailable here; falling back to a full shallow clone"
-  cd "$tmp_dir"
-  rm -rf "$tmp_dir/repo"
-  git clone --quiet --depth 1 --branch "$BRANCH" "$repo_url" "$tmp_dir/repo"
-  cd "$tmp_dir/repo" || die "could not enter the temp clone"
-  say "cloned ${REPO_SLUG}#${BRANCH}"
+  fetch_master_file scripts/update-ccusage.ts
+  fetch_master_file package.json
+  printf 'scripts/\npackage.json\nnode_modules/\n' >>.git/info/exclude
 }
 
 run_sync() {
@@ -467,8 +468,14 @@ run_sync() {
   clone_repo
 
   # A fresh clone has no identity; reuse whatever authored the last commit.
-  git config user.name >/dev/null 2>&1 || git config user.name "$(git log -1 --format=%an)"
-  git config user.email >/dev/null 2>&1 || git config user.email "$(git log -1 --format=%ae)"
+  if ! git config user.name >/dev/null 2>&1; then
+    ident=$(git log -1 --format=%an 2>/dev/null || true)
+    git config user.name "${ident:-ccusage sync}"
+  fi
+  if ! git config user.email >/dev/null 2>&1; then
+    ident=$(git log -1 --format=%ae 2>/dev/null || true)
+    git config user.email "${ident:-${REPO_SLUG%%/*}@users.noreply.github.com}"
+  fi
   git config commit.gpgsign false
 
   if [ -n "$token" ]; then
@@ -481,7 +488,7 @@ run_sync() {
   fi
 
   say "collecting ccusage data with $bun_bin"
-  head_before=$(git rev-parse HEAD)
+  head_before=$(git rev-parse -q --verify HEAD || true)
   # shellcheck disable=SC2086
   "$bun_bin" scripts/update-ccusage.ts $extra_args --no-push
 
@@ -490,20 +497,20 @@ run_sync() {
     return 0
   fi
 
-  if [ "$(git rev-parse HEAD)" = "$head_before" ]; then
+  if [ "$(git rev-parse -q --verify HEAD || true)" = "$head_before" ]; then
     say "no data changes on this machine; nothing to push"
     return 0
   fi
 
   attempt=1
   while :; do
-    if git push --quiet origin "HEAD:$BRANCH"; then
-      say "pushed to ${BRANCH}"
+    if git push --quiet origin "HEAD:refs/heads/$DATA_BRANCH"; then
+      say "pushed to ${DATA_BRANCH}"
       break
     fi
-    [ "$attempt" -lt 3 ] || die "push to ${BRANCH} failed after 3 attempts"
-    say "push rejected (another machine pushed first); re-merging onto latest ${BRANCH}"
-    git fetch --quiet --depth 1 origin "$BRANCH"
+    [ "$attempt" -lt 3 ] || die "push to ${DATA_BRANCH} failed after 3 attempts"
+    say "push rejected (another machine pushed first); re-merging onto latest ${DATA_BRANCH}"
+    git fetch --quiet --depth 1 origin "$DATA_BRANCH"
     git reset --hard --quiet FETCH_HEAD
     # shellcheck disable=SC2086
     "$bun_bin" scripts/update-ccusage.ts $extra_args --no-push
@@ -511,7 +518,7 @@ run_sync() {
   done
 
   if [ -n "${CI:-}" ] || [ -n "${THINHCORNER_QUIET:-}" ]; then :; else
-    say "done - Cloudflare Workers will rebuild the site from this commit"
+    say "done - /data/token-usage shows the new data within ~15 minutes"
   fi
 }
 
@@ -566,6 +573,22 @@ menu() {
   done
   exec 3<&-
 }
+
+# --- self-update -----------------------------------------------------------
+# Scheduled runs execute the cached copy with no arguments; refresh it from master
+# first so fixes reach every machine without re-installing the schedule.
+if [ "$orig_argc" = 0 ] && [ "$0" = "$cache_path" ] && [ -z "${THINHCORNER_SELF_UPDATED:-}" ] &&
+  command -v curl >/dev/null 2>&1; then
+  tmp_cache="$cache_path.tmp.$$"
+  if curl -fsSL "$SCRIPT_URL" -o "$tmp_cache" 2>/dev/null && ! cmp -s "$tmp_cache" "$cache_path"; then
+    mv "$tmp_cache" "$cache_path"
+    say "updated the cached script from $SCRIPT_URL"
+    THINHCORNER_SELF_UPDATED=1
+    export THINHCORNER_SELF_UPDATED
+    exec /bin/sh "$cache_path"
+  fi
+  rm -f "$tmp_cache"
+fi
 
 # --- main ------------------------------------------------------------------
 [ "$install_cron" = 0 ] || install_schedule
