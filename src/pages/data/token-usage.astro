@@ -1,5 +1,5 @@
 ---
-export const prerender = true;
+export const prerender = false;
 
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
@@ -11,11 +11,14 @@ import {
   buildUsageReport,
   usageLevel,
 } from "@/lib/ccusage";
-import usage from "../../../data/ccusage.json";
+import { getUsageSnapshot } from "@/lib/ccusage-data";
+import { env } from "cloudflare:workers";
 
-// The JSON import widens to loose nested arrays, so assert the encoded shape.
-const report = buildUsageReport(
-  usage as unknown as import("@/lib/ccusage").UsageSnapshot,
+const report = buildUsageReport(await getUsageSnapshot(env.CACHE));
+
+Astro.response.headers.set(
+  "Cache-Control",
+  "public, s-maxage=900, stale-while-revalidate=3600",
 );
 
 const {
