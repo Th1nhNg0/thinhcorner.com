@@ -13,8 +13,6 @@ interface Props {
   robots?: string;
   locale?: string; // e.g., en_US, vi_VN
   siteName?: string;
-  prevUrl?: string | URL;
-  nextUrl?: string | URL;
   author?: string;
   publishedTime?: string; // ISO
   modifiedTime?: string; // ISO
@@ -31,8 +29,6 @@ const {
   robots,
   locale,
   siteName = SITE.title,
-  prevUrl,
-  nextUrl,
   author,
   publishedTime,
   modifiedTime,
@@ -101,10 +97,6 @@ const {
     href={new URL("rss.xml", Astro.site)}
   />
   <link rel="sitemap" href="/sitemap-index.xml" />
-
-  {/* Pagination relationships */}
-  {prevUrl && <link rel="prev" href={prevUrl} />}
-  {nextUrl && <link rel="next" href={nextUrl} />}
 
   {/* Structured Data */}
   {
