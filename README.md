@@ -7,7 +7,7 @@ A personal website built with [Astro](https://astro.build/), featuring a blog wi
 ## Features
 
 - **Blog:** Content managed using Astro's Content Collections with MD/MDX support (`data/writing`).
-- **RSS Feed:** Automatically generated at `/rss.xml`.
+- **RSS Feeds:** Full-content feeds at `/rss.xml` (all posts), `/rss/en.xml` and `/rss/vi.xml`.
 - **Dynamic Open Graph Images:** Auto-generates OG images for blog posts using `@vercel/og`.
 - **Spotify Integration:** Shows listening activity (`/music` page).
 - **Goodreads Integration:** Displays reading activity (`/reading` page).
@@ -77,6 +77,7 @@ title: "Your Blog Post Title"
 description: "A brief description for SEO and previews"
 date: "YYYY-MM-DD"
 lang: "en" # Optional: "en" or "vi"
+updated: "YYYY-MM-DD" # Optional: last substantial revision (sets dateModified)
 ---
 
 Your content here...
@@ -114,6 +115,9 @@ bunx wrangler deploy
 
 The `/data/token-usage` page renders `data/ccusage.json`, a compact snapshot of local
 [ccusage](https://github.com/ryoppippi/ccusage) data merged from every machine I use.
+The live copy lives on the orphan `ccusage-data` branch, so syncs never add commits to
+`master` or trigger a rebuild: the page fetches it at request time (KV-cached ~15 min)
+and falls back to the snapshot bundled from `master` if GitHub is unreachable.
 Machines push their own slice with a one-liner — no manual clone:
 
 ```bash
@@ -133,11 +137,12 @@ curl -fsSL https://thinhcorner.com/sync.sh | sh -s -- --status
 curl -fsSL https://thinhcorner.com/sync.sh | sh -s -- --dry-run
 ```
 
-The bootstrap sparse-clones only what it needs into a temp dir — `data/ccusage.json`
-and `scripts/` — runs
-`bun scripts/update-ccusage.ts` (same as `bun run data:usage`), commits, pushes;
-Cloudflare Workers then rebuilds the site. Nothing is left behind except the cached
-copy the scheduler runs, and `--help` lists the passthrough flags (`--no-commit`,
+The bootstrap clones the `ccusage-data` branch (a single JSON file) into a temp dir,
+downloads `scripts/update-ccusage.ts` from `master` next to it, runs it, commits and
+pushes to `ccusage-data` (the first run creates the branch from `master`'s snapshot).
+`bun run data:usage` on a `master` checkout only updates the local file and never
+commits. Nothing is left behind except the cached copy the scheduler runs, which
+refreshes itself from `master` on every scheduled run; `--help` lists the passthrough flags (`--no-commit`,
 `--no-push`, `ccusage` filters, …). `bun` and `git` are required, and git needs push
 credentials: a stored credential helper, or `GH_TOKEN` in the config file below.
 

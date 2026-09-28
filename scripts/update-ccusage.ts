@@ -484,7 +484,22 @@ process.stdout.write(
   `Upserted ${incomingDays.length} days from ${sourceId} across ${targetHomes.length} home(s): ${newPeriods} new, ${refreshedPeriods} refreshed, ${Object.values(namedSources).reduce((sum, source) => sum + Object.keys(source).length, 0)} stored source-days.\n`,
 );
 
-if (shouldCommit) {
+// Usage data is committed to its own branch (see scripts/sync-ccusage.sh) so sync
+// commits stay out of master's history.
+const DATA_BRANCH = "ccusage-data";
+const currentBranch = await execFileAsync("git", ["symbolic-ref", "--short", "HEAD"], {
+  encoding: "utf8",
+}).then(
+  ({ stdout }) => stdout.trim(),
+  () => "",
+);
+
+if (shouldCommit && currentBranch !== DATA_BRANCH) {
+  process.stdout.write(
+    `Not committing: usage data is committed on the ${DATA_BRANCH} branch, not ${currentBranch || "a detached HEAD"}. ` +
+      `Run scripts/sync-ccusage.sh to publish it (scheduled machines: re-run it once with --install-cron).\n`,
+  );
+} else if (shouldCommit) {
   try {
     const unstaged = await execFileAsync("git", ["diff", "--name-only", dataPath], {
       encoding: "utf8",
