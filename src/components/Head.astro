@@ -1,5 +1,6 @@
 ---
 import { SITE, GOOGLE_ANALYTICS_ID } from "../../data/consts";
+import { FEED_LANGS } from "@/lib/feed";
 import "@/styles/global.css";
 import katexCSSUrl from "katex/dist/katex.min.css?url";
 
@@ -96,6 +97,17 @@ const {
     title={SITE.title}
     href={new URL("rss.xml", Astro.site)}
   />
+  {
+    Object.entries(FEED_LANGS).map(([lang, { label }]) => (
+      <link
+        rel="alternate"
+        type="application/rss+xml"
+        hreflang={lang}
+        title={`${SITE.title} (${label})`}
+        href={new URL(`rss/${lang}.xml`, Astro.site)}
+      />
+    ))
+  }
   <link rel="sitemap" href="/sitemap-index.xml" />
 
   {/* Structured Data */}

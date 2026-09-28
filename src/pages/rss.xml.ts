@@ -1,22 +1,4 @@
-import { SITE } from "../../data/consts";
-import rss from "@astrojs/rss";
-import { getCollection } from "astro:content";
+import { buildFeed } from "@/lib/feed";
 import type { APIRoute } from "astro";
 
-export const GET: APIRoute = async (context) => {
-  const blog = (await getCollection("writing")).filter((p) => !p.data.draft);
-
-  return rss({
-    title: SITE.title,
-    description: SITE.description,
-    site: context.site!,
-    items: blog
-      .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-      .map((post) => ({
-        title: post.data.title,
-        pubDate: post.data.date,
-        description: post.data.description,
-        link: new URL(`/writing/${post.id}`, context.site).toString(),
-      })),
-  });
-};
+export const GET: APIRoute = (context) => buildFeed(context.site!);
