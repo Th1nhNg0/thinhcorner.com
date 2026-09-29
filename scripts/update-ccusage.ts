@@ -127,7 +127,9 @@ const getTargetHomes = (): string[] => {
           existsSync(resolve(fullPath, ".codex")) ||
           existsSync(resolve(fullPath, ".claude")) ||
           existsSync(resolve(fullPath, ".agents")) ||
-          existsSync(resolve(fullPath, ".pi"));
+          existsSync(resolve(fullPath, ".pi")) ||
+          existsSync(resolve(fullPath, ".copilot")) ||
+          existsSync(resolve(fullPath, ".cursor"));
         if (hasAgentLogs) {
           homes.add(fullPath);
         }
