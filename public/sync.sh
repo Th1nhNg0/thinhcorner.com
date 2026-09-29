@@ -3,6 +3,7 @@
 #
 #   curl -fsSL https://thinhcorner.com/sync.sh | sh
 #   curl -fsSL https://thinhcorner.com/sync.sh | sh -s -- --install-cron
+#   curl -fsSL https://thinhcorner.com/sync.sh | sh -s -- --catch-up
 #
 # The real script lives in the repo so there is a single source of truth:
 #   scripts/sync-ccusage.sh

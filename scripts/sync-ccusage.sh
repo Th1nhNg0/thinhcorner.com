@@ -7,6 +7,7 @@
 #   curl -fsSL .../sync-ccusage.sh | sh -s -- --install-cron
 #   curl -fsSL .../sync-ccusage.sh | sh -s -- --install-cron --at 08:30
 #   curl -fsSL .../sync-ccusage.sh | sh -s -- --status
+#   curl -fsSL .../sync-ccusage.sh | sh -s -- --catch-up
 #   curl -fsSL .../sync-ccusage.sh | sh -s -- --uninstall-cron
 #   curl -fsSL .../sync-ccusage.sh | sh -s -- --yes        # skip the menu, sync now
 #
@@ -18,6 +19,8 @@
 #      `ccusage-data` - master's history stays free of sync commits
 #   3. the /data/token-usage page reads that branch at request time (cached
 #      ~15 min), so no site rebuild is needed
+#   4. scheduled runs catch up automatically on boot, login, or resume if the
+#      machine was powered off or sleeping during the scheduled time
 #
 # Options
 #   (no arguments + a terminal)  interactive menu:
@@ -25,11 +28,12 @@
 #       1) dry run           3) exit
 #   --yes               skip the menu and sync now (for scripts)
 #   --dry-run           compute + write data in the temp clone, never commit/push
-#   --install-cron      install a daily scheduler for this machine, then sync once
+#   --install-cron      install a daily schedule with boot/login catch-up
 #   --no-sync           with --install-cron: install the schedule only
 #   --uninstall-cron    remove the schedule installed by --install-cron
 #   --at HH:MM          schedule time, 24h, default 23:55 (also THINHCORNER_AT)
-#   --status            show config, cached copy, schedule and recent log
+#   --catch-up          sync only if the scheduled daily run was missed
+#   --status            show config, cached copy, schedule, last sync and recent log
 #   --help              this text
 #   THINHCORNER_MENU_INPUT=<file>   force the menu, read answers from <file>
 #   anything else       passed through to scripts/update-ccusage.ts
@@ -77,6 +81,7 @@ uninstall_cron=0
 do_sync=1
 show_status=0
 yes_flag=0
+catch_up=0
 extra_args=""
 
 usage() {
@@ -110,6 +115,9 @@ while [ $# -gt 0 ]; do
       at=${1#--at=}
       at_given=1
       ;;
+    --catch-up)
+      catch_up=1
+      ;;
     --status)
       show_status=1
       do_sync=0
@@ -134,7 +142,7 @@ done
 explicit=1
 if [ "$dry_run" = 0 ] && [ "$install_cron" = 0 ] && [ "$uninstall_cron" = 0 ] &&
   [ "$show_status" = 0 ] && [ "$do_sync" = 1 ] && [ "$yes_flag" = 0 ] &&
-  [ -z "$extra_args" ]; then
+  [ "$catch_up" = 0 ] && [ -z "$extra_args" ]; then
   explicit=0
 fi
 
@@ -165,12 +173,22 @@ state_home="${XDG_STATE_HOME:-$HOME/.local/state}/thinhcorner"
 cache_path="$data_home/sync-ccusage.sh"
 log_path="$state_home/sync.log"
 schedule_at_file="$state_home/schedule_at"
+last_sync_file="$state_home/last_sync"
+lock_file="$state_home/sync.lock"
 plist="$HOME/Library/LaunchAgents/com.thinhcorner.ccusage-sync.plist"
+
+scheduled_at() {
+  if [ -f "$schedule_at_file" ]; then
+    sed -n '1p' "$schedule_at_file"
+  else
+    printf '%s' "$DEFAULT_AT"
+  fi
+}
 
 # --- config file -----------------------------------------------------------
 [ -f "$config_path" ] && . "$config_path"
 
-[ "$at_given" = 1 ] || at="${THINHCORNER_AT:-$at}"
+[ "$at_given" = 1 ] || at="${THINHCORNER_AT:-$(scheduled_at)}"
 repo_url="${THINHCORNER_REPO_URL:-https://github.com/${REPO_SLUG}.git}"
 token="${GH_TOKEN:-${GITHUB_TOKEN:-}}"
 source_id="${CCUSAGE_SOURCE:-}"
@@ -211,14 +229,6 @@ schedule_installed() {
     *) return 1 ;;
   esac
 }
-
-scheduled_at() {
-  if [ -f "$schedule_at_file" ]; then
-    sed -n '1p' "$schedule_at_file"
-  else
-    printf '%s' "$DEFAULT_AT"
-  fi
-}
 # HH:MM -> printable + cron fields, rejecting junk before it reaches cron.
 validate_at() {
   case "$at" in
@@ -232,6 +242,48 @@ validate_at() {
   [ "$t_hh" -le 23 ] || die "hour out of range in '$at'"
   [ "$t_mm" -le 59 ] || die "minute out of range in '$at'"
   at_pretty=$(printf '%02d:%02d' "$t_hh" "$t_mm")
+}
+
+is_sync_missed() {
+  validate_at
+  [ -f "$last_sync_file" ] || return 0
+
+  last_ts=$(cat "$last_sync_file" 2>/dev/null || printf 0)
+  case "$last_ts" in
+    '' | *[!0-9]*) return 0 ;;
+  esac
+
+  time_fields=$(date '+%s %H %M %S' 2>/dev/null || true)
+  [ -n "$time_fields" ] || return 0
+  set -- $time_fields
+  now=${1:-0}
+  cur_hh=$(printf '%s' "${2:-0}" | sed 's/^0*//')
+  cur_mm=$(printf '%s' "${3:-0}" | sed 's/^0*//')
+  cur_ss=$(printf '%s' "${4:-0}" | sed 's/^0*//')
+  [ -n "$cur_hh" ] || cur_hh=0
+  [ -n "$cur_mm" ] || cur_mm=0
+  [ -n "$cur_ss" ] || cur_ss=0
+
+  cur_day_sec=$(( (cur_hh * 3600) + (cur_mm * 60) + cur_ss ))
+  today_midnight=$(( now - cur_day_sec ))
+  today_target=$(( today_midnight + (t_hh * 3600) + (t_mm * 60) ))
+
+  # Allow a 2-minute grace window so jobs firing right at/before target trigger reliably
+  if [ "$now" -ge "$(( today_target - 120 ))" ]; then
+    latest_target="$today_target"
+  else
+    latest_target=$(( today_target - 86400 ))
+  fi
+
+  if [ "$last_ts" -lt "$latest_target" ]; then
+    return 0
+  fi
+  return 1
+}
+
+record_sync_success() {
+  mkdir -p "$state_home"
+  date +%s >"$last_sync_file" 2>/dev/null || true
 }
 
 cache_script() {
@@ -252,7 +304,11 @@ cache_script() {
 }
 
 cron_runner() {
-  printf "/bin/sh '%s' >> '%s' 2>&1" "$cache_path" "$log_path"
+  if [ -n "${1:-}" ]; then
+    printf "/bin/sh '%s' %s >> '%s' 2>&1" "$cache_path" "$*" "$log_path"
+  else
+    printf "/bin/sh '%s' >> '%s' 2>&1" "$cache_path" "$log_path"
+  fi
 }
 
 install_schedule() {
@@ -272,13 +328,16 @@ install_schedule() {
       {
         printf '# %s (managed by scripts/sync-ccusage.sh)\n' "$MARKER"
         printf '%s %s * * * %s\n' "$t_mm" "$t_hh" "$(cron_runner)"
+        printf '@reboot %s\n' "$(cron_runner --catch-up)"
+        printf '*/30 * * * * %s\n' "$(cron_runner --catch-up)"
       } >>"$tmp_cron"
       crontab "$tmp_cron"
       rm -f "$tmp_cron"
-      say "installed cron entry: daily at $at_pretty"
+      say "installed cron entries: daily at $at_pretty + catch-up on boot & every 30m"
       if [ "$is_wsl" = 1 ] && ! command -v cron >/dev/null 2>&1 && ! command -v cronie >/dev/null 2>&1; then
         warn "this WSL distro has no cron daemon, so the entry will not fire until you install one:"
         warn "  sudo apt-get install -y cron && sudo service cron start"
+        warn "tip: you can also add '/bin/sh $cache_path --catch-up >/dev/null 2>&1 &' to ~/.bashrc or ~/.zshrc"
       fi
       ;;
     macos)
@@ -294,7 +353,12 @@ install_schedule() {
   <array>
     <string>/bin/sh</string>
     <string>$cache_path</string>
+    <string>--catch-up</string>
   </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StartInterval</key>
+  <integer>1800</integer>
   <key>StartCalendarInterval</key>
   <dict>
     <key>Hour</key>
@@ -311,7 +375,7 @@ install_schedule() {
 PLIST
       launchctl unload -w "$plist" >/dev/null 2>&1 || true
       launchctl load -w "$plist"
-      say "installed launchd agent: daily at $at_pretty ($plist)"
+      say "installed launchd agent: daily at $at_pretty + catch-up on login/wake ($plist)"
       ;;
     windows)
       # Prefer a durable Git for Windows bash, then whatever bash is on PATH.
@@ -338,11 +402,25 @@ PLIST
       case "$bash_win$runner_arg" in
         *%* | *'"'*) die "unexpected character in '$bash_win' or '$runner_arg'; install the schedule manually" ;;
       esac
-      printf '#!/bin/sh\nexec /bin/sh "%s" >> "%s" 2>&1\n' "$cache_path" "$log_path" >"$state_home/run.sh"
+      printf '#!/bin/sh\nexec /bin/sh "%s" "$@" >> "%s" 2>&1\n' "$cache_path" "$log_path" >"$state_home/run.sh"
       chmod +x "$state_home/run.sh" 2>/dev/null || true
-      printf '@echo off\n"%s" "%s"\n' "$bash_win" "$runner_arg" >"$state_home/run.cmd"
-      schtasks_run /Create /F /TN "$TASK_NAME" /SC DAILY /ST "$at_pretty" /TR "$(cygpath -w "$state_home/run.cmd" 2>/dev/null || printf '%s' "$state_home/run.cmd")" >/dev/null
-      say "installed Task Scheduler job '$TASK_NAME': daily at $at_pretty"
+      printf '@echo off\n"%s" "%s" %%*\n' "$bash_win" "$runner_arg" >"$state_home/run.cmd"
+      cmd_win=$(cygpath -w "$state_home/run.cmd" 2>/dev/null || printf '%s' "$state_home/run.cmd")
+      schtasks_run /Create /F /TN "$TASK_NAME" /SC DAILY /ST "$at_pretty" /TR "\"$cmd_win\"" >/dev/null
+      schtasks_run /Create /F /TN "${TASK_NAME}Logon" /SC ONLOGON /TR "\"$cmd_win\" --catch-up" >/dev/null
+
+      powershell_bin=$(command -v powershell.exe 2>/dev/null || command -v powershell 2>/dev/null || true)
+      if [ -n "$powershell_bin" ]; then
+        "$powershell_bin" -NoProfile -NonInteractive -Command "
+          try {
+            \$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+            Set-ScheduledTask -TaskName '$TASK_NAME' -Settings \$settings -ErrorAction SilentlyContinue | Out-Null
+            Set-ScheduledTask -TaskName '${TASK_NAME}Logon' -Settings \$settings -ErrorAction SilentlyContinue | Out-Null
+          } catch {}
+        " >/dev/null 2>&1 || true
+      fi
+
+      say "installed Task Scheduler jobs: daily at $at_pretty + catch-up on logon & start"
       say "  run it now with: schtasks /Run /TN $TASK_NAME"
       ;;
     *)
@@ -360,7 +438,7 @@ uninstall_schedule() {
       crontab -l 2>/dev/null | grep -v -e "$MARKER" -e "$cache_path" >"$tmp_cron" || true
       crontab "$tmp_cron"
       rm -f "$tmp_cron"
-      say "removed cron entry"
+      say "removed cron entries"
       ;;
     macos)
       launchctl unload -w "$plist" >/dev/null 2>&1 || true
@@ -369,10 +447,11 @@ uninstall_schedule() {
       ;;
     windows)
       schtasks_run /Delete /F /TN "$TASK_NAME" >/dev/null 2>&1 || warn "no Task Scheduler job named '$TASK_NAME'"
-      say "removed Task Scheduler job '$TASK_NAME'"
+      schtasks_run /Delete /F /TN "${TASK_NAME}Logon" >/dev/null 2>&1 || true
+      say "removed Task Scheduler jobs"
       ;;
   esac
-  rm -f "$cache_path" "$schedule_at_file" "$state_home/run.sh" "$state_home/run.cmd" 2>/dev/null || true
+  rm -f "$cache_path" "$schedule_at_file" "$last_sync_file" "$lock_file" "$state_home/run.sh" "$state_home/run.cmd" 2>/dev/null || true
 }
 
 print_status() {
@@ -381,9 +460,16 @@ print_status() {
   printf 'cached script : %s%s\n' "$cache_path" "$([ -f "$cache_path" ] && printf ' (present)' || printf ' (absent)')"
   printf 'log file      : %s\n' "$log_path"
   if schedule_installed; then
-    printf 'schedule      : on (daily %s)\n' "$(scheduled_at)"
+    printf 'schedule      : on (daily %s + auto catch-up)\n' "$(scheduled_at)"
   else
     printf 'schedule      : off (menu option 2, or --install-cron)\n'
+  fi
+  if [ -f "$last_sync_file" ]; then
+    last_ts=$(cat "$last_sync_file" 2>/dev/null || printf 0)
+    last_human=$(date -d "@$last_ts" '+%Y-%m-%d %H:%M:%S' 2>/dev/null || date -r "$last_ts" '+%Y-%m-%d %H:%M:%S' 2>/dev/null || printf '%s' "$last_ts")
+    printf 'last sync     : %s\n' "$last_human"
+  else
+    printf 'last sync     : none recorded\n'
   fi
   if [ -f "$log_path" ]; then
     printf -- '--- last log lines ---\n'
@@ -463,8 +549,22 @@ run_sync() {
     warn "  CCUSAGE_SOURCE=DESKTOP-3CH2JO3"
   fi
 
-  tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/thinhcorner-sync.XXXXXX") || die "mktemp failed"
-  trap 'rm -rf "$tmp_dir"' EXIT INT TERM
+  # Concurrency lock
+  mkdir -p "$state_home"
+  if [ -f "$lock_file" ]; then
+    lock_pid=$(cat "$lock_file" 2>/dev/null || true)
+    if [ -n "$lock_pid" ] && kill -0 "$lock_pid" 2>/dev/null; then
+      say "another sync is already in progress (pid $lock_pid); skipping"
+      return 0
+    fi
+  fi
+  printf '%s\n' "$$" >"$lock_file" 2>/dev/null || true
+
+  tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/thinhcorner-sync.XXXXXX") || {
+    rm -f "$lock_file" 2>/dev/null || true
+    die "mktemp failed"
+  }
+  trap 'rm -rf "$tmp_dir" "$lock_file" 2>/dev/null || true' EXIT INT TERM
   clone_repo
 
   # A fresh clone has no identity; reuse whatever authored the last commit.
@@ -499,6 +599,7 @@ run_sync() {
 
   if [ "$(git rev-parse -q --verify HEAD || true)" = "$head_before" ]; then
     say "no data changes on this machine; nothing to push"
+    record_sync_success
     return 0
   fi
 
@@ -517,6 +618,8 @@ run_sync() {
     attempt=$((attempt + 1))
   done
 
+  record_sync_success
+
   if [ -n "${CI:-}" ] || [ -n "${THINHCORNER_QUIET:-}" ]; then :; else
     say "done - /data/token-usage shows the new data within ~15 minutes"
   fi
@@ -530,7 +633,7 @@ menu() {
     printf '\nthinhcorner token usage sync\n'
     printf '  source id : %s\n' "${source_id:-$(hostname 2>/dev/null || printf unknown)}"
     if schedule_installed; then
-      printf '  auto-sync : on (daily %s)\n' "$(scheduled_at)"
+      printf '  auto-sync : on (daily %s + auto catch-up)\n' "$(scheduled_at)"
     else
       printf '  auto-sync : off\n'
     fi
@@ -539,7 +642,7 @@ menu() {
     if schedule_installed; then
       printf '  2) turn off auto-sync\n'
     else
-      printf '  2) turn on auto-sync (daily %s)\n' "$(scheduled_at)"
+      printf '  2) turn on auto-sync (daily %s + auto catch-up)\n' "$(scheduled_at)"
     fi
     printf '  3) exit\n\n'
     printf 'choose [0-3]: '
@@ -575,9 +678,10 @@ menu() {
 }
 
 # --- self-update -----------------------------------------------------------
-# Scheduled runs execute the cached copy with no arguments; refresh it from master
-# first so fixes reach every machine without re-installing the schedule.
-if [ "$orig_argc" = 0 ] && [ "$0" = "$cache_path" ] && [ -z "${THINHCORNER_SELF_UPDATED:-}" ] &&
+# Scheduled runs execute the cached copy; refresh it from master first so
+# fixes reach every machine without re-installing the schedule.
+if { [ "$orig_argc" = 0 ] || { [ "$orig_argc" = 1 ] && [ "${1:-}" = "--catch-up" ]; }; } &&
+  [ "$0" = "$cache_path" ] && [ -z "${THINHCORNER_SELF_UPDATED:-}" ] &&
   command -v curl >/dev/null 2>&1; then
   tmp_cache="$cache_path.tmp.$$"
   if curl -fsSL "$SCRIPT_URL" -o "$tmp_cache" 2>/dev/null && ! cmp -s "$tmp_cache" "$cache_path"; then
@@ -585,7 +689,7 @@ if [ "$orig_argc" = 0 ] && [ "$0" = "$cache_path" ] && [ -z "${THINHCORNER_SELF_
     say "updated the cached script from $SCRIPT_URL"
     THINHCORNER_SELF_UPDATED=1
     export THINHCORNER_SELF_UPDATED
-    exec /bin/sh "$cache_path"
+    exec /bin/sh "$cache_path" "$@"
   fi
   rm -f "$tmp_cache"
 fi
@@ -594,6 +698,14 @@ fi
 [ "$install_cron" = 0 ] || install_schedule
 [ "$uninstall_cron" = 0 ] || uninstall_schedule
 [ "$show_status" = 0 ] || print_status
+
+if [ "$catch_up" = 1 ]; then
+  if ! is_sync_missed; then
+    say "schedule is up to date (daily $at_pretty); skipping catch-up"
+    exit 0
+  fi
+  say "missed scheduled run detected (daily $at_pretty); syncing now"
+fi
 
 if [ "$do_sync" = 1 ]; then
   if [ -n "$menu_input" ]; then

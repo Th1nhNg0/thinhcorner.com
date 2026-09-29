@@ -141,7 +141,7 @@ curl -fsSL https://raw.githubusercontent.com/Th1nhNg0/thinhcorner.com/master/scr
 # same script, served from the deployed site (public/sync.sh)
 curl -fsSL https://thinhcorner.com/sync.sh | sh
 
-# also install a daily scheduler (cron / launchd / Task Scheduler)
+# also install a daily scheduler with auto boot/login catch-up (cron / launchd / Task Scheduler)
 curl -fsSL https://thinhcorner.com/sync.sh | sh -s -- --install-cron
 curl -fsSL https://thinhcorner.com/sync.sh | sh -s -- --install-cron --at 08:30
 curl -fsSL https://thinhcorner.com/sync.sh | sh -s -- --uninstall-cron
@@ -156,7 +156,8 @@ downloads `scripts/update-ccusage.ts` from `master` next to it, runs it, commits
 pushes to `ccusage-data` (the first run creates the branch from `master`'s snapshot).
 `bun run data:usage` on a `master` checkout only updates the local file and never
 commits. Nothing is left behind except the cached copy the scheduler runs, which
-refreshes itself from `master` on every scheduled run; `--help` lists the passthrough flags (`--no-commit`,
+refreshes itself from `master` on every scheduled run and catches up automatically
+on boot/login if the machine was off during the scheduled time; `--help` lists the passthrough flags (`--no-commit`,
 `--no-push`, `ccusage` filters, …). `bun` and `git` are required, and git needs push
 credentials: a stored credential helper, or `GH_TOKEN` in the config file below.
 
