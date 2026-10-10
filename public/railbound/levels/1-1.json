@@ -1,0 +1,1 @@
+{"n":"1-1","W":5,"H":1,"target":[1,5],"trains":[[1,1,"RIGHT"]],"decoys":[],"init":[[1,1,"STRAIGHT_RL"],[1,5,"STRAIGHT_RL"]],"tunnels":[],"gates":[],"acts":[],"dsw":[],"stations":[],"grid":[["STRAIGHT_RL","STRAIGHT_RL","STRAIGHT_RL","STRAIGHT_RL","STRAIGHT_RL"]],"tr":[[1,1,1,1,1]],"tc":[[1,2,3,4,5]],"dr":[],"dc":[],"arr":[4],"gate":[],"dsT":[],"esT":[]}
