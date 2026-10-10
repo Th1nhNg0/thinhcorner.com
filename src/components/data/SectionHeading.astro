@@ -1,0 +1,17 @@
+---
+// Section title row used across /data pages: heading on the left, a short
+// mono note or control (slot) on the right.
+interface Props {
+  title: string;
+  note?: string;
+  id?: string;
+}
+
+const { title, note, id } = Astro.props;
+---
+
+<div class="data-section-heading">
+  <h2 id={id}>{title}</h2>
+  {note && <span class="data-section-note">{note}</span>}
+  <slot />
+</div>

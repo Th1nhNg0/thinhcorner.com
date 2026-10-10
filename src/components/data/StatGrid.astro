@@ -1,0 +1,32 @@
+---
+// Bordered grid of headline numbers shared by the /data pages.
+interface Stat {
+  label: string;
+  value: string | number;
+  note?: string;
+}
+
+interface Props {
+  stats: Stat[];
+  cols?: 3 | 4;
+}
+
+const { stats, cols = 4 } = Astro.props;
+---
+
+<div
+  class:list={[
+    "grid grid-cols-2 border-l border-t border-[#27272a]",
+    cols === 4 ? "md:grid-cols-4" : "sm:grid-cols-3",
+  ]}
+>
+  {
+    stats.map((stat) => (
+      <div class="data-stat">
+        <p class="data-stat-label">{stat.label}</p>
+        <p class="data-stat-value">{stat.value}</p>
+        {stat.note && <p class="data-stat-note">{stat.note}</p>}
+      </div>
+    ))
+  }
+</div>
