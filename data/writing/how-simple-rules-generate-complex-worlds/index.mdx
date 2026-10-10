@@ -5,9 +5,16 @@ description: "Exploring the emergence of complexity from simple rules."
 draft: false
 ---
 
+import LoopVideo from "@/components/LoopVideo.astro";
 import YouTubeEmbed from "@/components/YouTubeEmbed.astro";
+import golMp4 from "./gol.mp4";
+import golWebm from "./gol.webm";
+import townscaperMp4 from "./townscaper.mp4";
+import townscaperWebm from "./townscaper.webm";
+import wfcMp4 from "./wfc.mp4";
+import wfcWebm from "./wfc.webm";
 
-![Game of life](./gol.gif)
+<LoopVideo webm={golWebm} mp4={golMp4} width={544} height={300} label="Game of life" />
 
 Have you seen this animation before? It's called the **Game of Life**.
 
@@ -116,7 +123,7 @@ As you can see in the video, the game generates a town just by clicking on a gri
 
 How does the game know what tile to place and what tile should change so it doesn't break the town?
 
-![Townscaper](./townscaper.gif)
+<LoopVideo webm={townscaperWebm} mp4={townscaperMp4} width={480} height={282} label="Townscaper" />
 
 Turns out, the game is using an algorithm called the **Wave Function Collapse algorithm** (WFC)—a greedy, computational algorithm that generates a grid of tiles based on a set of constraints. Developed by [Maxim Gumin](https://github.com/mxgmn) based on work by [Paul Merrell](https://paulmerrell.org/model-synthesis/).
 
@@ -130,7 +137,7 @@ In WFC, the process starts with a grid where each cell can be any possible tile 
 
 You can see the visualization below by [Wave by Oskar Stålberg](https://oskarstalberg.com/game/wave/wave.html).
 
-![WFC](./wfc.gif)
+<LoopVideo webm={wfcWebm} mp4={wfcMp4} width={960} height={550} label="WFC" />
 
 In summary, the rule in Wave Function Collapse is simple: for a given tile, we have a set of possible neighbors that can be placed next to it. Then we try to fill the empty grid by replacing each cell with the tile that matches its neighbors.
 

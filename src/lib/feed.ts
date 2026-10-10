@@ -34,6 +34,13 @@ async function renderPostHtml(
 
   $("script, style, link, template").remove();
   $("[srcset]").removeAttr("srcset").removeAttr("sizes");
+  // Readers rarely honor <source> lists or autoplay, so point each video straight at
+  // its MP4 (the most widely playable source) and give it controls.
+  $("video:not([src])").each((_, el) => {
+    const mp4 = $(el).find('source[type^="video/mp4"]').attr("src");
+    if (mp4) $(el).attr("src", mp4);
+  });
+  $("video").attr("controls", "");
   $("source").remove();
   for (const attr of ["src", "href", "poster"]) {
     $(`[${attr}]`).each((_, el) => {
