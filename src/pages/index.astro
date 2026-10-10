@@ -1,11 +1,6 @@
 ---
 import Container from "@/components/Container.astro";
-import {
-  AUTHOR_EMAIL,
-  AUTHOR_NAME,
-  SITE,
-  SOCIAL_MEDIA,
-} from "../../data/consts";
+import { AUTHOR_NAME, SITE, SOCIAL_MEDIA } from "../../data/consts";
 import Layout from "@/layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import { format } from "date-fns";
@@ -101,37 +96,5 @@ const blog = (await getCollection("blog"))
       </ol>
     </section>
 
-    <footer
-      class="mt-14 flex flex-wrap gap-x-4 gap-y-2 border-t border-[#27272a] py-5 text-xs text-zinc-600"
-    >
-      <a
-        href={`mailto:${AUTHOR_EMAIL}`}
-        class="transition-colors hover:text-[#eab308]">Email</a
-      >
-      {
-        SOCIAL_MEDIA.github && (
-          <a
-            href={SOCIAL_MEDIA.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="transition-colors hover:text-zinc-200"
-          >
-            GitHub
-          </a>
-        )
-      }
-      {
-        SOCIAL_MEDIA.linkedin && (
-          <a
-            href={SOCIAL_MEDIA.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="transition-colors hover:text-zinc-200"
-          >
-            LinkedIn
-          </a>
-        )
-      }
-    </footer>
   </Container>
 </Layout>

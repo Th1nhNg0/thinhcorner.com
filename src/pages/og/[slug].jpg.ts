@@ -6,7 +6,8 @@ import satori from "satori";
 import sharp from "sharp";
 import { readFileSync } from "node:fs";
 
-const SCALE = 2;
+// Standard Open Graph size; larger files make some apps (e.g. WhatsApp) skip the preview.
+const SCALE = 1;
 const WIDTH = 1200 * SCALE;
 const HEIGHT = 630 * SCALE;
 const px = (value: number) => value * SCALE;
@@ -344,7 +345,7 @@ export const GET: APIRoute = async ({ params, url }) => {
       { input: backgroundOverlay, top: 0, left: 0 },
       { input: Buffer.from(svg), top: 0, left: 0 },
     ])
-    .jpeg({ quality: 100, chromaSubsampling: "4:4:4", progressive: true })
+    .jpeg({ quality: 82, chromaSubsampling: "4:4:4", progressive: true })
     .toBuffer();
 
   return new Response(new Uint8Array(jpeg), {
