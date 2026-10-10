@@ -1,8 +1,9 @@
 ---
 title: "[Giải ngố IT] Làm IT là làm gì? Lập trình viên là ai? Tại sao ai cũng muốn trở thành lập trình viên?"
 date: 2021-09-09
-description: "Ngành IT (information technology) hiện nay được coi là ngành hot nhất trong các ngành. Người người học IT, nhà nhà học IT. Vậy ngành này có cái gì mà nhiều người thích đến vậy? Cùng mình tìm hiểu nhé 😙..."
+description: "Làm IT là làm gì, lập trình viên là ai, và vì sao ai cũng muốn vào ngành? Giải thích ngành IT dễ hiểu cho người mới tìm hiểu."
 lang: vi
+tags: ["programming"]
 ---
 
 Công nghệ thông tin đang là một trong những ngành học và làm việc hot nhất hiện nay. Số người tham gia vào ngành công nghệ thông tin đang không ngừng gia tăng và những start-up công nghệ đang xuất hiện ngày càng dày đặc.

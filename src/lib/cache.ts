@@ -18,8 +18,7 @@ export async function withCache<T>(
   }
 
   const data = await fetcher();
-  const isEmptyArray = Array.isArray(data) && data.length === 0;
-  if (!isEmptyArray) {
+  if (!isEmpty(data)) {
     try {
       await kv.put(key, JSON.stringify(data), { expirationTtl: ttlSeconds });
     } catch (err) {
@@ -28,4 +27,17 @@ export async function withCache<T>(
   }
 
   return data;
+}
+
+// Fetchers swallow errors and return empty lists, so an all-empty result usually
+// means the upstream call failed. Don't pin that in KV for the whole TTL.
+// Covers both `[]` and objects of lists like `{ current_reads: [], read: [] }`.
+function isEmpty(data: unknown): boolean {
+  if (data == null) return true;
+  if (Array.isArray(data)) return data.length === 0;
+  if (typeof data === "object") {
+    const values = Object.values(data);
+    return values.length > 0 && values.every(isEmpty);
+  }
+  return false;
 }

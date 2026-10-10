@@ -3,6 +3,7 @@ title: C++ tips & tricks
 date: 2020-11-05
 description: Tóm tắt lại vài thủ thuật hay ho mà mình học được khi chuyển từ pascal sang C++. Đa số những thủ thuật này được sử dụng trong CP (Competitive programming).
 lang: vi
+tags: ["programming"]
 ---
 
 ## Mở đầu

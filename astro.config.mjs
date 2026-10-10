@@ -6,6 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { satteri } from "@astrojs/markdown-satteri";
 import satteriKatex from "./remark/satteri-katex.mjs";
 import satteriImageAlt from "./remark/satteri-image-alt.mjs";
+import satteriImageSizes from "./remark/satteri-image-sizes.mjs";
 import { getPostLastmods } from "./src/lib/post-lastmods.ts";
 
 import cloudflare from "@astrojs/cloudflare";
@@ -16,7 +17,7 @@ const sitemapPath = (url) => new URL(url).pathname.replace(/\/$/, "") || "/";
 const markdownProcessor = satteri({
   features: { math: true },
   mdastPlugins: [satteriKatex, satteriImageAlt],
-  hastPlugins: [],
+  hastPlugins: [satteriImageSizes],
 });
 
 export default defineConfig({
