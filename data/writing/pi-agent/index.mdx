@@ -3,8 +3,10 @@ title: "Why Pi Is My GOAT Agent Harness"
 date: 2026-08-14
 description: "After moving from Claude Code to Codex and OpenCode, I found a minimal, extensible coding harness that I could finally shape around my own workflow."
 draft: false
+tags: ["ai", "tools"]
 ---
 
+import { Image } from "astro:assets";
 import harnessBenchmark from "./HPXZaY5XUAAmz_p.jpg";
 import costBenchmark from "./composio-cost.webp";
 import beforeCustomize from "./pi-beforecustomize.png";
@@ -20,12 +22,10 @@ While scrolling through X, I found a [Composio benchmark](https://x.com/composio
 In Composio's set of 30 agentic tasks, Pi passed 20, giving it a 66.7% pass rate. That was the best result among the four newly tested harnesses.
 
 <figure>
-  <img
-    src={harnessBenchmark.src}
+  <Image
+    src={harnessBenchmark}
     alt="Composio benchmark comparing Pi Agent, Prime Agent, Deep Agents, and Hermes Agent with DeepSeek V4 Flash"
-    width={harnessBenchmark.width}
-    height={harnessBenchmark.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>
     DeepSeek V4 Flash results across four newly tested agent harnesses. Source: Composio.
@@ -35,12 +35,10 @@ In Composio's set of 30 agentic tasks, Pi passed 20, giving it a 66.7% pass rate
 Cost per successful task was where Pi stood out most. Across all eight harnesses in Composio's comparison, Pi was the cheapest at \$0.028 per successful task. Claude Code was the most expensive at \$0.195, almost seven times as much. Pi's median completion time was 132.2 seconds; only Claude Code and OpenCode were faster in the broader comparison.
 
 <figure>
-  <img
-    src={costBenchmark.src}
+  <Image
+    src={costBenchmark}
     alt="Cost per successful task across eight agent harnesses using DeepSeek V4 Flash"
-    width={costBenchmark.width}
-    height={costBenchmark.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>
     Estimated cost per successful task at the API rates used by Composio.
@@ -139,24 +137,20 @@ A simple example is subscription usage. I use both an OpenCode Go subscription a
 This was Pi before the customization:
 
 <figure>
-  <img
-    src={beforeCustomize.src}
+  <Image
+    src={beforeCustomize}
     alt="Pi terminal interface before adding subscription usage indicators"
-    width={beforeCustomize.width}
-    height={beforeCustomize.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
 </figure>
 
 I asked Pi to build an extension for it. The result was a clean TypeScript extension that reads usage data for the active provider and adds compact progress bars to the footer. For OpenCode Go, it displays rolling, weekly, and monthly usage. For Codex through ChatGPT Plus, it shows the weekly usage window and subscription plan.
 
 <figure>
-  <img
-    src={afterCustomize.src}
+  <Image
+    src={afterCustomize}
     alt="Pi terminal interface showing OpenCode Go subscription usage bars in the footer"
-    width={afterCustomize.width}
-    height={afterCustomize.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>
     Rolling, weekly, and monthly OpenCode Go usage displayed directly in Pi.
@@ -172,12 +166,10 @@ I also built an autoresearch extension based on the principles in [Andrej Karpat
 With the help of OpenAI's GPT-5.6 Luna model at max thinking, I built a fully working workflow in about 10 minutes. It generated roughly 2,000 lines of code covering the commands, experiment orchestration, Git branch isolation, evaluation logic, progress tracking, and interactive dashboard. I define an objective with `/autoresearch <goal>`, then run `/autoresearch start`. From there, the agent works through a bounded experiment loop: it changes the code, runs the evaluation, compares the result with the current best, keeps improvements, reverts failures, and records each experiment automatically.
 
 <figure>
-  <img
-    src={autoresearch.src}
+  <Image
+    src={autoresearch}
     alt="Pi autoresearch dashboard showing a sequence of autonomous code experiments and their results"
-    width={autoresearch.width}
-    height={autoresearch.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>
     My autoresearch extension running a bounded optimization loop and tracking the best result.

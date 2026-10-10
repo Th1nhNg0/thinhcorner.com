@@ -1,5 +1,5 @@
 ---
-import { SITE, GOOGLE_ANALYTICS_ID } from "../../data/consts";
+import { SITE } from "../../data/consts";
 import { FEED_LANGS } from "@/lib/feed";
 import "@/styles/global.css";
 import katexCSSUrl from "katex/dist/katex.min.css?url";
@@ -18,6 +18,7 @@ interface Props {
   publishedTime?: string; // ISO
   modifiedTime?: string; // ISO
   imageAlt?: string;
+  tags?: string[];
   structuredData?: Record<string, any> | Array<Record<string, any>>;
 }
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -34,6 +35,7 @@ const {
   publishedTime,
   modifiedTime,
   imageAlt = title,
+  tags = [],
   structuredData,
   katex = false,
 } = Astro.props;
@@ -81,6 +83,11 @@ const {
     )
   }
 
+  {
+    type === "article" &&
+      tags.map((tag) => <meta property="article:tag" content={tag} />)
+  }
+
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content={canonicalURL} />
@@ -121,48 +128,7 @@ const {
     )
   }
 
-  {/* Load Google Analytics after the initial page is interactive. */}
-  {
-    import.meta.env.PROD && (
-      <script
-        is:inline
-        set:html={`
-(() => {
-  const id = ${JSON.stringify(GOOGLE_ANALYTICS_ID)};
-  let loaded = false;
-
-  const loadAnalytics = () => {
-    if (loaded) return;
-    loaded = true;
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = window.gtag || function gtag() {
-      window.dataLayer.push(arguments);
-    };
-    window.gtag("js", new Date());
-    window.gtag("config", id);
-
-    const script = document.createElement("script");
-    script.async = true;
-    script.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(id);
-    document.head.appendChild(script);
-  };
-
-  ["pointerdown", "keydown", "touchstart", "scroll"].forEach((eventName) => {
-    window.addEventListener(eventName, loadAnalytics, { once: true, passive: true });
-  });
-  window.addEventListener("load", () => window.setTimeout(loadAnalytics, 10000), { once: true });
-
-  document.addEventListener("astro:page-load", () => {
-    if (loaded && typeof window.gtag === "function") {
-      window.gtag("event", "page_view", {
-        page_path: window.location.pathname + window.location.search,
-      });
-    }
-  });
-})();`}
-      />
-    )
-  }
+  {/* Analytics: Cloudflare Web Analytics, injected at the edge (no script here). */}
 
   <slot />
 </head>

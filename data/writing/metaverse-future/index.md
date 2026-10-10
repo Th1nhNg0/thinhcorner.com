@@ -1,8 +1,9 @@
 ---
 title: "Metaverse: Tương Lai Không Thể Tránh Khỏi?"
 date: 2024-03-04
-description: "Khi trí tuệ nhân tạo đang là chủ đề nóng bỏng nhất và dường như Metaverse đã bị đặt sang một bên do quyết định của Mark Zuckerberg: chuyển sự đầu tư từ Metaverse sang trí tuệ nhân tạo. Metaverse vẫn luôn là một chủ đề rất hấp dẫn và không thể tránh khỏi."
+description: "AI đang chiếm spotlight và Meta đã chuyển hướng đầu tư, nhưng Metaverse vẫn là xu hướng khó tránh khỏi. Vì sao nó vẫn đáng để quan tâm."
 lang: vi
+tags: ["technology"]
 ---
 
 > Bài viết này sẽ không thể hoàn thành nếu thiếu sự đồng hành của bạn [Lê Huy Hoàng](https://www.facebook.com/hoang.lehuy.96343)

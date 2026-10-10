@@ -3,6 +3,7 @@ title: "Code một bot chat thông minh tự động học bằng Python và Cha
 date: "2021-06-01"
 description: "Hướng dẫn code một bot chat thông minh tự động học bằng Python và Chatterbot."
 lang: "vi"
+tags: ["programming", "ai"]
 ---
 
 ## Chatterbot là gì?

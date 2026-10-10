@@ -9,6 +9,7 @@ import { format } from "date-fns";
 import getReadingTime from "reading-time";
 import { getModifiedDate } from "@/lib/post-dates";
 import EditOnGithub from "../../../components/EditOnGithub.astro";
+import { getRelatedPosts, tagLabel } from "@/lib/tags";
 
 export async function getStaticPaths() {
   const paths = (await getCollection("writing")).sort(
@@ -40,6 +41,7 @@ function getPrevPost() {
 }
 
 const nextPost = getNextPost();
+const relatedPosts = getRelatedPosts(post, await getCollection("writing"));
 const prevPost = getPrevPost();
 
 const { Content, headings } = await render(post);
@@ -75,6 +77,7 @@ let slug = Array.isArray(Astro.params.id)
   publishedTime={post.data.date.toISOString()}
   modifiedTime={modifiedTime}
   imageAlt={post.data.title}
+  tags={post.data.tags.map(tagLabel)}
   structuredData={[
     {
       "@context": "https://schema.org",
@@ -97,6 +100,9 @@ let slug = Array.isArray(Astro.params.id)
       mainEntityOfPage: new URL(`/writing/${post.id}`, Astro.site).toString(),
       url: new URL(`/writing/${post.id}`, Astro.site).toString(),
       inLanguage: postLang,
+      ...(post.data.tags.length > 0 && {
+        keywords: post.data.tags.map(tagLabel).join(", "),
+      }),
       ...(minutesRead && {
         timeRequired: `PT${Math.ceil(parseInt(minutesRead))}M`,
       }),
@@ -184,6 +190,22 @@ let slug = Array.isArray(Astro.params.id)
             )
           }
         </div>
+        {
+          post.data.tags.length > 0 && (
+            <ul class="mt-3 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-wider" aria-label="Tags">
+              {post.data.tags.map((tag) => (
+                <li>
+                  <a
+                    href={`/writing/tag/${tag}`}
+                    class="text-zinc-500 transition-colors hover:text-[#eab308]"
+                  >
+                    #{tagLabel(tag)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
       </header>
       {
         showToc && (
@@ -214,6 +236,32 @@ let slug = Array.isArray(Astro.params.id)
     </article>
 
     <EditOnGithub slug={slug} />
+
+    {
+      relatedPosts.length > 0 && (
+        <section class="mb-8" aria-labelledby="related-heading">
+          <h2
+            id="related-heading"
+            class="mb-2 font-mono text-xs uppercase tracking-wider text-zinc-600"
+          >
+            {postLang === "vi" ? "Bài liên quan" : "Related"}
+          </h2>
+          <ul>
+            {relatedPosts.map((p) => (
+              <li>
+                <a
+                  href={`/writing/${p.id}`}
+                  hreflang={p.data.lang ?? "en"}
+                  class="block py-1.5 text-sm text-zinc-400 transition-colors hover:text-[#eab308]"
+                >
+                  {p.data.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
 
     <nav
       class="grid border-y border-[#27272a] sm:grid-cols-2"
