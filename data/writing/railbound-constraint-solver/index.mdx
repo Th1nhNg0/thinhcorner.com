@@ -1,171 +1,199 @@
 ---
 title: "Solving Railbound with a Constraint Solver"
 date: "2026-10-10"
-description: "Turning a train puzzle game into a constraint satisfaction problem with MiniZinc: tracks as variables, trains as positions over time, and a solver that clears 151 puzzles."
+description: "I taught a constraint solver to play Railbound, a puzzle game about tiny trains. It lays the track and plans every car's route at once, and clears all 151 puzzles in worlds 1 to 8."
 tags: ["programming", "games"]
 ---
 
 import LoopVideo from "@/components/LoopVideo.astro";
 import gameMp4 from "./game.mp4";
 import gameWebm from "./game.webm";
-import vizMp4 from "./viz.mp4";
-import vizWebm from "./viz.webm";
+import solve115Mp4 from "./1-15A.mp4";
+import solve115Webm from "./1-15A.webm";
+import tunnelMp4 from "./2-3.mp4";
+import tunnelWebm from "./2-3.webm";
+import gatesMp4 from "./3-7.mp4";
+import gatesWebm from "./3-7.webm";
+import bossMp4 from "./7-7C.mp4";
+import bossWebm from "./7-7C.webm";
+import nemesisMp4 from "./5-4C.mp4";
+import nemesisWebm from "./5-4C.webm";
+import beforeAfter from "./before-after.webp";
+import pieces from "./pieces.webp";
+import filmstrip from "./filmstrip.webp";
+import solveTimes from "./solve-times.webp";
 
 <LoopVideo webm={gameWebm} mp4={gameMp4} width={600} height={338} label="Railbound gameplay: three numbered train cars running through tunnels and loops" />
 
-[Railbound](https://afterburn.games/railbound/) is a cozy puzzle game about trains. Each level gives you a small grid, a few train cars, a station to reach, and a limited number of track pieces. You lay the track, press play, and watch. If the cars arrive in order (1, then 2, then 3) and nothing crashes, you win.
+I came across [Railbound](https://afterburn.games/railbound/) on YouTube, tried it myself, and really liked it. It is a cozy puzzle game about tiny trains. You get a small grid, a few numbered cars, an exit, and a limited number of track pieces. You lay the track, press play, and watch. If the cars leave in order (1, then 2, then 3) and nothing crashes, you win.
 
-The early levels take seconds. Then the game starts adding things: tunnels, gates that open when a train rolls over a button, switches that flip every time a train passes, stations where a car has to stop and wait, decoy cars that wander around and get in the way. Somewhere around world 5 the levels stop being about finding a path and start being about timing.
+Pretty soon I stopped wanting to solve the levels and started wanting to write something that solves them for me. A few years ago I did the same thing to [Hay Day's production schedule](/writing/hayday-game-schedule), so this is apparently a pattern.
 
-I came across Railbound on YouTube, tried it myself, and really liked it. Pretty soon I wanted to know whether I could write an algorithm that solves it.
+So here is a computer playing level 1-15A:
 
-A few years ago I solved [the scheduling problem in Hay Day](/writing/hayday-game-schedule) with OR-Tools. Railbound felt like the same kind of itch: a game whose rules are strict enough that a computer should be able to play it better than me. So I wrote a solver in [MiniZinc](https://www.minizinc.org/). The code is on [GitHub](https://github.com/Th1nhNg0/railbound_cp).
+<figure>
+  <LoopVideo webm={solve115Webm} mp4={solve115Mp4} width={666} height={666} label="Three cars running through a solver-built layout on level 1-15A, leaving in order 1, 2, 3" />
+  <figcaption>Level 1-15A. The solver picked every piece of track and every car's route. Solve time: 2.8 seconds.</figcaption>
+</figure>
 
-## Why constraint programming
+Nobody told it how to solve this. I only described what the game's rules are. The rest of this post is about how that works, and how the game kept trying to break it.
 
-There are two obvious ways to write a solver for a puzzle like this.
+The code is on [GitHub](https://github.com/Th1nhNg0/railbound_cp), written in [MiniZinc](https://www.minizinc.org/).
 
-The first is search: try placing a piece, simulate, backtrack when it fails. It works, but you end up writing the game engine and the search strategy and all the pruning tricks yourself.
+## Don't solve it, describe it
 
-The second is to **describe** what a valid solution looks like and let a solver find one. That is constraint programming. You declare variables (what is on each cell, where each train is at each moment) and constraints (a train must follow the track it is on, two trains cannot share a cell, at most N pieces may be placed). You never say how to search. The solver does that.
+There are two ways to write a puzzle solver.
 
-What I like about this approach is that the model reads almost like the game's rulebook. When the game adds a new mechanic, I add a new file of constraints instead of rewriting a search algorithm.
+**The hard way:** write the game engine, then a search. Place a piece, simulate the trains, see if it worked, undo, try another piece. Then spend weeks adding tricks so it finishes before the heat death of the universe.
 
-## The board as variables
+**The lazy way:** write down what a solved puzzle looks like, and hand that to a solver that is very good at searching. That is **constraint programming**. You declare the unknowns (what is on each cell, where each car is at each moment) and the rules they must follow. You never say how to search.
 
-Here is the smallest puzzle in the game, level 1-1, as MiniZinc data:
+I picked the lazy way. The nice side effect is that the model ends up reading like the game's rulebook. When the game invents a new mechanic, I write down one more rule.
+
+Here is what one level looks like as a problem:
+
+<figure>
+  <img
+    src={beforeAfter.src}
+    alt="Level 1-15A before and after. Left: a 7 by 7 grid with three cars and a few fixed track pieces. Right: the same grid with 15 solver-placed pieces highlighted in yellow, forming loops that lead all three cars to the exit."
+    width={beforeAfter.width}
+    height={beforeAfter.height}
+    loading="lazy"
+  />
+  <figcaption>Left: what the game gives you. Right: what the solver came back with. Yellow cells are the 15 pieces it placed, exactly the 15 the level allows.</figcaption>
+</figure>
+
+## Every empty cell is a question
+
+The board is a grid of variables. Each empty cell asks one question: *which piece goes here?* There are 15 possible answers:
+
+<figure>
+  <img
+    src={pieces.src}
+    alt="The 15 pieces a cell can hold: empty, two straights, four corners and eight switches"
+    width={pieces.width}
+    height={pieces.height}
+    loading="lazy"
+  />
+  <figcaption>The 15 options for a free cell: nothing, two straights, four corners, eight switches.</figcaption>
+</figure>
+
+In MiniZinc that is one line:
 
 ```minizinc
-W=5;
-H=1;
-
-MAX_TIME=4;
-MAX_TRACKS=3;
-
-TARGET=(1,5);
-
-TRAINS=[(1,1,RIGHT)];
-INIT_POS=[
-  (1,1,STRAIGHT_RL),
-  (1,5,STRAIGHT_RL),
-];
-```
-
-A 5×1 grid, one train starting on the left facing right, the exit on the right, and three pieces to place. The answer is obvious (three straights), but every other level is described the same way.
-
-Every cell holds one piece. The piece type encodes both the shape and the orientation:
-
-```minizinc
-enum Piece = {
-  EMPTY,
-  STRAIGHT_TD, STRAIGHT_RL,
-  CORNER_TR, CORNER_TL, CORNER_DR, CORNER_DL,
-  SWITCH_T_D_R, SWITCH_T_D_L, ...   % entry, straight exit, curved exit
-  DSWITCH_..., ESWITCH_...,         % switches with state
-  TUNNEL_T, TUNNEL_R, TUNNEL_D, TUNNEL_L,
-  ROCK
-};
-
 array[1..H, 1..W] of var Piece: grid;
 ```
 
-That `grid` is the main decision. The solver picks a piece for every empty cell, and a handful of rules keep it honest:
+The full `Piece` type actually has 37 values, because it also includes tunnels, rocks, and switches with memory. But those only ever come from the level itself, the player can never place them. Writing that down as a rule cut every free cell from 37 options to 15, and the solver got noticeably faster. A lot of this project turned out to be exactly that: telling the solver what is impossible, so it doesn't waste time on it.
 
-- Pieces fixed by the level must stay where they are.
-- You cannot place more than `MAX_TRACKS` new pieces.
-- Free cells can only take pieces the player could actually place (empty, straights, corners, simple switches). Tunnels, rocks and stateful switches only come from the level itself. This one rule cut each cell's domain from 37 values down to 15, which helped search a lot.
-- A placed piece has to connect to something. No floating track.
+A few more rules keep the grid honest: fixed pieces stay fixed, you can't place more than the level allows, and placed track has to connect to something.
 
-## Trains as positions over time
+## Time is just another dimension
 
-The grid alone is not enough, because a layout is only correct if the trains actually run through it correctly. So the model also unrolls time. For every train and every time step, there is a row, a column, and the direction it came in from:
+A pretty layout is worthless if the trains crash on it. So the model also tracks every car at every moment. Time is split into steps, and for each car and each step there is a variable for its row and its column.
+
+<figure>
+  <img
+    src={filmstrip.src}
+    alt="Level 1-1 shown at five moments in time, t equals 0 to 4, with the car moving one cell right each step until it reaches the green exit"
+    width={filmstrip.width}
+    height={filmstrip.height}
+    loading="lazy"
+  />
+  <figcaption>Level 1-1, the easiest level in the game, unrolled over time. To the solver, each row is a separate set of variables.</figcaption>
+</figure>
+
+The movement rule says: look at the piece under the car, figure out which side the car leaves from, and move one cell that way. Simplified, it looks like this:
 
 ```minizinc
-array[1..N_TRAINS, 0..MAX_TIME] of var 1..H: train_row;
-array[1..N_TRAINS, 0..MAX_TIME] of var 1..W: train_col;
-array[1..N_TRAINS, 1..MAX_TIME] of var Dir:  train_dir;
-array[1..N_TRAINS] of var 1..MAX_TIME: arrival_time;
+exit_dir = exit_of[piece, entry_dir] /\
+next_r = r + dr[exit_dir] /\
+next_c = c + dc[exit_dir]
 ```
 
-The movement rule says: look at the piece under the train, work out which side it exits from, and move to the neighbouring cell on that side. That neighbour must accept a train coming in from the opposite side. Stripped of the special cases, it looks like this:
+Here is the part I find beautiful. `piece` is not a fixed value. It is `grid[r, c]`, which is still unknown. So the solver is **building the track and driving the trains on it at the same time**. It never builds a whole layout, runs it, and watches it fail. The moment it figures out that a corner on one cell would send car 2 into a wall, that option disappears, along with everything that depended on it.
 
-```minizinc
-exit_dir = exit_of[effective_piece, entry_dir] /\
-intended_r = r + dr[exit_dir] /\
-intended_c = c + dc[exit_dir] /\
-can_enter[grid[intended_r, intended_c], opposite[exit_dir]] /\
-if blocked then
-  next_r = r /\ next_c = c        % wait at a closed gate
-else
-  next_r = intended_r /\ next_c = intended_c
-endif
-```
+The remaining rules are short:
 
-The interesting part is that `grid` is a variable here, not a constant. The solver is choosing the track and simulating the trains on it **at the same time**. A bad corner on one cell does not get discovered by running the whole simulation and failing at the end. The constraints propagate it immediately: if no piece on that cell lets train 2 reach the exit in time, the cell's options shrink before any full layout exists.
-
-The rest of the rules are short:
-
-- Cars must arrive in order: `arrival_time[t] < arrival_time[t+1]`.
-- Once a car arrives, it stays at the exit.
+- Cars must leave in order: car 1 before car 2 before car 3.
 - No two cars in the same cell at the same time.
-- No two cars swapping places between two steps (they would pass through each other on the track).
+- No two cars swapping places between steps. They would drive straight through each other, which the game, sadly, does not allow.
 
-## One file per mechanic
+## Then the game gets mean
 
-This is where the game gets fun, and where the model grew. Each new world brings a mechanic, and each mechanic became its own constraint file:
+World 1 is just track. After that, every world adds something new, and each new thing became its own small file of rules.
 
-| World | Mechanic | How it is modeled |
-| ----- | -------- | ----------------- |
-| 2 | Tunnels | Entering one end puts the train at the other end on the same step |
-| 3 | Gates and buttons | A gate's open/closed state per time step, flipped when a train enters its button |
-| 4 | Dynamic switches | A switch's state per time step, toggled by its button |
-| 5 | Stations | A car must visit its station and wait there for two steps |
-| 6 | Exit-triggered switches | The switch flips every time a train leaves it |
-| 7 | Decoy cars | Extra cars that move by the same rules but never need to arrive |
-| 9 | Semaphores | Player-placed stop signs next to switches that open for good one step after a train enters that switch |
+**Tunnels** (world 2). Drive into one end, pop out of the other. In the model, entering a tunnel moves the car to the other side in the same step.
 
-Most of these follow one pattern: add a boolean per object per time step, define how it changes from step `t` to `t+1`, and let movement read it. A gate becomes `gate_open[g, t]`. A dynamic switch becomes `dswitch_toggled[s, t]`, and the movement rule swaps the switch for its flipped version when that is true.
+<figure>
+  <LoopVideo webm={tunnelWebm} mp4={tunnelMp4} width={486} height={486} label="Level 2-3: two cars loop around and enter a tunnel on the left, then reappear on the top row and drive to the exit" />
+  <figcaption>Level 2-3. Both cars use the green tunnel to jump to the top row.</figcaption>
+</figure>
 
-Semaphores were the hardest. Unlike gates, the player places them, so the solver has to decide both **where** a semaphore goes and **when** it opens, and the opening time depends on train movement, which depends on the semaphore. It took a string of fixes over two days (trigger timing, keeping semaphores off gates and buttons, tightening domains) before it stopped producing either nonsense or nothing.
+**Gates and buttons** (world 3). A gate blocks the track until a car rolls over its button. Now the solver has to care about **when** things happen, not just **where**. Each gate gets a yes/no variable per time step: open or closed.
+
+<figure>
+  <LoopVideo webm={gatesWebm} mp4={gatesMp4} width={576} height={486} label="Level 3-7: cars drive over colored buttons, which open the matching gates so the other car can pass" />
+  <figcaption>Level 3-7. Each colored dot is a button, and it opens the gate of the same color.</figcaption>
+</figure>
+
+**Switches with memory** (worlds 4 and 6). Some switches flip when you press a button. Others flip every time a car leaves them, so the same switch sends car 1 left and car 2 right.
+
+**Stations** (world 5). A car has to stop at its own station and wait there for two steps before it can leave.
+
+**Decoys** (world 7). Extra cars that follow the same rules but don't need to leave. They wander around and get in your way.
+
+And then the game combines all of it. This is 7-7C: three tunnel pairs, five switches that flip whenever a car leaves them, rocks everywhere, and a yellow decoy with its own plans:
+
+<figure>
+  <LoopVideo webm={bossWebm} mp4={bossMp4} width={846} height={846} label="Level 7-7C: three cars and a yellow decoy weave through tunnels and self-flipping switches on a 9 by 9 grid full of rocks" />
+  <figcaption>Level 7-7C. I would not have found this by hand. The solver took 42 seconds.</figcaption>
+</figure>
+
+Most mechanics follow the same recipe: one yes/no variable per object per time step, a rule for how it changes from one step to the next, and the movement rule reads it. Gates, buttons and both kinds of switches all fit that recipe.
+
+**Semaphores** (world 9) did not. They are stop signs that **you** place next to switches, and they open one step after a car enters that switch. So the solver has to decide where they go **and** when they open, and when they open depends on how the cars move, which depends on the semaphores. It took a string of fixes over two days before the model stopped producing either nonsense or nothing.
 
 I did not work all of this out alone. A lot of it came out of a thread on the [Railbound Discord server](https://discord.com/channels/441217491612598272/1142318326136180796), where I worked through the mechanics together with another player from the community.
 
-## Watching the answer
+## So how fast is it?
 
-A solver that prints arrays of numbers is not much fun, so I also wrote a small viewer (`viz.html`). Paste the solver output in and scrub through time to watch the cars move.
+I ran every puzzle in worlds 1 to 8 through the CP-SAT solver from Google's OR-Tools. That is 151 puzzles, including the hard A, B and C variants. All 151 solved.
 
-<LoopVideo webm={vizWebm} mp4={vizMp4} width={720} height={598} label="The solution viewer stepping a three-car solution through time" />
+<figure>
+  <img
+    src={solveTimes.src}
+    alt="Dot plot of solve times for 151 puzzles, one row per world, on a log scale from 0.01 to 100 seconds. Most puzzles take between 0.1 and 10 seconds. The three slowest are highlighted: 5-4C at 80 seconds, 5-5B at 53 seconds, both in the stations world, and 7-7C at 42 seconds in the decoys world."
+    width={solveTimes.width}
+    height={solveTimes.height}
+    loading="lazy"
+  />
+  <figcaption>69 puzzles solve in under a second and 134 in under ten. The whole set takes about 10.5 minutes.</figcaption>
+</figure>
 
-## How fast is it
+The slowest puzzles are not the biggest ones. They are the ones where **timing** matters most. Stations make cars stop, and every stop means more possible timelines to check.
 
-I benchmarked every puzzle in worlds 1 to 8 with the CP-SAT backend from OR-Tools. That is 151 puzzles, including the hard "A/B/C" variants. All 151 solved.
+The champion is 5-4C, from the stations world. It took 80 seconds and about 286 million propagation steps, which is the solver's way of saying "hmm" 286 million times:
 
-- 69 solve in under a second.
-- 134 solve in under ten seconds.
-- The whole suite takes about 10.5 minutes.
+<figure>
+  <LoopVideo webm={nemesisWebm} mp4={nemesisMp4} width={576} height={666} label="Level 5-4C: three cars visit their yellow-numbered stations, wait, then thread through a long shared layout to the exit" />
+  <figcaption>Level 5-4C, the hardest puzzle for the solver. Cars 1 and 3 must stop at their numbered stations before leaving.</figcaption>
+</figure>
 
-The slowest ones are not the biggest grids. They are the ones where timing matters most:
+That lines up with how the game feels to play. The levels I found hardest were also the solver's hardest.
 
-| Puzzle | Mechanic | Time |
-| ------ | -------- | ---- |
-| 5-4C | Stations | 80.3 s |
-| 5-5B | Stations | 52.6 s |
-| 7-7C | Decoys | 42.3 s |
-| 4-9B | Dynamic switches | 29.0 s |
-| 7-7B | Decoys | 23.5 s |
-
-That matches how the game feels to play. Stations and decoys are the levels where you have to think about **when** each car is somewhere, not just **where** the track goes. For a solver, every waiting step multiplies the number of possible timelines.
-
-In July I spent a day squeezing the model. Most of the gains came from removing things rather than adding them: lookup tables that were never used, redundant connectivity checks, a normalization step that the solver did not need, and tighter bounds on arrival times. The full suite went from 764 seconds to 632, about 17% faster.
+In July I spent a day trying to make it faster. Most of the speedup came from **deleting** things: lookup tables that were never used, checks the solver did not need, and tighter limits on when each car can arrive. The full set went from 764 seconds to 632, about 17% faster.
 
 ## What I learned
 
-**Write the rules, not the search.** The model is around 1,300 lines of MiniZinc, and almost none of it is about how to search. When I got stuck on a mechanic, the fix was always to describe the game more precisely.
+**Write the rules, not the search.** The model is about 1,300 lines of MiniZinc and almost none of it is about how to search. Whenever I got stuck, the fix was to describe the game more precisely.
 
-**Smaller domains beat clever tricks.** The biggest wins came from telling the solver what it could never do: a free cell cannot hold a tunnel, a car cannot arrive before step `t`, a semaphore cannot sit on a gate. Each of those is one line and removes huge parts of the search space.
+**Saying what's impossible is the best optimization.** A free cell can't hold a tunnel. A car can't arrive before step `t`. A semaphore can't sit on a gate. Each of those is one line, and each one removes a huge chunk of work.
 
-**Time is the expensive part.** Placing track is easy. Simulating several cars, switches and gates over every time step is where the variables pile up. The hardest puzzles for me and for the solver are the same ones.
+**Time is the expensive part.** Placing track is easy. Tracking every car, gate and switch at every step is where the variables pile up.
 
-**Mostly, it was fun.** Watching the cars roll through a layout that the solver came up with never got old. This was one of the most fun things I have built.
+**Mostly, it was fun.** Watching the cars roll through a layout the solver came up with never got old. This was one of the most fun things I have built.
 
-Worlds 10 to 12 add more mechanics, including levels with two separate destinations, and they are still on my list. If you want to try the solver on your own level, the [data format](https://github.com/Th1nhNg0/railbound_cp/blob/main/docs/data_format.md) is documented in the repo. I also recommend [FoxtrotOnce's RailboundSolver](https://github.com/FoxtrotOnce/RailboundSolver), a different, logic-driven approach that many of the game visuals in my repo come from.
+Worlds 10 to 12 add more mechanics, including levels with two separate destinations, and they are still on my list. If you want to try the solver on your own level, the [data format](https://github.com/Th1nhNg0/railbound_cp/blob/main/docs/data_format.md) is documented in the repo. Also check out [FoxtrotOnce's RailboundSolver](https://github.com/FoxtrotOnce/RailboundSolver), a different, logic-driven approach, and where much of the game art in my repo comes from.
+
+*The animations in this post are drawn from the solver's real output, using the tile art from the repo.*
