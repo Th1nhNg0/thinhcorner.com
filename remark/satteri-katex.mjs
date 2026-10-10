@@ -1,23 +1,27 @@
 import katex from "katex";
 
-function renderMath(node, displayMode) {
+function renderMath(node, ctx, displayMode) {
   const value = katex.renderToString(node.value, {
     displayMode,
     throwOnError: false,
   });
+  if (displayMode) return { rawHtml: value };
 
-  // Preserve inline math as an inline HTML node. Returning rawHtml here makes
-  // Sätteri emit a block-level paragraph inside the surrounding paragraph.
-  return displayMode ? { rawHtml: value } : { type: "html", value };
+  // Inline math in Markdown: rawHtml would make Sätteri emit a block-level
+  // paragraph inside the surrounding paragraph, so use an inline HTML node.
+  // In MDX an html node becomes an escaped string child, while rawHtml is
+  // parsed into inline JSX, so MDX needs rawHtml.
+  const isMdx = ctx.fileURL?.pathname.endsWith(".mdx");
+  return isMdx ? { rawHtml: value } : { type: "html", value };
 }
 
 const satteriKatex = {
   name: "katex",
-  math(node) {
-    return renderMath(node, true);
+  math(node, ctx) {
+    return renderMath(node, ctx, true);
   },
-  inlineMath(node) {
-    return renderMath(node, false);
+  inlineMath(node, ctx) {
+    return renderMath(node, ctx, false);
   },
 };
 
