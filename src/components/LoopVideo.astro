@@ -1,0 +1,28 @@
+---
+// A silent looping clip that stands in for an animated GIF at a fraction of the size.
+// Browsers that decode AV1 take the WebM; everything else (older Safari) falls back
+// to the H.264 MP4.
+interface Props {
+  webm: string;
+  mp4: string;
+  width: number;
+  height: number;
+  label: string;
+}
+
+const { webm, mp4, width, height, label } = Astro.props;
+---
+
+<video
+  autoplay
+  loop
+  muted
+  playsinline
+  width={width}
+  height={height}
+  aria-label={label}
+  class="rounded-surface mx-auto border border-(--line)"
+>
+  <source src={webm} type='video/webm; codecs="av01.0.04M.08"' />
+  <source src={mp4} type="video/mp4" />
+</video>
