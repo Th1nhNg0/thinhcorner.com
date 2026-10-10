@@ -1,0 +1,199 @@
+---
+title: "How I Built My Data Page"
+date: "2026-10-10"
+description: "How the live pages under /data work: one small server-rendered page per service, a KV cache in front of every API, and a sync pipeline that collects AI token usage from every machine I own."
+---
+
+import dataHub from "./data-hub.webp";
+import tokenUsageTop from "./token-usage-top.webp";
+import tokenUsageMid from "./token-usage-mid.webp";
+
+I like looking at my own habits as data. How many books did I finish this year? Which artist have I had on repeat for six months without noticing? Is my chess rating actually going up, or does it only feel that way after one good night? How much would my coding agents cost if I paid for every token at API prices?
+
+The answers already exist. They are just scattered across Goodreads, Spotify, Chess.com, Steam and a pile of log files on several computers. The [/data](/data) section of this site is where I pull them into one place. This post explains how it works, what broke along the way, and what I would tell anyone building something similar.
+
+<figure>
+  <img
+    src={dataHub.src}
+    alt="The /data hub page listing five live pages: Books, Music, Chess, Steam and Token usage, each with its data source"
+    width={dataHub.width}
+    height={dataHub.height}
+    loading="lazy"
+  />
+  <figcaption>The /data hub. Each card is one page and one data source.</figcaption>
+</figure>
+
+There are five pages right now:
+
+- [Books](/data/books): everything I have read on Goodreads, by year and month, with ratings.
+- [Music](/data/music): recently played tracks, plus top tracks and artists over three time ranges from Spotify.
+- [Chess](/data/chess): ratings, win rates, openings and recent games from Chess.com.
+- [Steam](/data/steam): where my gaming hours went and what I am playing now.
+- [Token usage](/data/token-usage): daily tokens and estimated spend across the coding agents and models I use.
+
+## The shape of every page
+
+All five pages follow the same pattern, so adding a new one is mostly boring work, which is what I want.
+
+The site is built with [Astro](https://astro.build/) and runs on [Cloudflare Workers](https://workers.cloudflare.com/). Blog posts are prerendered at build time, but every data page opts out with `export const prerender = false`, so it renders when someone requests it. Each service has one small module in `src/lib/` that knows how to talk to that service and returns plain objects. The page only formats them.
+
+The important part sits between those two: a cache. Third-party APIs are slow, rate limited, and sometimes down. I do not want a visitor's page load to depend on Spotify's mood, so every fetch goes through one helper backed by [Workers KV](https://developers.cloudflare.com/kv/):
+
+```ts
+export async function withCache<T>(
+  kv: KVNamespace | undefined | null,
+  key: string,
+  ttlSeconds: number,
+  fetcher: () => Promise<T>,
+): Promise<T> {
+  if (!kv) return fetcher();
+
+  const cached = await kv.get(key);
+  if (cached) return JSON.parse(cached) as T;
+
+  const data = await fetcher();
+  // Never cache an empty result: it usually means the API failed.
+  if (!(Array.isArray(data) && data.length === 0)) {
+    await kv.put(key, JSON.stringify(data), { expirationTtl: ttlSeconds });
+  }
+  return data;
+}
+```
+
+(The real version in the repo also wraps the KV reads and writes in `try/catch`, so a KV hiccup falls through to a live fetch instead of an error page.)
+
+Each page also sends a `Cache-Control` header with `s-maxage` and `stale-while-revalidate`, so shared caches and browsers can reuse a rendered page for a few minutes. KV is the layer that really matters, though: it holds the raw API data for much longer, and a cache hit means the page renders without touching the third-party API at all.
+
+| Page | Source | Auth | KV cache |
+| --- | --- | --- | --- |
+| Books | Goodreads RSS feeds | None | 6 hours |
+| Music | Spotify Web API | OAuth refresh token | 1 to 2 hours |
+| Chess | Chess.com Published-Data API | None | 1 hour |
+| Steam | Steam Web API | API key | 6 hours |
+| Token usage | `ccusage` export on a Git branch | None | 15 minutes |
+
+The TTLs follow how fast the data actually changes. My Goodreads shelves change a few times a month, so six hours is plenty. Recently played music changes every few minutes, but nobody needs it to the second.
+
+## How it got here
+
+None of this was designed up front. It grew over about a year and a half.
+
+The first two pages arrived on the same day in February 2025: a reading page backed by Goodreads and a music page backed by Spotify. Back then the site ran on Vercel, and the music page used Vercel's incremental static regeneration, first with a 24-hour expiry and then 15 minutes. The reading page was fully static, so it only updated when I rebuilt the site.
+
+Some pages did not survive. A crypto portfolio page lived from May 2025 to February 2026. A games page built on the RAWG API lasted four months. Both were fun to build and not interesting enough to keep.
+
+In March 2026 I moved the whole site to Cloudflare Workers. A week earlier I had switched the pages to Astro 6's experimental route caching, and it came out again the day after the move. The KV helper above took its place in April. In August I added the `/data` hub with the Chess page, then Steam the same day, and moved Books and Music under `/data` so everything lived together. Token usage arrived the next day. Today the pages got a shared header, section headings and stat grid so they finally look like one family instead of five experiments.
+
+## Every API has a personality
+
+The pattern is the same, but every source has its own quirks.
+
+**Goodreads** closed its public API years ago. What still works is the RSS feed for each shelf (`review/list_rss/<user>?shelf=read`), which includes ratings, page counts and read dates. I parse it with [cheerio](https://cheerio.js.org/) in XML mode. Goodreads sometimes answers non-browser requests with an error page, so the fetch sends a normal browser `User-Agent`.
+
+This source also taught me the most important caching lesson. In May 2026 the books page went blank. Goodreads had returned an error, my parser found zero books, and the cache dutifully stored that empty list for hours. Every visitor got the cached nothing. The fix was simple: an empty result is almost never a real answer from these APIs, so it should never be cached.
+
+**Spotify** needs OAuth, but for a personal site the flow is simple. I authorized my own account once, kept the refresh token as a Worker secret, and exchange it for a short-lived access token on each cache miss. The page makes seven calls (recently played, plus top tracks and top artists for three time ranges), so caching matters a lot here.
+
+**Chess.com** has the friendliest API of the group. It is public and needs no key, although it asks callers to send a descriptive `User-Agent`. It has two small traps. Usernames in paths must be lowercase. And the monthly game archive returns a 404 for months in which you played no games, which looks exactly like an error unless you expect it. From the profile, stats and monthly archives, the page derives rating history, win streaks, favorite openings and recent games.
+
+**Steam** needs a free Web API key. If the key is missing, the page shows a short setup notice instead of failing, which makes local development and forks less painful.
+
+One more lesson applies to all of them: **version your cache keys**. The chess payload is stored under `chess_overview_v4_<user>` and Steam is on `_v9`. Whenever I change the shape of the cached object, I bump the version. Otherwise the new code reads an old object for up to six hours, and in one case a stale Steam entry kept showing 8 games in a "Most played" list that should have had 12.
+
+## The token usage page
+
+This page took the most work, because it is the only one where I had to build the data source myself.
+
+[ccusage](https://github.com/ryoppippi/ccusage) is a CLI that reads the local logs of coding agents and reports tokens and estimated cost per day, model and agent. The catch is the word *local*. The logs live on whatever machine ran the agent, and I use several: Windows desktops (with agents running both natively and inside WSL), a MacBook, and a small cloud server. No single machine knows the full picture.
+
+<figure>
+  <img
+    src={tokenUsageTop.src}
+    alt="The token usage page header and daily spend chart: 41.8B tokens, $3,482 estimated cost, 102 active days, with a stacked bar chart of daily spend by model from May to October 2026"
+    width={tokenUsageTop.width}
+    height={tokenUsageTop.height}
+    loading="lazy"
+  />
+  <figcaption>The top of /data/token-usage on October 10, 2026.</figcaption>
+</figure>
+
+### Collecting from every machine
+
+The collector is a Bun script, `scripts/update-ccusage.ts`. It runs `bun x ccusage daily --json --by-agent` and merges the result into one JSON file. Inside WSL it also looks through `/mnt/c/Users/*` for Windows home folders that contain agent logs (`.claude`, `.codex`, `.pi`, `.copilot`, `.cursor` and so on) and runs ccusage again with `HOME` pointed at each one. That way one run on a Windows machine covers both sides.
+
+Each machine writes only its own slice, keyed by a source id that defaults to the hostname:
+
+```json
+{
+  "b": 20578,
+  "m": ["gpt-5.6-sol", "claude-opus-5-5", "..."],
+  "a": ["pi", "codex", "claude", "..."],
+  "sources": {
+    "<machine-id>": [[30, 940262, 74806, 11595648, [[0, 12610716, 1274]], [[0, 12610716, 1274]]]]
+  }
+}
+```
+
+Each row is one day: offset from the base day, input, output and cache-read tokens, then `[index, tokens, cents]` triples per model and per agent. That format is deliberately ugly. The first version stored ccusage's pretty-printed JSON and weighed 144 KB. The compact version stores day offsets from a base day (`b`), replaces model and agent names with indexes into two dictionaries (`m` and `a`), and keeps cost in integer cents. The same data shrank to about 3 KB. The page decodes it once on the server, so readability of the file does not matter.
+
+Keying by machine has one sharp edge: the site sums every source per day. If one computer reports under two different ids, for example its Windows hostname and its WSL hostname, every overlapping day is counted twice. So the source id can be pinned in a small config file, and the script warns when it runs in WSL without one.
+
+### Getting the data off master
+
+The first sync design was the obvious one: commit `data/ccusage.json` to the main branch and let the site rebuild. It worked, and it was a mistake. Within a month, master had 45 commits named `chore(ccusage): sync usage data from ...`, burying the real history, and each one triggered a full site build just to change one small JSON file.
+
+Now every machine pushes to an orphan branch called `ccusage-data` that contains nothing but that file. The token usage page renders on request, fetches the file from `raw.githubusercontent.com` with a 15-minute KV cache, and falls back to a copy bundled from master if GitHub is unreachable. Syncing no longer touches master, and no rebuild is needed for new data to show up.
+
+### One command per machine
+
+I did not want to clone the whole repository on every machine, so the sync is a single command:
+
+```bash
+curl -fsSL https://thinhcorner.com/sync.sh | sh
+```
+
+`/sync.sh` is a tiny shim that downloads the real script from the repo, so there is only one source of truth. The script makes a throwaway clone of the data branch, downloads the collector from master next to it, runs it, commits and pushes. An earlier version cloned the full repository, about 57 MB of posts and images, to change one file. A partial clone with a sparse checkout brought that down to 177 KB before the move to a separate branch made it smaller still.
+
+Two machines can sync at nearly the same time, so the push is allowed to fail. If another machine pushed first, the script fetches the new branch tip, re-runs the merge on top of it and tries again, up to three times. Because each machine only rewrites its own slice, re-running the merge is always safe.
+
+Adding `--install-cron` installs a daily schedule using whatever the machine has: cron on Linux, launchd on macOS, Task Scheduler on Windows. Laptops are often asleep at 23:55, so the scheduler also runs a catch-up check on boot, login and every 30 minutes. The check compares a last-sync timestamp with the most recent scheduled time and only syncs if a run was missed.
+
+### Drawing it honestly
+
+Token data is hard to chart because cache reads dominate everything. On a linear scale, the token chart left 41 of 71 days under two pixels tall. Cost is much better behaved: the median day and the peak day differ by only a few times. So the daily chart has a toggle. Cost uses a linear scale, where stacked segments add up honestly. Tokens use a log scale, so normal days do not disappear. The toggle is plain CSS with two hidden radio buttons, so it works without JavaScript.
+
+<figure>
+  <img
+    src={tokenUsageMid.src}
+    alt="Token mix, agents and active days sections of the token usage page: cache reads are 95.6% of tokens, pi accounts for 73.2% of tokens, and a calendar heatmap shows usage increasing from August"
+    width={tokenUsageMid.width}
+    height={tokenUsageMid.height}
+    loading="lazy"
+  />
+  <figcaption>Token mix, agents and the activity calendar.</figcaption>
+</figure>
+
+## What the data says
+
+At the time of writing, the page covers May 5 to October 10, 2026: 41.8 billion tokens over 102 active days, with an estimated cost of \$3,482.
+
+That cost needs a caveat. ccusage prices every token at the provider's API rates, so it shows what the work *would* cost on pay-as-you-go. Much of my usage goes through subscriptions, so the number is a measure of the work, not my bill.
+
+A few things surprised me:
+
+- **95.6% of all tokens are cache reads.** Agents re-read the same context on every turn. Only 0.5% of tokens are output, the code and text the models actually wrote.
+- **Volume and cost tell different stories.** gpt-5.6-sol is only 3.6% of my tokens but 30.6% of the estimated cost. gpt-5.6-luna is 26% of tokens and 10% of cost.
+- **The harness matters as much as the model.** Pi handled 73% of my tokens at about \$0.03 per million. Codex and Claude Code each cost about ten times that per million. This matches what I wrote in [Why Pi Is My GOAT Agent Harness](/writing/pi-agent).
+- **I use these tools more than I thought.** The calendar is mostly empty in May and almost solid yellow from mid-August.
+
+## What I would do again
+
+If you want to build something like this, these are the lessons that cost me the most time:
+
+1. **Render on request, cache the API data.** KV in front of every service means most visitors never wait on a slow third party.
+2. **Never cache an empty response.** Treat empty as failure unless you know better.
+3. **Version your cache keys.** Bump the key whenever the cached shape changes.
+4. **Keep generated data out of your main branch.** A data branch read at request time beats a rebuild per sync.
+5. **Measure before choosing a chart.** Count how many points a scale hides before deciding it is fine.
+
+The pages are not finished, and I hope they never are. Every time I wonder about one of my habits, I now have a place to put the answer. The code is all in the [site's repository](https://github.com/Th1nhNg0/thinhcorner.com), and the [data pages](/data) update themselves while I sleep.
