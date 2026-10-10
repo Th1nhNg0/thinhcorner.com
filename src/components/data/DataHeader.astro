@@ -1,0 +1,61 @@
+---
+// Shared header for every /data page: breadcrumb, title, intro and a mono
+// meta line with the data source and when the page was rendered.
+interface Props {
+  title: string;
+  source?: string;
+  sourceHref?: string;
+  updated?: Date;
+}
+
+const { title, source, sourceHref, updated } = Astro.props;
+---
+
+<header class="page-header">
+  <nav aria-label="Breadcrumb" class="font-mono text-xs text-zinc-600">
+    <a href="/data" class="transition-colors hover:text-[#eab308]">data</a>
+    <span class="px-1 text-zinc-700" aria-hidden="true">/</span>
+    <span class="text-zinc-500" aria-current="page">{title.toLowerCase()}</span>
+  </nav>
+  <h1 class="page-title">{title}</h1>
+  {Astro.slots.has("default") && <p class="page-intro"><slot /></p>}
+  {
+    (source || updated || Astro.slots.has("meta")) && (
+      <p class="data-meta">
+        {source && (
+          <span class="data-meta-source">
+            <span class="data-live-dot" aria-hidden="true" />
+            {sourceHref ? (
+              <a href={sourceHref} target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-[#eab308]">
+                {source}
+              </a>
+            ) : (
+              source
+            )}
+          </span>
+        )}
+        <slot name="meta" />
+        {updated && (
+          <span>
+            updated <time data-local-time datetime={updated.toISOString()}>{updated.toISOString().slice(0, 16).replace("T", " ")} UTC</time>
+          </span>
+        )}
+      </p>
+    )
+  }
+</header>
+
+<script>
+  // Render server timestamps in the reader's own timezone.
+  function formatLocalTimes() {
+    document.querySelectorAll<HTMLTimeElement>("time[data-local-time]").forEach((el) => {
+      const date = new Date(el.dateTime);
+      if (isNaN(date.getTime())) return;
+      const datePart = date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      const timePart = date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true });
+      el.textContent = `${datePart}, ${timePart}`;
+    });
+  }
+
+  document.addEventListener("astro:page-load", formatLocalTimes);
+</script>

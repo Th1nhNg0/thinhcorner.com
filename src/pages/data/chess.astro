@@ -2,6 +2,7 @@
 export const prerender = false;
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
+import DataHeader from "@/components/data/DataHeader.astro";
 import { getChessOverview } from "@/lib/chess";
 import type { GameOutcome, HistoryPoint } from "@/lib/chess";
 import { CHESS_PROFILE_URL, CHESS_USERNAME } from "../../../data/consts";
@@ -62,12 +63,16 @@ const W = 720;
 const H = 260;
 const PAD = { l: 44, r: 14, t: 18, b: 30 };
 
-const round25 = (v: number) => Math.round(v / 25) * 25;
-let yLo = round25(Math.min(...allPoints.map((p) => p.r)) - 40);
-let yHi = round25(Math.max(...allPoints.map((p) => p.r)) + 40);
-if (!Number.isFinite(yLo)) yLo = 800;
-if (!Number.isFinite(yHi)) yHi = 1600;
-if (yHi - yLo < 100) yHi = yLo + 100;
+// Round the y-range out to a "nice" step so gridlines land on round ratings.
+let rMin = Math.min(...allPoints.map((p) => p.r));
+let rMax = Math.max(...allPoints.map((p) => p.r));
+if (!Number.isFinite(rMin)) rMin = 800;
+if (!Number.isFinite(rMax)) rMax = 1600;
+const yStep =
+  [25, 50, 100, 200, 250, 500].find((step) => (rMax - rMin + 40) / step <= 5) ??
+  1000;
+const yLo = Math.floor((rMin - 20) / yStep) * yStep;
+const yHi = Math.max(Math.ceil((rMax + 20) / yStep) * yStep, yLo + yStep * 2);
 
 let tMin = Math.min(...allPoints.map((p) => p.t));
 let tMax = Math.max(...allPoints.map((p) => p.t));
@@ -83,7 +88,10 @@ const x = (t: number) =>
 const y = (r: number) =>
   PAD.t + (1 - (r - yLo) / (yHi - yLo)) * (H - PAD.t - PAD.b);
 
-const yTicks = Array.from({ length: 5 }, (_, i) => yLo + ((yHi - yLo) / 4) * i);
+const yTicks = Array.from(
+  { length: Math.round((yHi - yLo) / yStep) + 1 },
+  (_, i) => yLo + yStep * i,
+);
 const xTicks = Array.from({ length: 4 }, (_, i) => tMin + ((tMax - tMin) / 3) * i);
 
 const seriesViews = chartSeries.map((s) => ({
@@ -117,7 +125,7 @@ const streakSuffix = { win: "W", loss: "L", draw: "D" } as const;
 
 const hasGames = data.gamesFetched > 0;
 const pageDescription =
-  "Production chess analytics from chess.com: ratings, history, openings and recent games.";
+  "Chess analytics from chess.com: ratings, history, openings and recent games.";
 
 // --- Performance by colour ----------------------------------------------------
 const perfViews = [
@@ -159,19 +167,14 @@ const perfViews = [
 >
   <Container>
     <div class="collection-page">
-      <header class="page-header">
-        <p class="font-mono text-xs uppercase tracking-wide text-zinc-600">
-          <a href="/data" class="transition-colors hover:text-zinc-400">← All data</a>
-        </p>
-        <h1 class="page-title">Chess</h1>
-        <p class="page-intro">
-          A production view of my rated chess activity from the last {data.monthsCovered} months, synced from{" "}
-          <a href={CHESS_PROFILE_URL} class="text-link">chess.com</a>.
-        </p>
-      </header>
+      <DataHeader title="Chess" source="chess.com" sourceHref={CHESS_PROFILE_URL} updated={now}>
+        My rated games from the last {data.monthsCovered} months: ratings, form,
+        openings and recent results, synced from{" "}
+        <a href={CHESS_PROFILE_URL} class="text-link">chess.com</a>.
+      </DataHeader>
 
       <!-- Profile / Player Card -->
-      <section class="mb-8">
+      <section class="data-section">
         <div class="flex items-center gap-3.5 border border-[#27272a] bg-[#0c0c0d] p-3">
           {
             data.profile.avatar ? (
@@ -220,9 +223,9 @@ const perfViews = [
       <!-- Ratings & form -->
       {
         (statViews.length > 0 || hasGames) && (
-          <section class="mb-8">
-            <div class="mb-3 flex items-center justify-between">
-              <h2 class="text-sm font-medium text-zinc-200">Ratings &amp; record</h2>
+          <section class="data-section">
+            <div class="data-section-heading">
+              <h2>Ratings &amp; record</h2>
               {data.gamesFetched > 0 && (
                 <span class="font-mono text-xs text-zinc-600">
                   {data.gamesFetched.toLocaleString()} rated games in window
@@ -337,9 +340,9 @@ const perfViews = [
       <!-- Performance by colour -->
       {
         hasGames && (
-          <section class="mb-8">
-            <div class="mb-3">
-              <h2 class="text-sm font-medium text-zinc-200">Performance</h2>
+          <section class="data-section">
+            <div class="data-section-heading">
+              <h2>Performance</h2>
             </div>
             <div class="grid border-l border-t border-[#27272a] md:grid-cols-2">
               {perfViews.map((perf) => (
@@ -377,9 +380,9 @@ const perfViews = [
       }
 
       <!-- Rating history chart -->
-      <section class="mb-8">
-        <div class="mb-3 flex items-center justify-between">
-          <h2 class="text-sm font-medium text-zinc-200">Rating history</h2>
+      <section class="data-section">
+        <div class="data-section-heading">
+          <h2>Rating history</h2>
           {
             hasChart && (
               <div
@@ -486,9 +489,9 @@ const perfViews = [
       <!-- Most played openings -->
       {
         data.openings.length > 0 && (
-          <section class="mb-8">
-            <div class="mb-3">
-              <h2 class="text-sm font-medium text-zinc-200">Most played openings</h2>
+          <section class="data-section">
+            <div class="data-section-heading">
+              <h2>Most played openings</h2>
             </div>
             <div class="border-y border-[#27272a]">
               {data.openings.map((opening) => (
@@ -513,9 +516,9 @@ const perfViews = [
       }
 
       <!-- Recent games -->
-      <section class="mb-8">
-        <div class="mb-3 flex items-center justify-between">
-          <h2 class="text-sm font-medium text-zinc-200">Recent games</h2>
+      <section class="data-section">
+        <div class="data-section-heading">
+          <h2>Recent games</h2>
           <span class="font-mono text-xs text-zinc-600">{data.recent.length} games</span>
         </div>
         {
@@ -590,11 +593,6 @@ const perfViews = [
         }
       </section>
 
-      <p
-        class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-xs text-zinc-600"
-      >
-        Updated <time id="last-updated" datetime={now.toISOString()}></time>
-      </p>
     </div>
   </Container>
 
@@ -621,30 +619,8 @@ const perfViews = [
         });
     }
 
-    function formatLastUpdated() {
-      const timeEl = document.getElementById("last-updated");
-      if (!timeEl) return;
-      const dt = timeEl.getAttribute("datetime");
-      if (!dt) return;
-      const date = new Date(dt);
-      if (isNaN(date.getTime())) return;
-
-      const datePart = date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      });
-      const timePart = date.toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-      });
-      timeEl.textContent = `${datePart} at ${timePart}`;
-    }
-
     document.addEventListener("astro:page-load", () => {
       initChessToggles();
-      formatLastUpdated();
     });
   </script>
 </Layout>
