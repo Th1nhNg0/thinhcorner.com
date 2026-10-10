@@ -1,0 +1,82 @@
+---
+export const prerender = true;
+import Container from "@/components/Container.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import { format } from "date-fns";
+import { tagLabel } from "@/lib/tags";
+
+export async function getStaticPaths() {
+  const posts = (await getCollection("writing"))
+    .filter((p) => !p.data.draft)
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
+  return tags.map((tag) => ({
+    params: { tag },
+    props: { posts: posts.filter((p) => p.data.tags.includes(tag)) },
+  }));
+}
+
+type Props = { posts: CollectionEntry<"writing">[] };
+const { posts } = Astro.props;
+const { tag } = Astro.params;
+const label = tagLabel(tag);
+const description = `Posts about ${label.toLowerCase() === "ai" ? "AI" : label.toLowerCase()} on Thinh's Corner, in English and Vietnamese.`;
+const url = new URL(`/writing/tag/${tag}`, Astro.site).toString();
+---
+
+<Layout
+  title={`${label} — Writing — Thinh's Corner`}
+  description={description}
+  image="/og/writing.jpg"
+  lang="en"
+  locale="en_US"
+  structuredData={[
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: `${label} posts`,
+      description,
+      url,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: new URL("/", Astro.site).toString() },
+        { "@type": "ListItem", position: 2, name: "Writing", item: new URL("/writing", Astro.site).toString() },
+        { "@type": "ListItem", position: 3, name: label, item: url },
+      ],
+    },
+  ]}
+>
+  <Container>
+    <header class="page-header">
+      <a href="/writing" class="page-kicker transition-colors hover:text-white">Writing / tag</a>
+      <h1 class="page-title mt-3">{label}</h1>
+      <p class="page-intro">{posts.length} {posts.length === 1 ? "post" : "posts"} tagged {label}.</p>
+    </header>
+
+    <ol class="border-t border-[#27272a] pt-3">
+      {
+        posts.map((post) => (
+          <li>
+            <a
+              data-astro-prefetch
+              href={`/writing/${post.id}`}
+              hreflang={post.data.lang ?? "en"}
+              class="group grid grid-cols-[1fr_auto] items-baseline gap-4 py-2 focus-visible:outline-none"
+            >
+              <span class="min-w-0 text-base leading-snug text-zinc-400 transition-colors group-hover:text-zinc-100">
+                {post.data.title}
+              </span>
+              <time datetime={post.data.date.toISOString()} class="font-mono text-xs text-zinc-600">
+                {format(post.data.date, "MMM yyyy")}
+              </time>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </Container>
+</Layout>

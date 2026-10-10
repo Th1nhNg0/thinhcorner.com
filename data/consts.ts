@@ -18,7 +18,8 @@ const PERSONAL_SOCIAL_PROFILES: {
 // Core website metadata for SEO and display
 const WEBSITE_CONFIG = {
   title: "Thinh's Corner",
-  description: "Ngô Phú Thịnh's personal blog",
+  description:
+    "Ngô Phú Thịnh's personal blog from Ho Chi Minh City: essays and notes on AI, programming, history, and economics, in English and Vietnamese.",
 };
 
 // Goodreads integration
@@ -39,4 +40,3 @@ export { PERSONAL_SOCIAL_PROFILES as SOCIAL_MEDIA, WEBSITE_CONFIG as SITE };
 // GitHub repository URL for blog content source
 export const GITHUB_CONTENT_SOURCE =
   "https://github.com/th1nhng0/thinhcorner.com/tree/master/data/writing";
-export const GOOGLE_ANALYTICS_ID = "G-P4B7XCWCYP";

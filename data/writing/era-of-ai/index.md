@@ -1,7 +1,8 @@
 ---
 title: "The Start of the AI Era: ChatGPT and Beyond"
 date: "2023-02-16"
-description: "The future of AI is not predetermined, but rather depends on our choices, actions, and values, as humans and as societies. That’s why we need to be aware, informed, and responsible, when it comes to AI. We need to ask ourselves: What do we want from AI? What do we expect from AI? What do we trust from AI? And most importantly, what do we learn from AI?"
+description: "ChatGPT marks the start of the AI era. Its future depends on our choices, so what do we want, expect, and trust from AI, and what do we learn from it?"
+tags: ["ai"]
 ---
 
 > This post is generate by the new Bing that I got access to early this morning xD

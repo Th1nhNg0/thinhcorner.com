@@ -1,7 +1,8 @@
 ---
 title: "Being First Doesn't Guarantee Success"
 date: "2026-03-25"
-description: "OpenAI just shut down Sora — the AI video app that hit #1 on the App Store and had a billion-dollar Disney deal. What its rise and fall says about first-mover advantage."
+description: "OpenAI just shut down Sora, the AI video app that hit #1 on the App Store. What its rise and fall says about first-mover advantage."
+tags: ["ai", "business"]
 ---
 
 ![Sora app on a phone in front of the OpenAI logo](./sora-video-generation-app-fox-news-002.webp)

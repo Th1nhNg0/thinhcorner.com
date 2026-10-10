@@ -1,9 +1,11 @@
 ---
 title: "How I Built My Data Page"
 date: "2026-10-10"
-description: "How the live pages under /data work: one small server-rendered page per service, a KV cache in front of every API, and a sync pipeline that collects AI token usage from every machine I own."
+description: "How the live pages under /data work: one server-rendered page per service, a KV cache in front of every API, and a sync pipeline for AI token usage."
+tags: ["programming", "data"]
 ---
 
+import { Image } from "astro:assets";
 import dataHub from "./data-hub.webp";
 import tokenUsageTop from "./token-usage-top.webp";
 import tokenUsageMid from "./token-usage-mid.webp";
@@ -13,12 +15,10 @@ I like looking at my own habits as data. How many books did I finish this year? 
 The answers already exist. They are just scattered across Goodreads, Spotify, Chess.com, Steam and a pile of log files on several computers. The [/data](/data) section of this site is where I pull them into one place. This post explains how it works, what broke along the way, and what I would tell anyone building something similar.
 
 <figure>
-  <img
-    src={dataHub.src}
+  <Image
+    src={dataHub}
     alt="The /data hub page listing five live pages: Books, Music, Chess, Steam and Token usage, each with its data source"
-    width={dataHub.width}
-    height={dataHub.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>The /data hub. Each card is one page and one data source.</figcaption>
 </figure>
@@ -107,12 +107,10 @@ This page took the most work, because it is the only one where I had to build th
 [ccusage](https://github.com/ryoppippi/ccusage) is a CLI that reads the local logs of coding agents and reports tokens and estimated cost per day, model and agent. The catch is the word *local*. The logs live on whatever machine ran the agent, and I use several: Windows desktops (with agents running both natively and inside WSL), a MacBook, and a small cloud server. No single machine knows the full picture.
 
 <figure>
-  <img
-    src={tokenUsageTop.src}
+  <Image
+    src={tokenUsageTop}
     alt="The token usage page header and daily spend chart: 41.8B tokens, $3,482 estimated cost, 102 active days, with a stacked bar chart of daily spend by model from May to October 2026"
-    width={tokenUsageTop.width}
-    height={tokenUsageTop.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>The top of /data/token-usage on October 10, 2026.</figcaption>
 </figure>
@@ -163,12 +161,10 @@ Adding `--install-cron` installs a daily schedule using whatever the machine has
 Token data is hard to chart because cache reads dominate everything. On a linear scale, the token chart left 41 of 71 days under two pixels tall. Cost is much better behaved: the median day and the peak day differ by only a few times. So the daily chart has a toggle. Cost uses a linear scale, where stacked segments add up honestly. Tokens use a log scale, so normal days do not disappear. The toggle is plain CSS with two hidden radio buttons, so it works without JavaScript.
 
 <figure>
-  <img
-    src={tokenUsageMid.src}
+  <Image
+    src={tokenUsageMid}
     alt="Token mix, agents and active days sections of the token usage page: cache reads are 95.6% of tokens, pi accounts for 73.2% of tokens, and a calendar heatmap shows usage increasing from August"
-    width={tokenUsageMid.width}
-    height={tokenUsageMid.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>Token mix, agents and the activity calendar.</figcaption>
 </figure>
