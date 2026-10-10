@@ -53,11 +53,25 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
     </header>
 
     <div class="mb-8 flex items-center justify-between border-b border-[#27272a] pb-3 text-xs text-zinc-600">
-      <span>{blog.length} posts</span>
-      <label class="flex cursor-pointer select-none items-center gap-2">
-        <input type="checkbox" id="englishOnly" class="size-3 accent-[#eab308]" />
-        English only
-      </label>
+      <span id="postCount">{blog.length} posts</span>
+      <div id="langFilter" class="flex gap-3" role="group" aria-label="Filter by language">
+        {
+          [
+            { lang: "all", label: "All" },
+            { lang: "en", label: "English" },
+            { lang: "vi", label: "Tiếng Việt" },
+          ].map(({ lang, label }) => (
+            <button
+              type="button"
+              data-lang-filter={lang}
+              aria-pressed={lang === "all" ? "true" : "false"}
+              class="cursor-pointer transition-colors hover:text-zinc-200 aria-pressed:text-[#eab308]"
+            >
+              {label}
+            </button>
+          ))
+        }
+      </div>
     </div>
 
     <div id="blogPosts" class="space-y-9">
@@ -91,33 +105,46 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
   </Container>
 
 <script>
-  function initEnglishFilter() {
-    const checkbox = document.getElementById("englishOnly");
-    const blogPostsContainer = document.getElementById("blogPosts");
-    if (!(checkbox instanceof HTMLInputElement) || !blogPostsContainer) return;
-    const filterCheckbox = checkbox;
-    const postsContainer = blogPostsContainer;
-    if (filterCheckbox.dataset.filterInitialized === "true") return;
+  function initLanguageFilter() {
+    const filter = document.getElementById("langFilter");
+    const container = document.getElementById("blogPosts");
+    const countLabel = document.getElementById("postCount");
+    if (!filter || !container || !countLabel) return;
+    const postsContainer = container;
+    const count = countLabel;
+    if (filter.dataset.filterInitialized === "true") return;
 
-    function filterPosts() {
-      postsContainer.querySelectorAll("li[data-lang]").forEach((post) => {
-        const item = post as HTMLLIElement;
-        item.style.display = filterCheckbox.checked && item.dataset.lang !== "en" ? "none" : "";
+    const buttons = Array.from(
+      filter.querySelectorAll<HTMLButtonElement>("[data-lang-filter]"),
+    );
+
+    function filterPosts(lang: string) {
+      let visible = 0;
+      postsContainer.querySelectorAll<HTMLLIElement>("li[data-lang]").forEach((item) => {
+        const show = lang === "all" || item.dataset.lang === lang;
+        item.style.display = show ? "" : "none";
+        if (show) visible++;
       });
 
-      postsContainer.querySelectorAll("[data-year]").forEach((yearSection) => {
-        const section = yearSection as HTMLElement;
-        const hasVisiblePosts = Array.from(section.querySelectorAll("li[data-lang]")).some(
-          (post) => (post as HTMLLIElement).style.display !== "none",
-        );
+      postsContainer.querySelectorAll<HTMLElement>("[data-year]").forEach((section) => {
+        const hasVisiblePosts = Array.from(
+          section.querySelectorAll<HTMLLIElement>("li[data-lang]"),
+        ).some((post) => post.style.display !== "none");
         section.style.display = hasVisiblePosts ? "" : "none";
       });
+
+      buttons.forEach((button) =>
+        button.setAttribute("aria-pressed", String(button.dataset.langFilter === lang)),
+      );
+      count.textContent = `${visible} posts`;
     }
 
-    filterCheckbox.dataset.filterInitialized = "true";
-    filterCheckbox.addEventListener("change", filterPosts);
+    filter.dataset.filterInitialized = "true";
+    buttons.forEach((button) =>
+      button.addEventListener("click", () => filterPosts(button.dataset.langFilter ?? "all")),
+    );
   }
 
-  document.addEventListener("astro:page-load", initEnglishFilter);
+  document.addEventListener("astro:page-load", initLanguageFilter);
 </script>
 </Layout>

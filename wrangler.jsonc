@@ -6,6 +6,9 @@
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
+    // Serve /writing from writing/index.html directly instead of redirecting to
+    // /writing/, matching Astro's trailingSlash: "never" canonical URLs.
+    "html_handling": "drop-trailing-slash",
   },
   "kv_namespaces": [
     {

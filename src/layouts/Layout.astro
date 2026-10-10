@@ -1,6 +1,7 @@
 ---
 import Head from "@/components/Head.astro";
 import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
 import { ClientRouter } from "astro:transitions";
 
 type Props = {
@@ -63,5 +64,6 @@ const {
     <main id="main-content" class="pb-12 pt-8 sm:pt-10">
       <slot />
     </main>
+    <Footer />
   </body>
 </html>
