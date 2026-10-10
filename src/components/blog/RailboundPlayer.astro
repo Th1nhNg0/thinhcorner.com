@@ -1,0 +1,556 @@
+---
+/**
+ * Interactive replay of solver output for the Railbound post.
+ *
+ * Each level's puzzle and solution live as JSON in /railbound/levels, loaded on
+ * demand when the reader picks a level. Tiles are the SVG art from the solver
+ * repo, served from /railbound/tiles. Cars follow a quadratic curve through each
+ * cell (entry edge -> centre -> exit edge) so they bend around corners instead of
+ * cutting across them.
+ */
+export type RailboundLevel = {
+  n: string;
+  world: number;
+  cars: number;
+  decoys: number;
+  w: number;
+  h: number;
+  placed: number;
+  time: number | null;
+};
+
+interface Props {
+  levels: RailboundLevel[];
+  initial: string;
+}
+
+const { levels, initial } = Astro.props;
+const worldNames: Record<number, string> = {
+  1: "Basics",
+  2: "Tunnels",
+  3: "Gates",
+  4: "Dynamic switches",
+  5: "Stations",
+  6: "Exit switches",
+  7: "Decoys",
+  8: "Big grids",
+  9: "Semaphores",
+};
+const worlds = [...new Set(levels.map((level) => level.world))].sort((a, b) => a - b);
+---
+
+<figure class="not-prose my-6" data-railbound-player data-initial={initial} data-levels={JSON.stringify(levels)}>
+  <div class="rounded-surface border border-(--line) bg-(--surface) p-3 sm:p-4">
+    <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+      <label class="flex items-center gap-2 text-sm text-(--muted)">
+        <span>Level</span>
+        <select
+          data-level
+          class="rounded-surface border border-(--line-strong) bg-(--page) px-2 py-1 text-sm text-(--ink)"
+        >
+          {
+            worlds.map((world) => (
+              <optgroup label={`World ${world} · ${worldNames[world] ?? ""}`}>
+                {levels
+                  .filter((level) => level.world === world)
+                  .map((level) => (
+                    <option value={level.n} selected={level.n === initial}>
+                      {level.n}
+                    </option>
+                  ))}
+              </optgroup>
+            ))
+          }
+        </select>
+      </label>
+      <p data-info class="m-0 text-sm text-(--muted)"></p>
+    </div>
+
+    <div class="mt-3 flex justify-center">
+      <svg
+        data-board
+        class="h-auto max-h-[70vh] w-full"
+        role="img"
+        aria-label="Railbound level replay"
+      ></svg>
+    </div>
+
+    <div class="mt-3 flex items-center gap-3">
+      <button
+        type="button"
+        data-play
+        class="rounded-surface w-20 shrink-0 border border-(--line-strong) bg-(--page) px-2 py-1 text-sm text-(--ink) hover:bg-(--surface-hover)"
+      >
+        Play
+      </button>
+      <input data-scrub type="range" min="0" max="100" step="0.01" value="0" class="w-full accent-(--accent)" aria-label="Time step" />
+      <span data-step class="w-24 shrink-0 text-right text-xs tabular-nums text-(--muted)">step 0</span>
+    </div>
+    <label class="mt-2 flex items-center gap-2 text-xs text-(--muted)">
+      <input data-highlight type="checkbox" class="accent-(--accent)" />
+      Highlight the pieces the solver placed
+    </label>
+  </div>
+  <figcaption class="mt-2 text-center text-sm text-(--muted)">
+    Every level here was solved by the model in this post. Pick one, press play, or drag the slider to step through time.
+  </figcaption>
+</figure>
+
+<script>
+  type Dir = "TOP" | "RIGHT" | "DOWN" | "LEFT";
+  type Cell = [number, number];
+  type LevelData = {
+    n: string;
+    W: number;
+    H: number;
+    target: Cell;
+    trains: [number, number, Dir][];
+    decoys: [number, number, Dir][];
+    init: [number, number, string][];
+    tunnels: [number, number, Dir, number, number, Dir][];
+    gates: [number, number, number, boolean][];
+    acts: [number, number, number][];
+    dsw: [number, number, number][];
+    stations: [number, number, number][];
+    grid: string[][];
+    tr: number[][];
+    tc: number[][];
+    dr: number[][];
+    dc: number[][];
+    arr: number[];
+    gate: number[][];
+    dsT: number[][];
+    esT: number[][];
+  };
+  type Visit = { r: number; c: number; entry: Dir; exit: Dir; tele: boolean };
+  type Mover = { decoy: boolean; idx: number; arrival: number; visits: Visit[]; el: SVGImageElement };
+
+  const CELL = 90;
+  const PAD = 14;
+  const SPEED = 2.6; // time steps per second
+  const NS = "http://www.w3.org/2000/svg";
+  const TILE = (name: string) => `/railbound/tiles/${name}.svg`;
+  const DIRS: Record<Dir, [number, number]> = { TOP: [-1, 0], RIGHT: [0, 1], DOWN: [1, 0], LEFT: [0, -1] };
+  const OPP: Record<Dir, Dir> = { TOP: "DOWN", DOWN: "TOP", LEFT: "RIGHT", RIGHT: "LEFT" };
+  const TUNNEL_ROT: Record<Dir, number> = { TOP: 90, RIGHT: 180, DOWN: 270, LEFT: 0 };
+  const BUTTON_COLORS = ["#f59e0b", "#a78bfa", "#38bdf8", "#fb7185"];
+  const FLIP: Record<string, string> = {};
+  for (const kind of ["DSWITCH", "ESWITCH"]) {
+    for (const [a, b] of [
+      ["T_D_R", "D_T_R"],
+      ["T_D_L", "D_T_L"],
+      ["R_L_T", "L_R_T"],
+      ["R_L_D", "L_R_D"],
+    ]) {
+      FLIP[`${kind}_${a}`] = `${kind}_${b}`;
+      FLIP[`${kind}_${b}`] = `${kind}_${a}`;
+    }
+  }
+
+  const cache = new Map<string, Promise<LevelData>>();
+  function loadLevel(name: string) {
+    if (!cache.has(name)) {
+      cache.set(
+        name,
+        fetch(`/railbound/levels/${name}.json`).then((response) => {
+          if (!response.ok) throw new Error(`Could not load level ${name}`);
+          return response.json() as Promise<LevelData>;
+        }),
+      );
+    }
+    return cache.get(name)!;
+  }
+
+  function el<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, string | number>) {
+    const node = document.createElementNS(NS, tag);
+    for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, String(value));
+    return node;
+  }
+
+  function dirBetween(a: Cell, b: Cell): Dir | null {
+    for (const [key, [dr, dc]] of Object.entries(DIRS) as [Dir, [number, number]][]) {
+      if (b[0] - a[0] === dr && b[1] - a[1] === dc) return key;
+    }
+    return null;
+  }
+
+  const center = (r: number, c: number): [number, number] => [
+    PAD + (c - 1) * CELL + CELL / 2,
+    PAD + (r - 1) * CELL + CELL / 2,
+  ];
+
+  function edge(r: number, c: number, d: Dir): [number, number] {
+    const [x, y] = center(r, c);
+    const [dr, dc] = DIRS[d];
+    return [x + (dc * CELL) / 2, y + (dr * CELL) / 2];
+  }
+
+  // The side a car enters from when it pops out of a tunnel next to (r, c).
+  function tunnelExitSide(level: LevelData, r: number, c: number): Dir | null {
+    for (const t of level.tunnels) {
+      for (const [tr, tc, td] of [
+        [t[0], t[1], t[2]],
+        [t[3], t[4], t[5]],
+      ] as [number, number, Dir][]) {
+        const [dr, dc] = DIRS[td];
+        if (tr + dr === r && tc + dc === c) return OPP[td];
+      }
+    }
+    return null;
+  }
+
+  function buildVisits(level: LevelData, rows: number[], cols: number[], dir0: Dir, isDecoy: boolean): Visit[] {
+    const pos: Cell[] = rows.map((r, i) => [r, cols[i]]);
+    return pos.map(([r, c], t) => {
+      let k = t - 1;
+      while (k >= 0 && pos[k][0] === r && pos[k][1] === c) k--;
+      let entry: Dir;
+      if (k < 0) entry = OPP[dir0];
+      else entry = dirBetween([r, c], pos[k]) ?? tunnelExitSide(level, r, c) ?? OPP[dir0];
+
+      let exit: Dir | null = null;
+      let tele = false;
+      for (let j = t + 1; j < pos.length; j++) {
+        if (pos[j][0] !== r || pos[j][1] !== c) {
+          exit = dirBetween([r, c], pos[j]);
+          if (exit === null) {
+            tele = true;
+            exit = OPP[entry];
+          }
+          break;
+        }
+      }
+      if (exit === null) {
+        exit = !isDecoy && r === level.target[0] && c === level.target[1] ? "RIGHT" : OPP[entry];
+      }
+      return { r, c, entry, exit, tele };
+    });
+  }
+
+  function bez(v: Visit, s: number): [number, number, number] {
+    const a = edge(v.r, v.c, v.entry);
+    const b = center(v.r, v.c);
+    const e = edge(v.r, v.c, v.exit);
+    const u = 1 - s;
+    const x = u * u * a[0] + 2 * u * s * b[0] + s * s * e[0];
+    const y = u * u * a[1] + 2 * u * s * b[1] + s * s * e[1];
+    const dx = 2 * u * (b[0] - a[0]) + 2 * s * (e[0] - b[0]);
+    const dy = 2 * u * (b[1] - a[1]) + 2 * s * (e[1] - b[1]);
+    return [x, y, (Math.atan2(dy, dx) * 180) / Math.PI];
+  }
+
+  function carAt(m: Mover, t: number): { x: number; y: number; a: number; o: number } | null {
+    const T = m.visits.length;
+    const i = Math.min(Math.floor(t), T - 1);
+    const f = Math.min(t - i, 1);
+    const v = m.visits[i];
+    if (!m.decoy && i >= m.arrival) {
+      const k = i - m.arrival + f;
+      if (k > 0.5) return null;
+      const [x, y, a] = bez(v, 0.5 + k);
+      return { x, y, a, o: 1 - k * 2 };
+    }
+    const n = m.visits[Math.min(i + 1, T - 1)];
+    const moving = i + 1 < T && (n.r !== v.r || n.c !== v.c);
+    if (!moving) {
+      const [x, y, a] = bez(v, 0.5);
+      return { x, y, a, o: 1 };
+    }
+    if (f < 0.5) {
+      const [x, y, a] = bez(v, 0.5 + f);
+      return { x, y, a, o: v.tele ? 1 - f * 2 : 1 };
+    }
+    const [x, y, a] = bez(n, f - 0.5);
+    return { x, y, a, o: v.tele ? (f - 0.5) * 2 : 1 };
+  }
+
+  function initPlayer(root: HTMLElement) {
+    if (root.dataset.initialized === "true") return;
+    root.dataset.initialized = "true";
+
+    const select = root.querySelector("select")!;
+    const info = root.querySelector("[data-info]") as HTMLElement;
+    const svg = root.querySelector("[data-board]") as SVGSVGElement;
+    const play = root.querySelector("[data-play]") as HTMLButtonElement;
+    const scrub = root.querySelector("[data-scrub]") as HTMLInputElement;
+    const stepLabel = root.querySelector("[data-step]") as HTMLElement;
+    const highlight = root.querySelector("[data-highlight]") as HTMLInputElement;
+    const meta = new Map(
+      (JSON.parse(root.dataset.levels ?? "[]") as { n: string; time: number | null; placed: number; cars: number }[]).map(
+        (level) => [level.n, level],
+      ),
+    );
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let level: LevelData | null = null;
+    let movers: Mover[] = [];
+    let end = 1;
+    let t = 0;
+    let playing = false;
+    let visible = false;
+    let userPaused = reduceMotion;
+    let last = 0;
+    let holdUntil = 0;
+    let lastStep = -1;
+    let dynamic: SVGGElement;
+    let switchImages: { el: SVGImageElement; piece: string; states: number[] }[] = [];
+    let placedMarks: SVGGElement;
+
+    function setPlaying(next: boolean) {
+      playing = next;
+      play.textContent = playing ? "Pause" : "Play";
+      if (playing) {
+        last = performance.now();
+        requestAnimationFrame(tick);
+      }
+    }
+
+    function build(data: LevelData) {
+      level = data;
+      const W = data.W * CELL + PAD * 2;
+      const H = data.H * CELL + PAD * 2;
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      svg.style.aspectRatio = `${W} / ${H}`;
+      svg.replaceChildren();
+      const init = new Map(data.init.map(([r, c, p]) => [`${r},${c}`, p]));
+
+      svg.appendChild(el("rect", { x: PAD - 2, y: PAD - 2, width: data.W * CELL + 4, height: data.H * CELL + 4, rx: 6, fill: "#27272a" }));
+      placedMarks = el("g", {});
+      const pieces = el("g", {});
+      for (let r = 1; r <= data.H; r++) {
+        for (let c = 1; c <= data.W; c++) {
+          const x = PAD + (c - 1) * CELL;
+          const y = PAD + (r - 1) * CELL;
+          const isTarget = data.target[0] === r && data.target[1] === c;
+          const given = init.has(`${r},${c}`);
+          svg.appendChild(
+            el("rect", {
+              x: x + 1,
+              y: y + 1,
+              width: CELL - 2,
+              height: CELL - 2,
+              rx: 3,
+              fill: isTarget ? "#163322" : given ? "#1f1f23" : "#141416",
+            }),
+          );
+          let piece = init.get(`${r},${c}`);
+          const placed = piece === undefined && data.grid[r - 1][c - 1] !== "EMPTY";
+          if (placed) piece = data.grid[r - 1][c - 1];
+          if (!piece || piece.startsWith("TUNNEL")) continue;
+          if (placed) {
+            placedMarks.appendChild(
+              el("rect", {
+                x: x + 2,
+                y: y + 2,
+                width: CELL - 4,
+                height: CELL - 4,
+                rx: 3,
+                fill: "#eab308",
+                "fill-opacity": 0.16,
+                stroke: "#eab308",
+                "stroke-width": 2,
+              }),
+            );
+          }
+          if (piece === "ROCK") {
+            const cx = x + CELL / 2;
+            const cy = y + CELL / 2;
+            pieces.appendChild(
+              el("path", {
+                d: `M${cx - 26} ${cy + 18} L${cx - 30} ${cy - 2} L${cx - 14} ${cy - 22} L${cx + 10} ${cy - 24} L${cx + 28} ${cy - 6} L${cx + 26} ${cy + 18} Z`,
+                fill: "#3f3f46",
+                stroke: "#0c0c0d",
+                "stroke-width": 2,
+                "stroke-linejoin": "round",
+              }),
+            );
+            continue;
+          }
+          const img = el("image", { href: TILE(piece), x, y, width: CELL, height: CELL });
+          pieces.appendChild(img);
+          const di = data.dsw.findIndex((d) => d[0] === r && d[1] === c);
+          if (di >= 0 && data.dsT[di]) switchImages.push({ el: img, piece, states: data.dsT[di] });
+          const eswitches = data.init.filter((p) => p[2].startsWith("ESWITCH"));
+          const ei = eswitches.findIndex((d) => d[0] === r && d[1] === c);
+          if (ei >= 0 && data.esT[ei]) switchImages.push({ el: img, piece, states: data.esT[ei] });
+        }
+      }
+      placedMarks.style.display = highlight.checked ? "" : "none";
+      svg.appendChild(placedMarks);
+      svg.appendChild(pieces);
+
+      data.tunnels.forEach((tp, i) => {
+        for (const [r, c, d] of [
+          [tp[0], tp[1], tp[2]],
+          [tp[3], tp[4], tp[5]],
+        ] as [number, number, Dir][]) {
+          const [cx, cy] = center(r, c);
+          svg.appendChild(
+            el("image", {
+              href: TILE(`Tunnel-${i % 4}`),
+              x: cx - CELL / 2,
+              y: cy - CELL / 2,
+              width: CELL,
+              height: CELL,
+              transform: `rotate(${TUNNEL_ROT[d]} ${cx} ${cy})`,
+            }),
+          );
+        }
+      });
+
+      for (const [r, c, tid] of data.stations) {
+        const [cx, cy] = center(r, c);
+        const g = el("g", {});
+        g.appendChild(el("rect", { x: cx - 42, y: cy - 42, width: 30, height: 24, rx: 5, fill: "#eab308", stroke: "#0c0c0d", "stroke-width": 2 }));
+        const label = el("text", { x: cx - 27, y: cy - 24.5, "text-anchor": "middle", "font-size": 15, "font-weight": 700, fill: "#111" });
+        label.textContent = String(tid);
+        g.appendChild(label);
+        svg.appendChild(g);
+      }
+      for (const [r, c, id] of data.acts) {
+        const [cx, cy] = center(r, c);
+        svg.appendChild(el("circle", { cx: cx + 28, cy: cy + 28, r: 10, fill: BUTTON_COLORS[(id - 1) % 4], stroke: "#0c0c0d", "stroke-width": 2 }));
+      }
+
+      dynamic = el("g", {});
+      svg.appendChild(dynamic);
+      movers = [];
+      const carLayer = el("g", {});
+      data.tr.forEach((rows, i) => {
+        const img = el("image", { href: TILE(`Car-${i + 1}`), width: CELL, height: CELL });
+        carLayer.appendChild(img);
+        movers.push({ decoy: false, idx: i, arrival: data.arr[i], visits: buildVisits(data, rows, data.tc[i], data.trains[i][2], false), el: img });
+      });
+      data.dr.forEach((rows, i) => {
+        const img = el("image", { href: TILE("Decoy"), width: CELL, height: CELL });
+        carLayer.appendChild(img);
+        movers.push({ decoy: true, idx: i, arrival: Infinity, visits: buildVisits(data, rows, data.dc[i], data.decoys[i][2], true), el: img });
+      });
+      svg.appendChild(carLayer);
+
+      end = Math.min(data.tr[0].length - 1, Math.max(...data.arr) + 1);
+      scrub.max = String(end);
+      t = 0;
+      lastStep = -1;
+      const m = meta.get(data.n);
+      const parts = [`${m?.cars ?? data.trains.length} car${data.trains.length === 1 ? "" : "s"}`, `${m?.placed ?? 0} pieces placed`];
+      if (m?.time != null) parts.push(`solved in ${m.time < 1 ? m.time.toFixed(2) : m.time.toFixed(1)} s`);
+      info.textContent = parts.join(" · ");
+      render();
+    }
+
+    function renderStep(step: number) {
+      if (!level) return;
+      for (const s of switchImages) {
+        const flipped = s.states[Math.min(step, s.states.length - 1)] === 1;
+        s.el.setAttribute("href", TILE(flipped ? FLIP[s.piece] ?? s.piece : s.piece));
+      }
+      dynamic.replaceChildren();
+      const init = new Map(level.init.map(([r, c, p]) => [`${r},${c}`, p]));
+      level.gates.forEach(([r, c, id, initOpen], gi) => {
+        const states = level!.gate[gi];
+        const open = states ? states[Math.min(step, states.length - 1)] === 1 : initOpen;
+        const [cx, cy] = center(r, c);
+        const color = BUTTON_COLORS[(id - 1) % 4];
+        const horizontal = (init.get(`${r},${c}`) ?? "").includes("RL");
+        if (open) {
+          dynamic.appendChild(el("rect", { x: cx - 40, y: cy - 40, width: 80, height: 80, rx: 6, fill: "none", stroke: color, "stroke-width": 3, "stroke-dasharray": "6 6", opacity: 0.8 }));
+        } else if (horizontal) {
+          dynamic.appendChild(el("rect", { x: cx - 7, y: cy - 40, width: 14, height: 80, rx: 4, fill: color, stroke: "#0c0c0d", "stroke-width": 2 }));
+        } else {
+          dynamic.appendChild(el("rect", { x: cx - 40, y: cy - 7, width: 80, height: 14, rx: 4, fill: color, stroke: "#0c0c0d", "stroke-width": 2 }));
+        }
+      });
+    }
+
+    function render() {
+      const step = Math.floor(t);
+      if (step !== lastStep) {
+        renderStep(step);
+        lastStep = step;
+      }
+      for (const m of movers) {
+        const s = carAt(m, t);
+        if (!s || s.o <= 0) {
+          m.el.style.display = "none";
+          continue;
+        }
+        m.el.style.display = "";
+        m.el.setAttribute("x", String(s.x - CELL / 2));
+        m.el.setAttribute("y", String(s.y - CELL / 2));
+        m.el.setAttribute("opacity", s.o.toFixed(3));
+        m.el.setAttribute("transform", `rotate(${s.a.toFixed(2)} ${s.x} ${s.y})`);
+      }
+      scrub.value = String(t);
+      stepLabel.textContent = `step ${Math.min(step, end)} / ${end}`;
+    }
+
+    function tick(now: number) {
+      if (!playing) return;
+      const dt = Math.min((now - last) / 1000, 0.1);
+      last = now;
+      if (now < holdUntil) {
+        requestAnimationFrame(tick);
+        return;
+      }
+      t += dt * SPEED;
+      if (t >= end) {
+        t = end;
+        render();
+        holdUntil = now + 1200;
+        t = 0;
+        requestAnimationFrame(tick);
+        return;
+      }
+      render();
+      requestAnimationFrame(tick);
+    }
+
+    async function choose(name: string) {
+      const wasPlaying = playing;
+      setPlaying(false);
+      switchImages = [];
+      info.textContent = "Loading…";
+      try {
+        build(await loadLevel(name));
+      } catch {
+        info.textContent = `Could not load level ${name}.`;
+        return;
+      }
+      holdUntil = performance.now() + 500;
+      if (wasPlaying || (visible && !userPaused)) setPlaying(true);
+    }
+
+    select.addEventListener("change", () => choose(select.value));
+    play.addEventListener("click", () => {
+      userPaused = playing;
+      setPlaying(!playing);
+    });
+    scrub.addEventListener("input", () => {
+      userPaused = true;
+      setPlaying(false);
+      t = Number(scrub.value);
+      render();
+    });
+    highlight.addEventListener("change", () => {
+      placedMarks.style.display = highlight.checked ? "" : "none";
+    });
+
+    new IntersectionObserver(
+      (entries) => {
+        visible = entries[0].isIntersecting;
+        if (visible && !userPaused && !playing && level) setPlaying(true);
+        if (!visible && playing) setPlaying(false);
+      },
+      { threshold: 0.4 },
+    ).observe(svg);
+
+    choose(root.dataset.initial ?? select.value);
+  }
+
+  function initPlayers() {
+    document.querySelectorAll<HTMLElement>("[data-railbound-player]").forEach(initPlayer);
+  }
+
+  document.addEventListener("astro:page-load", initPlayers);
+</script>
