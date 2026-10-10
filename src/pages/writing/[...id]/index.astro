@@ -21,9 +21,13 @@ export async function getStaticPaths() {
 }
 type Props = CollectionEntry<"writing">;
 
-const posts = (await getCollection("writing")).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
-);
+const post = Astro.props;
+const postLang = post.data.lang ?? "en";
+
+// Newer/Older links stay within the post's language.
+const posts = (await getCollection("writing"))
+  .filter((p) => (p.data.lang ?? "en") === postLang)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 function getNextPost() {
   const idx = posts.findIndex((p) => p.id === Astro.params.id);
@@ -38,8 +42,10 @@ function getPrevPost() {
 const nextPost = getNextPost();
 const prevPost = getPrevPost();
 
-const post = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+// Only long posts get a table of contents.
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const showToc = tocHeadings.filter((h) => h.depth === 2).length >= 4;
 const minutesRead = post.body ? getReadingTime(post.body).text : undefined;
 
 const modifiedTime = getModifiedDate(post).toISOString();
@@ -63,8 +69,8 @@ let slug = Array.isArray(Astro.params.id)
   type="article"
   katex={hasMath}
   robots={post.data.draft ? "noindex,nofollow" : undefined}
-  lang={post.data.lang ?? "en"}
-  locale={post.data.lang === "vi" ? "vi_VN" : "en_US"}
+  lang={postLang}
+  locale={postLang === "vi" ? "vi_VN" : "en_US"}
   author={AUTHOR_NAME}
   publishedTime={post.data.date.toISOString()}
   modifiedTime={modifiedTime}
@@ -90,7 +96,7 @@ let slug = Array.isArray(Astro.params.id)
       dateModified: modifiedTime,
       mainEntityOfPage: new URL(`/writing/${post.id}`, Astro.site).toString(),
       url: new URL(`/writing/${post.id}`, Astro.site).toString(),
-      inLanguage: post.data.lang ?? "en",
+      inLanguage: postLang,
       ...(minutesRead && {
         timeRequired: `PT${Math.ceil(parseInt(minutesRead))}M`,
       }),
@@ -137,7 +143,7 @@ let slug = Array.isArray(Astro.params.id)
         <a
           href="/writing"
           class="page-kicker transition-colors hover:text-white"
-          >Writing / {post.data.lang ?? "en"}</a
+          >Writing / {postLang}</a
         >
         <h1
           id="post-title"
@@ -179,6 +185,27 @@ let slug = Array.isArray(Astro.params.id)
           }
         </div>
       </header>
+      {
+        showToc && (
+          <details class="mb-8 border border-[#27272a] px-4 py-3 text-sm">
+            <summary class="cursor-pointer font-mono text-xs uppercase tracking-wider text-zinc-500 transition-colors hover:text-zinc-200">
+              {postLang === "vi" ? "Mục lục" : "Contents"}
+            </summary>
+            <ol class="mt-3 space-y-1.5">
+              {tocHeadings.map((h) => (
+                <li class:list={[h.depth === 3 && "pl-4"]}>
+                  <a
+                    href={`#${h.slug}`}
+                    class="text-zinc-400 transition-colors hover:text-[#eab308]"
+                  >
+                    {h.text}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </details>
+        )
+      }
       <div
         class="prose max-w-none prose-invert prose-headings:mt-7 prose-headings:mb-3 prose-headings:leading-tight prose-p:my-3 prose-p:leading-7 prose-ul:my-3 prose-ol:my-3 prose-li:my-1 prose-blockquote:my-5 prose-figure:my-5 prose-pre:my-4 prose-hr:my-8 prose-code:before:content-[''] prose-code:after:content-[''] prose-img:mx-auto prose-img:my-5 prose-table:my-4 prose-table:text-xs"
       >

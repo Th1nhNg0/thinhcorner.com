@@ -7,8 +7,8 @@ import satori from "satori";
 import sharp from "sharp";
 import { readFileSync } from "node:fs";
 
-// Render at 2x the standard Open Graph dimensions so platforms have more detail to downsample.
-const SCALE = 2;
+// Standard Open Graph size; larger files make some apps (e.g. WhatsApp) skip the preview.
+const SCALE = 1;
 const WIDTH = 1200 * SCALE;
 const HEIGHT = 630 * SCALE;
 const px = (value: number) => value * SCALE;
@@ -306,7 +306,7 @@ export const GET: APIRoute = async ({ params, url }) => {
       { input: Buffer.from(svg), top: 0, left: 0 },
     ])
     .jpeg({
-      quality: 100,
+      quality: 82,
       chromaSubsampling: "4:4:4",
       progressive: true,
     })
