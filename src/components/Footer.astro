@@ -1,0 +1,35 @@
+---
+import Container from "./Container.astro";
+import { AUTHOR_EMAIL, SOCIAL_MEDIA } from "../../data/consts";
+
+const socialLinks = [
+  { href: SOCIAL_MEDIA.github, label: "GitHub" },
+  { href: SOCIAL_MEDIA.linkedin, label: "LinkedIn" },
+].filter((link): link is { href: string; label: string } => Boolean(link.href));
+---
+
+<footer>
+  <Container>
+    <div
+      class="flex flex-wrap gap-x-4 gap-y-2 border-t border-[#27272a] py-5 text-xs text-zinc-600"
+    >
+      <a
+        href={`mailto:${AUTHOR_EMAIL}`}
+        class="transition-colors hover:text-[#eab308]">Email</a
+      >
+      {
+        socialLinks.map((link) => (
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="transition-colors hover:text-zinc-200"
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <a href="/rss.xml" class="transition-colors hover:text-[#eab308]">RSS</a>
+    </div>
+  </Container>
+</footer>
