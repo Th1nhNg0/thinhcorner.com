@@ -3,6 +3,7 @@ title: Tổng hợp các thuật ngữ chuyên ngành mà bất cứ fullstack d
 date: 2022-01-19
 description: Tổng hợp một số từ và cụm từ thông dụng có liên quan tới lập trình fullstack. Để hiểu sâu hơn bạn phải tự mình tìm kiếm.
 lang: vi
+tags: ["programming"]
 ---
 
 Jamstack? Docker? DOM? Serverless?

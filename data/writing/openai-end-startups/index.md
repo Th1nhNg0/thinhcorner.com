@@ -1,8 +1,9 @@
 ---
 title: Bản cập nhật ChatGPT mới - Sự kết thúc của hàng nghìn startup AI?
 date: "2023-10-31"
-description: Gần đây, OpenAI đã phát hành bản cập nhật mới cho ChatGPT Plus, với khả năng tạo ảnh, duyệt web, và lập trình. Điều này đã dấy lên mối lo ngại rằng đây có thể là "sự kết thúc của 10.000 startup AI". Chúng ta hãy cùng tìm hiểu xem liệu điều đó có thực sự đúng hay không.
+description: "ChatGPT Plus giờ có thể tạo ảnh, duyệt web và lập trình. Liệu đây có phải là dấu chấm hết cho hàng nghìn startup AI xây trên nền OpenAI?"
 lang: "vi"
+tags: ["ai", "business"]
 ---
 
 Gần đây, **OpenAI** đã phát hành bản cập nhật mới cho **ChatGPT Plus**, với khả năng tạo ảnh, duyệt web, và lập trình. Điều này đã dấy lên mối lo ngại rằng đây có thể là **"sự kết thúc của 10.000 startup AI"**. Chúng ta hãy cùng tìm hiểu xem liệu điều đó có thực sự đúng hay không.

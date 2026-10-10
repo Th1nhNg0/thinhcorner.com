@@ -1,8 +1,9 @@
 ---
 title: "Biochar và biến đổi khí hậu"
 date: "2024-12-12"
-description: "Biochar là giải pháp tiềm năng giúp giảm phát thải CO2, cải thiện đất và tăng năng suất nông nghiệp. Được tạo ra từ nhiệt phân sinh khối, biochar lưu giữ carbon bền vững trong đất, góp phần chống biến đổi khí hậu. Với khả năng loại bỏ hàng tỷ tấn CO2 mỗi năm, biochar mang lại lợi ích toàn diện cho khí hậu, nông nghiệp và năng lượng."
+description: "Biochar từ nhiệt phân sinh khối giúp khóa carbon trong đất, cải thiện đất và tăng năng suất. Vì sao nó là giải pháp tiềm năng cho biến đổi khí hậu."
 lang: "vi"
+tags: ["science"]
 ---
 
 Vấn đề khí hậu hiện nay đã trở nên vô cùng nghiêm trọng. Mỗi năm, loài người thải ra hơn 43 tỷ tấn CO2 vào khí quyển, lượng này cao hơn 25% so với chỉ một thập kỷ trước. Các nhà khoa học đã tính toán một “ngân sách carbon” cho Trái đất. Nếu chúng ta muốn có 75% cơ hội giữ cho mức ấm lên dưới 2 độ C, thì trong nửa đầu thế kỷ này ta chỉ có thể thải ra tối đa 1.000 tỷ tấn CO2. Thế nhưng, lượng khí thải carbon của chúng ta đã tăng nhanh đến mức vào năm 2013, chúng ta đã sử dụng gần 40% hạn mức đó. Và đến năm 2024, ta chỉ còn lại 8% ngân sách carbon. Với tốc độ như vậy, chúng ta sẽ hết “hạn mức” vào năm 2028. Do đó, thời gian để giải quyết cuộc khủng hoảng khí hậu là rất hạn chế, và những năm còn lại của thập kỷ này đặc biệt quan trọng[^CO@2COUNT].

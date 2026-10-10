@@ -1,8 +1,9 @@
 ---
 title: "Chủ quyền biên giới AI - Chiến lược của NVIDIA"
 date: "2024-12-10"
-description: 'Khám phá chiến lược của NVIDIA trong chủ quyền AI, nơi dữ liệu trở thành "biên giới quốc gia" mới. "Nhà máy AI" của NVIDIA biến dữ liệu thô thành sản phẩm AI giá trị, tác động lớn đến kinh tế và địa chính trị toàn cầu. Tìm hiểu vai trò của Việt Nam trong kế hoạch mở rộng của NVIDIA và thách thức với Trung Quốc. Cập nhật các xu hướng về công nghệ và chủ quyền AI.'
+description: "Chiến lược chủ quyền AI của NVIDIA: dữ liệu thành biên giới mới, “nhà máy AI” biến dữ liệu thô thành giá trị, và vị trí của Việt Nam trong cuộc chơi."
 lang: "vi"
+tags: ["ai", "geopolitics"]
 ---
 
 **Ngắn gọn:** Những dữ liệu, kiến thức, ký ức, thông tin... của một quần thể cư dân quốc gia rồi sẽ trở thành thứ "chủ quyền" mới trong thời đại của AI. Và chiến lược của NVIDIA là đi tắt đón đầu trong định hình tương lai đó.

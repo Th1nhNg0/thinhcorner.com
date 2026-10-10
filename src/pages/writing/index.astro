@@ -4,6 +4,7 @@ import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import { format } from "date-fns";
+import { tagLabel } from "@/lib/tags";
 
 const blog = (await getCollection("writing")).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
@@ -18,6 +19,14 @@ const postsByYear = blog.reduce(
   },
   {} as Record<number, typeof blog>,
 );
+
+// Tags ordered by how many published posts use them.
+const tagCounts = new Map<string, number>();
+for (const post of blog) {
+  if (post.data.draft) continue;
+  for (const tag of post.data.tags) tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+}
+const tags = [...tagCounts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
 
 const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
 ---
@@ -51,6 +60,16 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
         </div>
       </div>
     </header>
+
+    <nav class="mb-6 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-wider" aria-label="Tags">
+      {
+        tags.map(([tag, count]) => (
+          <a href={`/writing/tag/${tag}`} class="text-zinc-500 transition-colors hover:text-[#eab308]">
+            #{tagLabel(tag)} <span class="text-zinc-700">{count}</span>
+          </a>
+        ))
+      }
+    </nav>
 
     <div class="mb-8 flex items-center justify-between border-b border-[#27272a] pb-3 text-xs text-zinc-600">
       <span id="postCount">{blog.length} posts</span>
