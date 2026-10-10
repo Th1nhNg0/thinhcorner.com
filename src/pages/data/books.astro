@@ -2,6 +2,9 @@
 export const prerender = false;
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
+import DataHeader from "@/components/data/DataHeader.astro";
+import SectionHeading from "@/components/data/SectionHeading.astro";
+import StatGrid from "@/components/data/StatGrid.astro";
 import { get_book } from "@/lib/goodread";
 import { format } from "date-fns";
 import { GOODREADS_USER_URL } from "../../../data/consts";
@@ -95,8 +98,16 @@ const maxMonthlyAll = Math.max(...booksPerMonthAllYears, 1);
 
 // Combined max for toggle chart (so bars scale the same in both views)
 const maxMonthlyBoth = Math.max(maxMonthly, maxMonthlyAll, 1);
+const ratingLabels = {
+  1: "did not like it",
+  2: "it was ok",
+  3: "liked it",
+  4: "really liked it",
+  5: "it was amazing",
+};
+
 const pageDescription =
-  "Production reading analytics from Goodreads: books read, yearly trends and ratings.";
+  "Reading analytics from Goodreads: books read, yearly trends and ratings.";
 
 ---
 
@@ -114,20 +125,14 @@ const pageDescription =
 >
   <Container>
     <div class="collection-page">
-      <header class="page-header">
-        <p class="font-mono text-xs uppercase tracking-wide text-zinc-600">
-          <a href="/data" class="transition-colors hover:text-zinc-400">← All data</a>
-        </p>
-        <h1 class="page-title">Bookshelf</h1>
-        <p class="page-intro">
-          A production view of my reading history and yearly patterns, synced from my{" "}
-          <a href={GOODREADS_USER_URL} class="text-link">Goodreads profile</a>.
-        </p>
-      </header>
+      <DataHeader title="Books" source="goodreads" sourceHref={GOODREADS_USER_URL} updated={now}>
+        Everything I have finished reading, by year and month, synced from my{" "}
+        <a href={GOODREADS_USER_URL} class="text-link">Goodreads profile</a>.
+      </DataHeader>
 
       {
         !hasBooks && (
-          <section class="mb-8">
+          <section class="data-section">
             <div class="space-y-2 border border-[#27272a] bg-[#0c0c0d] p-6 font-mono text-xs leading-relaxed text-zinc-400">
               <p class="text-[#eab308]">Goodreads isn’t sharing right now.</p>
               <p>
@@ -155,47 +160,61 @@ const pageDescription =
         hasBooks && (
           <>
       <!-- Stats Bar -->
-      <section class="mb-8">
-        <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-4">
-          {
-            [
-              ["books total", read.length],
-              [`books in ${currentYear}`, booksThisYear],
-              ["pages read", totalPages.toLocaleString()],
-              ["time spent", `~${totalHours.toLocaleString()}h`],
-            ].map(([label, value]) => (
-              <div class="border-b border-r border-[#27272a] p-3">
-                <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
-                  {label}
-                </p>
-                <p class="mt-1 text-xl font-medium text-zinc-100">{value}</p>
-              </div>
-            ))
-          }
-        </div>
+      <section class="data-section">
+        <StatGrid
+          stats={[
+            { label: "Books read", value: read.length, note: `${numericYears.length} years tracked` },
+            { label: `In ${currentYear}`, value: booksThisYear, note: `${books.current_reads.length} in progress` },
+            { label: "Pages", value: totalPages.toLocaleString(), note: `~${Math.round(totalPages / Math.max(read.length, 1))} per book` },
+            { label: "Time spent", value: `~${totalHours.toLocaleString()}h`, note: "at 1.5 min / page" },
+          ]}
+        />
       </section>
 
       <!-- Currently Reading -->
       {
         books.current_reads.length > 0 && (
-          <section class="mb-8">
-            <div class="mb-3 flex items-center justify-between">
-              <h2 class="text-sm font-medium text-zinc-200">Currently reading</h2>
-              <span class="font-mono text-xs text-zinc-600">
-                {books.current_reads.length}{" "}
-                {books.current_reads.length === 1 ? "book" : "books"}
-              </span>
-            </div>
-            <div class="flex flex-wrap gap-x-4 gap-y-1.5 border border-[#27272a] bg-[#0c0c0d] p-3">
+          <section class="data-section">
+            <SectionHeading
+              title="Currently reading"
+              note={`${books.current_reads.length} ${books.current_reads.length === 1 ? "book" : "books"}`}
+            />
+            <div
+              class:list={[
+                "grid grid-cols-1 border-l border-t border-[#27272a]",
+                books.current_reads.length > 1 && "sm:grid-cols-2",
+              ]}
+            >
               {books.current_reads.map((book) => (
                 <a
                   href={book.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="inline-flex items-center gap-2 text-xs text-zinc-300 transition-colors hover:text-[#eab308]"
+                  class="compact-row group flex items-center gap-3 border-b border-r border-[#27272a] p-3"
                 >
-                  <span class="font-medium">{book.title}</span>
-                  <span class="text-zinc-600">by {book.author}</span>
+                  {book.cover ? (
+                    <img
+                      src={book.cover}
+                      alt=""
+                      width="40"
+                      height="60"
+                      class="h-[60px] w-[40px] shrink-0 border border-[#27272a] object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <span class="h-[60px] w-[40px] shrink-0 border border-[#27272a] bg-zinc-900" />
+                  )}
+                  <span class="min-w-0">
+                    <span class="block truncate text-sm font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
+                      {book.title}
+                    </span>
+                    <span class="block truncate text-xs text-zinc-500">{book.author}</span>
+                    <span class="mt-1 inline-flex items-center gap-1.5 font-mono text-[11px] text-[#eab308]">
+                      <span class="data-live-dot" aria-hidden="true" />
+                      reading now
+                    </span>
+                  </span>
                   <span class="sr-only">(opens in new tab)</span>
                 </a>
               ))}
@@ -205,134 +224,96 @@ const pageDescription =
       }
 
       <!-- Charts Section -->
-      <section class="mb-8 grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2">
+      <section class="data-section grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
         <!-- Year-over-year chart -->
         <div>
-          <div class="mb-3 flex items-center justify-between">
-            <h2 class="text-sm font-medium text-zinc-200">Books per year</h2>
-            <span class="font-mono text-xs text-zinc-600">
-              {numericYears.length} years
-            </span>
-          </div>
-          <div class="border border-[#27272a] bg-[#0c0c0d] p-4">
-            <div class="flex items-end gap-1" style="height: 7rem;">
+          <SectionHeading title="Books per year" note={`${numericYears.length} years`} />
+          <div class="data-panel px-4 pb-3 pt-4">
+            <div class="flex h-36 items-end gap-1.5 border-b border-[#27272a]">
               {
-                booksPerYear.map((d) => {
-                  const barH = Math.max((d.count / maxBooksInYear) * 5, 0.25);
-                  return (
+                booksPerYear.map((d) => (
+                  <div
+                    class="group flex h-full flex-1 flex-col items-center justify-end gap-1"
+                    title={`${d.year}: ${d.count} books`}
+                  >
+                    <span class="font-mono text-[11px] text-zinc-400 transition-colors group-hover:text-[#eab308]">
+                      {d.count || ""}
+                    </span>
                     <div
-                      class="flex-1 flex flex-col items-center justify-end gap-1 group"
-                      style="height: 100%;"
-                    >
-                      <span class="text-xs font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                        {d.count}
-                      </span>
-                      <div
-                        class="w-full bg-[#eab308]/70 transition-colors hover:bg-[#eab308]"
-                        style={`height: ${barH}rem;`}
-                        title={`${d.year}: ${d.count} books`}
-                      />
-                      <span class="text-xs font-mono text-zinc-600">
-                        {String(d.year).slice(-2)}
-                      </span>
-                    </div>
-                  );
-                })
+                      class="w-full bg-[#eab308]/70 transition-colors group-hover:bg-[#eab308]"
+                      style={`height: ${Math.max((d.count / maxBooksInYear) * 82, d.count ? 4 : 1)}%;`}
+                    />
+                  </div>
+                ))
               }
+            </div>
+            <div class="mt-1.5 flex gap-1.5">
+              {booksPerYear.map((d) => (
+                <span class="flex-1 text-center font-mono text-[11px] text-zinc-600">
+                  '{String(d.year).slice(-2)}
+                </span>
+              ))}
             </div>
           </div>
         </div>
 
         <!-- Monthly chart with toggle -->
         <div id="monthly-chart">
-          <div class="mb-3 flex items-center justify-between">
-            <h2 class="text-sm font-medium text-zinc-200">Monthly</h2>
-            <div class="flex border border-[#27272a] bg-[#0c0c0d] p-0.5">
-              <button
-                id="btn-this-year"
-                class="bg-[#eab308] px-2 py-0.5 font-mono text-xs uppercase text-black transition-colors"
-                type="button"
-                aria-pressed="true"
-              >
+          <SectionHeading title="By month">
+            <div class="segmented" role="group" aria-label="Monthly chart range">
+              <button id="btn-this-year" type="button" aria-pressed="true">
                 {currentYear}
               </button>
-              <button
-                id="btn-all-years"
-                class="px-2 py-0.5 font-mono text-xs uppercase text-zinc-500 transition-colors hover:text-zinc-300"
-                type="button"
-                aria-pressed="false"
-              >
+              <button id="btn-all-years" type="button" aria-pressed="false">
                 All
               </button>
             </div>
-          </div>
-          <div class="border border-[#27272a] bg-[#0c0c0d] p-4">
-          <!-- This year view -->
-          <div
-            id="chart-this-year"
-            class="flex items-end gap-1"
-            style="height: 7rem;"
-          >
+          </SectionHeading>
+          <div class="data-panel px-4 pb-3 pt-4">
             {
-              monthNames.map((m, i) => {
-                const count = booksPerMonthThisYear[i];
-                const barH = Math.max((count / maxMonthlyBoth) * 5, 0.25);
-                const isFuture = i > now.getMonth();
-                return (
-                  <div
-                    class="flex-1 flex flex-col items-center justify-end gap-1 group"
-                    style="height: 100%;"
-                  >
-                    <span class="text-xs font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                      {count}
-                    </span>
-                    <div
-                      class:list={[
-                        "w-full transition-colors",
-                        isFuture
-                          ? "bg-zinc-700/30"
-                          : count > 0
-                            ? "bg-[#eab308]/70 hover:bg-[#eab308]"
-                            : "bg-zinc-700/50",
-                      ]}
-                      style={`height: ${isFuture ? 0.25 : barH}rem;`}
-                      title={`${m}: ${count} books`}
-                    />
-                    <span class="text-xs font-mono text-zinc-600">{m}</span>
-                  </div>
-                );
-              })
+              [
+                { id: "chart-this-year", counts: booksPerMonthThisYear, hidden: false },
+                { id: "chart-all-years", counts: booksPerMonthAllYears, hidden: true },
+              ].map(({ id, counts, hidden }) => (
+                <div
+                  id={id}
+                  class:list={["h-36 items-end gap-1.5 border-b border-[#27272a]", hidden ? "hidden" : "flex"]}
+                >
+                  {monthNames.map((m, i) => {
+                    const count = counts[i];
+                    const isFuture = !hidden && i > now.getMonth();
+                    return (
+                      <div
+                        class="group flex h-full flex-1 flex-col items-center justify-end gap-1"
+                        title={`${m}: ${count} books`}
+                      >
+                        <span class="font-mono text-[11px] text-zinc-400 transition-colors group-hover:text-[#eab308]">
+                          {count || ""}
+                        </span>
+                        <div
+                          class:list={[
+                            "w-full transition-colors",
+                            isFuture
+                              ? "bg-zinc-800/40"
+                              : count > 0
+                                ? "bg-[#eab308]/70 group-hover:bg-[#eab308]"
+                                : "bg-zinc-700/60",
+                          ]}
+                          style={`height: ${count ? Math.max((count / maxMonthlyBoth) * 82, 4) : 1}%;`}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              ))
             }
-          </div>
-          <!-- All years view (hidden by default) -->
-          <div
-            id="chart-all-years"
-            class="hidden items-end gap-1"
-            style="height: 7rem;"
-          >
-            {
-              monthNames.map((m, i) => {
-                const count = booksPerMonthAllYears[i];
-                const barH = Math.max((count / maxMonthlyBoth) * 5, 0.25);
-                return (
-                  <div
-                    class="flex-1 flex flex-col items-center justify-end gap-1 group"
-                    style="height: 100%;"
-                  >
-                    <span class="text-xs font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                      {count}
-                    </span>
-                    <div
-                      class="w-full bg-[#eab308]/60 transition-colors hover:bg-[#eab308]"
-                      style={`height: ${barH}rem;`}
-                      title={`${m}: ${count} books`}
-                    />
-                    <span class="text-xs font-mono text-zinc-600">{m}</span>
-                  </div>
-                );
-              })
-            }
-          </div>
+            <div class="mt-1.5 flex gap-1.5">
+              {monthNames.map((m) => (
+                <span class="flex-1 text-center font-mono text-[11px] text-zinc-600" title={m}>
+                  {m[0]}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -341,78 +322,70 @@ const pageDescription =
       <section id="book-list">
         {
           years.map((year) => (
-            <div class="mb-8" data-year={year}>
-              <div class="mb-3 flex items-center gap-3">
-                <h2 class="text-sm font-medium text-zinc-200 whitespace-nowrap">
-                  {year}
-                </h2>
-                <div class="h-px flex-1 bg-[#27272a]" />
-                <span class="whitespace-nowrap font-mono text-xs text-zinc-600">
-                  {readByYear[year].length}{" "}
-                  {readByYear[year].length === 1 ? "book" : "books"}
-                </span>
-              </div>
+            <div class="data-section" data-year={year}>
+              <SectionHeading
+                title={year}
+                note={`${readByYear[year].length} ${readByYear[year].length === 1 ? "book" : "books"}`}
+              />
               <ul class="grid grid-cols-1 border-l border-t border-[#27272a] md:grid-cols-2">
-                {readByYear[year].map((book) => (
-                  <li class="compact-row group relative flex min-h-[7.25rem] gap-3 overflow-hidden border-b border-r border-[#27272a] p-2.5">
-                    {book.cover ? (
-                      <img
-                        src={book.cover}
-                        alt={`Cover of ${book.title}`}
-                        width="72"
-                        height="108"
-                        class="h-[96px] w-[64px] shrink-0 border border-[#27272a] object-cover"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ) : (
-                      <div class="flex h-[96px] w-[64px] shrink-0 items-center justify-center border border-[#27272a] bg-zinc-900 font-mono text-xs uppercase tracking-wide text-zinc-700">
-                        No cover
-                      </div>
-                    )}
-                    <div class="flex flex-col flex-1 min-w-0 py-0.5">
-                      <a
-                        href={book.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="line-clamp-2 text-xs font-medium leading-snug text-zinc-200 transition-colors hover:text-[#eab308]"
-                      >
-                        {book.title}
-                        <span class="sr-only">(opens in new tab)</span>
-                      </a>
-                      <p class="text-xs text-zinc-500 mt-1">{book.author}</p>
-                      {book.rating > 0 &&
-                        (() => {
-                          const ratingLabels = {
-                            1: "did not like it",
-                            2: "it was ok",
-                            3: "liked it",
-                            4: "really liked it",
-                            5: "it was amazing",
-                          };
-                          const r = Math.round(book.rating);
-                          return (
-                            <span class="flex items-center gap-1.5 mt-1.5">
-                              <span class="font-mono text-xs text-[#eab308]">
-                                {r}/5
+                {readByYear[year].map((book) => {
+                  const r = Math.round(book.rating);
+                  return (
+                    <li class="compact-row group relative flex gap-3.5 border-b border-r border-[#27272a] p-3">
+                      {book.cover ? (
+                        <img
+                          src={book.cover}
+                          alt={`Cover of ${book.title}`}
+                          width="72"
+                          height="108"
+                          class="h-[96px] w-[64px] shrink-0 border border-[#27272a] object-cover"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : (
+                        <div class="flex h-[96px] w-[64px] shrink-0 items-center justify-center border border-[#27272a] bg-zinc-900 p-1 text-center font-mono text-[10px] uppercase tracking-wide text-zinc-700">
+                          No cover
+                        </div>
+                      )}
+                      <div class="flex min-w-0 flex-1 flex-col">
+                        <a
+                          href={book.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="line-clamp-2 text-sm font-medium leading-snug text-zinc-200 transition-colors after:absolute after:inset-0 hover:text-[#eab308] group-hover:text-[#eab308]"
+                        >
+                          {book.title}
+                          <span class="sr-only">(opens in new tab)</span>
+                        </a>
+                        <p class="mt-0.5 truncate text-xs text-zinc-500">{book.author}</p>
+                        {r > 0 && (
+                          <p
+                            class="mt-1.5 flex items-center gap-0.5 text-xs leading-none"
+                            title={`${r}/5 · ${ratingLabels[r as keyof typeof ratingLabels]}`}
+                          >
+                            <span class="sr-only">Rated {r} out of 5</span>
+                            {[1, 2, 3, 4, 5].map((n) => (
+                              <span aria-hidden="true" class={n <= r ? "text-[#eab308]" : "text-zinc-700"}>
+                                ★
                               </span>
-                              <span class="text-xs text-zinc-500 font-mono">
-                                {ratingLabels[r as keyof typeof ratingLabels]}
-                              </span>
+                            ))}
+                            <span class="ml-1.5 font-mono text-[11px] text-zinc-600">
+                              {ratingLabels[r as keyof typeof ratingLabels]}
                             </span>
-                          );
-                        })()}
-                      <div class="mt-auto pt-2 flex items-center gap-2 text-xs text-zinc-600 font-mono">
-                        {book.num_pages && <span>Pages: {book.num_pages}</span>}
-                        {book.user_read_at && (
-                          <span class="ml-auto">
-                            Read: {format(new Date(book.user_read_at), "MMM d")}
-                          </span>
+                          </p>
                         )}
+                        <div class="mt-auto flex items-center gap-2 pt-2 font-mono text-[11px] text-zinc-600">
+                          {book.num_pages && <span>{book.num_pages} pp</span>}
+                          {book.user_read_at && (
+                            <span class="ml-auto">
+                              finished {format(new Date(book.user_read_at), "MMM d")}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </li>
-                ))}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))
@@ -423,78 +396,31 @@ const pageDescription =
         )
       }
 
-      <!-- Footer -->
-      <p
-        class="mb-8 mt-4 border-t border-[#27272a] pt-3 text-right font-mono text-xs text-zinc-600"
-      >
-        Updated <time id="last-updated" datetime={now.toISOString()}></time>
-      </p>
     </div>
   </Container>
 
   <script>
     function initReadingChartToggle() {
-      const btnThisYear = document.getElementById("btn-this-year");
-      const btnAllYears = document.getElementById("btn-all-years");
-      const chartThisYear = document.getElementById("chart-this-year");
-      const chartAllYears = document.getElementById("chart-all-years");
+      const buttons = [
+        { btn: document.getElementById("btn-this-year"), chart: document.getElementById("chart-this-year") },
+        { btn: document.getElementById("btn-all-years"), chart: document.getElementById("chart-all-years") },
+      ];
+      if (buttons.some(({ btn, chart }) => !btn || !chart)) return;
+      if (buttons[0].btn!.dataset.chartInitialized === "true") return;
+      buttons[0].btn!.dataset.chartInitialized = "true";
 
-      if (!btnThisYear || !btnAllYears || !chartThisYear || !chartAllYears)
-        return;
-      if (btnThisYear.dataset.chartInitialized === "true") return;
-
-      btnThisYear.dataset.chartInitialized = "true";
-      btnThisYear.addEventListener("click", () => {
-        chartThisYear.classList.remove("hidden");
-        chartThisYear.classList.add("flex");
-        chartAllYears.classList.add("hidden");
-        chartAllYears.classList.remove("flex");
-        btnThisYear.classList.add("bg-[#eab308]", "text-black");
-        btnThisYear.classList.remove("text-zinc-500", "hover:text-zinc-300");
-        btnAllYears.classList.remove("bg-[#eab308]", "text-black");
-        btnAllYears.classList.add("text-zinc-500", "hover:text-zinc-300");
-        btnThisYear.setAttribute("aria-pressed", "true");
-        btnAllYears.setAttribute("aria-pressed", "false");
-      });
-
-      btnAllYears.addEventListener("click", () => {
-        chartAllYears.classList.remove("hidden");
-        chartAllYears.classList.add("flex");
-        chartThisYear.classList.add("hidden");
-        chartThisYear.classList.remove("flex");
-        btnAllYears.classList.add("bg-[#eab308]", "text-black");
-        btnAllYears.classList.remove("text-zinc-500", "hover:text-zinc-300");
-        btnThisYear.classList.remove("bg-[#eab308]", "text-black");
-        btnThisYear.classList.add("text-zinc-500", "hover:text-zinc-300");
-        btnAllYears.setAttribute("aria-pressed", "true");
-        btnThisYear.setAttribute("aria-pressed", "false");
+      buttons.forEach(({ btn }) => {
+        btn!.addEventListener("click", () => {
+          buttons.forEach((other) => {
+            const active = other.btn === btn;
+            other.btn!.setAttribute("aria-pressed", String(active));
+            other.chart!.classList.toggle("hidden", !active);
+            other.chart!.classList.toggle("flex", active);
+          });
+        });
       });
     }
 
-    function formatLastUpdated() {
-      const timeEl = document.getElementById("last-updated");
-      if (!timeEl) return;
-      const dt = timeEl.getAttribute("datetime");
-      if (!dt) return;
-      const date = new Date(dt);
-      if (isNaN(date.getTime())) return;
-
-      const datePart = date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      });
-      const timePart = date.toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-      });
-      timeEl.textContent = `${datePart} at ${timePart}`;
-    }
-
-    document.addEventListener("astro:page-load", () => {
-      initReadingChartToggle();
-      formatLastUpdated();
-    });
+    document.addEventListener("astro:page-load", initReadingChartToggle);
   </script>
 </Layout>

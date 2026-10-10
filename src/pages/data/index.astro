@@ -13,7 +13,7 @@ import ChartIcon from "@/assets/icons/chart-bar.svg";
 // Books & Music use the Solar set (https://icones.js.org/collection/solar,
 // CC BY 4.0); Steam & Chess use simple-icons brand marks (CC0) for accuracy.
 const pageDescription =
-  "Production data views for what I play, read, listen to and measure across the services I use.";
+  "Live views of what I read, listen to, play and build with, pulled from the services I use.";
 
 const analyses = [
   {
@@ -22,7 +22,7 @@ const analyses = [
     title: "Books",
     source: "goodreads",
     description:
-      "Production reading analytics with yearly trends and ratings.",
+      "Everything I have read on Goodreads, by year and month, with ratings.",
   },
   {
     href: "/data/music",
@@ -30,7 +30,7 @@ const analyses = [
     title: "Music",
     source: "spotify",
     description:
-      "Production listening analytics for recent tracks, top songs and artists.",
+      "What I have been listening to lately, plus top tracks and artists over time.",
   },
   {
     href: "/data/chess",
@@ -38,7 +38,7 @@ const analyses = [
     title: "Chess",
     source: "chess.com",
     description:
-      "Production chess analytics for ratings, history, openings and recent games.",
+      "Ratings, win rates, favourite openings and recent games from chess.com.",
   },
   {
     href: "/data/steam",
@@ -46,7 +46,7 @@ const analyses = [
     title: "Steam",
     source: "steam web api",
     description:
-      "Production analytics for library size, playtime and recent activity.",
+      "My Steam library: where the hours went and what I am playing now.",
   },
   {
     href: "/data/token-usage",
@@ -54,7 +54,7 @@ const analyses = [
     title: "Token usage",
     source: "ccusage",
     description:
-      "Production analytics for daily token volume, token mix, agent usage and model distribution.",
+      "Daily tokens and spend across the coding agents and models I use.",
   },
 ];
 ---
@@ -76,42 +76,50 @@ const analyses = [
       <header class="page-header">
         <h1 class="page-title">Data</h1>
         <p class="page-intro">
-          Production views sourced from the services I use.
+          Live views of what I read, listen to, play and build with, pulled
+          from the services I use and refreshed every few minutes.
         </p>
       </header>
 
-      <section class="mb-8">
-        <div class="grid grid-cols-1 gap-px border border-[#27272a] bg-[#27272a] md:grid-cols-2">
+      <section class="mb-10">
+        <ul class="grid grid-cols-1 border-l border-t border-[#27272a] md:grid-cols-2">
           {
-            analyses.map(({ href, Icon, title, source, description }) => (
-              <a
-                href={href}
-                class="group flex flex-col justify-between bg-[#0c0c0d] p-4 transition-colors hover:bg-[#111113]"
+            analyses.map(({ href, Icon, title, source, description }, i) => (
+              <li
+                class:list={[
+                  "border-b border-r border-[#27272a]",
+                  analyses.length % 2 === 1 && i === analyses.length - 1 && "md:col-span-2",
+                ]}
               >
-                <div class="flex items-start justify-between gap-3">
+                <a
+                  href={href}
+                  class="group flex h-full gap-4 p-5 transition-colors hover:bg-[#111113]"
+                >
                   <span
-                    class="flex size-9 items-center justify-center border border-[#27272a] text-zinc-500 transition-colors group-hover:text-[#eab308]"
+                    class="flex size-10 shrink-0 items-center justify-center border border-[#27272a] bg-[#111113] text-zinc-400 transition-colors group-hover:border-[#eab308]/50 group-hover:text-[#eab308]"
                     aria-hidden="true"
                   >
                     <Icon class="size-5" />
                   </span>
-                  <span class="font-mono text-sm text-zinc-700 transition-colors group-hover:text-[#eab308]">
-                    →
+                  <span class="flex min-w-0 flex-1 flex-col">
+                    <span class="flex items-baseline justify-between gap-3">
+                      <span class="text-base font-medium text-zinc-100 transition-colors group-hover:text-[#eab308]">
+                        {title}
+                      </span>
+                      <span class="font-mono text-xs text-zinc-600">{source}</span>
+                    </span>
+                    <span class="mt-1 text-sm leading-relaxed text-zinc-400">
+                      {description}
+                    </span>
+                    <span class="mt-3 font-mono text-xs text-zinc-600 transition-colors group-hover:text-[#eab308]">
+                      {href} <span aria-hidden="true" class="inline-block transition-transform group-hover:translate-x-0.5">→</span>
+                    </span>
                   </span>
-                </div>
-                <h2 class="mt-3 text-base font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
-                  {title}
-                </h2>
-                <p class="mt-1 text-sm leading-relaxed text-zinc-500">
-                  {description}
-                </p>
-                <p class="mt-2 font-mono text-xs uppercase tracking-wide text-zinc-700">
-                  {source}
-                </p>
-              </a>
+                </a>
+              </li>
             ))
           }
-        </div>
+        </ul>
       </section>
     </div>
   </Container>

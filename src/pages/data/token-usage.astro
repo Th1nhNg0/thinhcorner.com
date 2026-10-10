@@ -3,6 +3,7 @@ export const prerender = false;
 
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
+import DataHeader from "@/components/data/DataHeader.astro";
 import ModelStackChart from "@/components/charts/ModelStackChart.astro";
 import {
   buildCalendar,
@@ -183,6 +184,8 @@ const paidModels = models
 const freeModels = models.filter((model) => model.cost === 0);
 const freeTokens = freeModels.reduce((sum, model) => sum + model.totalTokens, 0);
 
+// Long tail of paid models stays collapsed behind a button.
+const INITIAL_MODELS = 12;
 const modelRows = paidModels.map((model) => ({
   ...model,
   displayTokens: formatCompact(model.totalTokens),
@@ -218,35 +221,25 @@ const pageDescription =
 >
   <Container>
     <div class="collection-page">
-      <header class="page-header">
-        <p class="font-mono text-xs uppercase tracking-wide text-zinc-600">
-          <a href="/data" class="transition-colors hover:text-zinc-400">← All data</a>
-        </p>
-        <h1 class="page-title">Token usage</h1>
-        <p class="page-intro">
-          Every token my coding agents have processed, by day, model, agent and token
-          type — including how much of it was cheap cache traffic rather than generated
-          output.
-        </p>
-        <p class="mt-3 font-mono text-xs text-zinc-600">
-          {formatDay(firstPeriod, true)} – {formatDay(lastPeriod, true)} ·{" "}
-          <span class={isStale ? "text-[#ca8a04]" : "text-zinc-500"}>{freshnessCopy}</span>
-        </p>
-      </header>
+      <DataHeader title="Token usage" source="ccusage">
+        Every token my coding agents have processed, by day, model, agent and token
+        type, including how much of it was cheap cache traffic rather than generated
+        output.
+        <Fragment slot="meta">
+          <span>{formatDay(firstPeriod, true)} – {formatDay(lastPeriod, true)}</span>
+          <span class={isStale ? "text-[#ca8a04]" : undefined}>{freshnessCopy}</span>
+        </Fragment>
+      </DataHeader>
 
       <!-- Headline stats -->
-      <section class="mb-10">
+      <section class="data-section">
         <div class="grid grid-cols-2 border-l border-t border-[#27272a] sm:grid-cols-3">
           {
             statCells.map((cell) => (
-              <div class="border-b border-r border-[#27272a] p-3">
-                <p class="font-mono text-[10px] uppercase tracking-wide text-zinc-500">
-                  {cell.label}
-                </p>
-                <p class="mt-1.5 text-lg font-medium text-zinc-100">{cell.value}</p>
-                <p class="mt-1 font-mono text-[11px] leading-snug text-zinc-600">
-                  {cell.detail}
-                </p>
+              <div class="data-stat">
+                <p class="data-stat-label">{cell.label}</p>
+                <p class="data-stat-value">{cell.value}</p>
+                <p class="data-stat-note">{cell.detail}</p>
               </div>
             ))
           }
@@ -261,8 +254,8 @@ const pageDescription =
         panels) is a following sibling and can use peer-checked. No JS, and it
         still works with scripting disabled.
       -->
-      <section class="mb-10">
-        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-2">
+      <section class="data-section">
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
           <input
             id="stack-metric-cost"
             type="radio"
@@ -278,26 +271,26 @@ const pageDescription =
           />
 
           <h2
-            class="hidden flex-1 text-sm font-medium text-zinc-200 peer-checked/cost:block"
+            class="data-h2 hidden flex-1 peer-checked/cost:flex"
           >
             Daily spend by model
           </h2>
           <h2
-            class="hidden flex-1 text-sm font-medium text-zinc-200 peer-checked/tokens:block"
+            class="data-h2 hidden flex-1 peer-checked/tokens:flex"
           >
             Daily tokens by model
           </h2>
 
-          <div class="flex border border-[#27272a] font-mono text-[11px]">
+          <div class="flex border border-[#27272a] p-0.5 font-mono text-xs uppercase">
             <label
               for="stack-metric-cost"
-              class="cursor-pointer px-2.5 py-1 text-zinc-500 transition-colors hover:text-zinc-300 peer-checked/cost:bg-[#eab308] peer-checked/cost:text-[#0c0c0d]"
+              class="cursor-pointer px-2 py-0.5 text-zinc-500 transition-colors hover:text-zinc-300 peer-checked/cost:bg-[#eab308] peer-checked/cost:text-[#0c0c0d]"
             >
               Cost
             </label>
             <label
               for="stack-metric-tokens"
-              class="cursor-pointer border-l border-[#27272a] px-2.5 py-1 text-zinc-500 transition-colors hover:text-zinc-300 peer-checked/tokens:bg-[#eab308] peer-checked/tokens:text-[#0c0c0d]"
+              class="cursor-pointer px-2 py-0.5 text-zinc-500 transition-colors hover:text-zinc-300 peer-checked/tokens:bg-[#eab308] peer-checked/tokens:text-[#0c0c0d]"
             >
               Tokens
             </label>
@@ -358,9 +351,9 @@ const pageDescription =
       </section>
 
       <!-- Token mix -->
-      <section class="mb-10">
-        <div class="mb-3 flex flex-wrap items-baseline justify-between gap-x-3">
-          <h2 class="text-sm font-medium text-zinc-200">Token mix</h2>
+      <section class="data-section">
+        <div class="data-section-heading">
+          <h2>Token mix</h2>
           <span class="font-mono text-xs text-zinc-600">{formatCost(totals.totalCost)} total</span>
         </div>
 
@@ -410,9 +403,9 @@ const pageDescription =
       </section>
 
       <!-- Agents -->
-      <section class="mb-10">
-        <div class="mb-3 flex flex-wrap items-baseline justify-between gap-x-3">
-          <h2 class="text-sm font-medium text-zinc-200">Agents</h2>
+      <section class="data-section">
+        <div class="data-section-heading">
+          <h2>Agents</h2>
           <span class="font-mono text-xs text-zinc-600">by tokens</span>
         </div>
 
@@ -443,9 +436,9 @@ const pageDescription =
       </section>
 
       <!-- Calendar -->
-      <section class="mb-10">
-        <div class="mb-3 flex flex-wrap items-baseline justify-between gap-x-3">
-          <h2 class="text-sm font-medium text-zinc-200">Active days</h2>
+      <section class="data-section">
+        <div class="data-section-heading">
+          <h2>Active days</h2>
           <span class="font-mono text-xs text-zinc-600">
             {calendarWeeks.length} weeks · {activeDayCount} with usage
           </span>
@@ -530,9 +523,9 @@ const pageDescription =
       </div>
 
       <!-- Models -->
-      <section class="mb-10">
-        <div class="mb-3 flex flex-wrap items-baseline justify-between gap-x-3">
-          <h2 class="text-sm font-medium text-zinc-200">Models</h2>
+      <section class="data-section">
+        <div class="data-section-heading">
+          <h2>Models</h2>
           <span class="font-mono text-xs text-zinc-600">
             {models.length} total · by spend
           </span>
@@ -569,8 +562,14 @@ const pageDescription =
             </thead>
             <tbody>
               {
-                modelRows.map((model) => (
-                  <tr class="border-b border-[#27272a] transition-colors last:border-b-0 hover:bg-[#111113]">
+                modelRows.map((model, index) => (
+                  <tr
+                    class:list={[
+                      "border-b border-[#27272a] transition-colors last:border-b-0 hover:bg-[#111113]",
+                      index >= INITIAL_MODELS && "hidden",
+                    ]}
+                    data-extra-model={index >= INITIAL_MODELS ? "" : undefined}
+                  >
                     <th scope="row" class="p-2.5 text-left font-normal" title={model.modelName}>
                       <span class="block truncate text-xs text-zinc-300">
                         {model.modelName}
@@ -605,6 +604,18 @@ const pageDescription =
               }
             </tbody>
           </table>
+
+          {
+            modelRows.length > INITIAL_MODELS && (
+              <button
+                type="button"
+                id="models-show-all"
+                class="block w-full border-t border-[#27272a] p-2.5 text-center font-mono text-[11px] text-zinc-400 transition-colors hover:bg-[#111113] hover:text-[#eab308]"
+              >
+                Show {modelRows.length - INITIAL_MODELS} more paid models ↓
+              </button>
+            )
+          }
 
           {
             freeModelRows.length > 0 && (
@@ -656,6 +667,18 @@ const pageDescription =
   </Container>
 
   <script>
+    function initModelsShowAll() {
+      const button = document.getElementById("models-show-all");
+      if (!button || button.dataset.initialized === "true") return;
+      button.dataset.initialized = "true";
+      button.addEventListener("click", () => {
+        document
+          .querySelectorAll("[data-extra-model]")
+          .forEach((row) => row.classList.remove("hidden"));
+        button.remove();
+      });
+    }
+
     function initDailyUsageTooltips() {
       const tooltip = document.getElementById("daily-usage-tooltip");
       const cells = document.querySelectorAll<HTMLElement>("[data-daily-tooltip]");
@@ -709,6 +732,9 @@ const pageDescription =
       });
     }
 
-    document.addEventListener("astro:page-load", initDailyUsageTooltips);
+    document.addEventListener("astro:page-load", () => {
+      initDailyUsageTooltips();
+      initModelsShowAll();
+    });
   </script>
 </Layout>
