@@ -312,6 +312,8 @@ Here is a sample of what the solver came up with, across all the worlds. None of
 
 One honest note: the solver doesn't care about elegance. The model only asks for *a* solution, any layout that works. It doesn't try to use as few pieces as possible or to look nice. Asking for the layout with the fewest pieces would be one extra line of MiniZinc, but the search would get slower, because the solver would then have to prove that nothing smaller exists.
 
+So the raw answers come out a bit messy: a piece of track no car ever touches, or a switch where every car takes the same route, so its spare branch points into a rock. Before drawing the boards in this post, I tidy that up. Unused pieces are removed, and a switch that only ever sends cars one way becomes a plain straight or curve. Every car still moves exactly as before, and I checked each tidied board against the model again to make sure it is still a valid solution.
+
 ## What I learned
 
 **Write the rules, not the search.** The model is about 1,300 lines of MiniZinc and almost none of it is about how to search. Whenever I got stuck, the fix was to describe the game more precisely.
@@ -324,4 +326,4 @@ One honest note: the solver doesn't care about elegance. The model only asks for
 
 Worlds 10 to 12 add more mechanics, including levels with two separate destinations, and they are still on my list. If you want to try the solver on your own level, the [data format](https://github.com/Th1nhNg0/railbound_cp/blob/main/docs/data_format.md) is documented in the repo. Also check out [FoxtrotOnce's RailboundSolver](https://github.com/FoxtrotOnce/RailboundSolver), a different, logic-driven approach, and where much of the game art in my repo comes from.
 
-*The replays and animations in this post are drawn from the solver's real output, using the tile art from the repo.*
+*The replays and animations in this post are drawn from the solver's real output (tidied as described above), using the tile art from the repo.*
