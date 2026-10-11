@@ -1,0 +1,80 @@
+---
+title: "The Coders Got Rid of Them"
+date: "2026-10-11T12:00:00Z"
+description: "Chamath says software IP just became worthless after one developer cloned seven Adobe apps with AI. I agree with him, and as a user I'm pretty happy about it."
+tags: ["ai", "business"]
+---
+
+import photocraft from "./photocraft.webp";
+import sixMoreApps from "./six-more-apps.webp";
+
+The tech companies thought AI meant they could get rid of coders. Turns out, it meant the coders could get rid of them.
+
+## What Chamath said
+
+This week Chamath Palihapitiya said software IP has become "effectively worthless"[^polymarket]:
+
+> These are profound products that have existed and have had moats for years, and now they're just open source versions. [...] When everything is headless, so when Elon makes his services headless, Benioff made Salesforce headless a few months earlier, when all of these things are headless and you can wrap them in agent tools and you can connect them via MCP to other experiences, the value of IP no longer exists in software. It doesn't exist.
+
+He was reacting to Brandon Thomas, a developer who used Claude to rebuild seven Adobe apps as free, open source programs written in Rust: Photoshop, Illustrator, Premiere Pro, Lightroom, After Effects, InDesign and Acrobat[^gizmodo]. He calls them PhotoCraft, VectorCraft, FilmCraft and so on.
+
+I went to look at the repos expecting a toy demo. They look like the real thing. This is PhotoCraft, the Photoshop clone, from its GitHub page[^photocraft]:
+
+<figure>
+  <img
+    src={photocraft.src}
+    alt="PhotoCraft, a Photoshop clone, editing Hokusai's The Great Wave. It has a Photoshop-style toolbar, a Curves adjustment panel over a histogram, and a Layers panel with Curves, Vibrance, type layers and a caption card with a drop shadow."
+    width={photocraft.width}
+    height={photocraft.height}
+    loading="lazy"
+  />
+  <figcaption>PhotoCraft: layers, adjustment layers, layer styles and PSD files.</figcaption>
+</figure>
+
+And the other six:
+
+<figure>
+  <img
+    src={sixMoreApps.src}
+    alt="A grid of six app screenshots: VectorCraft (Illustrator) editing a neon poster, FilmCraft (Premiere) with a video timeline, LightCraft (Lightroom) developing a black and white landscape, EffectCraft (After Effects) with a motion graphics composition, DesignCraft (InDesign) laying out a magazine spread, and PDFCraft (Acrobat) with PDF tools and comments."
+    width={sixMoreApps.width}
+    height={sixMoreApps.height}
+    loading="lazy"
+  />
+  <figcaption>Screenshots from each app's README on GitHub.</figcaption>
+</figure>
+
+Why would anyone do this? Thomas said he got "bit by the dark pattern cancellation fee one too many times"[^tweaktown]. If you have ever tried to cancel Adobe, you know what he means. In March, Adobe agreed to a \$150 million settlement with the US government over hiding that early termination fee and making cancellation hard on purpose[^adobe].
+
+So a customer who was annoyed with Adobe used AI to rebuild Adobe. I find that pretty funny.
+
+## Headless
+
+The second half of Chamath's point is about "headless" software. It means the app is no longer a screen you click through. Everything it does is exposed as an API, so an AI agent can use it directly.
+
+Big companies are already doing this to themselves. In April, Salesforce announced Headless 360, which turns everything on its platform into an API, an MCP tool or a command line command[^salesforce]. In June, X launched a hosted MCP server so AI tools can plug into it[^x].
+
+For years, what you paid for was the interface and the workflow built on top of the data. If an agent goes straight to the API, nobody looks at that interface anymore. It gets hard to charge for something nobody sees.
+
+## They are still buggy
+
+To be fair, the clones are not ready. Gizmodo tried PhotoCraft and called it "glitchy, but real, Photoshop"[^gizmodo]. Thomas himself says the apps are "not anywhere close to ready". On Hacker News, a lot of people pointed out that keeping the quality up is the hard part[^hn].
+
+I agree, but these apps only came out a few weeks ago and they will keep getting better. A year ago, one person rebuilding Photoshop would have sounded like a joke.
+
+## Where I stand
+
+I'm on the user side, so I'm not worried. I'm happy about it.
+
+I agree with Chamath that the code itself is not worth much anymore. What's left is the stuff AI can't copy in a few weeks: the data you hold, the people who already use your product, and whether they trust you not to trap them with a cancellation fee.
+
+If a company's only advantage is "we wrote the software and you can't," that advantage is gone. The coders it planned to replace can now replace it.
+
+[^polymarket]: [Polymarket on X](https://x.com/Polymarket/status/2108953105186673136). I couldn't find the original clip, so the quote is as it was shared online.
+[^gizmodo]: [Someone Vibe Coded a Free Knockoff of Adobe Creative Suite](https://gizmodo.com/someone-vibe-coded-a-free-knockoff-of-adobe-creative-suite-2000823322), Gizmodo
+[^photocraft]: [storytold/photocraft](https://github.com/storytold/photocraft) on GitHub, MIT or Apache-2.0
+[^tweaktown]: [Developer says "software is over" after using AI to recreate Adobe's entire Creative Cloud suite](https://www.tweaktown.com/news/113989/developer-says-software-is-over-after-using-ai-to-recreate-adobes-entire-creative-cloud-suite-for-free/index.html), TweakTown
+[^adobe]: [Adobe Ends Federal Subscription Lawsuit With \$150 Million Settlement Package](https://www.pymnts.com/legal/2026/adobe-ends-federal-subscription-lawsuit-with-150-million-settlement-package), PYMNTS
+[^salesforce]: [Salesforce Headless 360 and Agentforce Vibes 2.0 revealed at TDX 2026](https://www.salesforceben.com/salesforce-headless-360-and-agentforce-vibes-2-0-revealed-at-tdx-2026/), Salesforce Ben
+[^x]: [X now offers an MCP server to make its platform easier for AI tools to use](https://techcrunch.com/2026/06/30/x-now-offers-an-mcp-server-to-make-its-platform-easier-for-AI-tools-to-use/), TechCrunch
+[^hn]: [ArtCraft Apps](https://news.ycombinator.com/item?id=49958850), Hacker News
