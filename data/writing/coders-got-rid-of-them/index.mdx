@@ -1,0 +1,97 @@
+---
+title: "The Coders Got Rid of Them"
+date: "2026-10-11"
+description: "Chamath says software IP just became worthless. I agree, and I'm on the side that's happy about it. A short hot take from someone who stopped paying for a CMS."
+tags: ["ai", "business"]
+---
+
+import thePlan from "./the-plan.webp";
+import headless from "./headless.webp";
+import myCms from "./my-cms.webp";
+
+The tech companies thought AI meant they could get rid of coders.
+
+Turns out, it meant the coders could get rid of them.
+
+<figure>
+  <img
+    src={thePlan.src}
+    alt="Two panels. The plan: a tech company plus AI pushes a coder out, saying we won't need you anymore. What happened: a coder plus AI pushes the tech company out, which is stamped CANCELLED."
+    width={thePlan.width}
+    height={thePlan.height}
+    loading="lazy"
+  />
+</figure>
+
+## What Chamath said
+
+This week Chamath Palihapitiya [declared](https://x.com/Polymarket/status/2108953105186673136) that software IP has become "effectively worthless." His words:
+
+> These are profound products that have existed and have had moats for years, and now they're just open source versions. [...] When everything is headless, so when Elon makes his services headless, Benioff made Salesforce headless a few months earlier, when all of these things are headless and you can wrap them in agent tools and you can connect them via MCP to other experiences, the value of IP no longer exists in software. It doesn't exist.
+
+What set him off: a developer named Brandon Thomas used Claude to rebuild [seven Adobe apps](https://gizmodo.com/someone-vibe-coded-a-free-knockoff-of-adobe-creative-suite-2000823322) as free, open source Rust programs. Photoshop, Illustrator, Premiere, Lightroom, After Effects, InDesign, Acrobat. All of them.
+
+His reason? He got "bit by the dark pattern cancellation fee one too many times." Then he [posted](https://www.tweaktown.com/news/113989/developer-says-software-is-over-after-using-ai-to-recreate-adobes-entire-creative-cloud-suite-for-free/index.html): "Software is over."
+
+That cancellation fee is real, by the way. In March, Adobe [paid $150 million](https://www.pymnts.com/legal/2026/adobe-ends-federal-subscription-lawsuit-with-150-million-settlement-package) to settle a US government lawsuit over hiding it.
+
+So one annoyed customer with an AI rebuilt the product that annoyed him. That's the whole story of this era in one sentence.
+
+## Headless means the door is gone
+
+"Headless" sounds technical, but the idea is simple. The app stops being a screen you click. It becomes a set of APIs that any agent can call.
+
+- In April, Salesforce announced [Headless 360](https://www.salesforceben.com/salesforce-headless-360-and-agentforce-vibes-2-0-revealed-at-tdx-2026/): everything on the platform becomes an API, an MCP tool or a CLI command. Its co-founder literally asked, "why should you ever log into Salesforce again?"
+- In June, X launched a [hosted MCP server](https://techcrunch.com/2026/06/30/x-now-offers-an-mcp-server-to-make-its-platform-easier-for-AI-tools-to-use/) so AI tools can plug straight into it.
+
+<figure>
+  <img
+    src={headless.src}
+    alt="Before: you click through the app, where the UI, workflows and pro features live, and the app sits between you and your data. Headless: you type a sentence to your agent, which calls Salesforce, X and your own code through MCP. The app's UI is a dashed box nobody opens."
+    width={headless.width}
+    height={headless.height}
+    loading="lazy"
+  />
+</figure>
+
+For years, the IP you paid for lived in that middle box. The UI, the workflows, the "pro" features, years of polish. Once an agent talks to the API directly, nobody sees the middle box anymore. And if nobody sees it, why pay for it?
+
+## It already happened to me
+
+I'm on the user side of this, and I'm not scared. I'm relieved.
+
+At work we needed a headless CMS. We used Directus and Strapi. Both are "free and open source," and both were great, right up until they weren't.
+
+<figure>
+  <img
+    src={myCms.src}
+    alt="Timeline in three steps. Step 1: Strapi or Directus, free and open source, you build on it. Step 2: the paywall, SSO costs an extra $50 per seat per month, audit logs need sales, and a bigger company needs a new license. Step 3: my own CMS, built on Payload (MIT) with AI-written code, where you just ask for a feature and need nobody's permission."
+    width={myCms.width}
+    height={myCms.height}
+    loading="lazy"
+  />
+</figure>
+
+The longer you use them, the more you hit locked doors. On Strapi, SSO is a [$50 per seat, per month add-on](https://strapi.io/blog/introducing-the-free-preview-feature-growth-plan-and-sso-add-on), and audit logs are Enterprise only. Directus [moved to a BSL license](https://directus.com/resources/why-we-are-relicensing-directus): free, unless your company is over $5 million a year.
+
+I don't blame them. They need to make money. But every locked feature is a small tax on being stuck with them.
+
+So I stopped being stuck. I vibecoded my own CMS on top of [Payload](https://payloadcms.com), which is MIT licensed. Need a feature? I describe it and an AI writes it. No sales call. No seat math. No license lawyer.
+
+More freedom. More control. And the "IP" I used to pay for turned out to be something I could just build.
+
+## "But the clones are buggy"
+
+They are. Gizmodo called the Photoshop clone "[glitchy, but real, Photoshop](https://gizmodo.com/someone-vibe-coded-a-free-knockoff-of-adobe-creative-suite-2000823322)." Thomas himself says it's "not anywhere close to ready." On [Hacker News](https://news.ycombinator.com/item?id=49958850), people pointed out that quality is the hard part.
+
+Sure. But look at the direction, not the snapshot. "Glitchy but real" in October is "good enough" by next summer. Meanwhile, one commenter in that same thread said they shorted Adobe the day they saw it.
+
+And look at what Salesforce and X are actually doing. They're not defending their UI. They're opening it up and charging for access to the data behind it. They already know the code isn't the moat.
+
+## So where did the value go?
+
+Not to the code. Code is cheap now.
+
+It went to the things an agent can't generate on a Sunday: your data, the people who already use you, and the trust that you won't trap them with a cancellation fee.
+
+If your business is "we wrote the software and you can't," that business is over. The coders you thought you could replace just learned they can replace you.
