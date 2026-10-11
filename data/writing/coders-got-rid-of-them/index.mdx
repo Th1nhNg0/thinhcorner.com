@@ -8,6 +8,8 @@ tags: ["ai", "business"]
 import thePlan from "./the-plan.webp";
 import headless from "./headless.webp";
 import myCms from "./my-cms.webp";
+import photocraft from "./photocraft.webp";
+import sixMoreApps from "./six-more-apps.webp";
 
 The tech companies thought AI meant they could get rid of coders.
 
@@ -32,9 +34,35 @@ This week Chamath Palihapitiya [declared](https://x.com/Polymarket/status/210895
 
 What set him off: a developer named Brandon Thomas used Claude to rebuild [seven Adobe apps](https://gizmodo.com/someone-vibe-coded-a-free-knockoff-of-adobe-creative-suite-2000823322) as free, open source Rust programs. Photoshop, Illustrator, Premiere, Lightroom, After Effects, InDesign, Acrobat. All seven.
 
+This is not a mockup. Here's [PhotoCraft](https://github.com/storytold/photocraft), the Photoshop one, straight from its README:
+
+<figure>
+  <img
+    src={photocraft.src}
+    alt="PhotoCraft, a Photoshop clone, editing Hokusai's The Great Wave. It has a Photoshop-style toolbar, a Curves adjustment panel over a histogram, and a Layers panel with Curves, Vibrance, type layers and a caption card with a drop shadow."
+    width={photocraft.width}
+    height={photocraft.height}
+    loading="lazy"
+  />
+  <figcaption>PhotoCraft. Layers, adjustment layers, layer styles, real PSD files. Written in Rust, MIT or Apache-2.0.</figcaption>
+</figure>
+
+And the other six:
+
+<figure>
+  <img
+    src={sixMoreApps.src}
+    alt="A grid of six app screenshots: VectorCraft (Illustrator) editing a neon poster, FilmCraft (Premiere) with a video timeline, LightCraft (Lightroom) developing a black and white landscape, EffectCraft (After Effects) with a motion graphics composition, DesignCraft (InDesign) laying out a magazine spread, and PDFCraft (Acrobat) with PDF tools and comments."
+    width={sixMoreApps.width}
+    height={sixMoreApps.height}
+    loading="lazy"
+  />
+  <figcaption>Screenshots from each app's GitHub README, by ArtCraft.</figcaption>
+</figure>
+
 His reason? He got "bit by the dark pattern cancellation fee one too many times." Then he [posted](https://www.tweaktown.com/news/113989/developer-says-software-is-over-after-using-ai-to-recreate-adobes-entire-creative-cloud-suite-for-free/index.html): "Software is over."
 
-That cancellation fee is real, by the way. In March, Adobe [agreed to a \$150 million settlement](https://www.pymnts.com/legal/2026/adobe-ends-federal-subscription-lawsuit-with-150-million-settlement-package of a US government lawsuit over hiding it.
+That cancellation fee is real, by the way. In March, Adobe [agreed to a \$150 million settlement](https://www.pymnts.com/legal/2026/adobe-ends-federal-subscription-lawsuit-with-150-million-settlement-package) over a US government lawsuit over hiding it.
 
 So one annoyed customer with an AI rebuilt the product that annoyed him. That's the whole story of this era in one sentence.
 
@@ -74,7 +102,9 @@ At work we needed a headless CMS. We used Directus and Strapi. Both were sold as
   />
 </figure>
 
-The longer you use them, the more you hit locked doors. On Strapi, SSO is a [\$50 per seat, per month add-on](https://strapi.io/blog/introducing-the-free-preview-feature-growth-plan-and-sso-add-on), and audit logs are Enterprise only. Directus [moved to a BSL license](https://directus.com/resources/why-we-are-relicensing-directus): free, unless your company is over \$5 million a year.
+The longer you use them, the more you hit locked doors. On Strapi, SSO is a [\$50 per seat, per month add-on](https://strapi.io/blog/introducing-the-free-preview-feature-growth-plan-and-sso-add-on), and audit logs are Enterprise only. Directus [moved to a BSL license](https://directus.com/resources/why-we-are-relicensing-directus) in 2023, free only if your company makes under \$5 million a year. Then in version 12 it [switched again](https://directus.com/resources/directus-v12-license-change), this time with license keys. The [current license](https://github.com/directus/directus/blob/main/license) literally says:
+
+> You must not move, change, disable or circumvent the license key functionality of the Software [...] to enable access to the protected functionality without a valid license key.
 
 I don't blame them. They need to make money. But every locked feature is a small tax on being stuck with them.
 
