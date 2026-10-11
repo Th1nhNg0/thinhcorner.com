@@ -78,7 +78,7 @@ const blog = (await getCollection("blog"))
               <a
                 data-astro-prefetch
                 href={`/writing/${post.id}`}
-                class="group grid grid-cols-[1fr_auto] gap-4 py-2"
+                class="group grid grid-cols-[1fr_auto] items-baseline gap-4 py-2"
               >
                 <span class="min-w-0 text-base text-zinc-400 transition-colors group-hover:text-zinc-100">
                   {post.data.title}
@@ -87,7 +87,7 @@ const blog = (await getCollection("blog"))
                   datetime={post.data.date.toISOString()}
                   class="font-mono text-xs text-zinc-600"
                 >
-                  {format(new Date(post.data.date), "MMM yyyy")}
+                  {format(new Date(post.data.date), "MMM dd, yyyy")}
                 </time>
               </a>
             </li>
