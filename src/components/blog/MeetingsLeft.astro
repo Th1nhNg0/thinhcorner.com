@@ -1,0 +1,84 @@
+---
+/**
+ * "How many more times will you see them?" counter for the Last Meeting Theory
+ * post, in the spirit of Tim Urban's "The Tail End". The reader sets the other
+ * person's age, how often they meet a year, and a life expectancy; each dot is
+ * one meeting left. Purely client-side.
+ */
+interface Props {
+  age?: number;
+  perYear?: number;
+  lifespan?: number;
+}
+
+const { age = 55, perYear = 3, lifespan = 75 } = Astro.props;
+---
+
+<figure class="not-prose my-6" data-meetings-left>
+  <div class="rounded-surface border border-(--line) bg-(--surface) p-3 sm:p-4">
+    <div class="grid gap-3 sm:grid-cols-3">
+      <label class="grid gap-1 text-sm text-(--muted)">
+        <span>Người đó bao nhiêu tuổi: <b data-out="age" class="text-(--ink)">{age}</b></span>
+        <input data-in="age" type="range" min="1" max="90" step="1" value={age} class="w-full accent-(--accent)" />
+      </label>
+      <label class="grid gap-1 text-sm text-(--muted)">
+        <span>Gặp mấy lần một năm: <b data-out="perYear" class="text-(--ink)">{perYear}</b></span>
+        <input data-in="perYear" type="range" min="1" max="52" step="1" value={perYear} class="w-full accent-(--accent)" />
+      </label>
+      <label class="grid gap-1 text-sm text-(--muted)">
+        <span>Tuổi thọ giả định: <b data-out="lifespan" class="text-(--ink)">{lifespan}</b></span>
+        <input data-in="lifespan" type="range" min="60" max="100" step="1" value={lifespan} class="w-full accent-(--accent)" />
+      </label>
+    </div>
+
+    <p class="mt-4 mb-2 text-sm text-(--muted)">
+      Nếu mọi thứ giữ nguyên, bạn còn gặp người này khoảng{" "}
+      <b data-total class="text-2xl text-(--accent) tabular-nums"></b>{" "}
+      lần nữa.
+    </p>
+    <div data-dots class="flex flex-wrap gap-[3px]" aria-hidden="true"></div>
+    <p data-note class="mt-2 mb-0 text-xs text-(--muted)"></p>
+  </div>
+  <figcaption class="mt-2 text-center text-sm text-(--muted)">
+    Mỗi chấm là một lần gặp. Kéo thanh trượt để thử với người bạn đang nghĩ tới.
+  </figcaption>
+</figure>
+
+<script>
+  const MAX_DOTS = 520;
+
+  for (const root of document.querySelectorAll("[data-meetings-left]")) {
+    const input = (name: string) => root.querySelector(`[data-in="${name}"]`) as HTMLInputElement;
+    const output = (name: string) => root.querySelector(`[data-out="${name}"]`) as HTMLElement;
+    const dots = root.querySelector("[data-dots]") as HTMLElement;
+    const total = root.querySelector("[data-total]") as HTMLElement;
+    const note = root.querySelector("[data-note]") as HTMLElement;
+    const names = ["age", "perYear", "lifespan"];
+
+    const render = () => {
+      const [age, perYear, lifespan] = names.map((name) => Number(input(name).value));
+      names.forEach((name) => (output(name).textContent = input(name).value));
+
+      const years = Math.max(0, lifespan - age);
+      const left = Math.round(years * perYear);
+      total.textContent = left.toLocaleString("vi-VN");
+
+      const shown = Math.min(left, MAX_DOTS);
+      dots.replaceChildren();
+      for (let i = 0; i < shown; i++) {
+        const dot = document.createElement("span");
+        dot.className = "block size-2.5 rounded-full bg-(--accent)";
+        dots.appendChild(dot);
+      }
+      note.textContent =
+        left > MAX_DOTS
+          ? `Chỉ vẽ ${MAX_DOTS} chấm đầu tiên.`
+          : left === 0
+            ? "Theo giả định này thì không còn lần nào. Thực tế thì chẳng ai biết trước được."
+            : `Khoảng ${years} năm nữa, mỗi năm ${perYear} lần.`;
+    };
+
+    names.forEach((name) => input(name).addEventListener("input", render));
+    render();
+  }
+</script>
