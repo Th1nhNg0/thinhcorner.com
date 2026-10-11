@@ -49,8 +49,9 @@ Chuyện mất liên lạc thì có số liệu hẳn hoi. Nhà xã hội học 
   <img
     src={network.src}
     alt="Lưới 100 chấm. 30 chấm vàng là người vẫn còn và giữ vai trò cũ, 18 chấm xám nhạt là người vẫn còn nhưng vai trò đã khác, 52 chấm xám đậm là người đã không còn trong mạng lưới quan hệ sau 7 năm."
-    width={network.width}
-    height={network.height}
+    width={400}
+    height={Math.round((network.height * 400) / network.width)}
+    class="mx-auto"
     loading="lazy"
   />
   <figcaption>Nếu bạn có 100 người thân quen hôm nay, bảy năm nữa khoảng một nửa sẽ không còn ở đó.</figcaption>
@@ -76,8 +77,9 @@ Phần mình thích nhất khi tìm hiểu là một thí nghiệm với socola.
   <img
     src={chocolate.src}
     alt="Biểu đồ thanh. Khi được báo đây là viên cuối cùng, 64% người chọn viên thứ năm là ngon nhất. Khi chỉ được báo đây là viên tiếp theo, tỉ lệ này là 22%, gần với mức 20% nếu chọn bừa."
-    width={chocolate.width}
-    height={chocolate.height}
+    width={chocolate.width / 2}
+    height={chocolate.height / 2}
+    class="mx-auto"
     loading="lazy"
   />
   <figcaption>Cùng một viên socola, chỉ khác một câu nói.</figcaption>
