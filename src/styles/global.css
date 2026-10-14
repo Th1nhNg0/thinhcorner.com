@@ -4,7 +4,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  --font-sans: var(--font-iosevka);
+  --font-sans: var(--font-iosevka-aile);
   --font-mono: var(--font-iosevka);
   --text-sm: 0.9375rem;
   --text-xs: 0.8125rem;
