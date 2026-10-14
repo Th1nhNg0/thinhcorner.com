@@ -28,16 +28,30 @@ export default defineConfig({
     layout: "constrained",
     responsiveStyles: false,
   },
-  // Used by the server-side Open Graph image generator and matches the site's sans-serif UI.
+  // Iosevka is the site-wide font. The files in src/assets/fonts are subsets of
+  // @fontsource/iosevka (Latin, Latin-1, Vietnamese and common punctuation), so each
+  // weight is ~60 KB instead of ~1 MB. The 600 weight also ships a WOFF copy because
+  // the Open Graph image generator (Satori) cannot parse WOFF2.
   fonts: [
     {
-      provider: fontProviders.fontsource(),
-      name: "Inter",
-      cssVariable: "--font-inter",
-      weights: [600],
-      styles: ["normal"],
-      subsets: ["latin", "latin-ext", "vietnamese"],
-      formats: ["woff"],
+      provider: fontProviders.local(),
+      name: "Iosevka",
+      cssVariable: "--font-iosevka",
+      display: "swap",
+      fallbacks: ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
+      options: {
+        variants: [
+          { weight: 400, style: "normal", src: ["./src/assets/fonts/iosevka-400.woff2"] },
+          { weight: 400, style: "italic", src: ["./src/assets/fonts/iosevka-400-italic.woff2"] },
+          { weight: 500, style: "normal", src: ["./src/assets/fonts/iosevka-500.woff2"] },
+          {
+            weight: 600,
+            style: "normal",
+            src: ["./src/assets/fonts/iosevka-600.woff2", "./src/assets/fonts/iosevka-600.woff"],
+          },
+          { weight: 700, style: "normal", src: ["./src/assets/fonts/iosevka-700.woff2"] },
+        ],
+      },
     },
   ],
   adapter: cloudflare({
