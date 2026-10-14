@@ -109,20 +109,20 @@ type OgFont = {
   style: "normal";
 };
 
-async function loadIosevka600(url: URL): Promise<OgFont[]> {
-  const variants = fontData["--font-iosevka"]?.filter(
+async function loadIosevkaAile600(url: URL): Promise<OgFont[]> {
+  const variants = fontData["--font-iosevka-aile"]?.filter(
     (font) => String(font.weight) === "600" && font.style === "normal",
   );
 
   if (!variants?.length) {
-    throw new Error("Cannot find Iosevka 600 fonts.");
+    throw new Error("Cannot find Iosevka Aile 600 fonts.");
   }
 
   return Promise.all(
     variants.map(async (variant, index) => {
       const source = variant.src.find((src) => src.format === "woff");
       if (!source) {
-        throw new Error("Cannot find a WOFF source for Iosevka 600.");
+        throw new Error("Cannot find a WOFF source for Iosevka Aile 600.");
       }
 
       const response = await fetch(
@@ -130,7 +130,7 @@ async function loadIosevka600(url: URL): Promise<OgFont[]> {
       );
       if (!response.ok) {
         throw new Error(
-          `Unable to load Iosevka 600 (${response.status} ${response.statusText}).`,
+          `Unable to load Iosevka Aile 600 (${response.status} ${response.statusText}).`,
         );
       }
 
@@ -141,7 +141,7 @@ async function loadIosevka600(url: URL): Promise<OgFont[]> {
       ).replace(/[^a-z0-9-]/gi, "-");
 
       return {
-        name: `Iosevka-${subset}`,
+        name: `IosevkaAile-${subset}`,
         data: await response.arrayBuffer(),
         weight: 600 as const,
         style: "normal" as const,
@@ -151,15 +151,15 @@ async function loadIosevka600(url: URL): Promise<OgFont[]> {
 }
 
 function getTitleFontSize(title: string) {
-  if (title.length > 34) return 52;
-  return 58;
+  if (title.length > 34) return 62;
+  return 68;
 }
 
 export const GET: APIRoute = async ({ params, url }) => {
   const page = pageMap.get(params.slug ?? "");
   if (!page) return new Response("Not found", { status: 404 });
 
-  const fonts = await loadIosevka600(url);
+  const fonts = await loadIosevkaAile600(url);
   const fontFamily = fonts.map((font) => font.name).join(", ");
   const titleFontSize = getTitleFontSize(page.title) * SCALE;
 

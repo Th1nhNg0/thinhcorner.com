@@ -28,11 +28,32 @@ export default defineConfig({
     layout: "constrained",
     responsiveStyles: false,
   },
-  // Iosevka is the site-wide font. The files in src/assets/fonts are subsets of
-  // @fontsource/iosevka (Latin, Latin-1, Vietnamese and common punctuation), so each
-  // weight is ~60 KB instead of ~1 MB. The 600 weight also ships a WOFF copy because
-  // the Open Graph image generator (Satori) cannot parse WOFF2.
+  // Iosevka Aile (proportional) is used for text, and Iosevka (monospace) for code and UI
+  // labels. The files in src/assets/fonts are subsets of the Fontsource builds (Latin,
+  // Vietnamese and common punctuation), so each weight is ~60 KB instead of ~1 MB.
+  // Aile 600 also ships a WOFF copy because the Open Graph image generator (Satori)
+  // cannot parse WOFF2.
   fonts: [
+    {
+      provider: fontProviders.local(),
+      name: "Iosevka Aile",
+      cssVariable: "--font-iosevka-aile",
+      display: "swap",
+      fallbacks: ["ui-sans-serif", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+      options: {
+        variants: [
+          { weight: 400, style: "normal", src: ["./src/assets/fonts/iosevka-aile-400.woff2"] },
+          { weight: 400, style: "italic", src: ["./src/assets/fonts/iosevka-aile-400-italic.woff2"] },
+          { weight: 500, style: "normal", src: ["./src/assets/fonts/iosevka-aile-500.woff2"] },
+          {
+            weight: 600,
+            style: "normal",
+            src: ["./src/assets/fonts/iosevka-aile-600.woff2", "./src/assets/fonts/iosevka-aile-600.woff"],
+          },
+          { weight: 700, style: "normal", src: ["./src/assets/fonts/iosevka-aile-700.woff2"] },
+        ],
+      },
+    },
     {
       provider: fontProviders.local(),
       name: "Iosevka",
@@ -42,14 +63,8 @@ export default defineConfig({
       options: {
         variants: [
           { weight: 400, style: "normal", src: ["./src/assets/fonts/iosevka-400.woff2"] },
-          { weight: 400, style: "italic", src: ["./src/assets/fonts/iosevka-400-italic.woff2"] },
           { weight: 500, style: "normal", src: ["./src/assets/fonts/iosevka-500.woff2"] },
-          {
-            weight: 600,
-            style: "normal",
-            src: ["./src/assets/fonts/iosevka-600.woff2", "./src/assets/fonts/iosevka-600.woff"],
-          },
-          { weight: 700, style: "normal", src: ["./src/assets/fonts/iosevka-700.woff2"] },
+          { weight: 600, style: "normal", src: ["./src/assets/fonts/iosevka-600.woff2"] },
         ],
       },
     },
