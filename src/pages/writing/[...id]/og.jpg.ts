@@ -45,17 +45,17 @@ type OgFont = {
 };
 
 /**
- * Inter is the closest portable equivalent to the blog's system-ui stack.
+ * Iosevka Aile matches the blog's body and heading font.
  * Each unicode subset gets its own family because Satori does not merge
  * duplicate family names when resolving missing Vietnamese glyphs.
  */
-async function loadInter600(url: URL): Promise<OgFont[]> {
-  const variants = fontData["--font-inter"]?.filter(
+async function loadIosevkaAile600(url: URL): Promise<OgFont[]> {
+  const variants = fontData["--font-iosevka-aile"]?.filter(
     (font) => String(font.weight) === "600" && font.style === "normal",
   );
 
   if (!variants?.length) {
-    throw new Error("Cannot find Inter 600 fonts.");
+    throw new Error("Cannot find Iosevka Aile 600 fonts.");
   }
 
   return Promise.all(
@@ -63,7 +63,7 @@ async function loadInter600(url: URL): Promise<OgFont[]> {
       // Satori's OpenType parser needs WOFF here; it cannot parse WOFF2.
       const source = variant.src.find((src) => src.format === "woff");
       if (!source) {
-        throw new Error("Cannot find a WOFF source for Inter 600.");
+        throw new Error("Cannot find a WOFF source for Iosevka Aile 600.");
       }
 
       const response = await fetch(
@@ -71,7 +71,7 @@ async function loadInter600(url: URL): Promise<OgFont[]> {
       );
       if (!response.ok) {
         throw new Error(
-          `Unable to load Inter 600 (${response.status} ${response.statusText}).`,
+          `Unable to load Iosevka Aile 600 (${response.status} ${response.statusText}).`,
         );
       }
 
@@ -82,7 +82,7 @@ async function loadInter600(url: URL): Promise<OgFont[]> {
       ).replace(/[^a-z0-9-]/gi, "-");
 
       return {
-        name: `Inter-${subset}`,
+        name: `IosevkaAile-${subset}`,
         data: await response.arrayBuffer(),
         weight: 600 as const,
         style: "normal" as const,
@@ -106,7 +106,7 @@ export const GET: APIRoute = async ({ params, url }) => {
   const data = postMap.get(params.id as string);
   if (!data) return new Response("Not found", { status: 404 });
 
-  const fonts = await loadInter600(url);
+  const fonts = await loadIosevkaAile600(url);
   const fontFamily = fonts.map((font) => font.name).join(", ");
   const titleFontSize = getTitleFontSize(data.title) * SCALE;
   const dateLabel = formatDate(data.date);
