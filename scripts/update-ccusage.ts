@@ -515,9 +515,11 @@ if (shouldCommit && currentBranch !== DATA_BRANCH) {
 
     if (hasChanges) {
       await execFileAsync("git", ["add", dataPath]);
+      // The data branch holds only data/ccusage.json, so a Cloudflare build of it
+      // always fails; [skip ci] tells Workers Builds not to start one.
       const commitMsg =
         process.env.COMMIT_MESSAGE?.trim() ||
-        `chore(ccusage): sync usage data from ${sourceId}`;
+        `chore(ccusage): sync usage data from ${sourceId} [skip ci]`;
       await execFileAsync("git", ["commit", "-m", commitMsg]);
       process.stdout.write(`Committed: "${commitMsg}"\n`);
 
