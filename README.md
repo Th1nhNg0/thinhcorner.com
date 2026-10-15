@@ -114,7 +114,10 @@ Connect the repo in **Cloudflare Dashboard → Workers & Pages → Create → Co
 - Build command: `bun run build`
 - Build output directory: `dist`
 - Add the secrets above under **Settings → Variables and Secrets**
-- Exclude the `ccusage-data` branch from non-production branch builds (it only holds data)
+- Exclude the `ccusage-data` branch from non-production branch builds (it only holds data):
+  under **Settings → Build → Branch control**, turn off builds for non-production branches
+  (preview builds for pull requests still come from Cloudflare's Worker Previews).
+  Sync commits also carry `[skip ci]`, which Workers Builds honors on its own.
 
 ### Manual deploy
 
