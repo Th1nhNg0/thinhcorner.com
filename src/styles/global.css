@@ -84,6 +84,11 @@ img {
   border-radius: 0 !important;
 }
 
+/* The activity grid is a field of dots, not boxes, so it opts out of the square reset. */
+.collection-page .activity-dot {
+  border-radius: 32% !important;
+}
+
 .page-header {
   margin-bottom: 2rem;
 }

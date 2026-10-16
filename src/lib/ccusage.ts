@@ -369,11 +369,11 @@ export function buildUsageReport(
 }
 
 /**
- * Calendar cells covering only the weeks the data actually spans, padded out to
- * whole Sun–Sat weeks. A fixed 52-week grid wastes most of its cells on an
- * export that is only a few months old.
+ * Calendar cells covering the weeks the data spans, padded out to whole Sun–Sat
+ * weeks. `minWeeks` extends the grid backwards in time with empty weeks so a young
+ * export still reads as a year-long calendar instead of a thin strip.
  */
-export function buildCalendar(report: UsageReport): string[][] {
+export function buildCalendar(report: UsageReport, minWeeks = 0): string[][] {
   if (!report.lastPeriod) return [];
 
   const start = new Date(`${report.firstPeriod}T00:00:00Z`);
@@ -383,6 +383,9 @@ export function buildCalendar(report: UsageReport): string[][] {
   const end = new Date(`${report.lastPeriod}T00:00:00Z`);
   // Forward to the Saturday that ends the last week.
   end.setUTCDate(end.getUTCDate() + (6 - end.getUTCDay()));
+
+  const spanWeeks = Math.round((end.getTime() - start.getTime()) / 86_400_000 / 7 + 1 / 7);
+  if (spanWeeks < minWeeks) start.setUTCDate(start.getUTCDate() - (minWeeks - spanWeeks) * 7);
 
   const weeks: string[][] = [];
   const cursor = new Date(start);
@@ -399,7 +402,7 @@ export function buildCalendar(report: UsageReport): string[][] {
 }
 
 /**
- * Quantile thresholds over active days only — including zero-token days would
+ * Quintile thresholds over active days only — including zero-token days would
  * collapse every populated cell into the top bucket.
  */
 export function buildIntensityThresholds(days: DailyUsage[]): number[] {
@@ -408,21 +411,19 @@ export function buildIntensityThresholds(days: DailyUsage[]): number[] {
     .filter((value) => value > 0)
     .sort((a, b) => a - b);
 
-  if (values.length === 0) return [1, 1, 1];
+  if (values.length === 0) return [1, 1, 1, 1];
 
   const quantile = (position: number) =>
     values[Math.min(values.length - 1, Math.floor((values.length - 1) * position))];
 
-  return [quantile(0.25), quantile(0.5), quantile(0.75)];
+  return [quantile(0.2), quantile(0.4), quantile(0.6), quantile(0.8)];
 }
 
-/** Maps a day's token volume onto one of five intensity buckets (0 = no usage). */
+/** Maps a day's token volume onto one of six intensity buckets (0 = no usage). */
 export function usageLevel(value: number, thresholds: number[]): number {
   if (value <= 0) return 0;
-  if (value >= thresholds[2]) return 4;
-  if (value >= thresholds[1]) return 3;
-  if (value >= thresholds[0]) return 2;
-  return 1;
+  const reached = thresholds.filter((threshold) => value >= threshold).length;
+  return Math.max(1, reached + 1);
 }
 
 /** Colour per stacked model series, ordered so neighbouring bands contrast. */
