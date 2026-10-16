@@ -135,41 +135,130 @@ const mixRows = tokenMix.map((slice) => ({
   compactValue: formatCompact(slice.value),
   displayCost: formatCost(slice.cost),
 }));
-// --- Calendar -------------------------------------------------------------
-// A fixed 52-week grid would be ~80% empty here; this covers just the span.
-const calendarWeeks = buildCalendar(report);
+// --- Activity grid ----------------------------------------------------------
+// One dot grid with three readings of the same data, switched by tabs:
+//   Daily       one dot per day, shaded by that day's volume
+//   Weekly      one column per week, dots stacked like a bar chart
+//   Cumulative  the same columns, stacked against the running total
+// Padded back to a full year so a young export still reads as a calendar.
+const MIN_WEEKS = 52;
+const GRID_ROWS = 7;
+const calendarWeeks = buildCalendar(report, MIN_WEEKS);
 const usageByPeriod = new Map(days.map((day) => [day.period, day]));
 const tokenThresholds = buildIntensityThresholds(days);
 
-// Label each week that contains the 1st of a month, so labels cannot drift.
-const weekMonths = calendarWeeks.map((week, index) => {
-  const firstOfMonth = week.find((period) => period.endsWith("-01"));
-  if (index === 0) {
-    return new Date(`${week[0]}T00:00:00Z`).toLocaleDateString("en-US", {
-      month: "short",
-      timeZone: "UTC",
-    });
-  }
-  if (!firstOfMonth) return "";
-  return new Date(`${firstOfMonth}T00:00:00Z`).toLocaleDateString("en-US", {
-    month: "short",
-    timeZone: "UTC",
-  });
+const dayLabel = (period: string) => formatDay(period, true);
+
+type Dot = { level: number; tip?: string };
+type DotColumn = { dots: Dot[]; tip?: string; label: string };
+
+const dailyColumns: DotColumn[] = calendarWeeks.map((week) => ({
+  label: "",
+  dots: week.map((period) => {
+    // Dates outside the export's span are unknown, not zero, so they get no tooltip.
+    if (period < firstPeriod || period > lastPeriod) return { level: 0 };
+    const day = usageByPeriod.get(period);
+    const tokens = day?.totalTokens ?? 0;
+    return {
+      level: usageLevel(tokens, tokenThresholds),
+      tip: tokens
+        ? `${dayLabel(period)}\n${formatCompact(tokens)} tokens · ${formatCost(day?.totalCost ?? 0)}`
+        : `${dayLabel(period)}\nNo usage`,
+    };
+  }),
+}));
+
+// Weekly totals, then running totals. Both are drawn bottom-up as a column of
+// GRID_ROWS dots, like the daily grid turned into a bar chart.
+const weekStats = calendarWeeks.map((week) => {
+  const inSpan = week.filter((period) => period >= firstPeriod && period <= lastPeriod);
+  const tokens = inSpan.reduce((sum, period) => sum + (usageByPeriod.get(period)?.totalTokens ?? 0), 0);
+  const cost = inSpan.reduce((sum, period) => sum + (usageByPeriod.get(period)?.totalCost ?? 0), 0);
+  return { start: week[0], tracked: inSpan.length > 0, tokens, cost };
+});
+const maxWeekTokens = Math.max(...weekStats.map((week) => week.tokens), 1);
+const allTokens = totals.totalTokens || 1;
+
+/** Dots filled in a column, 0 for none and at least 1 for any usage at all. */
+const dotsFor = (fraction: number) =>
+  fraction <= 0 ? 0 : Math.min(GRID_ROWS, Math.max(1, Math.ceil(fraction * GRID_ROWS)));
+
+/** Shade follows the same fraction, with the very top step reserved for the peak. */
+const levelFor = (fraction: number) =>
+  fraction <= 0 ? 0 : Math.min(5, Math.max(1, Math.ceil(fraction * 5)));
+
+const stackedColumn = (filled: number, level: number, tip: string | undefined): DotColumn => ({
+  label: "",
+  tip,
+  // Rows run top to bottom, so the filled dots are the last `filled` ones.
+  dots: Array.from({ length: GRID_ROWS }, (_, row) => ({
+    level: GRID_ROWS - row <= filled ? level : 0,
+  })),
 });
 
-// Transposed to row-major (7 weekday rows x N week columns) so each row can be a
-// flex row that fills the card width, with its weekday label on the same line.
-const WEEKDAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const calendarRows = WEEKDAY_LABELS.map((_, dayIndex) =>
-  calendarWeeks.map((week) => week[dayIndex] ?? ""),
+const weeklyColumns = weekStats.map((week) =>
+  stackedColumn(
+    dotsFor(Math.sqrt(week.tokens / maxWeekTokens)),
+    levelFor(week.tokens / maxWeekTokens),
+    week.tracked
+      ? `Week of ${dayLabel(week.start)}\n${formatCompact(week.tokens)} tokens · ${formatCost(week.cost)}`
+      : undefined,
+  ),
 );
 
+let runningTokens = 0;
+const cumulativeColumns = weekStats.map((week) => {
+  runningTokens += week.tokens;
+  return stackedColumn(
+    dotsFor(runningTokens / allTokens),
+    levelFor(runningTokens / allTokens),
+    week.tracked
+      ? `Through week of ${dayLabel(week.start)}\n${formatCompact(runningTokens)} tokens`
+      : undefined,
+  );
+});
+
+// Month labels sit under the week that contains the 1st. The first column is
+// labelled too unless the next month starts right behind it and would overlap.
+const monthName = (period: string) =>
+  new Date(`${period}T00:00:00Z`).toLocaleDateString("en-US", { month: "short", timeZone: "UTC" });
+const weekMonths = calendarWeeks.map((week, index) => {
+  const firstOfMonth = week.find((period) => period.endsWith("-01"));
+  if (firstOfMonth) return monthName(firstOfMonth);
+  if (index !== 0) return "";
+  const nextStart = calendarWeeks.findIndex((later) => later.some((period) => period.endsWith("-01")));
+  return nextStart > 2 ? monthName(week[0]) : "";
+});
+
+const activityViews = [
+  { id: "daily", label: "Daily", columns: dailyColumns },
+  { id: "weekly", label: "Weekly", columns: weeklyColumns },
+  { id: "cumulative", label: "Cumulative", columns: cumulativeColumns },
+];
+
+// Longest run of consecutive days with any usage.
+const longestStreak = (() => {
+  const active = days.filter((day) => day.totalTokens > 0).map((day) => day.period);
+  let best = 0;
+  let run = 0;
+  let previous = 0;
+  for (const period of active) {
+    const time = Date.parse(`${period}T00:00:00Z`);
+    run = previous && time - previous === 86_400_000 ? run + 1 : 1;
+    best = Math.max(best, run);
+    previous = time;
+  }
+  return best;
+})();
+
+// Level 0 is an unlit dot; 1–5 run from dim amber up to a pale peak.
 const intensityClasses = [
-  "bg-[#27272a]",
+  "bg-[#1b1b1e]",
   "bg-[#713f12]",
   "bg-[#a16207]",
   "bg-[#ca8a04]",
   "bg-[#eab308]",
+  "bg-[#fde68a]",
 ] as const;
 
 // --- Models ---------------------------------------------------------------
@@ -435,90 +524,151 @@ const pageDescription =
         </div>
       </section>
 
-      <!-- Calendar -->
+      <!--
+        Activity grid, switchable between daily, weekly and cumulative views.
+        Same CSS-only radio toggle as the daily spend chart above: no JS needed to
+        switch views (JS only drives the hover tooltips).
+      -->
       <section class="data-section">
-        <div class="data-section-heading">
-          <h2>Active days</h2>
-          <span class="font-mono text-xs text-zinc-600">
-            {calendarWeeks.length} weeks · {activeDayCount} with usage
-          </span>
-        </div>
+        <div class="flex flex-wrap items-center gap-y-2">
+          {
+            activityViews.map((view, index) => (
+              <input
+                id={`activity-${view.id}`}
+                type="radio"
+                name="activity-view"
+                class={`peer/${view.id} sr-only`}
+                checked={index === 0}
+              />
+            ))
+          }
 
-        <div class="border border-[#27272a] bg-[#0c0c0d] p-4">
-          <!--
-            Row-major layout: one flex row per weekday, so the weekday label sits
-            on the same line as its cells and cells can be flex-1.
-            The previous column-major version used fixed 14px cells, which filled
-            only 320px of this 672px card and left half of it empty.
-          -->
-          <div class="flex items-center gap-1">
-            <span class="w-9 shrink-0" aria-hidden="true" />
-            <!-- h-4 gives this row height: the labels are absolutely positioned
-                 (they overhang their column, since "May" is wider than a cell)
-                 and an absolutely positioned child contributes no height. -->
-            <div class="flex h-4 flex-1 gap-1 font-mono text-[10px] text-zinc-600">
-              {
-                weekMonths.map((label) => (
-                  <div class="relative min-w-0 flex-1">
-                    <span class="absolute left-0 top-0 whitespace-nowrap">{label}</span>
+          <h2 class="data-h2 mr-3 flex-1">Active days</h2>
+
+          <!-- Labels are direct siblings of the radios: peer-checked cannot reach a label
+               nested inside a wrapper div. -->
+          {
+            activityViews.map((view, index) => (
+              <label
+                for={`activity-${view.id}`}
+                class:list={[
+                  "cursor-pointer border border-[#27272a] px-2.5 py-1 font-mono text-xs uppercase text-zinc-500 transition-colors hover:text-zinc-300",
+                  index > 0 && "-ml-px",
+                  view.id === "daily" && "peer-checked/daily:border-[#eab308] peer-checked/daily:bg-[#eab308] peer-checked/daily:text-[#0c0c0d]!",
+                  view.id === "weekly" && "peer-checked/weekly:border-[#eab308] peer-checked/weekly:bg-[#eab308] peer-checked/weekly:text-[#0c0c0d]!",
+                  view.id === "cumulative" && "peer-checked/cumulative:border-[#eab308] peer-checked/cumulative:bg-[#eab308] peer-checked/cumulative:text-[#0c0c0d]!",
+                ]}
+              >
+                {view.label}
+              </label>
+            ))
+          }
+
+          {
+            activityViews.map((view) => (
+              <div
+                class:list={[
+                  "hidden min-w-0 basis-full",
+                  view.id === "daily" && "peer-checked/daily:block",
+                  view.id === "weekly" && "peer-checked/weekly:block",
+                  view.id === "cumulative" && "peer-checked/cumulative:block",
+                ]}
+              >
+                <div class="border border-[#27272a] bg-[#0c0c0d] p-4 sm:p-5">
+                  <!-- Narrow screens scroll sideways rather than shrinking dots to specks;
+                       the script parks the scroll position on the latest weeks. -->
+                  <div class="-mx-1 overflow-x-auto px-1 pb-1" data-activity-scroll>
+                    <div class="min-w-[36rem]" role="group" aria-label={`${view.label} token activity`}>
+                      <div class="flex gap-[3px]">
+                        {view.columns.map((column) => (
+                          <div
+                            class:list={[
+                              "flex min-w-0 flex-1 flex-col gap-[3px]",
+                              column.tip && view.id !== "daily" && "group/column cursor-help",
+                            ]}
+                            tabindex={column.tip && view.id !== "daily" ? 0 : undefined}
+                            role={column.tip && view.id !== "daily" ? "img" : undefined}
+                            aria-label={column.tip?.replace("\n", ": ")}
+                            data-daily-tooltip={view.id !== "daily" ? column.tip : undefined}
+                          >
+                            {column.dots.map((dot) => (
+                              <span
+                                class:list={[
+                                  "activity-dot aspect-square w-full transition-[filter,box-shadow]",
+                                  intensityClasses[dot.level],
+                                  dot.tip &&
+                                    "cursor-help hover:brightness-125 hover:shadow-[0_0_0_1px_rgb(244_244_245/0.7)] focus-visible:shadow-[0_0_0_1px_rgb(244_244_245)]",
+                                  column.tip &&
+                                    view.id !== "daily" &&
+                                    "group-hover/column:brightness-125 group-focus-visible/column:brightness-125",
+                                ]}
+                                role={dot.tip ? "img" : undefined}
+                                tabindex={dot.tip && dot.level > 0 ? 0 : undefined}
+                                aria-label={dot.tip?.replace("\n", ": ")}
+                                data-daily-tooltip={dot.tip}
+                                data-lit={dot.level > 0 ? "" : undefined}
+                              />
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+
+                      <div class="mt-2 flex gap-[3px] font-mono text-[10px] text-zinc-500" aria-hidden="true">
+                        {weekMonths.map((label) => (
+                          <div class="relative h-3 min-w-0 flex-1">
+                            <span class="absolute left-0 top-0 whitespace-nowrap">{label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                ))
-              }
-            </div>
-          </div>
 
-          <div class="mt-1 flex flex-col gap-1" role="group" aria-label="Daily token usage calendar">
-            {
-              calendarRows.map((row, dayIndex) => (
-                <div class="flex items-center gap-1">
-                  <span class="w-9 shrink-0 font-mono text-[10px] text-zinc-600">
-                    {WEEKDAY_LABELS[dayIndex]}
-                  </span>
-                  {row.map((period) => {
-                    const day = usageByPeriod.get(period);
-                    const totalTokens = day?.totalTokens ?? 0;
-                    const level = usageLevel(totalTokens, tokenThresholds);
-                    return (
-                      <span
-                        class:list={[
-                          "aspect-square min-w-0 flex-1 cursor-help transition hover:brightness-125 hover:outline hover:outline-1 hover:outline-zinc-100/80 focus-visible:outline focus-visible:outline-1 focus-visible:outline-zinc-100",
-                          intensityClasses[level],
-                        ]}
-                        role="img"
-                        tabindex={totalTokens > 0 ? 0 : -1}
-                        aria-label={`${formatDay(period, true)}: ${formatNumber(totalTokens)} tokens`}
-                        data-daily-tooltip={`${formatDay(period, true)} · ${formatNumber(totalTokens)} tokens${day ? ` · ${formatCost(day.totalCost)}` : ""}`}
-                      />
-                    );
-                  })}
+                  <div class="mt-4 flex flex-wrap items-center justify-between gap-x-5 gap-y-2 font-mono text-[11px] text-zinc-500">
+                    {view.id === "daily" && (
+                      <dl class="flex flex-wrap gap-x-5 gap-y-1">
+                        <div class="flex items-baseline gap-2">
+                          <dt class="text-zinc-600">busiest</dt>
+                          <dd class="text-zinc-400">
+                            {formatDay(peakDay.period)} · {formatCompact(peakDay.totalTokens)}
+                          </dd>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                          <dt class="text-zinc-600">longest streak</dt>
+                          <dd class="text-zinc-400">{longestStreak} days</dd>
+                        </div>
+                      </dl>
+                    )}
+                    {view.id === "weekly" && (
+                      <p>
+                        Dots per week scale with the square root of tokens, so quiet weeks stay
+                        visible next to the {formatCompact(maxWeekTokens)} peak.
+                      </p>
+                    )}
+                    {view.id === "cumulative" && (
+                      <p>
+                        Running total of {formatCompact(totals.totalTokens)} tokens, filling toward the
+                        latest week.
+                      </p>
+                    )}
+                    <span class="flex items-center gap-1.5 text-[10px]" aria-hidden="true">
+                      Less
+                      {[0, 1, 2, 3, 4, 5].map((level) => (
+                        <span class:list={["activity-dot size-2.5 shrink-0", intensityClasses[level]]} />
+                      ))}
+                      More
+                    </span>
+                  </div>
                 </div>
-              ))
-            }
-          </div>
-
-          <div class="mt-4 flex flex-wrap items-center justify-end gap-x-3 gap-y-2 font-mono text-[10px] text-zinc-600">
-            <span>
-              quartiles {formatCompact(tokenThresholds[0])} / {formatCompact(tokenThresholds[1])} /{" "}
-              {formatCompact(tokenThresholds[2])} tokens
-            </span>
-            <span class="flex items-center gap-1.5">
-              Less
-              {[0, 1, 2, 3, 4].map((level) => (
-                <span
-                  class:list={["size-[0.875rem] shrink-0", intensityClasses[level]]}
-                  aria-hidden="true"
-                />
-              ))}
-              More
-            </span>
-          </div>
+              </div>
+            ))
+          }
         </div>
       </section>
 
       <div
         id="daily-usage-tooltip"
         role="tooltip"
-        class="pointer-events-none fixed z-50 hidden whitespace-nowrap border border-[#3f3f46] bg-[#18181b] px-2 py-1 font-mono text-[10px] text-zinc-200 shadow-lg"
+        class="pointer-events-none fixed z-50 hidden whitespace-pre border border-[#3f3f46] bg-[#18181b]/95 px-2.5 py-1.5 font-mono text-[11px] leading-snug text-zinc-200 shadow-lg"
       >
       </div>
 
@@ -698,7 +848,8 @@ const pageDescription =
 
         tooltip.textContent = text;
         tooltip.classList.remove("hidden");
-        const cellRect = cell.getBoundingClientRect();
+        // Stacked columns anchor to their topmost lit dot, so the tooltip hugs the bar.
+        const cellRect = (cell.querySelector("[data-lit]") ?? cell).getBoundingClientRect();
         const tooltipRect = tooltip.getBoundingClientRect();
         const margin = 8;
         const left = Math.min(
@@ -732,7 +883,23 @@ const pageDescription =
       });
     }
 
+    // On narrow screens the activity grid scrolls sideways; start at the latest weeks.
+    function initActivityScroll() {
+      document.querySelectorAll<HTMLElement>("[data-activity-scroll]").forEach((el) => {
+        el.scrollLeft = el.scrollWidth;
+      });
+      // Hidden panels have no width yet, so park them when their tab is opened.
+      document.querySelectorAll<HTMLInputElement>('input[name="activity-view"]').forEach((radio) => {
+        radio.addEventListener("change", () => {
+          document.querySelectorAll<HTMLElement>("[data-activity-scroll]").forEach((el) => {
+            el.scrollLeft = el.scrollWidth;
+          });
+        });
+      });
+    }
+
     document.addEventListener("astro:page-load", () => {
+      initActivityScroll();
       initDailyUsageTooltips();
       initModelsShowAll();
     });
