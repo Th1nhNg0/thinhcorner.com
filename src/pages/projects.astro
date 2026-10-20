@@ -2,8 +2,23 @@
 import Container from "@/components/Container.astro";
 import { AUTHOR_NAME } from "../../data/consts";
 import Layout from "@/layouts/Layout.astro";
+import { Image } from "astro:assets";
+import riftRecapScoreboard from "@/assets/projects/rift-recap-scoreboard.webp";
+import legalTimeline from "../../data/writing/phan-tich-van-ban-phap-luat/timeline_annotated.png";
+import railboundBeforeAfter from "../../data/writing/railbound-constraint-solver/before-after.webp";
+import haydaySchedule from "../../data/writing/hayday-game-schedule/machine_schedule.png";
 
 const projects = [
+  {
+    name: "Rift Recap",
+    repo: "th1nhng0/rift-recap",
+    url: "https://github.com/Th1nhNg0/rift-recap",
+    description:
+      "A self-hosted Discord bot for my League of Legends squad. After each game it posts a scoreboard with everyone's LP change, plus daily, weekly and monthly recaps and optional AI commentary. One small Rust binary and a SQLite file.",
+    tags: ["Rust", "Discord", "League of Legends", "SQLite", "Docker"],
+    year: "2026",
+    featured: true,
+  },
   {
     name: "Vietnamese Legal Documents",
     repo: "th1nhng0/vietnamese-legal-documents",
@@ -12,6 +27,8 @@ const projects = [
       "A dataset of Vietnamese legal documents including laws, decrees, circulars, and other normative documents for NLP research and legal AI applications.",
     tags: ["Dataset", "Vietnamese", "NLP", "Legal", "Hugging Face"],
     year: "2026",
+    image: legalTimeline,
+    imageAlt: "Line chart of Vietnamese legal documents issued per year from 1945 to 2025, with historical milestones marked",
   },
   {
     name: "Railbound CP Solver",
@@ -21,6 +38,8 @@ const projects = [
       "A constraint programming solver for the Railbound puzzle game using MiniZinc and OR-Tools. Models track placement, train movement, switches, and gates as a constraint satisfaction problem.",
     tags: ["MiniZinc", "Python", "Constraint Programming", "Puzzle Solver"],
     year: "2025",
+    image: railboundBeforeAfter,
+    imageAlt: "A Railbound puzzle on the left and the track layout the solver found on the right",
   },
   {
     name: "Hayday Game Schedule",
@@ -36,6 +55,8 @@ const projects = [
       "Jupyter Notebook",
     ],
     year: "2024",
+    image: haydaySchedule,
+    imageAlt: "Gantt chart of a Hay Day production schedule across fields, a feed mill and a chicken coop",
   },
   {
     name: "Vietnamese Legal AI Thesis",
@@ -104,6 +125,16 @@ const sortedProjects = [...projects].sort((a, b) => {
   const yearDiff = Number(b.year) - Number(a.year);
   return yearDiff || a.name.localeCompare(b.name);
 });
+
+const featured = sortedProjects.find((project) => project.featured);
+const others = sortedProjects.filter((project) => project !== featured);
+
+// Cards sit two to a row on a 12-column grid and alternate 5/7 and 7/5.
+const spans = [
+  ["md:col-span-5", "md:col-span-7"],
+  ["md:col-span-7", "md:col-span-5"],
+];
+const spanFor = (index: number) => spans[Math.floor(index / 2) % 2][index % 2];
 ---
 
 <Layout
@@ -135,45 +166,74 @@ const sortedProjects = [...projects].sort((a, b) => {
         </p>
       </header>
 
-      <ul class="border-y border-[#27272a]">
+      {
+        featured && (
+          <a
+            href={featured.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="project-card project-card-featured group mb-3 flex flex-col gap-2.5 p-5"
+          >
+            <p class="relative font-mono text-xs">
+              {featured.year} · {featured.repo}
+            </p>
+            <h2 class="relative text-2xl font-semibold tracking-tight">
+              {featured.name}
+            </h2>
+            <p class="relative max-w-xl text-sm leading-6">
+              {featured.description}
+            </p>
+            <Image
+              src={riftRecapScoreboard}
+              alt="A Rift Recap match scoreboard posted in Discord"
+              widths={[480, 672, 960]}
+              sizes="(min-width: 640px) 632px, calc(100vw - 72px)"
+              class="relative mt-2 h-56 w-full object-cover object-top"
+            />
+            <p class="relative mt-1 font-mono text-xs uppercase tracking-wide">
+              {featured.tags.join(" · ")}
+            </p>
+            <span class="sr-only">(opens in new tab)</span>
+          </a>
+        )
+      }
+
+      <ul class="grid grid-cols-1 gap-3 md:grid-cols-12">
         {
-          sortedProjects.map((project) => (
-            <li class="border-b border-[#27272a] last:border-b-0">
+          others.map((project, index) => (
+            <li class={spanFor(index)}>
               <a
                 href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="compact-row group grid gap-2 px-2 py-4 focus-visible:outline-none sm:grid-cols-[4rem_1fr] sm:gap-4"
+                class="project-card group flex h-full flex-col gap-2.5 p-5"
               >
-                <time
-                  datetime={project.year}
-                  class="pt-0.5 font-mono text-xs text-zinc-600"
-                >
-                  {project.year}
-                </time>
-                <div class="min-w-0">
-                  <div class="flex items-start justify-between gap-4">
-                    <div>
-                      <h2 class="text-base font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
-                        {project.name}
-                      </h2>
-                      <p class="mt-0.5 font-mono text-xs text-zinc-600">
-                        {project.repo}
-                      </p>
-                    </div>
-                  </div>
-                  <p class="mt-2 max-w-2xl text-sm leading-6 text-zinc-500">
-                    {project.description}
-                  </p>
-                  <div class="mt-2.5 flex flex-wrap gap-x-3 gap-y-1">
-                    {project.tags.map((tag) => (
-                      <span class="font-mono text-xs uppercase tracking-wide text-zinc-600">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <span class="sr-only">(opens in new tab)</span>
+                {project.image && (
+                  <Image
+                    src={project.image}
+                    alt={project.imageAlt}
+                    widths={[320, 480, 640]}
+                    sizes="(min-width: 768px) 400px, calc(100vw - 72px)"
+                    class="project-thumb relative mb-1 h-32 w-full object-cover object-center"
+                  />
+                )}
+                <p class="relative font-mono text-xs text-zinc-600">
+                  {project.year} · {project.repo}
+                </p>
+                <h2 class="relative text-lg font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
+                  {project.name}
+                </h2>
+                <p class="relative text-sm leading-6 text-zinc-500">
+                  {project.description}
+                </p>
+                <div class="relative mt-auto flex flex-wrap gap-x-3 gap-y-1 pt-2">
+                  {project.tags.map((tag) => (
+                    <span class="font-mono text-xs uppercase tracking-wide text-zinc-600">
+                      {tag}
+                    </span>
+                  ))}
                 </div>
+                <span class="sr-only">(opens in new tab)</span>
               </a>
             </li>
           ))
@@ -182,3 +242,45 @@ const sortedProjects = [...projects].sort((a, b) => {
     </div>
   </Container>
 </Layout>
+
+<style>
+  .project-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    transition:
+      border-color 150ms ease,
+      background-color 150ms ease;
+  }
+
+  .project-card:hover,
+  .project-card:focus-visible {
+    border-color: var(--accent);
+    background: var(--surface-hover);
+  }
+
+  /* Chart and diagram screenshots are light or detailed; keep them framed. */
+  .project-thumb {
+    border: 1px solid var(--line);
+  }
+
+  .project-card-featured,
+  .project-card-featured:hover,
+  .project-card-featured:focus-visible {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #111;
+  }
+
+  .project-card-featured p {
+    color: #27272a;
+  }
+
+
+  .project-card-featured:hover h2,
+  .project-card-featured:focus-visible h2 {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>
