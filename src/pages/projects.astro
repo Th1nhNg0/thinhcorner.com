@@ -4,6 +4,9 @@ import { AUTHOR_NAME } from "../../data/consts";
 import Layout from "@/layouts/Layout.astro";
 import { Image } from "astro:assets";
 import riftRecapScoreboard from "@/assets/projects/rift-recap-scoreboard.webp";
+import legalTimeline from "../../data/writing/phan-tich-van-ban-phap-luat/timeline_annotated.png";
+import railboundBeforeAfter from "../../data/writing/railbound-constraint-solver/before-after.webp";
+import haydaySchedule from "../../data/writing/hayday-game-schedule/machine_schedule.png";
 
 const projects = [
   {
@@ -24,6 +27,8 @@ const projects = [
       "A dataset of Vietnamese legal documents including laws, decrees, circulars, and other normative documents for NLP research and legal AI applications.",
     tags: ["Dataset", "Vietnamese", "NLP", "Legal", "Hugging Face"],
     year: "2026",
+    image: legalTimeline,
+    imageAlt: "Line chart of Vietnamese legal documents issued per year from 1945 to 2025, with historical milestones marked",
   },
   {
     name: "Railbound CP Solver",
@@ -33,6 +38,8 @@ const projects = [
       "A constraint programming solver for the Railbound puzzle game using MiniZinc and OR-Tools. Models track placement, train movement, switches, and gates as a constraint satisfaction problem.",
     tags: ["MiniZinc", "Python", "Constraint Programming", "Puzzle Solver"],
     year: "2025",
+    image: railboundBeforeAfter,
+    imageAlt: "A Railbound puzzle on the left and the track layout the solver found on the right",
   },
   {
     name: "Hayday Game Schedule",
@@ -48,6 +55,8 @@ const projects = [
       "Jupyter Notebook",
     ],
     year: "2024",
+    image: haydaySchedule,
+    imageAlt: "Gantt chart of a Hay Day production schedule across fields, a feed mill and a chicken coop",
   },
   {
     name: "Vietnamese Legal AI Thesis",
@@ -199,6 +208,15 @@ const spanFor = (index: number) => spans[Math.floor(index / 2) % 2][index % 2];
                 rel="noopener noreferrer"
                 class="project-card group flex h-full flex-col gap-2.5 p-5"
               >
+                {project.image && (
+                  <Image
+                    src={project.image}
+                    alt={project.imageAlt}
+                    widths={[320, 480, 640]}
+                    sizes="(min-width: 768px) 400px, calc(100vw - 72px)"
+                    class="project-thumb relative mb-1 h-32 w-full object-cover object-center"
+                  />
+                )}
                 <p class="relative font-mono text-xs text-zinc-600">
                   {project.year} · {project.repo}
                 </p>
@@ -240,6 +258,11 @@ const spanFor = (index: number) => spans[Math.floor(index / 2) % 2][index % 2];
   .project-card:focus-visible {
     border-color: var(--accent);
     background: var(--surface-hover);
+  }
+
+  /* Chart and diagram screenshots are light or detailed; keep them framed. */
+  .project-thumb {
+    border: 1px solid var(--line);
   }
 
   .project-card-featured,
