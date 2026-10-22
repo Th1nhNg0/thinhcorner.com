@@ -12,7 +12,7 @@ import tokenUsageMid from "./token-usage-mid.webp";
 
 I like looking at my own habits as data. How many books did I finish this year? Which artist have I had on repeat for six months without noticing? Is my chess rating actually going up, or does it only feel that way after one good night? How much would my coding agents cost if I paid for every token at API prices?
 
-The answers already exist. They are just scattered across Goodreads, Spotify, Chess.com, Steam and a pile of log files on several computers. The [/data](/data) section of this site is where I pull them into one place. This post explains how it works, what broke along the way, and what I would tell anyone building something similar.
+The answers already exist. They are just scattered across Goodreads, Spotify, Chess.com, Steam and a pile of log files on several computers. The [/data](/data) section of this site is where I pull them into one place.
 
 <figure>
   <Image
@@ -84,21 +84,19 @@ Some pages did not survive. A crypto portfolio page lived from May 2025 to Febru
 
 In March 2026 I moved the whole site to Cloudflare Workers. A week earlier I had switched the pages to Astro 6's experimental route caching, and it came out again the day after the move. The KV helper above took its place in April. In August I added the `/data` hub with the Chess page, then Steam the same day, and moved Books and Music under `/data` so everything lived together. Token usage arrived the next day. Today the pages got a shared header, section headings and stat grid so they finally look like one family instead of five experiments.
 
-## Every API has a personality
+## Quirks of each API
 
-The pattern is the same, but every source has its own quirks.
+Goodreads closed its public API years ago. What still works is the RSS feed for each shelf (`review/list_rss/<user>?shelf=read`), which includes ratings, page counts and read dates. I parse it with [cheerio](https://cheerio.js.org/) in XML mode. Goodreads sometimes answers non-browser requests with an error page, so the fetch sends a normal browser `User-Agent`.
 
-**Goodreads** closed its public API years ago. What still works is the RSS feed for each shelf (`review/list_rss/<user>?shelf=read`), which includes ratings, page counts and read dates. I parse it with [cheerio](https://cheerio.js.org/) in XML mode. Goodreads sometimes answers non-browser requests with an error page, so the fetch sends a normal browser `User-Agent`.
+Goodreads is also where I learned not to cache empty results. In May 2026 the books page went blank. Goodreads had returned an error, my parser found zero books, and the cache dutifully stored that empty list for hours. Every visitor got the cached nothing. From these APIs an empty result is almost never a real answer, so now it never gets cached.
 
-This source also taught me the most important caching lesson. In May 2026 the books page went blank. Goodreads had returned an error, my parser found zero books, and the cache dutifully stored that empty list for hours. Every visitor got the cached nothing. The fix was simple: an empty result is almost never a real answer from these APIs, so it should never be cached.
+Spotify needs OAuth, but for a personal site the flow is simple. I authorized my own account once, kept the refresh token as a Worker secret, and exchange it for a short-lived access token on each cache miss. The page makes seven calls (recently played, plus top tracks and top artists for three time ranges), so caching matters a lot here.
 
-**Spotify** needs OAuth, but for a personal site the flow is simple. I authorized my own account once, kept the refresh token as a Worker secret, and exchange it for a short-lived access token on each cache miss. The page makes seven calls (recently played, plus top tracks and top artists for three time ranges), so caching matters a lot here.
+Chess.com has the friendliest API of the group. It is public and needs no key, although it asks callers to send a descriptive `User-Agent`. It has two small traps. Usernames in paths must be lowercase. And the monthly game archive returns a 404 for months in which you played no games, which looks exactly like an error unless you expect it. From the profile, stats and monthly archives, the page derives rating history, win streaks, favorite openings and recent games.
 
-**Chess.com** has the friendliest API of the group. It is public and needs no key, although it asks callers to send a descriptive `User-Agent`. It has two small traps. Usernames in paths must be lowercase. And the monthly game archive returns a 404 for months in which you played no games, which looks exactly like an error unless you expect it. From the profile, stats and monthly archives, the page derives rating history, win streaks, favorite openings and recent games.
+Steam needs a free Web API key. If the key is missing, the page shows a short setup notice instead of failing, which makes local development and forks less painful.
 
-**Steam** needs a free Web API key. If the key is missing, the page shows a short setup notice instead of failing, which makes local development and forks less painful.
-
-One more lesson applies to all of them: **version your cache keys**. The chess payload is stored under `chess_overview_v4_<user>` and Steam is on `_v9`. Whenever I change the shape of the cached object, I bump the version. Otherwise the new code reads an old object for up to six hours, and in one case a stale Steam entry kept showing 8 games in a "Most played" list that should have had 12.
+All of them taught me to version the cache keys. The chess payload is stored under `chess_overview_v4_<user>` and Steam is on `_v9`. Whenever I change the shape of the cached object, I bump the version. Otherwise the new code reads an old object for up to six hours, and in one case a stale Steam entry kept showing 8 games in a "Most played" list that should have had 12.
 
 ## The token usage page
 
@@ -156,7 +154,7 @@ Two machines can sync at nearly the same time, so the push is allowed to fail. I
 
 Adding `--install-cron` installs a daily schedule using whatever the machine has: cron on Linux, launchd on macOS, Task Scheduler on Windows. Laptops are often asleep at 23:55, so the scheduler also runs a catch-up check on boot, login and every 30 minutes. The check compares a last-sync timestamp with the most recent scheduled time and only syncs if a run was missed.
 
-### Drawing it honestly
+### Choosing the chart scale
 
 Token data is hard to chart because cache reads dominate everything. On a linear scale, the token chart left 41 of 71 days under two pixels tall. Cost is much better behaved: the median day and the peak day differ by only a few times. So the daily chart has a toggle. Cost uses a linear scale, where stacked segments add up honestly. Tokens use a log scale, so normal days do not disappear. The toggle is plain CSS with two hidden radio buttons, so it works without JavaScript.
 
@@ -177,19 +175,19 @@ That cost needs a caveat. ccusage prices every token at the provider's API rates
 
 A few things surprised me:
 
-- **95.6% of all tokens are cache reads.** Agents re-read the same context on every turn. Only 0.5% of tokens are output, the code and text the models actually wrote.
-- **Volume and cost tell different stories.** gpt-5.6-sol is only 3.6% of my tokens but 30.6% of the estimated cost. gpt-5.6-luna is 26% of tokens and 10% of cost.
-- **The harness matters as much as the model.** Pi handled 73% of my tokens at about \$0.03 per million. Codex and Claude Code each cost about ten times that per million. This matches what I wrote in [Why Pi Is My GOAT Agent Harness](/writing/pi-agent).
-- **I use these tools more than I thought.** The calendar is mostly empty in May and almost solid yellow from mid-August.
+- 95.6% of all tokens are cache reads, because agents re-read the same context on every turn. Only 0.5% of tokens are output, the code and text the models actually wrote.
+- Volume and cost tell different stories. gpt-5.6-sol is only 3.6% of my tokens but 30.6% of the estimated cost. gpt-5.6-luna is 26% of tokens and 10% of cost.
+- The harness matters as much as the model. Pi handled 73% of my tokens at about \$0.03 per million. Codex and Claude Code each cost about ten times that per million. This matches what I wrote in [Why Pi Is My GOAT Agent Harness](/writing/pi-agent).
+- I use these tools more than I thought. The calendar is mostly empty in May and almost solid yellow from mid-August.
 
 ## What I would do again
 
 If you want to build something like this, these are the lessons that cost me the most time:
 
-1. **Render on request, cache the API data.** KV in front of every service means most visitors never wait on a slow third party.
-2. **Never cache an empty response.** Treat empty as failure unless you know better.
-3. **Version your cache keys.** Bump the key whenever the cached shape changes.
-4. **Keep generated data out of your main branch.** A data branch read at request time beats a rebuild per sync.
-5. **Measure before choosing a chart.** Count how many points a scale hides before deciding it is fine.
+1. Render on request and cache the API data. KV in front of every service means most visitors never wait on a slow third party.
+2. Never cache an empty response. Treat empty as failure unless you know better.
+3. Version your cache keys, and bump the key whenever the cached shape changes.
+4. Keep generated data out of your main branch. A data branch read at request time beats a rebuild per sync.
+5. Measure before choosing a chart scale. Count how many points a scale hides before deciding it is fine.
 
-The pages are not finished, and I hope they never are. Every time I wonder about one of my habits, I now have a place to put the answer. The code is all in the [site's repository](https://github.com/Th1nhNg0/thinhcorner.com), and the [data pages](/data) update themselves while I sleep.
+The pages are not finished. Whenever I get curious about one of my habits, I add to them. The code is all in the [site's repository](https://github.com/Th1nhNg0/thinhcorner.com), and the [data pages](/data) update themselves while I sleep.
