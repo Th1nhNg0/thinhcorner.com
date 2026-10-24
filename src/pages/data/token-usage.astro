@@ -577,7 +577,7 @@ const pageDescription =
                 <div class="border border-[#27272a] bg-[#0c0c0d] p-4 sm:p-5">
                   <!-- Narrow screens scroll sideways rather than shrinking dots to specks;
                        the script parks the scroll position on the latest weeks. -->
-                  <div class="-mx-1 overflow-x-auto px-1 pb-1" data-activity-scroll>
+                  <div class="-mx-1 overflow-x-auto overflow-y-hidden px-1 pb-1" data-activity-scroll>
                     <div class="min-w-[36rem]" role="group" aria-label={`${view.label} token activity`}>
                       <div class="flex gap-[3px]">
                         {view.columns.map((column) => (
@@ -615,8 +615,8 @@ const pageDescription =
 
                       <div class="mt-2 flex gap-[3px] font-mono text-[10px] text-zinc-500" aria-hidden="true">
                         {weekMonths.map((label) => (
-                          <div class="relative h-3 min-w-0 flex-1">
-                            <span class="absolute left-0 top-0 whitespace-nowrap">{label}</span>
+                          <div class="relative h-3.5 min-w-0 flex-1">
+                            <span class="absolute left-0 top-0 whitespace-nowrap leading-[0.875rem]">{label}</span>
                           </div>
                         ))}
                       </div>
