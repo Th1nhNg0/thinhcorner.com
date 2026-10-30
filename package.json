@@ -11,25 +11,26 @@
     "generate-types": "wrangler types"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "14.2.1",
-    "@astrojs/markdown-satteri": "0.3.5",
-    "@astrojs/mdx": "7.0.5",
+    "@astrojs/cloudflare": "14.4.3",
+    "@astrojs/markdown-remark": "7.3.5",
+    "@astrojs/markdown-satteri": "0.4.6",
+    "@astrojs/mdx": "8.1.2",
     "@astrojs/rss": "4.0.19",
-    "@astrojs/sitemap": "3.7.3",
+    "@astrojs/sitemap": "3.7.4",
     "@tailwindcss/vite": "^4.3.3",
-    "astro": "7.2.2",
+    "astro": "7.4.4",
     "cheerio": "^1.2.0",
     "date-fns": "^4.4.0",
-    "katex": "^0.18.4",
-    "medium-zoom": "^1.1.0",
+    "katex": "^0.19.1",
+    "medium-zoom": "^1.1.2",
     "reading-time": "^1.5.0",
-    "satori": "^0.29.0",
-    "sharp": "^0.35.3",
+    "satori": "^0.63.2",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.3.3",
-    "wrangler": "4.123.0"
+    "wrangler": "4.156.0"
   },
   "devDependencies": {
-    "@astrojs/check": "0.9.10",
+    "@astrojs/check": "0.9.12",
     "@tailwindcss/typography": "^0.5.20",
     "typescript": "^6.0.3"
   },
