@@ -8,7 +8,17 @@ import legalTimeline from "../../data/writing/phan-tich-van-ban-phap-luat/timeli
 import railboundBeforeAfter from "../../data/writing/railbound-constraint-solver/before-after.webp";
 import haydaySchedule from "../../data/writing/hayday-game-schedule/machine_schedule.png";
 
-const projects = [
+type Project = {
+  name: string;
+  repo: string;
+  url: string;
+  description: string;
+  tags: string[];
+  year: string;
+  featured?: boolean;
+} & ({ image: ImageMetadata; imageAlt: string } | { image?: undefined; imageAlt?: undefined });
+
+const projects: Project[] = [
   {
     name: "Rift Recap",
     repo: "th1nhng0/rift-recap",
@@ -18,6 +28,8 @@ const projects = [
     tags: ["Rust", "Discord", "League of Legends", "SQLite", "Docker"],
     year: "2026",
     featured: true,
+    image: riftRecapScoreboard,
+    imageAlt: "A Rift Recap match scoreboard posted in Discord",
   },
   {
     name: "Vietnamese Legal Documents",
@@ -28,7 +40,8 @@ const projects = [
     tags: ["Dataset", "Vietnamese", "NLP", "Legal", "Hugging Face"],
     year: "2026",
     image: legalTimeline,
-    imageAlt: "Line chart of Vietnamese legal documents issued per year from 1945 to 2025, with historical milestones marked",
+    imageAlt:
+      "Line chart of Vietnamese legal documents issued per year from 1945 to 2025, with historical milestones marked",
   },
   {
     name: "Railbound CP Solver",
@@ -39,7 +52,8 @@ const projects = [
     tags: ["MiniZinc", "Python", "Constraint Programming", "Puzzle Solver"],
     year: "2025",
     image: railboundBeforeAfter,
-    imageAlt: "A Railbound puzzle on the left and the track layout the solver found on the right",
+    imageAlt:
+      "A Railbound puzzle on the left and the track layout the solver found on the right",
   },
   {
     name: "Hayday Game Schedule",
@@ -47,16 +61,11 @@ const projects = [
     url: "https://github.com/Th1nhNg0/hayday",
     description:
       "Code and resources for the Hayday Game Schedule blog post. Models Hay Day production as a Flexible Job Shop Scheduling Problem (FJSP) and solves it with Google OR-Tools and a genetic algorithm, including a web crawler for game data.",
-    tags: [
-      "Python",
-      "OR-Tools",
-      "Genetic Algorithm",
-      "Scheduling",
-      "Jupyter Notebook",
-    ],
+    tags: ["Python", "OR-Tools", "Genetic Algorithm", "Scheduling", "Jupyter Notebook"],
     year: "2024",
     image: haydaySchedule,
-    imageAlt: "Gantt chart of a Hay Day production schedule across fields, a feed mill and a chicken coop",
+    imageAlt:
+      "Gantt chart of a Hay Day production schedule across fields, a feed mill and a chicken coop",
   },
   {
     name: "Vietnamese Legal AI Thesis",
@@ -64,16 +73,7 @@ const projects = [
     url: "https://github.com/Th1nhNg0/vietnamese-legal-ai-thesis",
     description:
       "Bachelor thesis on Vietnamese legal question answering using BM25, TF-IDF, ChromaDB, dense embeddings, Instructor model fine-tuning, and RAG (final score 9.7/10).",
-    tags: [
-      "Python",
-      "Legal AI",
-      "Vietnamese",
-      "RAG",
-      "BM25",
-      "TF-IDF",
-      "ChromaDB",
-      "Embeddings",
-    ],
+    tags: ["Python", "Legal AI", "Vietnamese", "RAG", "BM25", "TF-IDF", "ChromaDB", "Embeddings"],
     year: "2023",
   },
   {
@@ -91,14 +91,7 @@ const projects = [
     url: "https://github.com/Th1nhNg0/VAIPE-2022",
     description:
       "Medicine pill image recognition challenge pipeline using Tesseract OCR for prescriptions, U-2-Net preprocessing, YOLOv5 object detection, and ResNet50 classification, with Dockerized training and inference scripts.",
-    tags: [
-      "Computer Vision",
-      "YOLOv5",
-      "ResNet50",
-      "OCR",
-      "Docker",
-      "Jupyter Notebook",
-    ],
+    tags: ["Computer Vision", "YOLOv5", "ResNet50", "OCR", "Docker", "Jupyter Notebook"],
     year: "2022",
   },
   {
@@ -121,20 +114,34 @@ const projects = [
   },
 ];
 
+// Newest first, with the featured project pulled to the front so it lands on
+// the wide tile regardless of when it shipped.
 const sortedProjects = [...projects].sort((a, b) => {
   const yearDiff = Number(b.year) - Number(a.year);
   return yearDiff || a.name.localeCompare(b.name);
 });
+const ordered = [...sortedProjects].sort(
+  (a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)),
+);
 
-const featured = sortedProjects.find((project) => project.featured);
-const others = sortedProjects.filter((project) => project !== featured);
+const years = projects.map((project) => Number(project.year));
+const yearRange = `${Math.min(...years)} — ${Math.max(...years)}`;
 
-// Cards sit two to a row on a 12-column grid and alternate 5/7 and 7/5.
+// 12 columns, mixed widths. Index 0 is the featured tile.
 const spans = [
-  ["md:col-span-5", "md:col-span-7"],
-  ["md:col-span-7", "md:col-span-5"],
+  "md:col-span-7",
+  "md:col-span-5",
+  "md:col-span-4",
+  "md:col-span-4",
+  "md:col-span-4",
+  "md:col-span-6",
+  "md:col-span-6",
+  "md:col-span-6",
+  "md:col-span-6",
 ];
-const spanFor = (index: number) => spans[Math.floor(index / 2) % 2][index % 2];
+const spanFor = (index: number) => spans[index % spans.length];
+// Narrow tiles get an extra line so their summaries don't collapse to fragments.
+const narrow = (index: number) => /\bcol-span-(4|5)\b/.test(spanFor(index));
 ---
 
 <Layout
@@ -164,75 +171,92 @@ const spanFor = (index: number) => spans[Math.floor(index / 2) % 2][index % 2];
           Small tools, research work, experiments, and things built to answer a
           question.
         </p>
-      </header>
-
-      {
-        featured && (
+        <div
+          class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-1 font-mono text-[0.6875rem] uppercase tracking-[0.06em] text-zinc-600"
+        >
+          <span>
+            <span class="text-zinc-500 tabular-nums"
+              >{String(projects.length).padStart(2, "0")}</span
+            > projects
+          </span>
+          <span class="tabular-nums">{yearRange}</span>
           <a
-            href={featured.url}
+            href="https://github.com/Th1nhNg0"
             target="_blank"
             rel="noopener noreferrer"
-            class="project-card project-card-featured group mb-3 flex flex-col gap-2.5 p-5"
+            class="ml-auto transition-colors hover:text-[#eab308]"
           >
-            <p class="relative font-mono text-xs">
-              {featured.year} · {featured.repo}
-            </p>
-            <h2 class="relative text-2xl font-semibold tracking-tight">
-              {featured.name}
-            </h2>
-            <p class="relative max-w-xl text-sm leading-6">
-              {featured.description}
-            </p>
-            <Image
-              src={riftRecapScoreboard}
-              alt="A Rift Recap match scoreboard posted in Discord"
-              widths={[480, 672, 960]}
-              sizes="(min-width: 640px) 632px, calc(100vw - 72px)"
-              class="relative mt-2 h-56 w-full object-cover object-top"
-            />
-            <p class="relative mt-1 font-mono text-xs uppercase tracking-wide">
-              {featured.tags.join(" · ")}
-            </p>
+            all source on github <span aria-hidden="true">↗</span>
             <span class="sr-only">(opens in new tab)</span>
           </a>
-        )
-      }
+        </div>
+      </header>
 
-      <ul class="grid grid-cols-1 gap-3 md:grid-cols-12">
+      <ul class="grid grid-cols-12 gap-2.5">
         {
-          others.map((project, index) => (
-            <li class={spanFor(index)}>
+          ordered.map((project, index) => (
+            <li class:list={["col-span-12", spanFor(index)]}>
               <a
                 href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="project-card group flex h-full flex-col gap-2.5 p-5"
+                class="group relative flex h-full flex-col border border-[var(--line)] bg-[var(--surface)] p-3.5 transition-colors hover:border-[#eab308] hover:bg-[var(--surface-hover)] focus-visible:border-[#eab308]"
               >
+                <span
+                  class="absolute right-2.5 top-2 font-mono text-[0.625rem] tabular-nums text-[#2f2f33] transition-colors group-hover:text-[#eab308]"
+                  aria-hidden="true"
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+
                 {project.image && (
-                  <Image
-                    src={project.image}
-                    alt={project.imageAlt}
-                    widths={[320, 480, 640]}
-                    sizes="(min-width: 768px) 400px, calc(100vw - 72px)"
-                    class="project-thumb relative mb-1 h-32 w-full object-cover object-center"
-                  />
+                  <span class="-mx-3.5 -mt-3.5 mb-3 block aspect-[2/1] overflow-hidden border-b border-[var(--line)] bg-[#141416]">
+                    <Image
+                      src={project.image}
+                      alt={project.imageAlt}
+                      widths={[240, 400, 560, 760]}
+                      sizes="(min-width: 768px) 45vw, 92vw"
+                      class="h-full w-full object-contain"
+                    />
+                  </span>
                 )}
-                <p class="relative font-mono text-xs text-zinc-600">
-                  {project.year} · {project.repo}
-                </p>
-                <h2 class="relative text-lg font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
+
+                <span class="flex flex-wrap items-baseline gap-x-2 pr-6 font-mono text-[0.6875rem] tracking-[0.06em] text-zinc-600">
+                  <span class="tabular-nums">{project.year}</span>
+                  <span class="break-all">{project.repo}</span>
+                </span>
+
+                <span
+                  class:list={[
+                    "mt-1 block font-medium leading-[1.3] tracking-[-0.015em] transition-colors group-hover:text-[#eab308]",
+                    project.featured ? "text-xl" : "text-base",
+                  ]}
+                >
                   {project.name}
-                </h2>
-                <p class="relative text-sm leading-6 text-zinc-500">
+                </span>
+
+                <span
+                  class:list={[
+                    "mt-1.5 text-[0.8125rem] leading-[1.6] text-zinc-500",
+                    project.featured || narrow(index) ? "line-clamp-4" : "line-clamp-3",
+                  ]}
+                >
                   {project.description}
-                </p>
-                <div class="relative mt-auto flex flex-wrap gap-x-3 gap-y-1 pt-2">
-                  {project.tags.map((tag) => (
-                    <span class="font-mono text-xs uppercase tracking-wide text-zinc-600">
+                </span>
+
+                <span class="mt-auto flex flex-wrap gap-1 pt-3">
+                  {project.tags.slice(0, 3).map((tag) => (
+                    <span class="border border-[var(--line)] px-1 font-mono text-[0.625rem] uppercase leading-[1.5] tracking-[0.07em] text-zinc-600">
                       {tag}
                     </span>
                   ))}
-                </div>
+                  {project.tags.length > 3 && (
+                    <span class="px-1 font-mono text-[0.625rem] uppercase leading-[1.5] tracking-[0.07em] text-zinc-700">
+                      +{project.tags.length - 3}
+                    </span>
+                  )}
+                </span>
+
                 <span class="sr-only">(opens in new tab)</span>
               </a>
             </li>
@@ -242,45 +266,3 @@ const spanFor = (index: number) => spans[Math.floor(index / 2) % 2][index % 2];
     </div>
   </Container>
 </Layout>
-
-<style>
-  .project-card {
-    position: relative;
-    overflow: hidden;
-    border: 1px solid var(--line);
-    background: var(--surface);
-    transition:
-      border-color 150ms ease,
-      background-color 150ms ease;
-  }
-
-  .project-card:hover,
-  .project-card:focus-visible {
-    border-color: var(--accent);
-    background: var(--surface-hover);
-  }
-
-  /* Chart and diagram screenshots are light or detailed; keep them framed. */
-  .project-thumb {
-    border: 1px solid var(--line);
-  }
-
-  .project-card-featured,
-  .project-card-featured:hover,
-  .project-card-featured:focus-visible {
-    border-color: var(--accent);
-    background: var(--accent);
-    color: #111;
-  }
-
-  .project-card-featured p {
-    color: #27272a;
-  }
-
-
-  .project-card-featured:hover h2,
-  .project-card-featured:focus-visible h2 {
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
-  }
-</style>
