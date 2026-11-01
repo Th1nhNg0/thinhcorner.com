@@ -4,6 +4,7 @@ import { AUTHOR_NAME } from "../../data/consts";
 import Layout from "@/layouts/Layout.astro";
 import { Image } from "astro:assets";
 import riftRecapScoreboard from "@/assets/projects/rift-recap-scoreboard.webp";
+import skyMusicStudio from "@/assets/projects/sky-music-studio.webp";
 import legalTimeline from "../../data/writing/phan-tich-van-ban-phap-luat/timeline_annotated.png";
 import railboundBeforeAfter from "../../data/writing/railbound-constraint-solver/before-after.webp";
 import haydaySchedule from "../../data/writing/hayday-game-schedule/machine_schedule.png";
@@ -30,6 +31,17 @@ const projects: Project[] = [
     featured: true,
     image: riftRecapScoreboard,
     imageAlt: "A Rift Recap match scoreboard posted in Discord",
+  },
+  {
+    name: "Sky Music Studio",
+    repo: "th1nhng0/sky-song",
+    url: "https://github.com/Th1nhNg0/sky-song",
+    description:
+      "A browser app for writing and playing songs on the instruments from Sky: Children of the Light. It only uses the keys each instrument really has, imports MIDI, and saves songs in your browser.",
+    tags: ["TypeScript", "React", "Web Audio", "MIDI", "Sky"],
+    year: "2026",
+    image: skyMusicStudio,
+    imageAlt: "Sky Music Studio editing a violin melody, with the 15-key panel on the right",
   },
   {
     name: "Vietnamese Legal Documents",
@@ -134,8 +146,9 @@ const spans = [
   "md:col-span-4",
   "md:col-span-4",
   "md:col-span-4",
-  "md:col-span-6",
-  "md:col-span-6",
+  "md:col-span-4",
+  "md:col-span-4",
+  "md:col-span-4",
   "md:col-span-6",
   "md:col-span-6",
 ];
