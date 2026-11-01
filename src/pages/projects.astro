@@ -2,8 +2,7 @@
 import Container from "@/components/Container.astro";
 import { AUTHOR_NAME } from "../../data/consts";
 import Layout from "@/layouts/Layout.astro";
-import { Image } from "astro:assets";
-import { earlier, selected, type ProjectLink } from "@/data/projects";
+import { projects, type ProjectLink } from "@/data/projects";
 
 const isExternal = (link: ProjectLink) => link.href.startsWith("http");
 ---
@@ -45,104 +44,66 @@ const isExternal = (link: ProjectLink) => link.href.startsWith("http");
 
       <div class="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2">
         {
-          selected.map((project, index) => {
-            const wide = index === 0;
-            return (
-              <article class:list={[wide && "sm:col-span-2"]}>
-                <a
-                  href={project.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class:list={[
-                    "block overflow-hidden rounded-[var(--radius-surface)] border border-[var(--line)] bg-[#161618] p-4 transition-colors hover:border-[var(--line-strong)]",
-                    wide ? "aspect-[2/1] sm:p-6" : "aspect-[16/10] sm:aspect-[4/3]",
-                  ]}
-                >
-                  <Image
-                    src={project.image}
-                    alt={project.imageAlt}
-                    widths={wide ? [480, 720, 1080, 1440] : [400, 640, 960]}
-                    sizes={wide ? "(min-width: 768px) 720px, 92vw" : "(min-width: 640px) 348px, 92vw"}
-                    class="h-full w-full object-contain"
-                  />
-                </a>
-                <div class="mt-3 flex items-baseline justify-between gap-3">
-                  <h2 class="text-base font-medium text-zinc-100">
-                    <a
-                      href={project.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="transition-colors hover:text-[#eab308]"
-                    >
-                      {project.name}
-                      <span class="sr-only">(opens in new tab)</span>
-                    </a>
-                  </h2>
-                  <span class="shrink-0 font-mono text-xs tabular-nums text-zinc-600">
-                    {project.year}
-                  </span>
-                </div>
-                <p class="mt-1 text-sm leading-relaxed text-zinc-500">{project.summary}</p>
-                <div class="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm">
-                  {project.links.map((link) => (
-                    <a
-                      href={link.href}
-                      {...(isExternal(link)
-                        ? { target: "_blank", rel: "noopener noreferrer" }
-                        : {})}
-                      class="text-zinc-400 underline decoration-[var(--line-strong)] underline-offset-4 transition-colors hover:text-[#eab308] hover:decoration-[#eab308]"
-                    >
-                      {link.label}
-                      {isExternal(link) && (
-                        <>
-                          <span aria-hidden="true" class="ml-0.5">↗</span>
-                          <span class="sr-only">(opens in new tab)</span>
-                        </>
-                      )}
-                    </a>
-                  ))}
-                </div>
-              </article>
-            );
-          })
+          projects.map((project) => (
+            <article>
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                tabindex="-1"
+                aria-hidden="true"
+                class="block aspect-[16/10] overflow-hidden rounded-[var(--radius-surface)] border border-[var(--line)] transition-colors hover:border-[var(--line-strong)]"
+              >
+                <img
+                  src={project.cover.src}
+                  width={project.cover.width}
+                  height={project.cover.height}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  class="h-full w-full object-cover"
+                />
+              </a>
+              <div class="mt-3 flex items-baseline justify-between gap-3">
+                <h2 class="text-base font-medium text-zinc-100">
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="transition-colors hover:text-[#eab308]"
+                  >
+                    {project.name}
+                    <span class="sr-only">(opens in new tab)</span>
+                  </a>
+                </h2>
+                <span class="shrink-0 font-mono text-xs tabular-nums text-zinc-600">
+                  {project.year}
+                </span>
+              </div>
+              <p class="mt-1 text-sm leading-relaxed text-zinc-500">{project.summary}</p>
+              <div class="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm">
+                {project.links.map((link) => (
+                  <a
+                    href={link.href}
+                    {...(isExternal(link)
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                    class="text-zinc-400 underline decoration-[var(--line-strong)] underline-offset-4 transition-colors hover:text-[#eab308] hover:decoration-[#eab308]"
+                  >
+                    {link.label}
+                    {isExternal(link) && (
+                      <>
+                        <span aria-hidden="true" class="ml-0.5">↗</span>
+                        <span class="sr-only">(opens in new tab)</span>
+                      </>
+                    )}
+                  </a>
+                ))}
+              </div>
+            </article>
+          ))
         }
       </div>
-
-      <section class="mt-16" aria-labelledby="earlier-heading">
-        <h2 id="earlier-heading" class="mb-3 text-base font-medium text-zinc-200">
-          Earlier
-        </h2>
-        <ul class="border-t border-[var(--line)]">
-          {
-            earlier.map((project) => (
-              <li class="border-b border-[var(--line)]">
-                <a
-                  href={project.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="group grid grid-cols-[3.25rem_1fr] gap-x-4 py-3.5 sm:grid-cols-[3.25rem_1fr_auto]"
-                >
-                  <span class="pt-0.5 font-mono text-xs tabular-nums text-zinc-600">
-                    {project.year}
-                  </span>
-                  <span class="min-w-0">
-                    <span class="block text-base text-zinc-200 transition-colors group-hover:text-[#eab308]">
-                      {project.name}
-                    </span>
-                    <span class="mt-0.5 block text-sm leading-relaxed text-zinc-500">
-                      {project.summary}
-                    </span>
-                  </span>
-                  <span class="col-start-2 mt-1 font-mono text-xs text-zinc-600 sm:col-start-3 sm:mt-0 sm:pt-1">
-                    {project.kind}
-                  </span>
-                  <span class="sr-only">(opens in new tab)</span>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </section>
     </div>
   </Container>
 </Layout>

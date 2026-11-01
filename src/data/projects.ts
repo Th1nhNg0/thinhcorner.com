@@ -1,9 +1,14 @@
 import type { ImageMetadata } from "astro";
-import riftRecapScoreboard from "@/assets/projects/rift-recap-scoreboard.webp";
-import skyMusicStudio from "@/assets/projects/sky-music-studio.webp";
-import legalTimeline from "../../data/writing/phan-tich-van-ban-phap-luat/timeline_annotated.png";
-import railboundBeforeAfter from "../../data/writing/railbound-constraint-solver/before-after.webp";
-import haydaySchedule from "../../data/writing/hayday-game-schedule/machine_schedule.png";
+import riftRecapCover from "@/assets/projects/covers/rift-recap.svg";
+import skyMusicStudioCover from "@/assets/projects/covers/sky-music-studio.svg";
+import vietnameseLegalDocumentsCover from "@/assets/projects/covers/vietnamese-legal-documents.svg";
+import railboundCover from "@/assets/projects/covers/railbound.svg";
+import haydayCover from "@/assets/projects/covers/hayday.svg";
+import legalAiThesisCover from "@/assets/projects/covers/legal-ai-thesis.svg";
+import travelFlowCover from "@/assets/projects/covers/travel-flow.svg";
+import vaipeCover from "@/assets/projects/covers/vaipe.svg";
+import athenaeduCover from "@/assets/projects/covers/athenaedu.svg";
+import tictacmulCover from "@/assets/projects/covers/tictacmul.svg";
 
 export type ProjectLink = { label: string; href: string };
 
@@ -18,7 +23,9 @@ export type Project = {
   year: number;
   url: string;
   links: ProjectLink[];
-} & ({ image: ImageMetadata; imageAlt: string } | { image?: undefined; imageAlt?: undefined });
+  /** Abstract cover drawn for this page (src/assets/projects/covers). */
+  cover: ImageMetadata;
+};
 
 const gh = (repo: string): ProjectLink => ({
   label: "Source",
@@ -28,6 +35,7 @@ const gh = (repo: string): ProjectLink => ({
 export const projects: Project[] = [
   {
     name: "Rift Recap",
+    cover: riftRecapCover,
     summary:
       "A Discord bot that posts a scoreboard with everyone's LP change after each League game, plus daily, weekly and monthly recaps.",
     description:
@@ -37,11 +45,10 @@ export const projects: Project[] = [
     year: 2026,
     url: "https://github.com/Th1nhNg0/rift-recap",
     links: [gh("rift-recap")],
-    image: riftRecapScoreboard,
-    imageAlt: "A Rift Recap match scoreboard posted in Discord",
   },
   {
     name: "Sky Music Studio",
+    cover: skyMusicStudioCover,
     summary:
       "Write and play songs on the instruments from Sky: Children of the Light, using only the keys each instrument really has.",
     description:
@@ -51,11 +58,10 @@ export const projects: Project[] = [
     year: 2026,
     url: "https://sky.thinhcorner.com",
     links: [{ label: "Open app", href: "https://sky.thinhcorner.com" }, gh("sky-song")],
-    image: skyMusicStudio,
-    imageAlt: "Sky Music Studio editing a violin melody, with the 15-key panel on the right",
   },
   {
     name: "Vietnamese Legal Documents",
+    cover: vietnameseLegalDocumentsCover,
     summary:
       "An open dataset of Vietnamese laws, decrees and circulars from 1945 to today, for NLP and legal AI work.",
     description:
@@ -68,12 +74,10 @@ export const projects: Project[] = [
       { label: "Dataset", href: "https://huggingface.co/datasets/th1nhng0/vietnamese-legal-documents" },
       { label: "Write-up", href: "/writing/phan-tich-van-ban-phap-luat" },
     ],
-    image: legalTimeline,
-    imageAlt:
-      "Line chart of Vietnamese legal documents issued per year from 1945 to 2025, with historical milestones marked",
   },
   {
     name: "Railbound CP Solver",
+    cover: railboundCover,
     summary:
       "Solves Railbound puzzles by modelling tracks, trains, switches and gates as a constraint problem.",
     description:
@@ -86,11 +90,10 @@ export const projects: Project[] = [
       { label: "Write-up", href: "/writing/railbound-constraint-solver" },
       gh("railbound_cp"),
     ],
-    image: railboundBeforeAfter,
-    imageAlt: "A Railbound puzzle on the left and the track layout the solver found on the right",
   },
   {
     name: "Hay Day Scheduler",
+    cover: haydayCover,
     summary:
       "Plans Hay Day production as a flexible job shop problem, solved with OR-Tools and a genetic algorithm.",
     description:
@@ -100,11 +103,10 @@ export const projects: Project[] = [
     year: 2024,
     url: "https://github.com/Th1nhNg0/hayday",
     links: [{ label: "Write-up", href: "/writing/hayday-game-schedule" }, gh("hayday")],
-    image: haydaySchedule,
-    imageAlt: "Gantt chart of a Hay Day production schedule across fields, a feed mill and a chicken coop",
   },
   {
     name: "Vietnamese Legal AI Thesis",
+    cover: legalAiThesisCover,
     summary:
       "Bachelor thesis on legal question answering in Vietnamese with BM25, dense embeddings and RAG. Graded 9.7/10.",
     description:
@@ -117,6 +119,7 @@ export const projects: Project[] = [
   },
   {
     name: "Travel Flow",
+    cover: travelFlowCover,
     summary: "A travel planning app with map-based discovery. First prize at UIT Web Adventure 2022.",
     description:
       "First-prize UIT Web Adventure 2022 mobile app for Travel Flow. Built with Expo and React Native, with authentication, location permissions, map-based travel discovery, location details, and trip plan detail screens.",
@@ -128,6 +131,7 @@ export const projects: Project[] = [
   },
   {
     name: "VAIPE 2022",
+    cover: vaipeCover,
     summary: "Reads a prescription photo and recognises the pills in it, for the VAIPE 2022 challenge.",
     description:
       "Medicine pill image recognition challenge pipeline using Tesseract OCR for prescriptions, U-2-Net preprocessing, YOLOv5 object detection, and ResNet50 classification, with Dockerized training and inference scripts.",
@@ -139,6 +143,7 @@ export const projects: Project[] = [
   },
   {
     name: "AthenaEdu",
+    cover: athenaeduCover,
     summary: "A quiz and study platform with multiplayer rooms and a forum, built at SPKT Hackathon 2020.",
     description:
       "SPKT Hackathon 2020 education platform using Vue, Firebase, Express, and Socket.IO. Includes login, quiz categories, single-player practice, multiplayer quiz rooms, forum questions, and rankings.",
@@ -150,6 +155,7 @@ export const projects: Project[] = [
   },
   {
     name: "TicTacMul",
+    cover: tictacmulCover,
     summary: "Realtime multiplayer tic-tac-toe with rooms.",
     description:
       "A realtime multiplayer tic-tac-toe game built with Vue, Node.js, Express, and Socket.IO, including room-based play and a bundled Vue client served by the Node backend.",
@@ -161,9 +167,3 @@ export const projects: Project[] = [
   },
 ];
 
-type ProjectWithImage = Extract<Project, { image: ImageMetadata }>;
-
-/** Projects with a screenshot, shown as the gallery. */
-export const selected = projects.filter((p): p is ProjectWithImage => Boolean(p.image));
-/** Projects without one, shown in the "Earlier" list. */
-export const earlier = projects.filter((p) => !p.image);
