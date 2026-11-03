@@ -1,4 +1,5 @@
 import type { ImageMetadata } from "astro";
+import pippinCover from "@/assets/projects/covers/pippin.svg";
 import riftRecapCover from "@/assets/projects/covers/rift-recap.svg";
 import skyMusicStudioCover from "@/assets/projects/covers/sky-music-studio.svg";
 import vietnameseLegalDocumentsCover from "@/assets/projects/covers/vietnamese-legal-documents.svg";
@@ -33,6 +34,19 @@ const gh = (repo: string): ProjectLink => ({
 });
 
 export const projects: Project[] = [
+  {
+    name: "Pippin",
+    cover: pippinCover,
+    summary:
+      "A point-and-click story told through five isometric pixel-art dioramas. Drag the slider to move each one through time.",
+    description:
+      "A point-and-click story in five drawers. Nell inherits her grandmother's cabinet and a brass winding key, then follows Ida's life through five isometric pixel-art dioramas. Click to walk, talk and use things, and move the slider to change the time.",
+    kind: "Game",
+    stack: ["JavaScript", "Canvas", "Vite"],
+    year: 2026,
+    url: "https://th1nhng0.itch.io/pippin",
+    links: [{ label: "Play", href: "https://th1nhng0.itch.io/pippin" }],
+  },
   {
     name: "Rift Recap",
     cover: riftRecapCover,
