@@ -3,18 +3,29 @@ export const prerender = false;
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
 import DataHeader from "@/components/data/DataHeader.astro";
-import { getChessOverview } from "@/lib/chess";
+import { emptyChessOverview, getChessOverview } from "@/lib/chess";
 import type { GameOutcome, HistoryPoint } from "@/lib/chess";
 import { CHESS_PROFILE_URL, CHESS_USERNAME } from "../../../data/consts";
 import { format, formatDistanceToNow } from "date-fns";
 import { env } from "cloudflare:workers";
 
-const data = await getChessOverview(CHESS_USERNAME, env.CACHE);
+// Chess.com outages (with nothing cached yet) render a notice instead of a 500.
+let data;
+let unavailable = false;
+try {
+  data = await getChessOverview(CHESS_USERNAME, env.CACHE);
+} catch (err) {
+  console.error("[Chess] Overview unavailable:", err);
+  data = emptyChessOverview(CHESS_USERNAME);
+  unavailable = true;
+}
 const now = new Date();
 
 Astro.response.headers.set(
   "Cache-Control",
-  "public, s-maxage=600, stale-while-revalidate=300",
+  unavailable
+    ? "public, s-maxage=60"
+    : "public, s-maxage=600, stale-while-revalidate=300",
 );
 
 // --- Rating cards -----------------------------------------------------------
@@ -167,13 +178,26 @@ const perfViews = [
 >
   <Container>
     <div class="collection-page">
-      <DataHeader title="Chess" source="chess.com" sourceHref={CHESS_PROFILE_URL} updated={now}>
+      <DataHeader title="Chess" source="chess.com" sourceHref={CHESS_PROFILE_URL} updated={unavailable ? undefined : now}>
         My rated games from the last {data.monthsCovered} months: ratings, form,
         openings and recent results, synced from{" "}
         <a href={CHESS_PROFILE_URL} class="text-link">chess.com</a>.
       </DataHeader>
 
+      {
+        unavailable && (
+          <p class="data-section border border-[#27272a] bg-[#0c0c0d] p-3 text-sm text-zinc-400">
+            Chess.com isn’t responding right now, so there’s nothing to show. Try again
+            in a few minutes, or see the{" "}
+            <a href={CHESS_PROFILE_URL} class="text-link">profile on chess.com</a>.
+          </p>
+        )
+      }
+
+      {/* Everything below needs data; hidden during an outage. */}
       <!-- Profile / Player Card -->
+      {!unavailable && (
+      <>
       <section class="data-section">
         <div class="flex items-center gap-3.5 border border-[#27272a] bg-[#0c0c0d] p-3">
           {
@@ -592,6 +616,8 @@ const perfViews = [
           )
         }
       </section>
+      </>
+      )}
 
     </div>
   </Container>
