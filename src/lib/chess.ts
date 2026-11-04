@@ -481,3 +481,37 @@ export async function getChessOverview(
     } satisfies ChessOverview;
   });
 }
+
+/** Placeholder for when Chess.com is unreachable and nothing is cached. */
+export function emptyChessOverview(username: string): ChessOverview {
+  const emptyColor: ColorPerformance = {
+    games: 0,
+    win: 0,
+    loss: 0,
+    draw: 0,
+    avgOpponentRating: 0,
+  };
+  return {
+    profile: {
+      username,
+      name: username,
+      avatar: "",
+      url: `https://www.chess.com/member/${username}`,
+      followers: 0,
+      country: "",
+      joined: 0,
+      lastOnline: 0,
+    },
+    stats: [],
+    recent: [],
+    history: {},
+    openings: [],
+    gamesFetched: 0,
+    monthsCovered: HISTORY_MONTHS,
+    currentStreak: null,
+    bestWinStreak: 0,
+    avgOpponentRating: 0,
+    ratingChange: 0,
+    byColor: { white: emptyColor, black: emptyColor },
+  };
+}
