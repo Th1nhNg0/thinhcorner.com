@@ -243,6 +243,34 @@ function mapStats(raw: RawStats): ChessTimeClassStats[] {
 }
 
 /**
+ * Fallback for when the stats endpoint is down: current rating, best rating and
+ * record per time class, computed from the fetched games (so the record covers
+ * only the last HISTORY_MONTHS, not the whole account).
+ */
+function statsFromGames(
+  games: RawGame[],
+  meOf: (g: RawGame) => RawPlayerSide,
+): ChessTimeClassStats[] {
+  return TIME_CLASSES.flatMap(({ key, label }) => {
+    const subset = games.filter((g) => `chess_${g.time_class}` === key);
+    const last = subset.at(-1);
+    if (!last) return [];
+    const outcomes = subset.map((g) => outcomeFrom(meOf(g).result));
+    return [
+      {
+        key,
+        label,
+        rating: meOf(last).rating,
+        best: Math.max(...subset.map((g) => meOf(g).rating)),
+        win: outcomes.filter((o) => o === "win").length,
+        loss: outcomes.filter((o) => o === "loss").length,
+        draw: outcomes.filter((o) => o === "draw").length,
+      },
+    ];
+  });
+}
+
+/**
  * Fetches profile, stats and up to HISTORY_MONTHS of rated-games archives in one go,
  * deriving recent games, rating history per time class and most-played openings.
  */
@@ -257,8 +285,14 @@ export async function getChessOverview(
     const rawProfile = await fetchJson<RawProfile>(`/player/${usernameLower}`);
     const profile = mapProfile(rawProfile);
 
+    // The stats endpoint sometimes fails on Chess.com's side ("An internal error has
+    // occurred") while the archives still work, so a failure falls back to ratings
+    // derived from the fetched games instead of failing the whole page.
     const [rawStats, ...archives] = await Promise.all([
-      fetchJson<RawStats>(`/player/${usernameLower}/stats`),
+      fetchJson<RawStats>(`/player/${usernameLower}/stats`).catch((err) => {
+        console.error("[Chess] Stats unavailable, deriving from games:", err);
+        return null;
+      }),
       ...monthList(profile.joined).map(({ year, month }) =>
         getMonthlyGames(usernameLower, year, month),
       ),
@@ -430,7 +464,9 @@ export async function getChessOverview(
 
     return {
       profile,
-      stats: mapStats(rawStats),
+      stats: rawStats
+        ? mapStats(rawStats)
+        : statsFromGames(games, meOf),
       recent: games.slice(-RECENT_GAMES_LIMIT).toReversed().map(toSummary),
       history,
       openings,
