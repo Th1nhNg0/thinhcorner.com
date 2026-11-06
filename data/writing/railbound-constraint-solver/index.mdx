@@ -5,6 +5,7 @@ description: "I taught a constraint solver to play Railbound, a puzzle game abou
 tags: ["programming", "games"]
 ---
 
+import { Image } from "astro:assets";
 import LoopVideo from "@/components/LoopVideo.astro";
 import RailboundPlayer from "@/components/blog/RailboundPlayer.astro";
 import levels from "./levels.json";
@@ -53,12 +54,10 @@ Each level gives you a grid. Some cells already have track on them, some have ro
 - and you use no more pieces than the level allows.
 
 <figure>
-  <img
-    src={beforeAfter.src}
+  <Image
+    src={beforeAfter}
     alt="Level 1-15A before and after. Left: a 7 by 7 grid with three cars and a few fixed track pieces. Right: the same grid with 15 solver-placed pieces highlighted in yellow, forming loops that lead all three cars to the exit."
-    width={beforeAfter.width}
-    height={beforeAfter.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>Left: what the game gives you. Right: what the solver came back with. Yellow cells are the 15 pieces it placed, exactly the 15 the level allows.</figcaption>
 </figure>
@@ -66,12 +65,10 @@ Each level gives you a grid. Some cells already have track on them, some have ro
 Cars move one cell per tick, all at the same time, and they simply follow the track. You never steer them. The only way to send two cars different ways through the same spot is a **switch**: a Y-shaped piece where two tracks merge into one.
 
 <figure>
-  <img
-    src={switchRouting.src}
+  <Image
+    src={switchRouting}
     alt="The same switch piece three times. A car from the left goes straight through to the right. A car from below curves up and also leaves to the right. A car from the right takes the curve and leaves downward."
-    width={switchRouting.width}
-    height={switchRouting.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>One switch, three ways in. Cars from either branch merge into the trunk. A car coming up the trunk always takes the curve.</figcaption>
 </figure>
@@ -99,12 +96,10 @@ I picked the lazy way. The nice side effect is that the model ends up reading li
 The board is a grid of variables. Each empty cell asks one question: *which piece goes here?* There are 15 possible answers:
 
 <figure>
-  <img
-    src={pieces.src}
+  <Image
+    src={pieces}
     alt="The 15 pieces a cell can hold: empty, two straights, four corners and eight switches"
-    width={pieces.width}
-    height={pieces.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>The 15 options for a free cell: nothing, two straights, four corners, eight switches.</figcaption>
 </figure>
@@ -126,12 +121,10 @@ Fine, the level only lets you place 15 pieces, so most of those are illegal. Cou
 The solver needed 2.8 seconds.
 
 <figure>
-  <img
-    src={searchSpace.src}
+  <Image
+    src={searchSpace}
     alt="Scatter plot of 151 puzzles. Horizontal axis: number of possible layouts within the piece limit, on a log scale from 1 to 10 to the 50. Vertical axis: solve time, log scale from 0.01 to 100 seconds. The points rise from left to right. Highlighted: 1-1 with 3,375 layouts in 0.007 seconds, 1-15A with about 10 to the 26 layouts in 2.8 seconds, 7-7C with about 10 to the 29 in 42 seconds, 5-4C with about 10 to the 36 in 80 seconds, and 5-5B, the biggest, with about 10 to the 45 in 53 seconds."
-    width={searchSpace.width}
-    height={searchSpace.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>The biggest haystack, 5-5B, has around 10<sup>45</sup> legal layouts. It took 53 seconds. The trend is real but loose: some smaller puzzles are slower than bigger ones.</figcaption>
 </figure>
@@ -147,12 +140,10 @@ It is the same as pencil marks in Sudoku: "this cell can't be a 5 because there'
 Here is the kind of reasoning it does on the very first level of the game, 1-1. The car starts on the left, the exit is on the right, and there are three empty cells in between:
 
 <figure>
-  <img
-    src={propagation.src}
+  <Image
+    src={propagation}
     alt="Three stages of the 1-1 corridor. Stage 1: each of the three empty cells could hold 15 pieces, 3,375 layouts. Stage 2: every cell is entered from the left, so only the 9 pieces with a left opening remain, 729 layouts. Stage 3: the car has 4 steps to move 4 cells, so it can never turn or wait; only 3 pieces lead from left to right, 27 layouts, and all 27 work."
-    width={propagation.width}
-    height={propagation.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>Two rules, applied without any guessing, shrink 3,375 options to 27. I checked by asking the solver for every answer: there are exactly 27, and they are these.</figcaption>
 </figure>
@@ -164,12 +155,10 @@ On a real level, propagation usually can't finish the job alone. At some point e
 A pretty layout is worthless if the trains crash on it. So the model also tracks every car at every moment. Time is split into steps, and for each car and each step there are variables for its row and its column.
 
 <figure>
-  <img
-    src={filmstrip.src}
+  <Image
+    src={filmstrip}
     alt="Level 1-1 shown at five moments in time, t equals 0 to 4, with the car moving one cell right each step until it reaches the green exit"
-    width={filmstrip.width}
-    height={filmstrip.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>Level 1-1 unrolled over time. To the solver, each row is a separate set of variables.</figcaption>
 </figure>
@@ -201,12 +190,10 @@ A naive search would just undo the last guess and try the next one. Modern solve
 To give a sense of scale, here is what happens when the solver takes on the hardest puzzle in my benchmark:
 
 <figure>
-  <img
-    src={pipeline.src}
+  <Image
+    src={pipeline}
     alt="Five steps from model to answer for level 5-4C. The model: about 1,300 lines of MiniZinc. Plus one level: a 6 by 7 grid, 3 cars, 2 stations, 23 pieces. MiniZinc compiles it to 9,709 variables and 10,807 constraints in 0.46 seconds. CP-SAT searches: 286 million propagations and 88,566 dead ends in 80 seconds. The answer: every cell's piece and every car's position at every step."
-    width={pipeline.width}
-    height={pipeline.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>From 1,300 lines of rules to one answer for level 5-4C.</figcaption>
 </figure>
@@ -253,12 +240,10 @@ I did not work all of this out alone. A lot of it came out of a thread on the [R
 I ran every puzzle in worlds 1 to 8 through the CP-SAT solver from Google's OR-Tools. That is 151 puzzles, including the hard A, B and C variants. All 151 solved.
 
 <figure>
-  <img
-    src={solveTimes.src}
+  <Image
+    src={solveTimes}
     alt="Dot plot of solve times for 151 puzzles, one row per world, on a log scale from 0.01 to 100 seconds. Most puzzles take between 0.1 and 10 seconds. The three slowest are highlighted: 5-4C at 80 seconds, 5-5B at 53 seconds, both in the stations world, and 7-7C at 42 seconds in the decoys world."
-    width={solveTimes.width}
-    height={solveTimes.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>69 puzzles solve in under a second and 134 in under ten. The whole set takes about 10.5 minutes.</figcaption>
 </figure>
@@ -279,12 +264,10 @@ That lines up with how the game feels to play. The levels I found hardest were a
 Because MiniZinc separates the model from the solver, I can swap the engine underneath without changing a single rule. In October 2025 I ran the same model through two of them, [Chuffed](https://github.com/chuffed/chuffed) and OR-Tools CP-SAT, on the same laptop:
 
 <figure>
-  <img
-    src={solvers.src}
+  <Image
+    src={solvers}
     alt="Scatter plot comparing solve times of the same 143 puzzles on CP-SAT (horizontal) and Chuffed (vertical), log scales. Most points sit well below the diagonal, meaning Chuffed was faster on 134 puzzles. The 9 points above the diagonal, where CP-SAT was faster, are all among the slowest puzzles, taking 20 seconds or more."
-    width={solvers.width}
-    height={solvers.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>Chuffed won 134 of 143 puzzles. CP-SAT won 9, and every one of those took it at least 20 seconds.</figcaption>
 </figure>
@@ -298,12 +281,10 @@ In July I spent a day trying to make the model itself faster. Most of the speedu
 Here is a sample of what the solver came up with, across all the worlds. None of these were designed by a person:
 
 <figure>
-  <img
-    src={gallery.src}
+  <Image
+    src={gallery}
     alt="A grid of small solved Railbound boards from worlds 1 to 8, each showing the solver's track layout with the cars at their starting positions."
-    width={gallery.width}
-    height={gallery.height}
-    loading="lazy"
+    sizes="(min-width: 720px) 672px, 100vw"
   />
   <figcaption>Solved boards from worlds 1 to 8. Every one of them is playable in the box at the top of this post.</figcaption>
 </figure>

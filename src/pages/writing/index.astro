@@ -52,19 +52,19 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
           <h1 class="page-title">Writing</h1>
           <p class="page-intro">Notes and essays on technology, research, and things I’m learning.</p>
         </div>
-        <div class="mt-2 flex gap-2 text-sm text-zinc-500">
-          <a href="/rss.xml" class="transition-colors hover:text-[#eab308]">RSS</a>
+        <div class="mt-2 flex items-center gap-1 text-sm text-zinc-500">
+          <a href="/rss.xml" class="inline-flex min-h-6 min-w-6 items-center justify-center px-1 transition-colors hover:text-[#eab308]">RSS</a>
           <span aria-hidden="true">·</span>
-          <a href="/rss/en.xml" hreflang="en" title="English posts only" class="transition-colors hover:text-[#eab308]">EN</a>
-          <a href="/rss/vi.xml" hreflang="vi" title="Vietnamese posts only" class="transition-colors hover:text-[#eab308]">VI</a>
+          <a href="/rss/en.xml" hreflang="en" title="English posts only" class="inline-flex min-h-6 min-w-6 items-center justify-center px-1 transition-colors hover:text-[#eab308]">EN</a>
+          <a href="/rss/vi.xml" hreflang="vi" title="Vietnamese posts only" class="inline-flex min-h-6 min-w-6 items-center justify-center px-1 transition-colors hover:text-[#eab308]">VI</a>
         </div>
       </div>
     </header>
 
-    <nav class="mb-6 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-wider" aria-label="Tags">
+    <nav class="mb-5 flex flex-wrap gap-x-3 font-mono text-xs uppercase tracking-wider" aria-label="Tags">
       {
         tags.map(([tag, count]) => (
-          <a href={`/writing/tag/${tag}`} class="text-zinc-500 transition-colors hover:text-[#eab308]">
+          <a href={`/writing/tag/${tag}`} class="inline-block py-1 text-zinc-500 transition-colors hover:text-[#eab308]">
             #{tagLabel(tag)} <span class="text-zinc-700">{count}</span>
           </a>
         ))
