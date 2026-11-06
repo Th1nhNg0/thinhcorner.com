@@ -55,8 +55,9 @@ A personal website built with [Astro](https://astro.build/), featuring a blog wi
     | `SPOTIFY_REFRESH_TOKEN` | Spotify OAuth refresh token |
     | `STEAM_API_KEY` | Steam Web API key for `/data/steam` |
 
-    Site settings (author, social links, Goodreads/Chess.com/Steam usernames, Google
-    Analytics ID) live in `data/consts.ts`.
+    Site settings (author, social links, Goodreads/Chess.com/Steam usernames) live
+    in `data/consts.ts`. Analytics is Cloudflare Web Analytics, injected at the edge,
+    so there is no tracking ID in the code.
 
 4. **Run the development server:**
 

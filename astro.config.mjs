@@ -30,7 +30,10 @@ export default defineConfig({
   },
   // Iosevka Aile (proportional) is used for text, and Iosevka (monospace) for code and UI
   // labels. The files in src/assets/fonts are subsets of the Fontsource builds (Latin,
-  // Vietnamese and common punctuation), so each weight is ~60 KB instead of ~1 MB.
+  // Vietnamese and common punctuation) with only the default OpenType features kept
+  // (ccmp, locl, mark, mkmk, calt, liga, kern and the number features). Dropping Iosevka's
+  // character-variant and stylistic sets removes ~1,850 unused alternate glyphs, so each
+  // WOFF2 weight is ~20 KB instead of ~60 KB (and ~1 MB unsubsetted).
   // Aile 600 also ships a WOFF copy because the Open Graph image generator (Satori)
   // cannot parse WOFF2.
   fonts: [
