@@ -73,6 +73,8 @@ A personal website built with [Astro](https://astro.build/), featuring a blog wi
     bun run build
     ```
 
+    This also runs [Pagefind](https://pagefind.app/) to build the search index for `/writing`. Search only works on built output (for example `bun run preview`), not under `bun run dev`.
+
 6. **Type check** (CI runs this and the build on every PR):
 
     ```bash
