@@ -144,10 +144,16 @@ let slug = Array.isArray(Astro.params.id)
         </div>
       )
     }
-    <article aria-labelledby="post-title">
+    <article
+      aria-labelledby="post-title"
+      data-pagefind-body={post.data.draft ? undefined : ""}
+      data-pagefind-filter={`lang:${postLang}`}
+      data-pagefind-meta={`date:${post.data.date.toISOString()}`}
+    >
       <header class="mb-8 border-b border-[#27272a] pb-6">
         <a
           href="/writing"
+          data-pagefind-ignore
           class="page-kicker transition-colors hover:text-white"
           >Writing / {postLang}</a
         >
@@ -158,6 +164,7 @@ let slug = Array.isArray(Astro.params.id)
           {post.data.title}
         </h1>
         <div
+          data-pagefind-ignore
           class="mt-4 flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-zinc-600"
         >
           <time
@@ -192,7 +199,7 @@ let slug = Array.isArray(Astro.params.id)
         </div>
         {
           post.data.tags.length > 0 && (
-            <ul class="mt-3 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-wider" aria-label="Tags">
+            <ul data-pagefind-ignore class="mt-3 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-wider" aria-label="Tags">
               {post.data.tags.map((tag) => (
                 <li>
                   <a
@@ -209,7 +216,7 @@ let slug = Array.isArray(Astro.params.id)
       </header>
       {
         showToc && (
-          <details class="mb-8 border border-[#27272a] px-4 py-3 text-sm">
+          <details data-pagefind-ignore class="mb-8 border border-[#27272a] px-4 py-3 text-sm">
             <summary class="cursor-pointer font-mono text-xs uppercase tracking-wider text-zinc-500 transition-colors hover:text-zinc-200">
               {postLang === "vi" ? "Mục lục" : "Contents"}
             </summary>
@@ -327,6 +334,46 @@ let slug = Array.isArray(Astro.params.id)
       };
 
       document.addEventListener("astro:page-load", initMediumZoom);
+
+      // Add a copy button to every code block. The button sits in a wrapper rather than
+      // inside <pre>, so it stays put when a long line scrolls horizontally.
+      const initCodeCopy = () => {
+        const blocks = document.querySelectorAll("article .prose pre") as NodeListOf<HTMLPreElement>;
+        blocks.forEach((pre) => {
+          if (pre.parentElement?.classList.contains("code-block")) return;
+
+          const wrapper = document.createElement("div");
+          wrapper.className = "code-block";
+          pre.parentNode?.insertBefore(wrapper, pre);
+          wrapper.appendChild(pre);
+
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "code-copy";
+          button.textContent = "Copy";
+          button.setAttribute("aria-label", "Copy code to clipboard");
+          wrapper.appendChild(button);
+
+          let reset: ReturnType<typeof setTimeout> | undefined;
+          button.addEventListener("click", async () => {
+            const text = (pre.querySelector("code") ?? pre).textContent ?? "";
+            try {
+              await navigator.clipboard.writeText(text.replace(/\n$/, ""));
+              button.textContent = "Copied";
+            } catch {
+              button.textContent = "Failed";
+            }
+            button.dataset.state = "done";
+            clearTimeout(reset);
+            reset = setTimeout(() => {
+              button.textContent = "Copy";
+              delete button.dataset.state;
+            }, 1600);
+          });
+        });
+      };
+
+      document.addEventListener("astro:page-load", initCodeCopy);
     </script>
   </Container>
 </Layout>

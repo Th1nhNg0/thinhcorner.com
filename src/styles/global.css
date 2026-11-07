@@ -204,6 +204,62 @@ img {
   box-shadow: none;
 }
 
+/* Code blocks get a copy button (added by the post page script). The wrapper takes over
+   the block's vertical margin so the button can be pinned to the block's top-right corner. */
+.prose .code-block {
+  position: relative;
+  margin-block: 1rem;
+}
+
+.prose .code-block > pre {
+  margin-block: 0;
+}
+
+.code-copy {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 0.25rem;
+  background: var(--surface);
+  padding: 0.125rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  color: #a1a1aa;
+  cursor: pointer;
+  transition: color 150ms ease, border-color 150ms ease, opacity 150ms ease;
+}
+
+.code-copy:hover,
+.code-copy:focus-visible,
+.code-copy[data-state="done"] {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+@media (hover: hover) {
+  .code-copy {
+    opacity: 0;
+  }
+
+  .code-block:hover .code-copy,
+  .code-copy:focus-visible,
+  .code-copy[data-state="done"] {
+    opacity: 1;
+  }
+}
+
+/* The search box shows focus with its accent border, so skip the global outline ring. */
+#postSearchInput:focus-visible {
+  outline: none;
+}
+
+.search-excerpt mark {
+  background: transparent;
+  color: var(--accent);
+}
+
 .prose :where(img) {
   border: 1px solid var(--line);
 }

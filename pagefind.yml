@@ -1,0 +1,7 @@
+# Pagefind builds the static search index for /writing after `astro build`.
+# Only post pages are indexed: they mark their article with data-pagefind-body.
+site: dist/client
+# Posts are in English and Vietnamese. Pagefind normally splits the index by <html lang>
+# and only searches the index matching the page doing the search, which would hide every
+# Vietnamese post from the English /writing page. One shared index searches both.
+force_language: en

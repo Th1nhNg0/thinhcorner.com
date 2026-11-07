@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && pagefind",
     "preview": "astro preview",
     "astro": "astro",
     "data:usage": "bun scripts/update-ccusage.ts",
@@ -32,6 +32,7 @@
   "devDependencies": {
     "@astrojs/check": "0.9.12",
     "@tailwindcss/typography": "^0.5.20",
+    "pagefind": "^1.6.0",
     "typescript": "^6.0.3"
   },
   "overrides": {
