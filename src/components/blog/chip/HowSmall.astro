@@ -1,0 +1,446 @@
+---
+/**
+ * "How small is 3nm?" A zoom from a human hair down to a silicon atom.
+ * Every object is drawn at its true size relative to the others. The slider
+ * moves through them one by one; the camera zooms toward the next object, so
+ * the previous one stays visible at the left edge as a huge wall.
+ */
+type Thing = { key: string; label: string; title: string; body: string };
+
+const things: Thing[] = [
+  {
+    key: "hair",
+    label: "Sợi tóc · 70 µm",
+    title: "Sợi tóc người, khoảng 70 micromet",
+    body: "Một sợi tóc dày khoảng 70 micromet, tức 70.000 nanomet. Kéo thanh trượt để phóng to dần.",
+  },
+  {
+    key: "rbc",
+    label: "Hồng cầu · 7 µm",
+    title: "Hồng cầu, khoảng 7 micromet",
+    body: "Xếp khoảng mười tế bào hồng cầu cạnh nhau thì bằng bề ngang một sợi tóc. Từ đây trở xuống, mắt thường không còn thấy được.",
+  },
+  {
+    key: "bac",
+    label: "E. coli · 2 µm",
+    title: "Vi khuẩn E. coli, dài khoảng 2 micromet",
+    body: "Một con vi khuẩn E. coli dài khoảng 2 micromet, nhỏ hơn hồng cầu vài lần.",
+  },
+  {
+    key: "duv",
+    label: "Bước sóng DUV · 193 nm",
+    title: "Bước sóng ánh sáng DUV, 193nm",
+    body: "Phần lớn chip trên thế giới được in bằng ánh sáng DUV có bước sóng 193nm, ngắn hơn ánh sáng mắt người nhìn thấy từ hai đến bốn lần.",
+  },
+  {
+    key: "virus",
+    label: "Virus cúm · 100 nm",
+    title: "Virus cúm, khoảng 100nm",
+    body: "Virus cúm có đường kính khoảng 100nm, nhỏ hơn cả bước sóng của ánh sáng DUV.",
+  },
+  {
+    key: "gate",
+    label: "Cực cổng chip 3nm · 48 nm",
+    title: "Khoảng cách hai cực cổng trên chip 3nm, khoảng 48nm",
+    body: "Trên chip 3nm của TSMC, hai cực cổng (gate) cạnh nhau cách nhau khoảng 48nm, chưa bằng một phần tư bước sóng DUV. Vì vậy ngành chip mới cần đến EUV.",
+  },
+  {
+    key: "euv",
+    label: "Bước sóng EUV · 13,5 nm",
+    title: "Bước sóng ánh sáng EUV, 13,5nm",
+    body: "Ánh sáng EUV có bước sóng 13,5nm, ngắn hơn DUV 14 lần. Hiện chỉ có máy của ASML dùng được loại ánh sáng này để in chip.",
+  },
+  {
+    key: "dna",
+    label: "DNA · 2 nm",
+    title: "Chuỗi DNA, rộng khoảng 2nm",
+    body: "Một chuỗi DNA rộng khoảng 2nm. Cái tên \"3nm\" nghe như còn to hơn DNA một chút, nhưng như đã nói ở trên, nó chỉ là tên gọi.",
+  },
+  {
+    key: "si",
+    label: "Nguyên tử silicon · 0,2 nm",
+    title: "Nguyên tử silicon, khoảng 0,2nm",
+    body: "Một nguyên tử silicon rộng khoảng 0,2nm. Khoảng cách 48nm giữa hai cực cổng chỉ bằng khoảng hai trăm nguyên tử xếp thành hàng.",
+  },
+];
+---
+
+<figure class="not-prose my-8" data-how-small data-things={JSON.stringify(things)}>
+  <div class="rounded-surface overflow-hidden border border-(--line) bg-(--surface)">
+    <div data-stage class="relative aspect-[2/1] w-full bg-[#0e0e10]">
+      <svg
+        data-svg
+        class="absolute inset-0 h-full w-full select-none"
+        viewBox="0 0 672 336"
+        role="img"
+        aria-label="Phóng to từ sợi tóc xuống nguyên tử silicon, các vật được vẽ đúng tỉ lệ với nhau"
+      >
+        <defs>
+          <linearGradient id="hs-hair" x1="0" x2="1">
+            <stop offset="0" stop-color="#241d19"></stop>
+            <stop offset=".3" stop-color="#5c4a3e"></stop>
+            <stop offset=".55" stop-color="#4a3b31"></stop>
+            <stop offset="1" stop-color="#211a16"></stop>
+          </linearGradient>
+          <radialGradient id="hs-rbc">
+            <stop offset="0" stop-color="#7d2b27"></stop>
+            <stop offset=".5" stop-color="#92332d"></stop>
+            <stop offset=".82" stop-color="#c0504a"></stop>
+            <stop offset="1" stop-color="#9a3731"></stop>
+          </radialGradient>
+          <linearGradient id="hs-bac" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3f7350"></stop>
+            <stop offset="1" stop-color="#244531"></stop>
+          </linearGradient>
+          <radialGradient id="hs-si" cx=".4" cy=".38" r=".65">
+            <stop offset="0" stop-color="#e4e4e7"></stop>
+            <stop offset=".55" stop-color="#8b8b94"></stop>
+            <stop offset="1" stop-color="#3f3f46"></stop>
+          </radialGradient>
+        </defs>
+        <g data-things-g></g>
+        <g data-labels class="font-mono" font-size="11" stroke="#0e0e10" stroke-width="3" stroke-linejoin="round" paint-order="stroke"></g>
+      </svg>
+    </div>
+    <div class="border-t border-(--line) px-4 pb-4 pt-3">
+      <h3 data-title class="m-0 text-base font-medium leading-6 text-(--ink)">{things[0].title}</h3>
+      <p data-body class="mt-1.5 mb-0 min-h-[4.9rem] text-sm leading-6 text-(--muted) sm:min-h-[3.4rem]">
+        {things[0].body}
+      </p>
+      <div class="mt-3">
+        <input
+          data-range
+          type="range"
+          min="0"
+          max={things.length - 1}
+          step="0.001"
+          value="0"
+          aria-label="Mức phóng to"
+          class="block w-full cursor-pointer accent-[#eab308]"
+        />
+        <div class="relative mx-[7px] mt-1 h-5">
+          {
+            things.map((t, i) => (
+              <button
+                type="button"
+                data-tick={i}
+                title={t.label}
+                aria-label={t.label}
+                class="absolute top-0 grid h-5 w-5 -translate-x-1/2 place-items-center"
+                style={`left:${(i / (things.length - 1)) * 100}%`}
+              >
+                <span class="block h-1.5 w-1.5 rounded-full bg-(--line-strong) transition-colors" />
+              </button>
+            ))
+          }
+        </div>
+        <div class="flex justify-between gap-2 font-mono text-[11px] text-(--faint)">
+          <span>sợi tóc</span>
+          <span data-fov class="text-(--muted)"></span>
+          <span>nguyên tử</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <figcaption class="mt-2 text-center text-sm text-(--muted)">
+    Các vật được vẽ đúng tỉ lệ với nhau, theo kích thước điển hình. Bước sóng được vẽ thành hai chu kỳ sóng.
+  </figcaption>
+</figure>
+
+<script>
+  type Thing = { key: string; label: string; title: string; body: string };
+  type Shape = { w: number; h: number; draw: (side: number) => string };
+
+  const NS = "http://www.w3.org/2000/svg";
+  const ACCENT = "#eab308";
+  const f3 = (n: number) => +n.toFixed(4);
+
+  // A sine wave of two periods, centred on 0, plus a bracket marking one wavelength.
+  function wave(lambda: number, color: string, side: number) {
+    const w = lambda * 2;
+    const a = lambda * 0.26;
+    let d = "";
+    for (let i = 0; i <= 96; i++) {
+      const x = -w / 2 + (w * i) / 96;
+      const y = -a * Math.sin((2 * Math.PI * (x + w / 2)) / lambda);
+      d += (i ? "L" : "M") + f3(x) + "," + f3(y);
+    }
+    return (
+      `<path d="${d}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>` +
+      bracket(-lambda / 2, lambda / 2, side * (a + lambda * 0.12), lambda * 0.05)
+    );
+  }
+
+  function bracket(x0: number, x1: number, y: number, tick: number) {
+    return `<path d="M${f3(x0)},${f3(y - tick)}V${f3(y + tick)}M${f3(x0)},${f3(y)}H${f3(x1)}M${f3(x1)},${f3(y - tick)}V${f3(y + tick)}" fill="none" stroke="#a1a1aa" stroke-width="1" vector-effect="non-scaling-stroke"/>`;
+  }
+
+  const SHAPES: Record<string, Shape> = {
+    hair: {
+      w: 70000,
+      h: Infinity,
+      draw: () => `<rect x="-35000" y="-20000000" width="70000" height="40000000" fill="url(#hs-hair)"/>`,
+    },
+    rbc: {
+      w: 7000,
+      h: 7000,
+      draw: () => `<circle r="3500" fill="url(#hs-rbc)"/>`,
+    },
+    bac: {
+      w: 2000,
+      h: 620,
+      draw: () => {
+        let dots = "";
+        const pts = [
+          [-560, -90],
+          [-300, 120],
+          [-60, -150],
+          [180, 60],
+          [420, -60],
+          [620, 130],
+          [-760, 60],
+        ];
+        for (const [x, y] of pts) dots += `<circle cx="${x}" cy="${y}" r="34" fill="#6fb07f" opacity=".45"/>`;
+        return (
+          `<rect x="-1000" y="-310" width="2000" height="620" rx="310" fill="url(#hs-bac)" stroke="#6fb07f" stroke-width="1.5" vector-effect="non-scaling-stroke"/>` +
+          dots
+        );
+      },
+    },
+    duv: { w: 386, h: 386 * 0.52, draw: (side) => wave(193, "#a78bfa", side) },
+    virus: {
+      w: 124,
+      h: 124,
+      draw: () => {
+        let s = "";
+        for (let i = 0; i < 18; i++) {
+          const t = (i / 18) * Math.PI * 2;
+          const c = Math.cos(t);
+          const n = Math.sin(t);
+          s += `<line x1="${f3(c * 48)}" y1="${f3(n * 48)}" x2="${f3(c * 58)}" y2="${f3(n * 58)}" stroke="#d68aa0" stroke-width="1.5" vector-effect="non-scaling-stroke"/><circle cx="${f3(c * 59)}" cy="${f3(n * 59)}" r="3" fill="#d68aa0"/>`;
+        }
+        return s + `<circle r="50" fill="#5a2f42" stroke="#d68aa0" stroke-width="1.5" vector-effect="non-scaling-stroke"/>`;
+      },
+    },
+    gate: {
+      w: 70,
+      h: 64,
+      draw: (side) =>
+        `<rect x="-35" y="-5" width="70" height="10" rx="2" fill="#52525b"/>` +
+        `<rect x="-32" y="-28" width="16" height="56" rx="2" fill="${ACCENT}"/>` +
+        `<rect x="16" y="-28" width="16" height="56" rx="2" fill="${ACCENT}"/>` +
+        bracket(-24, 24, side * 35, 2.5),
+    },
+    euv: { w: 27, h: 27 * 0.52, draw: (side) => wave(13.5, "#c4b5fd", side) },
+    dna: {
+      w: 6.8,
+      h: 2,
+      draw: () => {
+        // Two strands of a double helix, seen from the side, with base pairs between them.
+        const L = 6.8;
+        const turn = 3.4;
+        const r = 1;
+        const strand = (phase: number) => {
+          let d = "";
+          for (let i = 0; i <= 120; i++) {
+            const x = -L / 2 + (L * i) / 120;
+            const y = r * Math.sin((2 * Math.PI * (x + L / 2)) / turn + phase);
+            d += (i ? "L" : "M") + f3(x) + "," + f3(y);
+          }
+          return d;
+        };
+        let rungs = "";
+        for (let x = -L / 2 + 0.17; x < L / 2; x += 0.34) {
+          const y0 = r * Math.sin((2 * Math.PI * (x + L / 2)) / turn);
+          const y1 = r * Math.sin((2 * Math.PI * (x + L / 2)) / turn + 2.2);
+          rungs += `<line x1="${f3(x)}" y1="${f3(y0)}" x2="${f3(x)}" y2="${f3(y1)}" stroke="#5eead4" stroke-opacity=".35" stroke-width="1.5" vector-effect="non-scaling-stroke"/>`;
+        }
+        return (
+          rungs +
+          `<path d="${strand(0)}" fill="none" stroke="#5eead4" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>` +
+          `<path d="${strand(2.2)}" fill="none" stroke="#2dd4bf" stroke-opacity=".7" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`
+        );
+      },
+    },
+    si: {
+      w: 0.22,
+      h: 0.22,
+      draw: () => `<circle r="0.11" fill="url(#hs-si)"/>`,
+    },
+  };
+
+  const smooth = (t: number) => t * t * (3 - 2 * t);
+  const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
+
+  function fmtWidth(nm: number) {
+    const vi = (n: number, d: number) => n.toFixed(d).replace(".", ",");
+    if (nm >= 1000) {
+      const um = nm / 1000;
+      return vi(um, um >= 10 ? 0 : 1) + " µm";
+    }
+    if (nm >= 10) return vi(nm, 0) + " nm";
+    if (nm >= 1) return vi(nm, 1) + " nm";
+    return vi(nm, 2) + " nm";
+  }
+
+  function initHowSmall(root: HTMLElement) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    const things = JSON.parse(root.dataset.things || "[]") as Thing[];
+    const stage = root.querySelector("[data-stage]") as HTMLElement;
+    const svg = root.querySelector("[data-svg]") as SVGSVGElement;
+    const gThings = root.querySelector("[data-things-g]") as SVGGElement;
+    const gLabels = root.querySelector("[data-labels]") as SVGGElement;
+    const fov = root.querySelector("[data-fov]") as HTMLElement;
+    const title = root.querySelector("[data-title]") as HTMLElement;
+    const body = root.querySelector("[data-body]") as HTMLElement;
+    const range = root.querySelector("[data-range]") as HTMLInputElement;
+    const ticks = Array.from(root.querySelectorAll("[data-tick]")) as HTMLButtonElement[];
+
+    const N = things.length;
+    const shapes = things.map((t) => SHAPES[t.key]);
+    // Lay the objects out left to right, each one a little to the right of the previous.
+    const centers: number[] = [0];
+    for (let i = 1; i < N; i++) {
+      centers[i] = centers[i - 1] + shapes[i - 1].w / 2 + shapes[i].w * 0.6 + shapes[i].w / 2;
+    }
+    const fovs = shapes.map((s) => s.w * 3);
+
+    // Labels go below even items and above odd ones, so neighbours never share a row.
+    const sides = things.map((_, i) => (i % 2 === 0 ? 1 : -1));
+    const groups = shapes.map((s, i) => {
+      const g = document.createElementNS(NS, "g");
+      g.innerHTML = s.draw(-sides[i]);
+      gThings.appendChild(g);
+      return g;
+    });
+    const labels = things.map((t) => {
+      const el = document.createElementNS(NS, "text");
+      el.textContent = t.label;
+      gLabels.appendChild(el);
+      return el;
+    });
+    const labelW: number[] = [];
+
+    let W = 672;
+    let H = 336;
+    let v = 0;
+    let shown = -1;
+
+    function camera(at: number): [number, number] {
+      let i = Math.floor(at);
+      if (i >= N - 1) i = N - 2;
+      const f = clamp(at - i, 0, 1);
+      const F = Math.exp(Math.log(fovs[i]) + (Math.log(fovs[i + 1]) - Math.log(fovs[i])) * f);
+      // Zoom toward the next object: its distance from the centre shrinks smoothly on screen.
+      const k0 = W / fovs[i];
+      const k = W / F;
+      const dc = centers[i + 1] - centers[i];
+      const cam = centers[i + 1] - (dc * k0 * (1 - smooth(f))) / k;
+      return [F, cam];
+    }
+
+    function render() {
+      const [F, cam] = camera(v);
+      const k = W / F;
+      const cur = Math.round(v);
+      shapes.forEach((s, i) => {
+        const g = groups[i];
+        const el = labels[i];
+        const pw = s.w * k;
+        const sx = (centers[i] - cam) * k + W / 2;
+        const sy = H / 2;
+        const left = sx - pw / 2;
+        const right = sx + pw / 2;
+        const visible = pw > 0.35 && right > -2 && left < W + 2;
+        if (!visible) {
+          g.setAttribute("display", "none");
+          el.setAttribute("display", "none");
+          return;
+        }
+        g.removeAttribute("display");
+        g.setAttribute("transform", `translate(${sx.toFixed(2)} ${sy}) scale(${k})`);
+
+        // Label
+        // Only the current object and its neighbours get a label, so small specks don't crowd it.
+        const span = Math.min(right, W) - Math.max(left, 0);
+        const whole = left >= 0 && right <= W;
+        // On narrow screens, skip the label of the next (smaller) object until we get close to it.
+        const reach = W < 480 && i > v ? 0.8 : 1.7;
+        const near = clamp((reach - Math.abs(i - v)) / 0.3, 0, 1);
+        const o = clamp((pw - 4) / 10, 0, 1) * (whole ? 1 : clamp((span - 18) / 24, 0, 1)) * near;
+        if (o <= 0.01) {
+          el.setAttribute("display", "none");
+          return;
+        }
+        el.removeAttribute("display");
+        const offLeft = sx < 0;
+        el.textContent = offLeft ? "← " + things[i].label.split(" · ")[0] : things[i].label;
+        if (offLeft) {
+          el.setAttribute("text-anchor", "start");
+          el.setAttribute("x", "8");
+        } else {
+          if (labelW[i] === undefined) labelW[i] = el.getComputedTextLength();
+          const tw = labelW[i];
+          el.setAttribute("text-anchor", "middle");
+          el.setAttribute("x", clamp(sx, 8 + tw / 2, W - 8 - tw / 2).toFixed(1));
+        }
+        const half = Number.isFinite(s.h) ? (s.h / 2) * k : Infinity;
+        const y = sides[i] > 0 ? Math.min(sy + half + 16, H - 9) : Math.max(sy - half - 9, 16);
+        el.setAttribute("y", y.toFixed(1));
+        el.setAttribute("fill", i === cur ? "#ededed" : "#a1a1aa");
+        el.setAttribute("opacity", o.toFixed(2));
+      });
+      fov.textContent = "Khung hình rộng " + fmtWidth(F);
+      if (cur !== shown) {
+        shown = cur;
+        title.textContent = things[cur].title;
+        body.textContent = things[cur].body;
+        ticks.forEach((t, i) => {
+          const dot = t.firstElementChild as HTMLElement;
+          dot.style.background = i === cur ? ACCENT : "";
+        });
+      }
+    }
+
+    function resize() {
+      W = Math.max(stage.clientWidth, 200);
+      H = W / 2;
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      render();
+    }
+
+    let anim = 0;
+    function goTo(target: number) {
+      cancelAnimationFrame(anim);
+      const from = v;
+      const ms = 450 + 180 * Math.abs(target - from);
+      const t0 = performance.now();
+      const step = (now: number) => {
+        const t = Math.min((now - t0) / ms, 1);
+        const e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        v = from + (target - from) * e;
+        range.value = String(v);
+        render();
+        if (t < 1) anim = requestAnimationFrame(step);
+      };
+      anim = requestAnimationFrame(step);
+    }
+
+    range.addEventListener("input", () => {
+      cancelAnimationFrame(anim);
+      v = parseFloat(range.value);
+      render();
+    });
+    ticks.forEach((t, i) => t.addEventListener("click", () => goTo(i)));
+
+    if ("ResizeObserver" in window) new ResizeObserver(resize).observe(stage);
+    resize();
+  }
+
+  const initAll = () => {
+    (Array.from(document.querySelectorAll("[data-how-small]")) as HTMLElement[]).forEach(initHowSmall);
+  };
+  initAll();
+  document.addEventListener("astro:page-load", initAll);
+</script>

@@ -1,0 +1,125 @@
+---
+/**
+ * Foundry market share, Q2 2026 (TrendForce), as a 10 x 10 waffle: one cell
+ * is 1% of the world's foundry revenue. Cells are rounded with the largest
+ * remainder method so they add up to 100.
+ */
+type Co = { name: string; where: string; share: number; color: string };
+const cos: Co[] = [
+  { name: "TSMC", where: "Đài Loan", share: 72.5, color: "#eab308" },
+  { name: "Samsung", where: "Hàn Quốc", share: 5.9, color: "#3987e5" },
+  { name: "SMIC", where: "Trung Quốc", share: 5.4, color: "#d95926" },
+  { name: "UMC", where: "Đài Loan", share: 3.9, color: "#199e70" },
+  { name: "GlobalFoundries", where: "Mỹ", share: 3.2, color: "#9085e9" },
+  { name: "Các hãng khác", where: "", share: 9.1, color: "#52525b" },
+];
+const floors = cos.map((c) => Math.floor(c.share));
+let left = 100 - floors.reduce((a, b) => a + b, 0);
+const order = cos.map((c, i) => [c.share - floors[i], i]).sort((a, b) => b[0] - a[0]);
+for (const [, i] of order) {
+  if (left <= 0) break;
+  floors[i]++;
+  left--;
+}
+const cells: number[] = [];
+floors.forEach((n, i) => {
+  for (let k = 0; k < n; k++) cells.push(i);
+});
+const vi = (n: number) => n.toFixed(1).replace(".", ",");
+---
+
+<figure class="not-prose my-8" data-foundry-share>
+  <div class="rounded-surface border border-(--line) bg-(--surface) p-4">
+    <div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-7">
+      <div
+        data-grid
+        class="grid aspect-square w-full max-w-[16rem] shrink-0 grid-cols-10 grid-rows-10 gap-[3px] self-center sm:w-64"
+        role="img"
+        aria-label="Lưới 100 ô: TSMC chiếm 73 ô, Samsung 6, SMIC 5, UMC 4, GlobalFoundries 3, các hãng khác 9"
+      >
+        {
+          cells.map((c, i) => (
+            <span
+              data-cell={c}
+              class="block rounded-[2px] bg-[#26262b] transition-[background-color,opacity] duration-300"
+              style={`transition-delay:${i * 11}ms`}
+            />
+          ))
+        }
+      </div>
+      <div class="min-w-0 flex-1">
+        <p class="m-0 text-5xl font-semibold leading-none text-(--ink)">72,5%</p>
+        <p class="mt-2 mb-4 text-sm leading-6 text-(--muted)">doanh thu đúc chip của thế giới thuộc về TSMC trong quý 2 năm 2026</p>
+        <ul class="m-0 list-none space-y-0.5 p-0">
+          {
+            cos.map((c, i) => (
+              <li
+                data-row={i}
+                class="flex cursor-default items-center gap-2.5 rounded-[0.25rem] px-1 py-0.5 text-sm transition-opacity"
+              >
+                <span class="h-3 w-3 shrink-0 rounded-[2px]" style={`background:${c.color}`} />
+                <span class="text-(--ink)">{c.name}</span>
+                {c.where && <span class="text-(--faint)">{c.where}</span>}
+                <span class="ml-auto font-mono text-xs tabular-nums text-(--muted)">{vi(c.share)}%</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+  <figcaption class="mt-2 text-center text-sm text-(--muted)">
+    Mỗi ô là 1% doanh thu của ngành đúc chip toàn cầu, quý 2 năm 2026. Nguồn: TrendForce.
+  </figcaption>
+</figure>
+
+<script>
+  const COLORS = ["#eab308", "#3987e5", "#d95926", "#199e70", "#9085e9", "#52525b"];
+
+  function initShare(root: HTMLElement) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    const cells = Array.from(root.querySelectorAll("[data-cell]")) as HTMLElement[];
+    const rows = Array.from(root.querySelectorAll("[data-row]")) as HTMLElement[];
+
+    const fill = () => cells.forEach((c) => (c.style.backgroundColor = COLORS[+(c.dataset.cell || 0)]));
+
+    function focus(i: number | null) {
+      cells.forEach((c) => {
+        c.style.transitionDelay = "0ms";
+        c.style.opacity = i === null || +(c.dataset.cell || 0) === i ? "1" : "0.22";
+      });
+      rows.forEach((r, k) => (r.style.opacity = i === null || k === i ? "1" : "0.45"));
+    }
+    cells.forEach((c) => {
+      c.addEventListener("pointerenter", () => focus(+(c.dataset.cell || 0)));
+      c.addEventListener("pointerleave", () => focus(null));
+    });
+    rows.forEach((r, k) => {
+      r.addEventListener("pointerenter", () => focus(k));
+      r.addEventListener("pointerleave", () => focus(null));
+    });
+
+    if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      cells.forEach((c) => (c.style.transitionDelay = "0ms"));
+      fill();
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          fill();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    io.observe(root.querySelector("[data-grid]") as HTMLElement);
+  }
+
+  const initAll = () => {
+    (Array.from(document.querySelectorAll("[data-foundry-share]")) as HTMLElement[]).forEach(initShare);
+  };
+  initAll();
+  document.addEventListener("astro:page-load", initAll);
+</script>

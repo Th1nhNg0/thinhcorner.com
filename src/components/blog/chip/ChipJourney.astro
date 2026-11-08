@@ -1,0 +1,440 @@
+---
+/**
+ * Interactive map for the chip supply chain post: follows a typical phone chip
+ * through the countries that make it, one step at a time. The camera flies to
+ * each place and an arc draws toward Taiwan, where everything gets made.
+ *
+ * Country outlines are Natural Earth (via world-atlas), projected and compacted
+ * ahead of time into /chuoi-cung-ung-chip/world-map.json, which loads only when
+ * the figure gets near the viewport.
+ */
+type Step = {
+  key: string;
+  label: string;
+  title: string;
+  body: string;
+  pins: string[];
+  cam: string;
+};
+
+const steps: Step[] = [
+  {
+    key: "all",
+    label: "Toàn cảnh",
+    title: "Một con chip đi qua ít nhất bảy nước",
+    body: "Mỗi nước giữ một khâu mà nước khác khó thay thế. Bấm Tiếp để đi theo con chip từ bản thiết kế tới tay bạn.",
+    pins: [],
+    cam: "world",
+  },
+  {
+    key: "us",
+    label: "Mỹ",
+    title: "Mỹ: thiết kế",
+    body: "Apple, Nvidia, Qualcomm hay AMD vẽ ra con chip trên máy tính, bằng phần mềm của Synopsys và Cadence. Những công ty này không có nhà máy nào. Bản thiết kế được gửi sang Đài Loan.",
+    pins: ["us"],
+    cam: "us",
+  },
+  {
+    key: "uk",
+    label: "Anh",
+    title: "Anh: kiến trúc",
+    body: "Phần lớn chip điện thoại chạy trên kiến trúc của Arm, một công ty ở Cambridge. Arm không làm chip. Họ bán quyền dùng bản thiết kế lõi vi xử lý và thu tiền bản quyền trên mỗi con chip bán ra.",
+    pins: ["uk"],
+    cam: "eu",
+  },
+  {
+    key: "nl",
+    label: "Hà Lan, Đức",
+    title: "Hà Lan và Đức: máy quang khắc",
+    body: "Cỗ máy in mạch lên wafer do ASML ở Veldhoven làm. Gương bên trong do Zeiss làm, laser do Trumpf làm, cả hai đều ở Đức. Với chip tiên tiến nhất, cả thế giới chỉ có một nơi bán loại máy này.",
+    pins: ["nl", "de"],
+    cam: "eu",
+  },
+  {
+    key: "jp",
+    label: "Nhật Bản",
+    title: "Nhật Bản: vật liệu",
+    body: "Tấm wafer silicon siêu tinh khiết và hóa chất cản quang phần lớn đến từ Nhật. Riêng chất cản quang dùng cho máy EUV, ba công ty JSR, Tokyo Ohka và Shin-Etsu nắm khoảng 90% thị trường.",
+    pins: ["jp"],
+    cam: "jp",
+  },
+  {
+    key: "tw",
+    label: "Đài Loan",
+    title: "Đài Loan: sản xuất",
+    body: "Ở Tân Trúc, TSMC in bản thiết kế lên wafer qua khoảng một nghìn bước, mất vài tháng. Quý 2 năm 2026, TSMC chiếm 72,5% doanh thu đúc chip của cả thế giới.",
+    pins: ["tw"],
+    cam: "tw",
+  },
+  {
+    key: "sea",
+    label: "Đông Nam Á",
+    title: "Đông Nam Á: đóng gói, kiểm thử",
+    body: "Wafer được cắt thành từng con chip, đóng vỏ và kiểm tra. Malaysia đã làm việc này từ năm 1972. Nhà máy lắp ráp và kiểm thử lớn nhất của Intel nằm ở Khu Công nghệ cao TP.HCM.",
+    pins: ["my", "vn"],
+    cam: "sea",
+  },
+  {
+    key: "cn",
+    label: "Trung Quốc",
+    title: "Trung Quốc: lắp ráp",
+    body: "Con chip được hàn lên bo mạch, lắp thành điện thoại hay laptop trong những nhà máy hàng trăm nghìn công nhân, rồi đi khắp thế giới.",
+    pins: ["cn"],
+    cam: "cn",
+  },
+];
+---
+
+<figure class="not-prose my-8" data-chip-journey data-steps={JSON.stringify(steps)}>
+  <div class="rounded-surface overflow-hidden border border-(--line) bg-(--surface)">
+    <div class="relative aspect-[2/1] w-full bg-[#0e0e10]">
+      <svg
+        data-map
+        class="absolute inset-0 h-full w-full touch-pan-y select-none"
+        viewBox="88.6 -22.8 800.7 400.3"
+        preserveAspectRatio="xMidYMid slice"
+        role="img"
+        aria-label="Bản đồ hành trình của một con chip qua các nước"
+      >
+        <g data-land></g>
+        <g data-arcs fill="none" stroke-linecap="round"></g>
+        <g data-pins></g>
+      </svg>
+      <p
+        data-where
+        class="pointer-events-none absolute left-3 top-2.5 m-0 font-mono text-xs uppercase tracking-wider text-(--faint)"
+      >
+        Toàn cảnh
+      </p>
+    </div>
+    <div class="border-t border-(--line) px-4 pb-4 pt-3">
+      <h3 data-title class="m-0 text-base font-medium leading-6 text-(--ink)">{steps[0].title}</h3>
+      <p data-body class="mt-1.5 mb-0 min-h-[4.9rem] text-sm leading-6 text-(--muted) sm:min-h-[3.4rem]">{steps[0].body}</p>
+      <div class="mt-3 flex items-center gap-2">
+        <button
+          type="button"
+          data-prev
+          class="rounded-surface shrink-0 border border-(--line-strong) bg-(--page) px-2.5 py-1 text-sm text-(--ink) hover:bg-(--surface-hover) disabled:opacity-40"
+          aria-label="Bước trước">←</button
+        >
+        <ol data-dots class="m-0 flex flex-1 list-none items-center justify-center gap-1 p-0 sm:gap-1.5">
+          {
+            steps.map((s, i) => (
+              <li>
+                <button
+                  type="button"
+                  data-dot={i}
+                  aria-label={s.label}
+                  title={s.label}
+                  class="grid h-5 min-w-5 place-items-center rounded-full border border-(--line-strong) px-0.5 font-mono text-[10px] text-(--faint) transition-colors sm:h-6 sm:min-w-6 sm:text-[11px]"
+                >
+                  {i === 0 ? "◎" : i}
+                </button>
+              </li>
+            ))
+          }
+        </ol>
+        <button
+          type="button"
+          data-next
+          class="rounded-surface shrink-0 border border-(--accent) bg-(--page) px-2.5 py-1 text-sm text-(--accent) hover:bg-(--surface-hover) sm:px-3"
+          aria-label="Bước tiếp"><span data-next-label class="hidden sm:inline">Tiếp </span>→</button
+        >
+      </div>
+    </div>
+  </div>
+  <figcaption class="mt-2 text-center text-sm text-(--muted)">
+    Hành trình đã được đơn giản hóa: mỗi khâu thật ra có nhiều nước cùng làm. Bản đồ: Natural Earth.
+  </figcaption>
+</figure>
+
+<script>
+  type Step = { key: string; label: string; title: string; body: string; pins: string[]; cam: string };
+  type MapData = {
+    countries: { id?: string; k: string | null; d: string }[];
+    points: Record<string, [number, number]>;
+    cams: Record<string, [number, number, number, number]>;
+  };
+  type Box = [number, number, number, number];
+
+  const NS = "http://www.w3.org/2000/svg";
+  const ACCENT = "#eab308";
+  const URL_MAP = "/chuoi-cung-ung-chip/world-map.json";
+
+  // Which pins send an arc where, and in which step the arc appears.
+  const FLOWS: { from: string; to: string; step: number; bend: number }[] = [
+    { from: "us", to: "tw", step: 1, bend: 0.32 },
+    { from: "uk", to: "tw", step: 2, bend: 0.22 },
+    { from: "nl", to: "tw", step: 3, bend: 0.16 },
+    { from: "jp", to: "tw", step: 4, bend: 0.25 },
+    { from: "tw", to: "my", step: 6, bend: -0.2 },
+    { from: "tw", to: "vn", step: 6, bend: -0.2 },
+    { from: "vn", to: "cn", step: 7, bend: 0.25 },
+  ];
+  const PIN_STEP: Record<string, number> = { us: 1, uk: 2, nl: 3, de: 3, jp: 4, tw: 5, my: 6, vn: 6, cn: 7 };
+  const COUNTRY_STEP: Record<string, number> = PIN_STEP;
+
+  const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+  function fitBox(points: [number, number][], pad: number): Box {
+    const xs = points.map((p) => p[0]);
+    const ys = points.map((p) => p[1]);
+    const x0 = Math.min(...xs);
+    const x1 = Math.max(...xs);
+    const y0 = Math.min(...ys);
+    const y1 = Math.max(...ys);
+    let w = Math.max(x1 - x0, 40) * (1 + pad * 2);
+    let h = Math.max(y1 - y0, 20) * (1 + pad * 2);
+    if (w / h < 2) w = h * 2;
+    else h = w / 2;
+    return [(x0 + x1) / 2 - w / 2, (y0 + y1) / 2 - h / 2, w, h];
+  }
+
+  function initJourney(root: HTMLElement) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    const steps = JSON.parse(root.dataset.steps || "[]") as Step[];
+    const svg = root.querySelector("[data-map]") as SVGSVGElement;
+    const land = root.querySelector("[data-land]") as SVGGElement;
+    const arcsG = root.querySelector("[data-arcs]") as SVGGElement;
+    const pinsG = root.querySelector("[data-pins]") as SVGGElement;
+    const where = root.querySelector("[data-where]") as HTMLElement;
+    const title = root.querySelector("[data-title]") as HTMLElement;
+    const body = root.querySelector("[data-body]") as HTMLElement;
+    const prev = root.querySelector("[data-prev]") as HTMLButtonElement;
+    const next = root.querySelector("[data-next]") as HTMLButtonElement;
+    const nextLabel = root.querySelector("[data-next-label]") as HTMLElement;
+    const dots = Array.from(root.querySelectorAll("[data-dot]")) as HTMLButtonElement[];
+
+    let data: MapData | null = null;
+    let current = 0;
+    let vb: Box = [88.6, -22.8, 800.7, 400.3];
+    let camAnim = 0;
+    let pending = 0;
+    const countryEls: { k: string | null; el: SVGPathElement }[] = [];
+    const arcEls: { el: SVGPathElement; flow: (typeof FLOWS)[number]; t: number; target: number }[] = [];
+    const pinEls: Record<string, SVGGElement> = {};
+
+    const setVB = (b: Box) => {
+      vb = b;
+      svg.setAttribute("viewBox", b.map((v) => v.toFixed(2)).join(" "));
+      // Keep pins and strokes the same size on screen at any zoom.
+      const k = b[2] / Math.max(svg.clientWidth, 1);
+      for (const key in pinEls) {
+        const p = data!.points[key];
+        pinEls[key].setAttribute("transform", `translate(${p[0]},${p[1]}) scale(${k})`);
+      }
+      for (const a of arcEls) a.el.setAttribute("stroke-width", String(2.4 * k));
+      land.setAttribute("stroke-width", String(0.8 * k));
+    };
+
+    const flyTo = (target: Box, ms = 1000) =>
+      new Promise<void>((resolve) => {
+        cancelAnimationFrame(camAnim);
+        const from = vb.slice() as Box;
+        const t0 = performance.now();
+        const tick = (now: number) => {
+          const t = Math.min(1, (now - t0) / ms);
+          const e = ease(t);
+          setVB(from.map((v, i) => v + (target[i] - v) * e) as Box);
+          if (t < 1) camAnim = requestAnimationFrame(tick);
+          else resolve();
+        };
+        camAnim = requestAnimationFrame(tick);
+      });
+
+    // Quadratic arc between two points, partially drawn up to t (de Casteljau).
+    const arcD = (f: (typeof FLOWS)[number], t: number) => {
+      const p = data!.points[f.from];
+      const q = data!.points[f.to];
+      const mx = (p[0] + q[0]) / 2;
+      const my = (p[1] + q[1]) / 2;
+      const dx = q[0] - p[0];
+      const dy = q[1] - p[1];
+      const c = [mx + dy * f.bend * (dx > 0 ? 1 : -1) * 0, my - Math.hypot(dx, dy) * f.bend];
+      const a1 = [p[0] + (c[0] - p[0]) * t, p[1] + (c[1] - p[1]) * t];
+      const b1 = [c[0] + (q[0] - c[0]) * t, c[1] + (q[1] - c[1]) * t];
+      const e = [a1[0] + (b1[0] - a1[0]) * t, a1[1] + (b1[1] - a1[1]) * t];
+      return `M${p[0]},${p[1]} Q${a1[0]},${a1[1]} ${e[0]},${e[1]}`;
+    };
+
+    let arcAnim = 0;
+    const animateArcs = () => {
+      cancelAnimationFrame(arcAnim);
+      let last = performance.now();
+      const tick = (now: number) => {
+        const dt = (now - last) / 1000;
+        last = now;
+        let moving = false;
+        for (const a of arcEls) {
+          if (a.t !== a.target) {
+            const dir = Math.sign(a.target - a.t);
+            a.t = dir > 0 ? Math.min(a.target, a.t + dt / 1.3) : Math.max(a.target, a.t - dt / 0.4);
+            a.el.setAttribute("d", arcD(a.flow, Math.max(a.t, 0.0001)));
+            moving = true;
+          }
+        }
+        if (moving) arcAnim = requestAnimationFrame(tick);
+      };
+      arcAnim = requestAnimationFrame(tick);
+    };
+
+    const build = (d: MapData) => {
+      data = d;
+      const frag = document.createDocumentFragment();
+      for (const c of d.countries) {
+        const el = document.createElementNS(NS, "path") as SVGPathElement;
+        el.setAttribute("d", c.d);
+        el.setAttribute("fill", c.k ? "#303036" : "#1d1d21");
+        el.style.transition = "fill .6s";
+        frag.appendChild(el);
+        countryEls.push({ k: c.k, el });
+      }
+      land.setAttribute("stroke", "#0e0e10");
+      land.appendChild(frag);
+
+      for (const f of FLOWS) {
+        const el = document.createElementNS(NS, "path") as SVGPathElement;
+        el.setAttribute("stroke", ACCENT);
+        el.setAttribute("d", arcD(f, 0.0001));
+        arcsG.appendChild(el);
+        arcEls.push({ el, flow: f, t: 0, target: 0 });
+      }
+
+      for (const key of Object.keys(PIN_STEP)) {
+        const g = document.createElementNS(NS, "g") as SVGGElement;
+        const isTw = key === "tw";
+        const ring = document.createElementNS(NS, "circle");
+        ring.setAttribute("r", "14");
+        ring.setAttribute("fill", "none");
+        ring.setAttribute("stroke", ACCENT);
+        ring.setAttribute("stroke-width", "1.5");
+        ring.setAttribute("data-ring", "");
+        ring.style.opacity = "0";
+        const minor = key === "de" || key === "my";
+        const dot = document.createElementNS(NS, "circle");
+        dot.setAttribute("r", minor ? "5" : "8");
+        dot.setAttribute("fill", isTw ? ACCENT : "#ededed");
+        dot.setAttribute("stroke", "#0e0e10");
+        dot.setAttribute("stroke-width", "2");
+        const num = document.createElementNS(NS, "text");
+        num.setAttribute("text-anchor", "middle");
+        num.setAttribute("y", "3.6");
+        num.setAttribute("font-size", "10");
+        num.setAttribute("font-weight", "700");
+        num.setAttribute("fill", "#111");
+        num.textContent = minor ? "" : String(PIN_STEP[key]);
+        g.appendChild(ring);
+        g.appendChild(dot);
+        g.appendChild(num);
+        g.style.transition = "opacity .5s";
+        pinsG.appendChild(g);
+        pinEls[key] = g;
+      }
+      setVB(vb);
+      show(current, true);
+    };
+
+    const show = async (i: number, instant = false) => {
+      current = Math.max(0, Math.min(steps.length - 1, i));
+      const s = steps[current];
+      const token = ++pending;
+      title.textContent = s.title;
+      body.textContent = s.body;
+      where.textContent = current === 0 ? "Toàn cảnh" : `${current}/7 · ${s.label}`;
+      prev.disabled = current === 0;
+      nextLabel.textContent = current === steps.length - 1 ? "Xem lại " : "Tiếp ";
+      dots.forEach((d, j) => {
+        const on = j === current;
+        d.style.borderColor = on ? ACCENT : "";
+        d.style.color = on ? "#111" : j <= current && current > 0 ? "#ededed" : "";
+        d.style.background = on ? ACCENT : "";
+        d.setAttribute("aria-current", on ? "step" : "false");
+      });
+      if (!data) return;
+
+      const overview = current === 0;
+      for (const c of countryEls) {
+        if (!c.k) continue;
+        const st = COUNTRY_STEP[c.k];
+        const active = !overview && st === current;
+        c.el.setAttribute(
+          "fill",
+          active ? (c.k === "tw" ? "rgba(234,179,8,.55)" : "rgba(234,179,8,.32)") : overview || st < current ? "#34343b" : "#26262b"
+        );
+      }
+      for (const key in pinEls) {
+        const st = PIN_STEP[key];
+        const visible = overview || st <= current || key === "tw";
+        pinEls[key].style.opacity = visible ? (overview || st === current || key === "tw" ? "1" : ".55") : "0";
+        const ring = pinEls[key].querySelector("[data-ring]") as SVGCircleElement;
+        ring.style.opacity = !overview && st === current ? "1" : "0";
+      }
+      for (const a of arcEls) {
+        a.target = overview || a.flow.step <= current ? 1 : 0;
+        a.el.setAttribute("stroke-opacity", overview || a.flow.step === current ? "0.95" : "0.35");
+        if (instant || overview) a.t = a.target;
+        a.el.setAttribute("d", arcD(a.flow, Math.max(a.t, 0.0001)));
+      }
+
+      const cam = data.cams[s.cam];
+      if (instant) {
+        setVB(cam);
+        return;
+      }
+      // Hold the arcs of this step back until the camera lands.
+      const mine = arcEls.filter((a) => a.flow.step === current);
+      mine.forEach((a) => {
+        a.t = 0;
+        a.target = 0;
+      });
+      animateArcs();
+      await flyTo(cam, 1000);
+      if (token !== pending) return;
+      mine.forEach((a) => (a.target = 1));
+      animateArcs();
+      // For far-away places, pull back so the arc's end (Taiwan) comes into view.
+      if (current >= 1 && current <= 4) {
+        await new Promise((r) => setTimeout(r, 650));
+        if (token !== pending) return;
+        const pts = [...s.pins.map((k) => data!.points[k]), data.points.tw];
+        await flyTo(fitBox(pts, 0.14), 1300);
+      }
+    };
+
+    prev.addEventListener("click", () => show(current - 1));
+    next.addEventListener("click", () => show(current === steps.length - 1 ? 0 : current + 1));
+    dots.forEach((d, i) => d.addEventListener("click", () => show(i)));
+    root.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") show(current + 1);
+      if (e.key === "ArrowLeft") show(current - 1);
+    });
+    window.addEventListener("resize", () => setVB(vb));
+
+    const load = () =>
+      fetch(URL_MAP)
+        .then((r) => r.json())
+        .then((d) => build(d as MapData))
+        .catch(() => {
+          where.textContent = "Không tải được bản đồ";
+        });
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            io.disconnect();
+            load();
+          }
+        },
+        { rootMargin: "600px" }
+      );
+      io.observe(root);
+    } else load();
+  }
+
+  const initAll = () => {
+    (Array.from(document.querySelectorAll("[data-chip-journey]")) as HTMLElement[]).forEach(initJourney);
+  };
+  initAll();
+  document.addEventListener("astro:page-load", initAll);
+</script>

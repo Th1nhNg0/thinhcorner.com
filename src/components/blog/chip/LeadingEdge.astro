@@ -1,0 +1,187 @@
+---
+/**
+ * How many companies can make the most advanced logic chips: nearly 30 in 2001
+ * (C WorldWide), three today. Only the companies we can source by name are
+ * labelled; the rest are anonymous dots. The switch animates from one year to
+ * the other and runs once by itself when the figure scrolls into view.
+ */
+const named = [
+  { name: "TSMC", stays: true },
+  { name: "Samsung", stays: true },
+  { name: "Intel", stays: true },
+  { name: "AMD", stays: false },
+  { name: "IBM", stays: false },
+  { name: "UMC", stays: false },
+];
+const TOTAL = 29;
+const dots = [...named, ...Array.from({ length: TOTAL - named.length }, () => ({ name: "", stays: false }))];
+const exits = [
+  ["2009", "AMD tách các nhà máy của mình ra thành GlobalFoundries"],
+  ["2014", "IBM trả 1,5 tỷ USD để GlobalFoundries nhận mảng sản xuất chip"],
+  ["2017", "UMC thôi đầu tư vào các tiến trình dưới 14nm"],
+  ["2018", "GlobalFoundries dừng phát triển tiến trình 7nm"],
+];
+---
+
+<figure class="not-prose my-8" data-leading-edge>
+  <div class="rounded-surface border border-(--line) bg-(--surface) p-4">
+    <div class="flex items-center justify-between gap-3">
+      <div role="group" aria-label="Chọn năm" class="rounded-surface inline-flex border border-(--line-strong) p-0.5 font-mono text-xs">
+        <button type="button" data-year="then" class="rounded-[0.2rem] px-3 py-1 transition-colors">2001</button>
+        <button type="button" data-year="now" class="rounded-[0.2rem] px-3 py-1 transition-colors">Hôm nay</button>
+      </div>
+      <p class="m-0 font-mono text-xs text-(--faint)">mỗi chấm là một công ty</p>
+    </div>
+
+    <div class="mt-4 flex items-baseline gap-3">
+      <p data-count class="m-0 min-w-[2.6ch] text-5xl font-semibold leading-none text-(--ink)">~30</p>
+      <p data-count-text class="m-0 text-sm leading-6 text-(--muted)">
+        công ty sản xuất được chip ở tiến trình tiên tiến nhất
+      </p>
+    </div>
+
+    <ol class="mt-5 grid list-none grid-cols-6 gap-y-3 p-0 sm:grid-cols-10" aria-hidden="true">
+      {
+        dots.map((d) => (
+          <li class="flex flex-col items-center">
+            <span
+              data-dot
+              data-stays={d.stays ? "1" : ""}
+              class="block h-4 w-4 rounded-full border border-transparent bg-[#a1a1aa] transition-[background-color,border-color,transform] duration-500 sm:h-[18px] sm:w-[18px]"
+            />
+            {d.name && (
+              <span data-name data-stays={d.stays ? "1" : ""} class="mt-1 font-mono text-[10px] leading-none text-(--muted) transition-colors duration-500 sm:text-[11px]">
+                {d.name}
+              </span>
+            )}
+          </li>
+        ))
+      }
+    </ol>
+
+    <div data-exits class="mt-5 border-t border-(--line) pt-3">
+      <p class="m-0 mb-2 font-mono text-xs text-(--faint)">Một vài cái tên rời cuộc đua</p>
+      <ul class="m-0 list-none space-y-1 p-0">
+        {
+          exits.map(([y, t]) => (
+            <li data-exit class="flex gap-3 text-sm leading-6 text-(--muted) transition-opacity duration-500">
+              <span class="w-10 shrink-0 font-mono text-xs leading-6 text-(--faint)">{y}</span>
+              <span>{t}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+  <figcaption class="mt-2 text-center text-sm text-(--muted)">
+    Chip logic ở tiến trình tiên tiến nhất của từng thời điểm. Số năm 2001 theo ước tính "gần 30 công ty" của C WorldWide. Nguồn: C WorldWide, IEEE Spectrum, eWeek, CDRInfo.
+  </figcaption>
+</figure>
+
+<script>
+  function initEdge(root: HTMLElement) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    const btns = Array.from(root.querySelectorAll("[data-year]")) as HTMLButtonElement[];
+    const dots = Array.from(root.querySelectorAll("[data-dot]")) as HTMLElement[];
+    const names = Array.from(root.querySelectorAll("[data-name]")) as HTMLElement[];
+    const exits = Array.from(root.querySelectorAll("[data-exit]")) as HTMLElement[];
+    const count = root.querySelector("[data-count]") as HTMLElement;
+    const countText = root.querySelector("[data-count-text]") as HTMLElement;
+    const N = dots.length;
+    // A fixed shuffled order for the dots that drop out, so the fade looks scattered.
+    const order = dots.map((_, i) => i).sort((a, b) => ((a * 7919) % 31) - ((b * 7919) % 31));
+    let state: "then" | "now" = "then";
+    let timer = 0;
+
+    function setButtons() {
+      btns.forEach((b) => {
+        const on = b.dataset.year === state;
+        b.style.background = on ? "#eab308" : "";
+        b.style.color = on ? "#0c0c0d" : "#a1a1aa";
+        b.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+    }
+
+    function tweenCount(from: number, to: number, ms: number) {
+      const t0 = performance.now();
+      const step = (now: number) => {
+        const t = Math.min((now - t0) / ms, 1);
+        const v = Math.round(from + (to - from) * t);
+        count.textContent = to === N && t === 1 ? "~30" : String(v);
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
+    function apply(next: "then" | "now", animate: boolean) {
+      state = next;
+      setButtons();
+      const now = next === "now";
+      const spread = animate ? 1100 : 0;
+      dots.forEach((d) => {
+        const stays = d.dataset.stays === "1";
+        const delay = stays ? 0 : (order.indexOf(dots.indexOf(d)) / N) * spread;
+        d.style.transitionDelay = `${now ? delay : 0}ms`;
+        if (now && stays) {
+          d.style.background = "#eab308";
+          d.style.borderColor = "transparent";
+          d.style.transform = "scale(1.15)";
+        } else if (now) {
+          d.style.background = "transparent";
+          d.style.borderColor = "#3f3f46";
+          d.style.transform = "scale(1)";
+        } else {
+          d.style.background = "#a1a1aa";
+          d.style.borderColor = "transparent";
+          d.style.transform = "scale(1)";
+        }
+      });
+      names.forEach((n) => {
+        const stays = n.dataset.stays === "1";
+        n.style.color = now ? (stays ? "#ededed" : "#52525b") : "";
+        n.style.textDecoration = now && !stays ? "line-through" : "";
+      });
+      exits.forEach((e, i) => {
+        e.style.transitionDelay = `${now && animate ? 300 + i * 220 : 0}ms`;
+        e.style.opacity = now ? "1" : "0.35";
+      });
+      countText.textContent = now
+        ? "công ty còn sản xuất được chip logic tiên tiến nhất: TSMC, Samsung và Intel"
+        : "công ty sản xuất được chip ở tiến trình tiên tiến nhất";
+      if (animate) tweenCount(now ? N : 3, now ? 3 : N, spread || 1);
+      else count.textContent = now ? "3" : "~30";
+    }
+
+    btns.forEach((b) =>
+      b.addEventListener("click", () => {
+        clearTimeout(timer);
+        const next = b.dataset.year as "then" | "now";
+        if (next !== state) apply(next, true);
+      })
+    );
+
+    apply("then", false);
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!("IntersectionObserver" in window) || reduce) {
+      apply("now", false);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          timer = window.setTimeout(() => apply("now", true), 1400);
+        }
+      },
+      { threshold: 0.6 }
+    );
+    io.observe(root);
+  }
+
+  const initAll = () => {
+    (Array.from(document.querySelectorAll("[data-leading-edge]")) as HTMLElement[]).forEach(initEdge);
+  };
+  initAll();
+  document.addEventListener("astro:page-load", initAll);
+</script>

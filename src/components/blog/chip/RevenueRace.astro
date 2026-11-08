@@ -1,0 +1,259 @@
+---
+/**
+ * TSMC vs Intel annual revenue, 1997–2025, in billions of USD (nominal).
+ * TSMC: CompaniesMarketCap for 1997–2005, Our World in Data for 2006–2025
+ * (from TSMC reports, converted at the yearly average rate).
+ * Intel: Macrotrends for 1997–2024, Intel's own release for 2025.
+ */
+const years = Array.from({ length: 29 }, (_, i) => 1997 + i);
+const tsmc = [
+  1.34, 1.53, 2.32, 5.05, 3.96, 4.94, 6.32, 7.84, 8.4, 9.75, 9.83, 10.56, 8.95, 13.26, 14.49, 17.1, 20.05, 25.11, 26.42,
+  29.35, 32.13, 34.17, 34.6, 45.29, 56.67, 75.84, 69.33, 90.1, 122.3,
+];
+const intel = [
+  25.07, 26.27, 29.39, 33.73, 26.54, 26.76, 30.14, 34.21, 38.83, 35.38, 38.33, 37.59, 35.13, 43.62, 54.0, 53.34, 52.71,
+  55.87, 55.36, 59.39, 62.76, 70.85, 71.97, 77.87, 79.02, 63.05, 54.23, 53.1, 52.9,
+];
+const vi = (n: number) => n.toFixed(1).replace(".", ",");
+---
+
+<figure class="not-prose my-8" data-revenue-race data-years={JSON.stringify(years)} data-tsmc={JSON.stringify(tsmc)} data-intel={JSON.stringify(intel)}>
+  <div class="rounded-surface border border-(--line) bg-(--surface) px-4 pb-3 pt-3">
+    <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+      <p class="m-0 text-base font-medium text-(--ink)">Doanh thu hằng năm, tỷ USD</p>
+      <div class="flex items-center gap-4 font-mono text-xs text-(--muted)">
+        <span class="flex items-center gap-1.5"><span class="inline-block h-[3px] w-4 rounded-full bg-[#eab308]"></span>TSMC</span>
+        <span class="flex items-center gap-1.5"><span class="inline-block h-[3px] w-4 rounded-full bg-[#3987e5]"></span>Intel</span>
+      </div>
+    </div>
+    <div data-stage class="relative mt-2 w-full touch-pan-y">
+      <svg data-svg class="block w-full select-none" role="img" aria-label="Biểu đồ đường doanh thu TSMC và Intel từ 1997 đến 2025. Năm 2022 TSMC vượt Intel; năm 2025 TSMC đạt 122,3 tỷ USD, Intel 52,9 tỷ USD."></svg>
+      <div
+        data-tip
+        class="rounded-surface pointer-events-none absolute left-0 top-0 hidden whitespace-nowrap border border-(--line-strong) bg-(--page) px-2.5 py-1.5 font-mono text-xs leading-5 text-(--ink) shadow-lg"
+      >
+      </div>
+    </div>
+    <details class="mt-1 text-sm text-(--muted)">
+      <summary class="cursor-pointer select-none font-mono text-xs text-(--faint)">Xem bảng số liệu</summary>
+      <table class="mt-2 w-full max-w-sm font-mono text-xs tabular-nums">
+        <thead>
+          <tr class="text-left text-(--faint)"><th class="py-0.5 font-normal">Năm</th><th class="py-0.5 text-right font-normal">TSMC</th><th class="py-0.5 text-right font-normal">Intel</th></tr>
+        </thead>
+        <tbody>
+          {
+            years.map((y, i) => (
+              <tr class="border-t border-(--line)">
+                <td class="py-0.5">{y}</td>
+                <td class="py-0.5 text-right">{vi(tsmc[i])}</td>
+                <td class="py-0.5 text-right">{vi(intel[i])}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </details>
+  </div>
+  <figcaption class="mt-2 text-center text-sm text-(--muted)">
+    Số liệu danh nghĩa, chưa điều chỉnh lạm phát. Doanh thu TSMC quy đổi từ Đài tệ theo tỷ giá trung bình năm. Nguồn: Our World in Data, CompaniesMarketCap, Macrotrends, Intel.
+  </figcaption>
+</figure>
+
+<script>
+  const NS = "http://www.w3.org/2000/svg";
+  const C_TSMC = "#eab308";
+  const C_INTEL = "#3987e5";
+  const vi = (n: number) => n.toFixed(1).replace(".", ",");
+
+  function el(tag: string, attrs: Record<string, string | number>, text?: string) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, String(attrs[k]));
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+
+  function initRace(root: HTMLElement) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    const years = JSON.parse(root.dataset.years || "[]") as number[];
+    const tsmc = JSON.parse(root.dataset.tsmc || "[]") as number[];
+    const intel = JSON.parse(root.dataset.intel || "[]") as number[];
+    const stage = root.querySelector("[data-stage]") as HTMLElement;
+    const svg = root.querySelector("[data-svg]") as SVGSVGElement;
+    const tip = root.querySelector("[data-tip]") as HTMLElement;
+    const CROSS = years.indexOf(2022);
+
+    let revealed = false;
+    let reveal = 0; // 0..1, how much of the lines is drawn
+    let W = 640;
+    let H = 340;
+    let x = (_: number) => 0;
+    let y = (_: number) => 0;
+    let clipRect: SVGRectElement | null = null;
+    let late: SVGGElement | null = null;
+    let hover: SVGGElement | null = null;
+    const M = { l: 34, r: 74, t: 14, b: 26 };
+
+    function build() {
+      W = Math.max(stage.clientWidth, 260);
+      H = Math.round(Math.min(Math.max(W * 0.56, 250), 360));
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      svg.setAttribute("height", String(H));
+      svg.replaceChildren();
+      const x0 = M.l;
+      const x1 = W - M.r;
+      const y0 = H - M.b;
+      const y1 = M.t;
+      const YMAX = 125;
+      x = (i: number) => x0 + ((x1 - x0) * i) / (years.length - 1);
+      y = (v: number) => y0 - ((y0 - y1) * v) / YMAX;
+
+      const axis = el("g", { "font-size": 11, fill: "#8f8f98", class: "font-mono" });
+      for (let v = 0; v <= YMAX; v += 25) {
+        axis.appendChild(el("line", { x1: x0, x2: x1, y1: y(v), y2: y(v), stroke: v === 0 ? "#3f3f46" : "#27272a", "stroke-width": 1 }));
+        axis.appendChild(el("text", { x: x0 - 6, y: y(v) + 4, "text-anchor": "end" }, String(v)));
+      }
+      const step = W < 480 ? 10 : 5;
+      years.forEach((yr, i) => {
+        if (yr % step === 0 || (step === 10 && yr === 2025)) {
+          axis.appendChild(el("text", { x: x(i), y: y0 + 18, "text-anchor": "middle" }, String(yr)));
+        }
+      });
+      svg.appendChild(axis);
+
+      const defs = el("defs", {});
+      const clip = el("clipPath", { id: "rr-clip" });
+      clipRect = el("rect", { x: 0, y: 0, width: 0, height: H }) as SVGRectElement;
+      clip.appendChild(clipRect);
+      defs.appendChild(clip);
+      svg.appendChild(defs);
+
+      const lines = el("g", { "clip-path": "url(#rr-clip)", fill: "none", "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" });
+      const d = (arr: number[]) => arr.map((v, i) => (i ? "L" : "M") + x(i).toFixed(1) + "," + y(v).toFixed(1)).join("");
+      lines.appendChild(el("path", { d: d(intel), stroke: C_INTEL }));
+      lines.appendChild(el("path", { d: d(tsmc), stroke: C_TSMC }));
+      svg.appendChild(lines);
+
+      // Things that appear after the lines finish drawing: end labels and the crossover note.
+      late = el("g", { opacity: 0 }) as SVGGElement;
+      const last = years.length - 1;
+      const endDot = (v: number, c: string) =>
+        late!.appendChild(el("circle", { cx: x(last), cy: y(v), r: 4, fill: c, stroke: "#111113", "stroke-width": 2 }));
+      endDot(tsmc[last], C_TSMC);
+      endDot(intel[last], C_INTEL);
+      const lab = el("g", { "font-size": 12, class: "font-mono" });
+      lab.appendChild(el("text", { x: x(last) + 9, y: y(tsmc[last]) + 4, fill: "#ededed" }, "TSMC"));
+      lab.appendChild(el("text", { x: x(last) + 9, y: y(tsmc[last]) + 19, fill: "#a1a1aa" }, vi(tsmc[last])));
+      lab.appendChild(el("text", { x: x(last) + 9, y: y(intel[last]) + 4, fill: "#ededed" }, "Intel"));
+      lab.appendChild(el("text", { x: x(last) + 9, y: y(intel[last]) + 19, fill: "#a1a1aa" }, vi(intel[last])));
+      late.appendChild(lab);
+      // Crossover in 2022
+      const cx = x(CROSS);
+      const cy = y(tsmc[CROSS]);
+      late.appendChild(el("circle", { cx, cy, r: 4, fill: C_TSMC, stroke: "#111113", "stroke-width": 2 }));
+      late.appendChild(el("line", { x1: cx - 4, y1: cy - 5, x2: cx - 22, y2: cy - 26, stroke: "#71717a", "stroke-width": 1 }));
+      late.appendChild(
+        el("text", { x: cx - 26, y: cy - 30, "text-anchor": "end", "font-size": 12, fill: "#ededed" }, "2022: TSMC vượt Intel")
+      );
+      svg.appendChild(late);
+
+      // Hover layer
+      hover = el("g", { opacity: 0, "pointer-events": "none" }) as SVGGElement;
+      hover.appendChild(el("line", { "data-h": "line", y1: y1, y2: y0, stroke: "#52525b", "stroke-width": 1 }));
+      hover.appendChild(el("circle", { "data-h": "t", r: 4.5, fill: C_TSMC, stroke: "#111113", "stroke-width": 2 }));
+      hover.appendChild(el("circle", { "data-h": "i", r: 4.5, fill: C_INTEL, stroke: "#111113", "stroke-width": 2 }));
+      svg.appendChild(hover);
+      const hit = el("rect", { x: x0, y: y1, width: x1 - x0, height: y0 - y1, fill: "transparent" });
+      svg.appendChild(hit);
+      hit.addEventListener("pointermove", (e) => show(e as PointerEvent));
+      hit.addEventListener("pointerdown", (e) => show(e as PointerEvent));
+      hit.addEventListener("pointerleave", hide);
+
+      paint();
+    }
+
+    function show(e: PointerEvent) {
+      if (!hover) return;
+      const r = svg.getBoundingClientRect();
+      const px = ((e.clientX - r.left) / r.width) * W;
+      const i = Math.max(0, Math.min(years.length - 1, Math.round(((px - M.l) / (W - M.r - M.l)) * (years.length - 1))));
+      const hx = x(i);
+      const q = (s: string) => hover!.querySelector(`[data-h="${s}"]`) as SVGElement;
+      q("line").setAttribute("x1", String(hx));
+      q("line").setAttribute("x2", String(hx));
+      q("t").setAttribute("cx", String(hx));
+      q("t").setAttribute("cy", String(y(tsmc[i])));
+      q("i").setAttribute("cx", String(hx));
+      q("i").setAttribute("cy", String(y(intel[i])));
+      hover.setAttribute("opacity", "1");
+      const k = r.width / W;
+      tip.innerHTML =
+        `<div class="text-(--faint)">${years[i]}</div>` +
+        `<div><span style="color:${C_TSMC}">●</span> TSMC ${vi(tsmc[i])}</div>` +
+        `<div><span style="color:${C_INTEL}">●</span> Intel ${vi(intel[i])}</div>`;
+      tip.classList.remove("hidden");
+      const tw = tip.offsetWidth;
+      let left = hx * k + 12;
+      if (left + tw > r.width - 4) left = hx * k - tw - 12;
+      const top = Math.min(y(Math.max(tsmc[i], intel[i])) * k, r.height - tip.offsetHeight - 4);
+      tip.style.transform = `translate(${left}px, ${Math.max(0, top - 10)}px)`;
+    }
+
+    function hide() {
+      hover?.setAttribute("opacity", "0");
+      tip.classList.add("hidden");
+    }
+
+    function paint() {
+      if (clipRect) clipRect.setAttribute("width", String(M.l + (W - M.l - M.r) * reveal + 6));
+      if (late) late.setAttribute("opacity", String(Math.max(0, Math.min(1, (reveal - 0.92) / 0.08))));
+    }
+
+    function play() {
+      if (revealed) return;
+      revealed = true;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        reveal = 1;
+        paint();
+        return;
+      }
+      const t0 = performance.now();
+      const ms = 2400;
+      const step = (now: number) => {
+        const t = Math.min((now - t0) / ms, 1);
+        reveal = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+        paint();
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
+    build();
+    if ("ResizeObserver" in window) {
+      let lastW = stage.clientWidth;
+      new ResizeObserver(() => {
+        if (Math.abs(stage.clientWidth - lastW) < 2) return;
+        lastW = stage.clientWidth;
+        build();
+      }).observe(stage);
+    }
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            io.disconnect();
+            play();
+          }
+        },
+        { threshold: 0.4 }
+      );
+      io.observe(svg);
+    } else play();
+  }
+
+  const initAll = () => {
+    (Array.from(document.querySelectorAll("[data-revenue-race]")) as HTMLElement[]).forEach(initRace);
+  };
+  initAll();
+  document.addEventListener("astro:page-load", initAll);
+</script>

@@ -1,0 +1,289 @@
+---
+/**
+ * How an EUV machine makes its light: a tin droplet, two laser pulses, a
+ * plasma, and a mirror that collects the 13.5nm light. One cycle, slowed down
+ * a lot; the steps below the drawing light up in sync and can be clicked.
+ */
+const steps = [
+  "Một giọt thiếc nóng chảy, rộng khoảng 30 micromet, rơi qua buồng chân không.",
+  "Xung laser thứ nhất bắn trúng giọt thiếc và làm nó dẹt ra.",
+  "Xung thứ hai mạnh hơn nhiều, biến giọt thiếc thành plasma nóng vài trăm nghìn độ.",
+  "Plasma phát ra ánh sáng 13,5nm. Gương hứng lấy ánh sáng và dẫn nó đi tiếp tới các gương khác, rồi tới wafer.",
+];
+
+// Geometry (viewBox 600 x 300)
+const fx = 220;
+const fy = 160;
+const R = 105;
+const ifx = 540;
+const nozzleY = 30;
+const pt = (deg: number) => [fx + R * Math.cos((deg * Math.PI) / 180), fy + R * Math.sin((deg * Math.PI) / 180)];
+const arc = (a0: number, a1: number) => {
+  const [x0, y0] = pt(a0);
+  const [x1, y1] = pt(a1);
+  return `M${x0.toFixed(1)},${y0.toFixed(1)} A${R},${R} 0 0 1 ${x1.toFixed(1)},${y1.toFixed(1)}`;
+};
+const [tx, ty] = pt(232);
+const [bx, by] = pt(128);
+const cone = `M${tx.toFixed(1)},${ty.toFixed(1)} L${ifx},${fy} L${bx.toFixed(1)},${by.toFixed(1)} A${R},${R} 0 0 1 ${tx.toFixed(1)},${ty.toFixed(1)}Z`;
+const coneEdges = `M${tx.toFixed(1)},${ty.toFixed(1)} L${ifx},${fy} M${bx.toFixed(1)},${by.toFixed(1)} L${ifx},${fy}`;
+---
+
+<figure class="not-prose my-8" data-euv-light>
+  <div class="rounded-surface overflow-hidden border border-(--line) bg-(--surface)">
+    <div class="relative bg-[#0e0e10]">
+      <svg
+        class="block h-auto w-full select-none"
+        viewBox="0 0 600 300"
+        role="img"
+        aria-label="Hình động: laser bắn vào giọt thiếc tạo ra plasma phát ánh sáng EUV, gương hứng ánh sáng và dẫn đi"
+      >
+        <defs>
+          <radialGradient id="euv-glow">
+            <stop offset="0" stop-color="#fffbe6"></stop>
+            <stop offset=".35" stop-color="#eab308" stop-opacity=".95"></stop>
+            <stop offset="1" stop-color="#eab308" stop-opacity="0"></stop>
+          </radialGradient>
+          <linearGradient id="euv-cone" x1="0" x2="1">
+            <stop offset="0" stop-color="#c4b5fd" stop-opacity=".04"></stop>
+            <stop offset=".55" stop-color="#c4b5fd" stop-opacity=".26"></stop>
+            <stop offset="1" stop-color="#c4b5fd" stop-opacity=".06"></stop>
+          </linearGradient>
+        </defs>
+
+        <rect x="12" y="12" width="576" height="276" rx="12" fill="#141417" stroke="#2a2a2e" stroke-width="1.5"></rect>
+        <text class="euv-l euv-chamber" x="28" y="40" fill="#71717a">buồng chân không</text>
+
+        <!-- EUV light cone, from the mirror to the intermediate focus -->
+        <g data-cone opacity="0">
+          <path d={cone} fill="url(#euv-cone)"></path>
+          <path data-flow d={coneEdges} fill="none" stroke="#c4b5fd" stroke-width="1.6" stroke-dasharray="6 7"></path>
+          <circle cx={ifx} cy={fy} r="5" fill="#c4b5fd"></circle>
+        </g>
+        <g data-cone-label opacity="0">
+          <text class="euv-l" x={ifx + 4} y={fy - 58} text-anchor="end" fill="#ededed">ánh sáng 13,5nm</text>
+          <path d={`M${ifx + 8},${fy} H${ifx + 34} M${ifx + 27},${fy - 6} L${ifx + 35},${fy} L${ifx + 27},${fy + 6}`} fill="none" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </g>
+
+        <!-- Collector mirror, with a hole in the middle for the laser -->
+        <path d={arc(115, 172)} fill="none" stroke="#d4d4d8" stroke-width="7" stroke-linecap="round"></path>
+        <path d={arc(188, 245)} fill="none" stroke="#d4d4d8" stroke-width="7" stroke-linecap="round"></path>
+        <text class="euv-l" x={fx - 70} y={fy + 122} text-anchor="middle" fill="#a1a1aa">gương hứng</text>
+
+        <!-- Droplet path and generator -->
+        <line x1={fx} y1={nozzleY + 14} x2={fx} y2={fy - 12} stroke="#3f3f46" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round"></line>
+        <rect x={fx - 15} y={nozzleY - 12} width="30" height="22" rx="4" fill="#3a3a41" stroke="#71717a"></rect>
+        <text class="euv-l" x={fx + 26} y={nozzleY + 5} fill="#a1a1aa">máy nhả giọt thiếc</text>
+
+        <!-- Laser -->
+        <line x1="13" y1={fy} x2={fx - 8} y2={fy} stroke="#f87171" stroke-opacity=".16" stroke-width="3"></line>
+        <text class="euv-l" x="24" y={fy - 62} fill="#f87171">laser CO₂</text>
+        <line data-pre x1="13" y1={fy} x2={fx - 6} y2={fy} stroke="#f87171" stroke-width="3" opacity="0"></line>
+        <line data-main x1="13" y1={fy} x2={fx - 6} y2={fy} stroke="#fca5a5" stroke-width="9" stroke-linecap="round" opacity="0"></line>
+
+        <!-- Droplet and plasma -->
+        <ellipse data-drop cx={fx} cy={nozzleY + 18} rx="6.5" ry="6.5" fill="#e4e4e7"></ellipse>
+        <circle data-glow cx={fx} cy={fy} r="34" fill="url(#euv-glow)" opacity="0"></circle>
+        <text data-plasma-label class="euv-l" x={fx + 26} y={fy + 36} fill="#eab308" font-weight="600" opacity="0">plasma</text>
+      </svg>
+    </div>
+
+    <div class="border-t border-(--line) px-4 pb-4 pt-3">
+      <ol class="m-0 list-none space-y-1 p-0">
+        {
+          steps.map((s, i) => (
+            <li>
+              <button
+                type="button"
+                data-step={i}
+                class="flex w-full items-start gap-3 rounded-[0.25rem] px-1 py-1 text-left text-sm leading-6 text-(--faint) transition-colors hover:bg-(--surface-hover)"
+              >
+                <span
+                  data-num
+                  class="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full border border-(--line-strong) font-mono text-[11px] transition-colors"
+                >
+                  {i + 1}
+                </span>
+                <span data-text class="transition-colors">{s}</span>
+              </button>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="mt-3 flex items-center gap-3">
+        <button
+          type="button"
+          data-play
+          class="rounded-surface shrink-0 border border-(--line-strong) bg-(--page) px-2.5 py-1 font-mono text-xs text-(--ink) hover:bg-(--surface-hover)"
+          >Tạm dừng</button
+        >
+        <p class="m-0 text-xs leading-5 text-(--faint)">
+          Chậm hơn thực tế khoảng 400.000 lần. Máy thật lặp lại chu kỳ này 50.000 lần mỗi giây.
+        </p>
+      </div>
+    </div>
+  </div>
+  <figcaption class="mt-2 text-center text-sm text-(--muted)">
+    Hình vẽ minh họa, không đúng tỉ lệ. Nguồn: ASML, Trumpf, MIT Technology Review.
+  </figcaption>
+</figure>
+
+<style>
+  .euv-l {
+    font-size: 16px;
+  }
+  @media (max-width: 520px) {
+    .euv-l {
+      font-size: 21px;
+    }
+    .euv-chamber {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const D = 8; // seconds per loop
+  const FX = 220;
+  const FY = 160;
+  const NOZZLE = 48;
+  // Where each step starts, and the moment shown when a step is clicked.
+  const STARTS = [0, 1.2, 2.3, 3.0];
+  const SHOW = [0.75, 1.42, 2.5, 4.2];
+
+  const clamp = (v: number, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+  const lin = (t: number, t0: number, t1: number) => clamp((t - t0) / (t1 - t0));
+  const easeOut = (x: number) => 1 - Math.pow(1 - x, 3);
+
+  function initEuv(root: HTMLElement) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    const q = (s: string) => root.querySelector(s) as SVGElement;
+    const drop = q("[data-drop]");
+    const pre = q("[data-pre]");
+    const main = q("[data-main]");
+    const glow = q("[data-glow]");
+    const plasmaLabel = q("[data-plasma-label]");
+    const coneG = q("[data-cone]");
+    const coneLabel = q("[data-cone-label]");
+    const flow = q("[data-flow]");
+    const playBtn = root.querySelector("[data-play]") as HTMLButtonElement;
+    const stepBtns = Array.from(root.querySelectorAll("[data-step]")) as HTMLButtonElement[];
+
+    let t = 0;
+    let playing = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let inView = false;
+    let last = 0;
+    let raf = 0;
+    let shownStep = -1;
+
+    function draw() {
+      // Fade the whole cycle out at the end of the loop.
+      const out = 1 - lin(t, D - 0.7, D - 0.15);
+
+      // 1. Droplet falls to the focus.
+      const fall = easeOut(lin(t, 0, 1.2));
+      const y = NOZZLE + (FY - NOZZLE) * fall;
+      // 2. First pulse flattens it.
+      const flat = easeOut(lin(t, 1.22, 1.75));
+      const rx = 6.5 * (1 + 1.7 * flat);
+      const ry = 6.5 * (1 - 0.58 * flat);
+      const dropOn = t < 2.36 ? lin(t, 0, 0.12) : 0;
+      drop.setAttribute("cy", y.toFixed(1));
+      drop.setAttribute("rx", rx.toFixed(2));
+      drop.setAttribute("ry", ry.toFixed(2));
+      drop.setAttribute("opacity", dropOn.toFixed(2));
+
+      const preOn = t >= 1.2 && t < 1.5 ? 1 - lin(t, 1.3, 1.5) : 0;
+      pre.setAttribute("opacity", (preOn * 0.95).toFixed(2));
+      // 3. Second, stronger pulse turns it into plasma.
+      const mainOn = t >= 2.3 && t < 2.8 ? 1 - lin(t, 2.45, 2.8) : 0;
+      main.setAttribute("opacity", mainOn.toFixed(2));
+
+      let g = 0;
+      let s = 0.2;
+      if (t >= 2.36) {
+        const a = lin(t, 2.36, 2.58);
+        const b = lin(t, 2.58, 3.3);
+        g = a;
+        s = 0.2 + 1.05 * easeOut(a) - 0.25 * b;
+        // Slight flicker while it shines.
+        if (t > 3.3) s = 1 + 0.04 * Math.sin(t * 9);
+      }
+      glow.setAttribute("opacity", (g * out).toFixed(2));
+      glow.setAttribute("transform", `translate(${FX} ${FY}) scale(${s.toFixed(3)}) translate(${-FX} ${-FY})`);
+      plasmaLabel.setAttribute("opacity", (lin(t, 2.6, 3.0) * out).toFixed(2));
+
+      // 4. Light comes off the mirror and converges on the focus point.
+      const c = lin(t, 3.0, 3.7) * out;
+      coneG.setAttribute("opacity", c.toFixed(2));
+      coneLabel.setAttribute("opacity", (lin(t, 3.4, 3.9) * out).toFixed(2));
+      flow.setAttribute("stroke-dashoffset", (-t * 26).toFixed(1));
+
+      let step = 0;
+      for (let i = 0; i < STARTS.length; i++) if (t >= STARTS[i]) step = i;
+      if (step !== shownStep) {
+        shownStep = step;
+        stepBtns.forEach((b, i) => {
+          const on = i === step;
+          const num = b.querySelector("[data-num]") as HTMLElement;
+          const txt = b.querySelector("[data-text]") as HTMLElement;
+          num.style.background = on ? "#eab308" : "";
+          num.style.borderColor = on ? "#eab308" : "";
+          num.style.color = on ? "#0c0c0d" : "";
+          txt.style.color = on ? "#ededed" : "";
+        });
+      }
+    }
+
+    function tick(now: number) {
+      const dt = Math.min((now - last) / 1000, 0.1);
+      last = now;
+      t = (t + dt) % D;
+      draw();
+      raf = requestAnimationFrame(tick);
+    }
+
+    function sync() {
+      cancelAnimationFrame(raf);
+      if (playing && inView) {
+        last = performance.now();
+        raf = requestAnimationFrame(tick);
+      }
+      playBtn.textContent = playing ? "Tạm dừng" : "Chạy tiếp";
+    }
+
+    playBtn.addEventListener("click", () => {
+      playing = !playing;
+      sync();
+    });
+    stepBtns.forEach((b, i) =>
+      b.addEventListener("click", () => {
+        t = SHOW[i];
+        playing = false;
+        draw();
+        sync();
+      })
+    );
+
+    if (!playing) t = SHOW[3];
+    draw();
+    sync();
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver((entries) => {
+        inView = entries.some((e) => e.isIntersecting);
+        sync();
+      }).observe(root);
+    } else {
+      inView = true;
+      sync();
+    }
+  }
+
+  const initAll = () => {
+    (Array.from(document.querySelectorAll("[data-euv-light]")) as HTMLElement[]).forEach(initEuv);
+  };
+  initAll();
+  document.addEventListener("astro:page-load", initAll);
+</script>
