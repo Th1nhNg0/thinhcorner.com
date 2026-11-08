@@ -1,0 +1,261 @@
+---
+/**
+ * What is inside one AI chip, Nvidia's B200: two GPU dies made by TSMC, eight
+ * HBM3E stacks (SK hynix in TechInsights' teardown), and TSMC's CoWoS-L package
+ * that holds them together. A simplified top view plus a cross-section along
+ * the dashed line. Pick a part (button, tap or hover) to light it up and read
+ * who makes it; the parts cycle by themselves until the reader picks one.
+ */
+const parts = [
+  {
+    key: "gpu",
+    name: "Khuôn GPU",
+    who: "TSMC · Đài Loan",
+    color: "#eab308",
+    body: "Hai khuôn silicon với tổng cộng 208 tỷ transistor, làm trên tiến trình 4nm của TSMC. Mỗi khuôn đã gần bằng cỡ lớn nhất mà máy quang khắc in được trong một lần, nên Nvidia ghép hai khuôn và nối chúng bằng đường truyền 10 TB mỗi giây.",
+  },
+  {
+    key: "hbm",
+    name: "Bộ nhớ HBM3E",
+    who: "SK hynix · Hàn Quốc",
+    color: "#3987e5",
+    body: "Tám chồng bộ nhớ đặt sát hai khuôn GPU. Mỗi chồng gồm tám lớp chip DRAM xếp lên một chip điều khiển. Bản tháo rời của TechInsights cho thấy B200 dùng HBM3E của SK hynix.",
+  },
+  {
+    key: "cowos",
+    name: "Đóng gói CoWoS-L",
+    who: "TSMC · Đài Loan",
+    color: "#eab308",
+    body: "Khuôn GPU và các chồng HBM được gắn lên một lớp nền chung, rồi cả khối mới được gắn xuống đế. TSMC gọi cách đóng gói này là CoWoS. B200 là sản phẩm thương mại đầu tiên dùng phiên bản CoWoS-L.",
+  },
+  {
+    key: "design",
+    name: "Thiết kế",
+    who: "Nvidia · Mỹ",
+    color: "#ededed",
+    body: "Nvidia thiết kế con chip ở Mỹ nhưng không có nhà máy nào. Phần lớn các khâu sản xuất nằm ở Đài Loan và Hàn Quốc.",
+  },
+];
+
+// Top view, viewBox 360 x 300.
+const sub = { x: 20, y: 16, w: 320, h: 268 };
+const inter = { x: 78, y: 44, w: 204, h: 212 };
+const dies = [
+  { x: 88, y: 105, w: 90, h: 90 },
+  { x: 182, y: 105, w: 90, h: 90 },
+];
+const hbmXs = [90, 136, 182, 228];
+const hbmTop = hbmXs.map((x) => ({ x, y: 52, w: 42, h: 44 }));
+const hbmBot = hbmXs.map((x) => ({ x, y: 204, w: 42, h: 44 }));
+const hbms = [...hbmTop, ...hbmBot];
+const cutX = 133; // the cross-section runs down the middle of the left column
+const caps = [40, 70, 100, 200, 230, 260].flatMap((y) => [
+  { x: 34, y },
+  { x: 318, y },
+]);
+const link = Array.from({ length: 13 }, (_, i) => 111 + i * 6.5);
+const grid = [1, 2, 3, 4, 5];
+
+// Cross-section, viewBox 260 x 124. Its x axis is the top view's y axis.
+const sx = (ty: number) => 10 + ((ty - 16) * 240) / 268;
+const base = 74; // top of the micro-bumps, where dies and stacks sit
+const sDie = { x: sx(105), w: sx(195) - sx(105), y: base - 34, h: 34 };
+const sHbm = [sx(52), sx(204)].map((x) => ({ x, w: sx(96) - sx(52) }));
+const layers = Array.from({ length: 8 }, (_, i) => base - 6 - 0.8 - (i + 1) * 3.6 - i * 0.8);
+const sInter = { x: sx(44), w: sx(256) - sx(44), y: base + 2, h: 12 };
+const balls = Array.from({ length: 20 }, (_, i) => 18 + i * 12);
+const bumps = Array.from({ length: 24 }, (_, i) => sInter.x + 6 + i * 8).filter((x) => x < sInter.x + sInter.w - 4);
+---
+
+<figure class="not-prose my-8" data-ai-chip>
+  <div class="rounded-surface border border-(--line) bg-(--surface) p-4">
+    <p class="m-0 text-base font-medium text-(--ink)">Bên trong một con chip AI: Nvidia B200</p>
+
+    <div class="mt-3 grid gap-4 sm:grid-cols-[3fr_2fr] sm:items-center">
+      <div>
+        <svg viewBox="0 0 360 300" class="block h-auto w-full select-none" role="img" aria-label="Sơ đồ nhìn từ trên của chip B200: hai khuôn GPU ở giữa, bốn chồng HBM phía trên và bốn chồng phía dưới, tất cả đặt trên lớp nền CoWoS và đế chip.">
+          <rect x={sub.x} y={sub.y} width={sub.w} height={sub.h} rx="6" fill="#18181b" stroke="#3f3f46" stroke-width="1.5" data-sub style="transition:stroke .3s" />
+          {caps.map((c) => <rect x={c.x} y={c.y} width="8" height="5" rx="1" fill="#3f3f46" />)}
+          <g data-part="cowos" style="transition:opacity .3s">
+            <rect x={inter.x} y={inter.y} width={inter.w} height={inter.h} rx="3" fill="rgba(234,179,8,0.14)" stroke="#eab308" stroke-width="1.5" />
+          </g>
+          <g data-part="hbm" style="transition:opacity .3s">
+            {
+              hbms.map((h) => (
+                <g>
+                  <rect x={h.x} y={h.y} width={h.w} height={h.h} rx="2" fill="#3987e5" />
+                  <rect x={h.x + 4} y={h.y + 4} width={h.w - 8} height={h.h - 8} rx="1" fill="none" stroke="#0c0c0d" stroke-opacity="0.3" />
+                </g>
+              ))
+            }
+          </g>
+          <g data-part="gpu" style="transition:opacity .3s">
+            {
+              dies.map((d) => (
+                <g>
+                  <rect x={d.x} y={d.y} width={d.w} height={d.h} rx="2" fill="#eab308" />
+                  {grid.map((g) => (
+                    <line x1={d.x + (d.w * g) / 6} x2={d.x + (d.w * g) / 6} y1={d.y + 4} y2={d.y + d.h - 4} stroke="#0c0c0d" stroke-opacity="0.16" />
+                  ))}
+                  {grid.map((g) => (
+                    <line y1={d.y + (d.h * g) / 6} y2={d.y + (d.h * g) / 6} x1={d.x + 4} x2={d.x + d.w - 4} stroke="#0c0c0d" stroke-opacity="0.16" />
+                  ))}
+                </g>
+              ))
+            }
+            {link.map((y) => <rect x="178.5" y={y} width="3" height="3" fill="#ededed" />)}
+          </g>
+          <line x1={cutX} x2={cutX} y1="8" y2="292" stroke="#ededed" stroke-opacity="0.55" stroke-dasharray="4 4" />
+        </svg>
+        <p class="m-0 mt-1 text-center font-mono text-xs text-(--faint)">nhìn từ trên</p>
+      </div>
+      <div>
+        <svg viewBox="0 0 260 124" class="block h-auto w-full select-none" role="img" aria-label="Mặt cắt của chip B200: chồng HBM tám lớp và khuôn GPU nằm trên lớp nền CoWoS, lớp nền nằm trên đế chip.">
+          {balls.map((x) => <circle cx={x} cy="113" r="3.2" fill="#52525b" />)}
+          <rect x="10" y="92" width="240" height="17" rx="2" fill="#18181b" stroke="#3f3f46" stroke-width="1.2" data-sub style="transition:stroke .3s" />
+          <g data-part="cowos" style="transition:opacity .3s">
+            {bumps.map((x) => <circle cx={x} cy={sInter.y + sInter.h + 1.6} r="1.4" fill="#a1a1aa" />)}
+            <rect x={sInter.x} y={sInter.y} width={sInter.w} height={sInter.h} rx="1.5" fill="rgba(234,179,8,0.14)" stroke="#eab308" stroke-width="1.2" />
+          </g>
+          <g data-part="hbm" style="transition:opacity .3s">
+            {
+              sHbm.map((h) => (
+                <g>
+                  <rect x={h.x} y={base - 6} width={h.w} height="6" fill="#1d4f91" />
+                  {layers.map((ly) => (
+                    <rect x={h.x} y={ly} width={h.w} height="3.6" fill="#3987e5" />
+                  ))}
+                </g>
+              ))
+            }
+          </g>
+          <g data-part="gpu" style="transition:opacity .3s">
+            <rect x={sDie.x} y={sDie.y} width={sDie.w} height={sDie.h} rx="1.5" fill="#eab308" />
+          </g>
+        </svg>
+        <p class="m-0 mt-1 text-center font-mono text-xs text-(--faint)">mặt cắt theo đường đứt nét</p>
+      </div>
+    </div>
+
+    <div role="group" aria-label="Chọn một phần của con chip" class="mt-4 flex flex-wrap gap-1.5">
+      {
+        parts.map((p) => (
+          <button
+            type="button"
+            data-pick={p.key}
+            aria-pressed="false"
+            class="rounded-surface inline-flex h-8 items-center gap-2 border border-(--line-strong) bg-(--page) px-3 font-mono text-xs text-(--muted) transition-colors hover:bg-(--surface-hover)"
+          >
+            <span class="block h-2.5 w-2.5 rounded-[2px]" style={`background:${p.color}`} />
+            {p.name}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="mt-3 grid" aria-live="polite">
+      {
+        parts.map((p, i) => (
+          <div
+            data-panel={p.key}
+            class:list={["col-start-1 row-start-1 transition-[opacity,visibility] duration-200", i ? "invisible opacity-0" : ""]}
+            aria-hidden={i ? "true" : "false"}
+          >
+            <p class="m-0 text-base font-medium leading-6 text-(--ink)">
+              {p.name} <span class="ml-1 font-mono text-xs font-normal text-(--faint)">{p.who}</span>
+            </p>
+            <p class="mt-1.5 mb-0 text-sm leading-6 text-(--muted)">{p.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+  <figcaption class="mt-2 text-balance text-center text-sm text-(--muted)">
+    Sơ đồ đơn giản hóa, không đúng tỉ lệ.
+    <span class="mt-0.5 block font-mono text-xs text-(--faint)">Nguồn: Nvidia, TechInsights.</span>
+  </figcaption>
+</figure>
+
+<script>
+  const ORDER = ["gpu", "hbm", "cowos", "design"];
+
+  function initChip(root: HTMLElement) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    const btns = Array.from(root.querySelectorAll("[data-pick]")) as HTMLButtonElement[];
+    const panels = Array.from(root.querySelectorAll("[data-panel]")) as HTMLElement[];
+    const groups = Array.from(root.querySelectorAll("[data-part]")) as SVGGElement[];
+    const subs = Array.from(root.querySelectorAll("[data-sub]")) as SVGRectElement[];
+    let current = "gpu";
+    let timer = 0;
+    let userPicked = false;
+
+    function pick(key: string) {
+      current = key;
+      btns.forEach((b) => {
+        const on = b.dataset.pick === key;
+        b.setAttribute("aria-pressed", on ? "true" : "false");
+        b.style.color = on ? "#ededed" : "";
+        b.style.borderColor = on ? "#a1a1aa" : "";
+      });
+      panels.forEach((p) => {
+        const on = p.dataset.panel === key;
+        p.classList.toggle("invisible", !on);
+        p.classList.toggle("opacity-0", !on);
+        p.setAttribute("aria-hidden", on ? "false" : "true");
+      });
+      // "design" lights the whole chip; any other part dims the rest.
+      groups.forEach((g) => {
+        g.style.opacity = key === "design" || g.dataset.part === key ? "1" : "0.22";
+      });
+      subs.forEach((s) => s.setAttribute("stroke", key === "design" ? "#ededed" : "#3f3f46"));
+    }
+
+    function stopCycle() {
+      userPicked = true;
+      clearInterval(timer);
+    }
+
+    btns.forEach((b) =>
+      b.addEventListener("click", () => {
+        stopCycle();
+        pick(b.dataset.pick || "gpu");
+      })
+    );
+    groups.forEach((g) => {
+      g.style.cursor = "pointer";
+      g.addEventListener("click", () => {
+        stopCycle();
+        pick(g.dataset.part || "gpu");
+      });
+      g.addEventListener("pointerenter", (e) => {
+        if ((e as PointerEvent).pointerType !== "mouse") return;
+        stopCycle();
+        pick(g.dataset.part || "gpu");
+      });
+    });
+
+    pick("gpu");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || !("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.some((e) => e.isIntersecting);
+        clearInterval(timer);
+        if (visible && !userPicked) {
+          timer = window.setInterval(() => {
+            pick(ORDER[(ORDER.indexOf(current) + 1) % ORDER.length]);
+          }, 3800);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    io.observe(root);
+  }
+
+  const initAll = () => {
+    (Array.from(document.querySelectorAll("[data-ai-chip]")) as HTMLElement[]).forEach(initChip);
+  };
+  initAll();
+  document.addEventListener("astro:page-load", initAll);
+</script>

@@ -1,7 +1,7 @@
 ---
 title: "Chuỗi cung ứng chip bán dẫn"
 date: "2026-11-08T20:00:00Z"
-description: "Lịch sử chuỗi cung ứng chip, từ phòng thí nghiệm quân sự Mỹ đến các nhà máy ở châu Á, và lý do gần như mọi con chip tiên tiến trên thế giới đều phải đi qua TSMC ở Đài Loan và máy của ASML ở Hà Lan."
+description: "Lịch sử chuỗi cung ứng chip, từ phòng thí nghiệm quân sự Mỹ đến các nhà máy ở châu Á, và lý do gần như mọi con chip tiên tiến trên thế giới, kể cả chip AI, đều phải đi qua TSMC ở Đài Loan và máy của ASML ở Hà Lan."
 lang: "vi"
 tags: ["technology", "history", "geopolitics"]
 ---
@@ -13,6 +13,8 @@ import LeadingEdge from "@/components/blog/chip/LeadingEdge.astro";
 import RevenueRace from "@/components/blog/chip/RevenueRace.astro";
 import FoundryShare from "@/components/blog/chip/FoundryShare.astro";
 import Chokepoints from "@/components/blog/chip/Chokepoints.astro";
+import AiBoom from "@/components/blog/chip/AiBoom.astro";
+import AiChip from "@/components/blog/chip/AiChip.astro";
 import Photo from "@/components/blog/Photo.astro";
 import car from "./car.webp";
 import wafer from "./wafer.webp";
@@ -27,7 +29,7 @@ Năm 2021, nhà máy ô tô khắp thế giới phải dừng dây chuyền vì 
   credit="Lilian Do Khac / Unsplash"
 />
 
-Ở bài [Silicon Valley](/writing/silicon-valley), mình đã viết về transistor, mạch tích hợp, Fairchild và Intel. Bài này kể tiếp chuyện vì sao hơn 60 năm sau, phần lớn chip tiên tiến nhất thế giới lại được làm ở Đài Loan, bằng những cỗ máy mà chỉ một công ty ở Hà Lan làm được. Phần lịch sử chủ yếu dựa theo cuốn _Chip War_ của Chris Miller[^chipwar].
+Ở bài [Silicon Valley](/writing/silicon-valley), mình đã viết về transistor, mạch tích hợp, Fairchild và Intel. Bài này kể tiếp chuyện vì sao hơn 60 năm sau, phần lớn chip tiên tiến nhất thế giới lại được làm ở Đài Loan, bằng những cỗ máy mà chỉ một công ty ở Hà Lan làm được, và vì sao AI khiến cả thế giới càng phụ thuộc vào hai công ty này. Phần lịch sử chủ yếu dựa theo cuốn _Chip War_ của Chris Miller[^chipwar].
 
 ## Phần 1: Một con chip được làm ra như thế nào
 
@@ -130,13 +132,29 @@ Tiến trình sau luôn đắt hơn tiến trình trước, và mỗi lần chuy
 
 Intel từng dẫn đầu về sản xuất suốt mấy chục năm, nhưng bị chậm liên tục với tiến trình 10nm rồi 7nm[^intel7]. Rapidus của Nhật đang thử sức ở 2nm[^semix].
 
-TSMC thì ngày càng bỏ xa. Khi Morris Chang trở lại làm CEO giữa khủng hoảng tài chính năm 2009, ông nâng chi đầu tư năm 2010 lên 5,9 tỷ USD, gấp hơn hai lần những năm trước, trong lúc các đối thủ cắt giảm[^caixin]. Từ khoảng năm 2014, hãng làm chip cho iPhone, và Apple thành khách hàng quan trọng nhất của họ. TSMC sản xuất hàng loạt chip 5nm từ năm 2020, sớm nhất thế giới, rồi 3nm từ cuối năm 2022 và 2nm từ cuối năm 2025[^tsmcwiki].
+TSMC thì ngày càng bỏ xa. Khi Morris Chang trở lại làm CEO giữa khủng hoảng tài chính năm 2009, ông nâng chi đầu tư năm 2010 lên 5,9 tỷ USD, gấp hơn hai lần những năm trước, trong lúc các đối thủ cắt giảm[^caixin]. Từ khoảng năm 2014, hãng làm chip cho iPhone, và Apple thành khách hàng quan trọng nhất của họ. TSMC sản xuất hàng loạt chip 5nm từ năm 2020, sớm nhất thế giới, rồi 3nm từ cuối năm 2022 và 2nm từ cuối năm 2025[^tsmcwiki]. Quý 3 năm 2026, hai tiến trình 3nm và 2nm chiếm 41% doanh thu wafer của TSMC[^tsmc3q26].
 
 Doanh thu của TSMC lần đầu vượt Intel vào năm 2022. Đến năm 2025, TSMC thu hơn 122 tỷ USD, gấp hơn hai lần Intel[^owid][^intel25].
 
 <RevenueRace />
 
-## Phần 3: Vì sao cả thế giới phụ thuộc vào TSMC và ASML
+## Phần 3: Chip cho AI
+
+ChatGPT ra mắt ngày 30 tháng 11 năm 2022. Các mô hình như vậy được huấn luyện và chạy trên chip AI đặt trong trung tâm dữ liệu, như GPU của Nvidia. Doanh thu mảng trung tâm dữ liệu của Nvidia tăng từ 3,6 tỷ USD trong quý kết thúc tháng 1 năm 2023 lên 89 tỷ USD trong quý kết thúc tháng 7 năm 2026[^nvidia].
+
+<AiBoom />
+
+Năm 2026, Alphabet, Amazon, Meta và Microsoft dự kiến chi khoảng 760 tỷ USD đầu tư cho AI, gần gấp đôi năm 2025[^statista]. Gần như mọi chip AI quan trọng, từ GPU của Nvidia đến chip của Google hay Amazon, đều do TSMC sản xuất[^trendforce]. Quý 3 năm 2026, mảng điện toán hiệu năng cao, trong đó có chip AI, chiếm 68% doanh thu của TSMC, còn điện thoại chỉ 21%. Cả năm 2026, TSMC dự kiến doanh thu tăng khoảng 44%[^fool]. Nvidia, công ty đang gần phá sản khi nhận cuộc gọi của Morris Chang năm 1997, giờ là một trong những khách hàng lớn nhất của TSMC.
+
+Một con chip AI như B200 của Nvidia đi qua TSMC hai lần: một lần để in mạch, một lần để đóng gói cùng bộ nhớ[^blackwell][^techinsights].
+
+<AiChip />
+
+Khâu đóng gói này là nút thắt của cả ngành. Năm 2026, TSMC có thể đóng gói 120.000 đến 140.000 wafer CoWoS mỗi tháng, nhưng giữa năm nguồn cung vẫn thiếu khoảng 20% so với nhu cầu[^cowos]. Tháng 10 năm 2025, những tấm wafer Blackwell đầu tiên được làm ở nhà máy của TSMC tại Arizona, nhưng vẫn phải gửi về Đài Loan để đóng gói. Nhà máy đóng gói của Amkor ở Arizona dự kiến chạy từ đầu năm 2028[^azblackwell].
+
+Bộ nhớ HBM thì đến từ Hàn Quốc. Quý 2 năm 2026, SK hynix chiếm 50% doanh thu HBM thế giới, Samsung 33%, còn Micron của Mỹ 18%[^hbm].
+
+## Phần 4: Vì sao cả thế giới phụ thuộc vào TSMC và ASML
 
 ### TSMC
 
@@ -144,7 +162,7 @@ Trong ngành sản xuất chip thuê, TSMC chiếm 72,5% doanh thu quý 2 năm 2
 
 <FoundryShare />
 
-Với chip tiên tiến nhất thì còn tập trung hơn. Năm 2019, 92% năng lực sản xuất chip dưới 10nm của thế giới nằm ở Đài Loan[^bcg2021].
+Với chip tiên tiến nhất thì còn tập trung hơn. Năm 2022, Đài Loan nắm 69% năng lực sản xuất chip dưới 10nm của thế giới, Hàn Quốc nắm phần còn lại, còn Mỹ không làm được con chip logic tiên tiến nào[^bcg2024].
 
 Đuổi theo TSMC trước hết cần rất nhiều tiền. Một nhà máy chip tiên tiến tốn 15 đến 25 tỷ USD[^semix], còn riêng năm 2026 TSMC dự kiến chi 60 đến 64 tỷ USD cho đầu tư[^arizona]. Có tiền rồi vẫn phải học: tỷ lệ chip đạt chuẩn trên mỗi wafer chỉ tăng dần qua sản xuất thật, nên hãng làm nhiều nhất cũng là hãng học nhanh nhất, đúng như cách Morris Chang tính từ thời ở TI. Quanh Tân Trúc còn có cả một mạng lưới nhà cung cấp và kỹ sư hình thành trong gần 40 năm, và xây một nhà máy ở nước khác dễ hơn nhiều so với xây lại mạng lưới đó.
 
@@ -164,7 +182,7 @@ Báo cáo năm 2021 của BCG và Hiệp hội Công nghiệp Bán dẫn Mỹ g�
 
 Đài Loan còn có động đất và hạn hán. Năm 2021, đợt hạn hán tệ nhất trong hơn 50 năm buộc Đài Loan phải chở nước bằng xe bồn tới các nhà máy chip[^twsemi]. Tháng 4 năm 2024, trận động đất 7,4 độ gần Hoa Liên, mạnh nhất trong 25 năm, làm TSMC mất 10 giờ mới khôi phục được hơn 70% thiết bị[^quake].
 
-## Phần 4: Chiến tranh chip
+## Phần 5: Chiến tranh chip
 
 Các nước đã bắt đầu dùng những điểm nghẽn này để gây sức ép lên nhau. Tháng 7 năm 2019, Nhật siết xuất khẩu sang Hàn Quốc ba loại hóa chất dùng để làm chip, trong đó có chất cản quang[^jt].
 
@@ -172,13 +190,13 @@ Mỹ thì nhắm vào Trung Quốc, và từ năm 2018 đã tìm cách chặn AS
 
 Tháng 10 năm 2022, Mỹ hạn chế xuất khẩu sang Trung Quốc chip AI cao cấp và thiết bị làm chip tiên tiến[^export]. Hà Lan và Nhật sau đó cũng siết xuất khẩu thiết bị[^asmlwiki]. Trung Quốc thì tự làm lấy. Tháng 8 năm 2023, Huawei ra mắt điện thoại Mate 60 Pro với chip 7nm do SMIC sản xuất mà không cần máy EUV[^mate60]. Đến nay SMIC đã làm được chip tương đương 5nm[^semix].
 
-Mỹ cũng tìm cách kéo nhà máy về nước mình. Đạo luật CHIPS năm 2022 dành 52,7 tỷ USD cho ngành bán dẫn, trong đó 39 tỷ USD để xây nhà máy ở Mỹ[^chipsact]. Cả gói này còn ít hơn số tiền TSMC định chi cho đầu tư chỉ riêng năm 2026. TSMC công bố nhà máy 12 tỷ USD ở Arizona từ năm 2020, và đến tháng 7 năm 2026, tổng cam kết đầu tư của hãng ở Mỹ đã lên 265 tỷ USD[^arizona][^tsmcwiki]. TSMC còn xây nhà máy ở Kumamoto (Nhật Bản) và Dresden (Đức)[^tsmcwiki].
+Chính sách với chip AI sau đó đổi liên tục. Tháng 4 năm 2025, Mỹ cấm bán H20, con chip Nvidia làm riêng cho Trung Quốc để đáp ứng quy định cũ. Tháng 8, Nvidia được bán lại nếu nộp 15% doanh thu bán ở Trung Quốc cho chính phủ Mỹ. Tháng 9, Trung Quốc cấm các công ty trong nước mua chip AI của Nvidia. Tháng 12, Mỹ cho bán cả H200, một chip mạnh hơn[^aichina]. Trong dự báo cho quý kết thúc tháng 10 năm 2026, Nvidia không tính đồng doanh thu chip trung tâm dữ liệu nào từ Trung Quốc[^nvidia].
 
-Cơn sốt AI càng làm sự phụ thuộc này lộ rõ. Gần như mọi chip AI quan trọng, từ GPU của Nvidia đến chip của Google hay Amazon, đều do TSMC sản xuất, và quý 2 năm 2026 các dây chuyền tiên tiến nhất của hãng chạy kín công suất[^trendforce]. Nvidia, công ty đang gần phá sản khi nhận cuộc gọi của Morris Chang năm 1997, giờ là một trong những khách hàng lớn nhất của TSMC.
+Mỹ cũng tìm cách kéo nhà máy về nước mình. Đạo luật CHIPS năm 2022 dành 52,7 tỷ USD cho ngành bán dẫn, trong đó 39 tỷ USD để xây nhà máy ở Mỹ[^chipsact]. Cả gói này còn ít hơn số tiền TSMC định chi cho đầu tư chỉ riêng năm 2026. Tháng 8 năm 2025, Mỹ đổi 8,9 tỷ USD tiền trợ cấp, phần lớn từ đạo luật này, thành 9,9% cổ phần Intel[^intelstake]. TSMC công bố nhà máy 12 tỷ USD ở Arizona từ năm 2020, và đến tháng 7 năm 2026, tổng cam kết đầu tư của hãng ở Mỹ đã lên 265 tỷ USD[^arizona][^tsmcwiki]. TSMC còn xây nhà máy ở Kumamoto (Nhật Bản) và Dresden (Đức)[^tsmcwiki].
 
 ## Kết luận
 
-Năm 2021, thiếu những con chip vài đô đã đủ làm nhà máy ô tô khắp thế giới dừng dây chuyền. Với chip tiên tiến nhất, cả thế giới đang trông vào một công ty ở Đài Loan và một công ty ở Hà Lan, và cả hai đều từng dám chi tiền vào lúc khó khăn nhất. Nhà máy mới đang được xây ở Mỹ, Nhật và Đức, nhưng sự tập trung này mất mấy chục năm để hình thành, nên theo mình nó cũng sẽ cần chừng ấy thời gian để thay đổi.
+Năm 2021, thiếu những con chip vài đô đã đủ làm nhà máy ô tô khắp thế giới dừng dây chuyền. Giờ thì hàng trăm tỷ USD đổ vào AI mỗi năm cũng phải đi qua nhà máy của một công ty ở Đài Loan, máy của một công ty ở Hà Lan và bộ nhớ của hai công ty Hàn Quốc. Nhà máy mới đang được xây ở Mỹ, Nhật và Đức, nhưng sự tập trung này mất mấy chục năm để hình thành, nên theo mình nó cũng sẽ cần chừng ấy thời gian để thay đổi.
 
 [^chipwar]: Chris Miller (2022), _Chip War: The Fight for the World's Most Critical Technology_, Scribner.
 [^alix]: [Chip shortage expected to cost auto industry \$210 billion in 2021](https://www.cnbc.com/2021/09/23/chip-shortage-expected-to-cost-auto-industry-210-billion-in-2021.html), CNBC, dẫn dự báo của AlixPartners, tháng 9/2021.
@@ -216,6 +234,18 @@ Năm 2021, thiếu những con chip vài đô đã đủ làm nhà máy ô tô k
 [^owid]: [TSMC's annual revenue](https://ourworldindata.org/grapher/tsmc-annual-revenue), Our World in Data, từ báo cáo của TSMC, quy đổi sang USD theo tỷ giá trung bình năm. Số liệu 1997 đến 2005 lấy từ [CompaniesMarketCap](https://companiesmarketcap.com/tsmc/revenue/).
 [^intel25]: [Intel Reports Fourth-Quarter and Full-Year 2025 Financial Results](https://www.intc.com/news-events/press-releases/detail/1759/intel-reports-fourth-quarter-and-full-year-2025-financial-results), Intel, tháng 1/2026. Số liệu các năm trước lấy từ [Macrotrends](https://pro.macrotrends.net/stocks/charts/INTC/intel/revenue).
 [^trendforce]: [Top 10 foundries 2Q26](https://www.trendforce.com/presscenter/news/20260909-13225.html), TrendForce, tháng 9/2026.
+[^nvidia]: [NVIDIA Announces Financial Results for Second Quarter Fiscal 2027](https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-second-quarter-fiscal-2027), Nvidia, tháng 8/2026. Số liệu các quý trước lấy từ [báo cáo hằng quý của Nvidia](https://investor.nvidia.com/financial-info/quarterly-earnings).
+[^statista]: [Big Tech's AI Spending to Reach \$760 Billion in 2026](https://www.statista.com/chart/35046/capital-expenditure-of-meta-alphabet-amazon-and-microsoft/), Statista, tháng 7/2026.
+[^fool]: [The Most Important Number in Taiwan Semiconductor's Earnings Report Was 68%](https://www.fool.com/investing/2026/10/19/the-most-important-number-in-taiwan-semiconductors/), The Motley Fool, tháng 10/2026.
+[^tsmc3q26]: [TSMC Reports Third Quarter EPS of NT\$29.43](https://pr.tsmc.com/english/news/3346), TSMC, tháng 10/2026.
+[^blackwell]: [NVIDIA Blackwell Architecture](https://www.nvidia.com/en-us/data-center/technologies/blackwell-architecture/), Nvidia.
+[^techinsights]: [TechInsights' NVIDIA HGX B200 Analysis Reveals HBM3E Supplier and Advanced Packaging Innovation](https://www.techinsights.com/blog/techinsights-nvidia-hgx-b200-analysis-reveals-hbm3e-supplier-and-advanced-packaging-innovation), TechInsights.
+[^cowos]: [TSMC CoWoS Supply-Demand Gap Reportedly Seen Narrowing from 20% to 10% by End-2026](https://www.trendforce.com/news/2026/06/15/news-tsmc-cowos-supply-demand-gap-reportedly-seen-narrowing-from-20-to-10-by-end-2026-as-capacity-expands/), TrendForce, tháng 6/2026.
+[^azblackwell]: [TSMC produces first Nvidia Blackwell GPU in the US, but it still has to fly to Taiwan for packaging](https://www.techspot.com/news/109958-tsmc-produces-first-nvidia-blackwell-gpu-us-but.html), TechSpot, tháng 10/2025.
+[^hbm]: [Samsung narrows gap with No. 1 SK hynix in HBM market revenue in Q2](https://www.koreajoongangdaily.com/business/samsung-narrows-gap-with-no-1-sk-hynix-in-hbm-market-revenue-in-q2/12859060), Korea JoongAng Daily, dẫn số liệu của Counterpoint Research, tháng 9/2026.
+[^bcg2024]: [Emerging Resilience in the Semiconductor Supply Chain](https://semiconductors.org/wp-content/uploads/2024/05/Emerging-Resilience-in-the-Semiconductor-Supply-Chain_BCG-Briefing.pdf), BCG và SIA, tháng 5/2024.
+[^intelstake]: [US government to acquire nearly 10 percent stake in Intel](https://betanews.com/2025/08/23/us-government-to-acquire-nearly-10-percent-stake-in-intel/), BetaNews, tháng 8/2025.
+[^aichina]: [Trump Lifted the AI Chip Ban on China, Clearing Nvidia and AMD to Resume Sales: Now What?](https://builtin.com/articles/trump-lifts-ai-chip-ban-china-nvidia), Built In.
 [^bcg2021]: [Strengthening the Global Semiconductor Supply Chain in an Uncertain Era](https://www.semiconductors.org/wp-content/uploads/2021/05/BCG-x-SIA-Strengthening-the-Global-Semiconductor-Value-Chain-April-2021_1.pdf), BCG và SIA, tháng 4/2021.
 [^asml2025]: [ASML reports €32.7 billion total net sales and €9.6 billion net income in 2025](https://www.sec.gov/Archives/edgar/data/937966/000162828026003701/pressreleasefinancialresul.htm), ASML, tháng 1/2026.
 [^jt]: [Japanese manufacturers use decades of experience to dominate key chemical market for cutting-edge chips](https://japantimes.co.jp/news/2019/10/09/business/japanese-manufacturers-use-decades-experience-dominate-key-chemical-market-cutting-edge-chips), The Japan Times, tháng 10/2019.
