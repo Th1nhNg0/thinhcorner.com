@@ -18,12 +18,12 @@ const vi = (n: number) => n.toFixed(1).replace(".", ",");
 ---
 
 <figure class="not-prose my-8" data-revenue-race data-years={JSON.stringify(years)} data-tsmc={JSON.stringify(tsmc)} data-intel={JSON.stringify(intel)}>
-  <div class="rounded-surface border border-(--line) bg-(--surface) px-4 pb-3 pt-3">
+  <div class="rounded-surface border border-(--line) bg-(--surface) p-4">
     <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
       <p class="m-0 text-base font-medium text-(--ink)">Doanh thu hằng năm, tỷ USD</p>
       <div class="flex items-center gap-4 font-mono text-xs text-(--muted)">
         <span class="flex items-center gap-1.5"><span class="inline-block h-[3px] w-4 rounded-full bg-[#eab308]"></span>TSMC</span>
-        <span class="flex items-center gap-1.5"><span class="inline-block h-[3px] w-4 rounded-full bg-[#3987e5]"></span>Intel</span>
+        <span class="flex items-center gap-1.5"><span class="inline-block h-[3px] w-4 rounded-full bg-[#a1a1aa]"></span>Intel</span>
       </div>
     </div>
     <div data-stage class="relative mt-2 w-full touch-pan-y">
@@ -54,15 +54,16 @@ const vi = (n: number) => n.toFixed(1).replace(".", ",");
       </table>
     </details>
   </div>
-  <figcaption class="mt-2 text-center text-sm text-(--muted)">
-    Số liệu danh nghĩa, chưa điều chỉnh lạm phát. Doanh thu TSMC quy đổi từ Đài tệ theo tỷ giá trung bình năm. Nguồn: Our World in Data, CompaniesMarketCap, Macrotrends, Intel.
+  <figcaption class="mt-2 text-balance text-center text-sm text-(--muted)">
+    Số liệu danh nghĩa, chưa điều chỉnh lạm phát. Doanh thu TSMC quy đổi từ Đài tệ theo tỷ giá trung bình năm.
+    <span class="mt-0.5 block font-mono text-xs text-(--faint)">Nguồn: Our World in Data, CompaniesMarketCap, Macrotrends, Intel.</span>
   </figcaption>
 </figure>
 
 <script>
   const NS = "http://www.w3.org/2000/svg";
   const C_TSMC = "#eab308";
-  const C_INTEL = "#3987e5";
+  const C_INTEL = "#a1a1aa"; // neutral: blue means Samsung in the waffle below
   const vi = (n: number) => n.toFixed(1).replace(".", ",");
 
   function el(tag: string, attrs: Record<string, string | number>, text?: string) {
@@ -94,8 +95,15 @@ const vi = (n: number) => n.toFixed(1).replace(".", ",");
     let hover: SVGGElement | null = null;
     const M = { l: 34, r: 74, t: 14, b: 26 };
 
+    // A tap outside the chart dismisses the tooltip (touch never gets a hover-out).
+    document.addEventListener("pointerdown", (e) => {
+      if (!stage.contains(e.target as Node)) hide();
+    });
+
     function build() {
       W = Math.max(stage.clientWidth, 260);
+      M.r = W < 480 ? 52 : 74;
+      hide();
       H = Math.round(Math.min(Math.max(W * 0.56, 250), 360));
       svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
       svg.setAttribute("height", String(H));
@@ -153,7 +161,7 @@ const vi = (n: number) => n.toFixed(1).replace(".", ",");
       late.appendChild(el("circle", { cx, cy, r: 4, fill: C_TSMC, stroke: "#111113", "stroke-width": 2 }));
       late.appendChild(el("line", { x1: cx - 4, y1: cy - 5, x2: cx - 22, y2: cy - 26, stroke: "#71717a", "stroke-width": 1 }));
       late.appendChild(
-        el("text", { x: cx - 26, y: cy - 30, "text-anchor": "end", "font-size": 12, fill: "#ededed" }, "2022: TSMC vượt Intel")
+        el("text", { x: cx - 26, y: cy - 30, "text-anchor": "end", "font-size": 12, fill: "#ededed", class: "font-mono" }, "2022: TSMC vượt Intel")
       );
       svg.appendChild(late);
 
@@ -163,11 +171,15 @@ const vi = (n: number) => n.toFixed(1).replace(".", ",");
       hover.appendChild(el("circle", { "data-h": "t", r: 4.5, fill: C_TSMC, stroke: "#111113", "stroke-width": 2 }));
       hover.appendChild(el("circle", { "data-h": "i", r: 4.5, fill: C_INTEL, stroke: "#111113", "stroke-width": 2 }));
       svg.appendChild(hover);
-      const hit = el("rect", { x: x0, y: y1, width: x1 - x0, height: y0 - y1, fill: "transparent" });
+      // Full-width hit area, so the last years (right next to the end labels) are easy to reach.
+      const hit = el("rect", { x: 0, y: 0, width: W, height: H, fill: "transparent" });
       svg.appendChild(hit);
       hit.addEventListener("pointermove", (e) => show(e as PointerEvent));
       hit.addEventListener("pointerdown", (e) => show(e as PointerEvent));
-      hit.addEventListener("pointerleave", hide);
+      // A tap fires pointerleave right after pointerup; keep the tooltip up for touch.
+      hit.addEventListener("pointerleave", (e) => {
+        if ((e as PointerEvent).pointerType !== "touch") hide();
+      });
 
       paint();
     }
@@ -192,11 +204,12 @@ const vi = (n: number) => n.toFixed(1).replace(".", ",");
         `<div><span style="color:${C_TSMC}">●</span> TSMC ${vi(tsmc[i])}</div>` +
         `<div><span style="color:${C_INTEL}">●</span> Intel ${vi(intel[i])}</div>`;
       tip.classList.remove("hidden");
+      // Pinned to the top of the plot area, beside the crosshair, inside the card.
       const tw = tip.offsetWidth;
       let left = hx * k + 12;
-      if (left + tw > r.width - 4) left = hx * k - tw - 12;
-      const top = Math.min(y(Math.max(tsmc[i], intel[i])) * k, r.height - tip.offsetHeight - 4);
-      tip.style.transform = `translate(${left}px, ${Math.max(0, top - 10)}px)`;
+      if (left + tw > r.width) left = hx * k - tw - 12;
+      left = Math.max(0, Math.min(left, r.width - tw));
+      tip.style.transform = `translate(${Math.round(left)}px, ${Math.round(M.t * k)}px)`;
     }
 
     function hide() {

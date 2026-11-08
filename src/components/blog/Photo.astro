@@ -1,0 +1,39 @@
+---
+/**
+ * A post photo with a visible caption and credit line. Markdown image titles
+ * only become a hover tooltip, so photos that need a credit on screen use this.
+ * The photo is cropped to 2:1 so it lines up with the 2:1 figure stages.
+ */
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets";
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  caption?: string;
+  credit?: string;
+  /** CSS object-position for the 2:1 crop, e.g. "50% 0%" to keep the top. */
+  position?: string;
+}
+
+const { src, alt, caption, credit, position = "50% 50%" } = Astro.props;
+---
+
+<figure class="not-prose my-8">
+  <Image
+    src={src}
+    alt={alt}
+    sizes="(min-width: 720px) 672px, 100vw"
+    widths={[672, 1344]}
+    class="rounded-surface block aspect-[2/1] w-full border border-(--line) object-cover"
+    style={`object-position:${position}`}
+  />
+  {
+    (caption || credit) && (
+      <figcaption class="mt-2 text-center text-sm text-balance text-(--muted)">
+        {caption}
+        {credit && <span class="mt-0.5 block font-mono text-xs text-(--faint)">Ảnh: {credit}</span>}
+      </figcaption>
+    )
+  }
+</figure>

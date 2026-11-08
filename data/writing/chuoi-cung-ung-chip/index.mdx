@@ -13,165 +13,172 @@ import LeadingEdge from "@/components/blog/chip/LeadingEdge.astro";
 import RevenueRace from "@/components/blog/chip/RevenueRace.astro";
 import FoundryShare from "@/components/blog/chip/FoundryShare.astro";
 import Chokepoints from "@/components/blog/chip/Chokepoints.astro";
-
-Ở bài [Silicon Valley](/writing/silicon-valley), mình viết về transistor, mạch tích hợp, Fairchild và Intel. Bài này kể tiếp phần sau: vì sao hơn 60 năm sau, phần lớn chip tiên tiến nhất lại được làm ở Đài Loan, bằng những cỗ máy mà chỉ một công ty ở Hà Lan làm được.
+import Photo from "@/components/blog/Photo.astro";
+import car from "./car.webp";
+import wafer from "./wafer.webp";
+import taipei from "./taipei.webp";
 
 Năm 2021, nhà máy ô tô khắp thế giới phải dừng dây chuyền vì thiếu chip, phần lớn là loại chip vài đô dùng cho cửa kính hay túi khí. AlixPartners ước tính ngành ô tô mất 210 tỷ USD doanh thu năm đó, tương đương 7,7 triệu chiếc xe. Một phần nguyên nhân là các đợt phong tỏa vì COVID ở Malaysia, nơi có nhiều nhà máy đóng gói chip[^alix].
 
-![Các cánh tay robot đang lắp ráp khung xe ô tô trên một dây chuyền](./car.webp "Dây chuyền lắp ráp ô tô trưng bày ở Bảo tàng Công nghiệp và Công nghệ Toyota, Nagoya. Ảnh: Lilian Do Khac / Unsplash")
+<Photo
+  src={car}
+  alt="Các cánh tay robot đang lắp ráp khung xe ô tô trên một dây chuyền"
+  caption="Dây chuyền lắp ráp ô tô trưng bày ở Bảo tàng Công nghiệp và Công nghệ Toyota, Nagoya."
+  credit="Lilian Do Khac / Unsplash"
+/>
 
-Phần lịch sử trong bài chủ yếu dựa trên cuốn _Chip War_ của Chris Miller[^chipwar].
+Ở bài [Silicon Valley](/writing/silicon-valley), mình đã viết về transistor, mạch tích hợp, Fairchild và Intel. Bài này kể tiếp chuyện vì sao hơn 60 năm sau, phần lớn chip tiên tiến nhất thế giới lại được làm ở Đài Loan, bằng những cỗ máy mà chỉ một công ty ở Hà Lan làm được. Phần lịch sử chủ yếu dựa theo cuốn _Chip War_ của Chris Miller[^chipwar].
 
 ## Phần 1: Một con chip được làm ra như thế nào
 
 Con chip là một mảnh silicon chứa rất nhiều transistor, những công tắc tí hon bật tắt dòng điện. Chip điện thoại bây giờ có hơn 10 tỷ transistor[^mittr].
 
-![Cận cảnh một tấm wafer silicon với các con chip xếp thành lưới, ánh lên nhiều màu](./wafer.webp "Một tấm wafer bị loại vì lỗi. Mỗi ô vuông sẽ được cắt ra thành một con chip. Ảnh: Laura Ockel / Unsplash")
-
-Kỹ sư thiết kế mạch bằng phần mềm chuyên dụng. Silicon được tinh chế, kéo thành thỏi rồi cắt thành những tấm tròn mỏng gọi là wafer. Nhà máy in mạch lên wafer, sau đó wafer được cắt thành từng con chip để đóng vỏ và kiểm tra, rồi lắp vào điện thoại hay máy tính.
-
-Khâu khó nhất là in mạch. Nhà máy phủ lên wafer một lớp hóa chất nhạy sáng, rồi chiếu ánh sáng qua một tấm mặt nạ để in hình mạch lên đó. Cách in này gọi là **quang khắc**. Nhà máy lặp lại việc in, khắc và phủ vật liệu cho từng lớp. Cả quá trình có khoảng 700 bước và mất khoảng ba tháng[^wapo].
-
-Vài từ sẽ gặp trong bài:
-
-- Fab là nhà máy sản xuất chip.
-- Foundry là công ty sản xuất chip thuê, như TSMC.
-- Fabless là công ty chỉ thiết kế chip mà không có nhà máy, như Apple hay Nvidia.
-- Tiến trình (node) là thế hệ công nghệ sản xuất, như "3nm". Số càng nhỏ thì transistor càng nhỏ.
-
-Mỗi khâu nằm ở một nước khác nhau. Bấm qua bản đồ để đi theo một con chip điện thoại.
+Kỹ sư thiết kế mạch bằng phần mềm chuyên dụng. Silicon được tinh chế, kéo thành thỏi rồi cắt thành những tấm tròn mỏng gọi là wafer. Nhà máy in mạch lên wafer, sau đó wafer được cắt thành từng con chip để đóng gói và kiểm tra, rồi lắp vào điện thoại hay máy tính. Các khâu này nằm rải rác ở nhiều nước.
 
 <ChipJourney />
 
-Tên tiến trình như "3nm" từ lâu đã không còn ứng với kích thước thật nào trên chip, nó chỉ là tên thương mại. Kích thước thật vẫn rất nhỏ: trên chip 3nm của TSMC, hai cực cổng (gate) cạnh nhau cách nhau khoảng 48nm[^wikichip].
+Khâu khó nhất là in mạch, gọi là **quang khắc**. Nhà máy phủ lên wafer một lớp hóa chất nhạy sáng gọi là chất cản quang, rồi chiếu ánh sáng qua một tấm mặt nạ để in hình mạch lên đó. Việc phủ vật liệu, in và khắc được lặp lại cho từng lớp mạch. Cả quá trình có khoảng 700 bước và mất khoảng ba tháng[^wapo].
+
+<Photo
+  src={wafer}
+  alt="Cận cảnh một tấm wafer silicon với các con chip xếp thành lưới, ánh lên nhiều màu"
+  caption="Một tấm wafer bị loại vì lỗi. Mỗi ô vuông sẽ được cắt ra thành một con chip."
+  credit="Laura Ockel / Unsplash"
+/>
+
+Mỗi thế hệ công nghệ sản xuất gọi là một tiến trình (node), và được đặt tên như "5nm" hay "3nm". Tiến trình càng mới thì transistor càng nhỏ, nên một con chip chứa được càng nhiều transistor và càng mạnh. Chip làm ở tiến trình mới nhất thường được gọi là chip tiên tiến.
+
+Cái tên "3nm" từ lâu đã không còn khớp với kích thước thật nào trên chip. Dù vậy, kích thước thật vẫn rất nhỏ. Mỗi transistor có một cực cổng để bật tắt dòng điện, và trên chip 3nm của TSMC, hai cực cổng liền kề chỉ cách nhau khoảng 48nm[^wikichip]. In được nét nhỏ đến đâu phụ thuộc vào bước sóng của ánh sáng dùng để in, cũng như muốn viết chữ nhỏ thì cần ngòi bút nhỏ.
 
 <HowSmall />
 
-In được nét nhỏ đến đâu phụ thuộc vào bước sóng của ánh sáng dùng để in. Phần lớn câu chuyện về ASML ở dưới là chuyện đi tìm loại ánh sáng có bước sóng ngắn hơn.
+Phần lớn lịch sử của ASML, hãng làm máy quang khắc ở Hà Lan, là chuyện đi tìm ánh sáng có bước sóng ngắn hơn.
 
 ## Phần 2: Lịch sử
 
 ### Cái kính hiển vi lật ngược
 
-Cách in mạch lên silicon đến từ quân đội Mỹ. Giữa thập niên 1950, Jay Lathrop làm ở một phòng thí nghiệm của Quân đội Mỹ và được giao thu nhỏ ngòi nổ cho đạn pháo. Ông lật ngược ống kính của kính hiển vi: thay vì phóng to một vật nhỏ, nó thu nhỏ một hình lớn và chiếu lên bề mặt phủ hóa chất nhạy sáng. Năm 1957, Lathrop và James Nall đăng ký bằng sáng chế cho cách làm này, rồi ông chuyển sang Texas Instruments[^mittr]. Chip bây giờ vẫn được in theo nguyên lý đó.
+Cách in mạch lên silicon ra đời trong một phòng thí nghiệm của Quân đội Mỹ. Giữa thập niên 1950, Jay Lathrop làm việc ở đó và được giao thu nhỏ ngòi nổ cho đạn pháo. Ông lật ngược một chiếc kính hiển vi: thay vì phóng to một vật nhỏ, nó thu nhỏ một hình lớn và chiếu lên bề mặt phủ hóa chất nhạy sáng. Năm 1957, Lathrop và James Nall đăng ký bằng sáng chế cho cách làm này, rồi ông chuyển sang Texas Instruments[^mittr]. Chip bây giờ vẫn được in theo nguyên lý đó.
 
-Khách hàng đầu tiên của chip cũng là quân đội và NASA. Năm 1962, Texas Instruments nhận thiết kế 22 loại mạch cho tên lửa Minuteman II. Máy tính dẫn đường của tàu Apollo dùng khoảng 200.000 con chip, mỗi con giá 20 đến 30 USD[^chm]. Những đơn hàng này giúp các hãng học cách làm chip nhiều và rẻ, đủ rẻ để sau đó đưa vào máy tính và đồ điện tử.
+Khách hàng đầu tiên của chip cũng là quân đội và NASA. Năm 1962, Texas Instruments nhận thiết kế 22 loại mạch cho tên lửa Minuteman II. Tính đến năm 1965, máy tính dẫn đường của tàu Apollo là nơi dùng nhiều chip nhất, tổng cộng 200.000 con, mỗi con giá 20 đến 30 USD[^chm]. Những đơn hàng này giúp các hãng học cách làm chip nhiều và rẻ, đủ rẻ để sau đó đưa vào máy tính và đồ điện tử.
 
 ### Đưa nhà máy sang châu Á
 
-Khâu lắp ráp chip thời đó cần nhiều sức người. Công nhân ngồi trước kính hiển vi để hàn những sợi dây vàng nối con chip với vỏ. Lương ở California cao, nên các hãng Mỹ chuyển khâu này sang châu Á. Fairchild mở xưởng ở Hồng Kông vào giữa thập niên 1960. Texas Instruments đến Singapore năm 1968, Đài Loan năm 1969 và Malaysia năm 1972[^rhines].
+Khâu đóng gói chip thời đó cần nhiều sức người. Công nhân ngồi trước kính hiển vi để hàn những sợi dây vàng nối con chip với vỏ. Lương ở California cao, nên các hãng Mỹ chuyển khâu này sang châu Á. Fairchild mở xưởng ở Hồng Kông năm 1964. Texas Instruments đến Singapore năm 1968, Đài Loan năm 1969 và Malaysia năm 1972[^rhines].
 
 Theo Chris Miller, đây còn là chuyện chính trị thời Chiến tranh Lạnh. Nhà máy điện tử tạo việc làm và gắn kinh tế Đài Loan, Singapore, Malaysia với Mỹ, nên chính phủ các nước này chủ động mời các hãng chip Mỹ vào[^chipwar].
 
 ### Nhật Bản vượt mặt Mỹ
 
-Nhật thì tự sản xuất chip, nhất là chip nhớ DRAM, loại cần làm số lượng lớn với tỷ lệ lỗi thấp. Năm 1980, các hãng Nhật chiếm khoảng 25% thị trường bán dẫn thế giới. Năm 1986, Nhật vượt Mỹ thành nước cung cấp chip lớn nhất, và năm 1987 nắm khoảng 80% thị trường DRAM[^shmj].
+Nhật thì tự sản xuất chip, nhất là DRAM, loại chip nhớ dùng làm RAM trong máy tính. Chip nhớ cần làm số lượng lớn với tỷ lệ lỗi thấp. Năm 1980, các hãng Nhật mới chiếm khoảng 25% thị trường bán dẫn thế giới. Sáu năm sau, Nhật vượt Mỹ thành nước cung cấp chip lớn nhất, và đến năm 1987 nắm khoảng 80% thị trường DRAM[^shmj].
 
-Intel, công ty làm ra chip DRAM thương mại đầu tiên, bị dồn vào chân tường. Năm 1985, Andy Grove hỏi Gordon Moore rằng nếu hội đồng quản trị thay CEO thì người mới sẽ làm gì. Moore nói người đó sẽ đưa Intel ra khỏi mảng bộ nhớ. Grove đáp: "Vậy sao hai chúng ta không bước ra ngoài, rồi quay lại và tự làm việc đó?"[^grove] Intel bỏ DRAM để tập trung vào bộ vi xử lý.
+Intel, công ty làm ra chip DRAM thương mại đầu tiên, bị dồn vào chân tường. Năm 1985, Andy Grove hỏi Gordon Moore: nếu hội đồng quản trị thay CEO, người mới sẽ làm gì? Moore bảo người đó sẽ đưa Intel ra khỏi mảng bộ nhớ. Grove nói: "Vậy sao anh với tôi không bước ra khỏi cửa, rồi quay vào và tự làm việc đó?"[^grove] Intel bỏ DRAM để tập trung vào bộ vi xử lý, con chip làm phần tính toán.
 
-Mỹ ký Hiệp định bán dẫn với Nhật năm 1986[^shmj] và lập liên minh nghiên cứu Sematech năm 1987[^mittr]. Ngành máy quang khắc của Mỹ thì không cứu được. Các hãng chip Nhật mua máy của Nikon và Canon, còn GCA, hãng dẫn đầu của Mỹ, sụp đổ dù được Sematech bơm tiền. Sang thập niên 1990, thị trường này chỉ còn ba tên tuổi lớn: Nikon, Canon và một công ty Hà Lan[^mittr].
+Mỹ ký Hiệp định bán dẫn với Nhật năm 1986[^shmj] và lập liên minh nghiên cứu Sematech năm 1987[^mittr]. Đến năm 1993, Mỹ giành lại vị trí số một[^shmj]. Ngành máy quang khắc của Mỹ thì không cứu được. Các hãng chip Nhật mua máy của Nikon và Canon, còn GCA, hãng dẫn đầu của Mỹ, sụp đổ dù được Sematech bơm tiền. Sang thập niên 1990, thị trường này chỉ còn ba tên tuổi lớn: Nikon, Canon và một công ty Hà Lan[^mittr].
 
-Năm 1993, Mỹ giành lại vị trí số một[^shmj]. Ở mảng chip nhớ, Hàn Quốc đã bắt đầu đuổi theo.
+### Samsung làm chip nhớ
 
-### Canh bạc của Samsung
-
-Năm 1983, nhà sáng lập Samsung là Lee Byung-chul tuyên bố Samsung sẽ làm chip DRAM, dù đi sau Mỹ và Nhật nhiều năm. Cuối năm đó Samsung làm ra chip 64K DRAM đầu tiên của Hàn Quốc[^tokyo]. Họ chịu lỗ nhiều năm và vẫn xây nhà máy mới cả khi giá chip đang giảm. Năm 1994, Samsung làm ra chip DRAM 256 megabit đầu tiên trên thế giới và trở thành hãng chip nhớ lớn nhất[^samsung].
+Năm 1983, nhà sáng lập Samsung là Lee Byung-chul tuyên bố tập đoàn sẽ làm chip DRAM, dù Hàn Quốc đi sau Mỹ và Nhật nhiều năm. Cuối năm đó, họ làm ra chip 64K DRAM đầu tiên của Hàn Quốc[^tokyo]. Samsung chịu lỗ nhiều năm và vẫn xây nhà máy mới cả khi giá chip đang giảm. Đến giữa thập niên 1990, họ đã là hãng chip nhớ lớn nhất thế giới, và năm 1994 làm ra chip DRAM 256 megabit đầu tiên[^samsung].
 
 ### Đài Loan và Morris Chang
 
-Đài Loan làm theo kế hoạch của nhà nước. Năm 1973, chính phủ lập viện nghiên cứu ITRI[^itri]. Năm 1976, ITRI mua công nghệ của hãng RCA và gửi kỹ sư sang Mỹ học. Năm 1980, UMC được tách ra từ ITRI, và Khu Khoa học Tân Trúc ra đời[^twsemi].
+Ở Đài Loan, ngành chip đi theo kế hoạch của nhà nước. Chính phủ lập viện nghiên cứu ITRI năm 1973[^itri]. Ba năm sau, ITRI mua công nghệ của hãng RCA và gửi kỹ sư sang Mỹ học. Đến năm 1980, UMC được tách ra từ ITRI, và Khu Khoa học Tân Trúc ra đời[^twsemi].
 
-Người quan trọng nhất trong câu chuyện này là Morris Chang (Trương Trung Mưu). Ông sinh năm 1931 ở Ninh Ba, Trung Quốc, học ở Harvard rồi MIT, và làm cho Texas Instruments 25 năm, lên tới chức phó chủ tịch phụ trách mảng bán dẫn. Ở TI, ông nổi tiếng vì định giá chip thấp ngay từ đầu để chiếm thị phần, rồi nhờ sản lượng lớn mà hạ chi phí. Ông rời TI năm 1983[^chang].
+<Photo
+  src={taipei}
+  position="50% 0%"
+  alt="Đường chân trời Đài Bắc về đêm với tòa tháp Taipei 101"
+  caption="Đài Bắc về đêm. Phần lớn nhà máy của TSMC nằm ở Tân Trúc, Đài Trung và Đài Nam."
+  credit="Timo Volz / Unsplash"
+/>
 
-Năm 1985, chính phủ Đài Loan mời ông về làm viện trưởng ITRI[^caixin]. Ông muốn lập một công ty chỉ sản xuất chip cho người khác và không tự thiết kế chip. Thời đó hãng chip nào cũng vừa thiết kế vừa sản xuất. Jerry Sanders của AMD có câu nổi tiếng: "Đàn ông thật sự thì phải có nhà máy"[^sanders]. Nhưng từ khi cuốn sách của Carver Mead và Lynn Conway ra đời năm 1980, việc thiết kế chip đã có thể tách khỏi nhà máy[^meadconway], và Chang đoán sẽ có nhiều công ty chỉ muốn thiết kế.
+Morris Chang (Trương Trung Mưu) sinh năm 1931 ở Ninh Ba, Trung Quốc, và học ở Harvard rồi MIT. Ông làm cho Texas Instruments 25 năm, lên tới chức phó chủ tịch phụ trách mảng bán dẫn, và nổi tiếng vì định giá chip thấp ngay từ đầu để chiếm thị phần, rồi nhờ sản lượng lớn mà hạ chi phí. Ông rời TI năm 1983[^chang].
 
-Ông đi gọi vốn ở Intel, Toshiba, Hitachi và Sony. Theo lời ông, chỉ có Philips thật sự quan tâm[^benzinga]. TSMC ra đời năm 1987 với 48,3% vốn của chính phủ Đài Loan và 27,6% của Philips[^tsmcwiki][^caixin]. Doanh thu năm 1990 khoảng 70 triệu USD, đến năm 1995 là 1,1 tỷ USD[^caixin].
+Năm 1985, chính phủ Đài Loan mời ông về làm viện trưởng ITRI[^caixin]. Ông muốn lập một công ty chỉ sản xuất chip thuê cho người khác, không tự thiết kế. Thời đó hãng chip nào cũng vừa thiết kế vừa sản xuất. Jerry Sanders của AMD có câu nổi tiếng: "Đàn ông thật sự thì phải có nhà máy"[^sanders]. Nhưng từ khi cuốn sách của Carver Mead và Lynn Conway ra đời năm 1980, việc thiết kế chip đã có thể tách khỏi nhà máy[^meadconway], và Chang đoán sẽ có nhiều công ty chỉ muốn thiết kế.
 
-Chang đoán đúng. Từ cuối thập niên 1980, hàng loạt công ty chỉ thiết kế chip ra đời, như Qualcomm, Broadcom và Nvidia. Năm 1997, khi Nvidia gần phá sản, Morris Chang gọi điện cho họ và hai bên bắt đầu làm ăn[^caixin]. Còn AMD, công ty của câu "phải có nhà máy", đến năm 2009 tách nhà máy ra thành GlobalFoundries[^sanders].
+Ông đi gọi vốn ở Intel, Toshiba, Hitachi, Sony và Philips. Theo lời ông, chỉ Philips thật sự quan tâm[^benzinga]. TSMC ra đời năm 1987 với 48,3% vốn của chính phủ Đài Loan và 27,6% của Philips[^tsmcwiki][^caixin]. Doanh thu năm 1990 khoảng 70 triệu USD, đến năm 1995 là 1,1 tỷ USD[^caixin].
+
+Từ cuối thập niên 1980, hàng loạt công ty chỉ thiết kế chip ra đời đúng như ông đoán, trong đó có Qualcomm, Broadcom và Nvidia. Năm 1997, khi Nvidia gần phá sản, Morris Chang gọi điện cho họ và hai bên bắt đầu làm ăn[^caixin]. Còn AMD, công ty của câu "phải có nhà máy", đến năm 2009 tách nhà máy ra thành GlobalFoundries[^sanders].
 
 TSMC giữ được khách vì không bán chip mang tên mình. Apple hay Nvidia có thể đưa bản thiết kế cho TSMC mà không sợ bị cạnh tranh. Samsung và Intel cũng nhận làm thuê, nhưng họ bán cả chip của chính mình.
 
-### ASML: từ cái lán dột ở Eindhoven
+### ASML và cái lán dột ở Eindhoven
 
-ASML ra đời năm 1984, là liên doanh giữa Philips và ASM International. Trụ sở đầu tiên là một cái lán dột cạnh một tòa nhà của Philips ở Eindhoven. Cỗ máy đầu tiên dùng bơm dầu thủy lực ồn tới mức phải đặt một cái container bên cạnh để đỡ tiếng ồn[^shed], và bán không được[^asmlwiki]. Từ năm 1986 ASML hợp tác với hãng quang học Zeiss của Đức[^shed], và đến năm 1991 mới có dòng máy bán chạy đầu tiên[^asmlwiki].
+ASML ra đời năm 1984, là liên doanh giữa ASM International và Philips, công ty ba năm sau góp vốn vào TSMC. Trụ sở đầu tiên là một cái lán dột cạnh một tòa nhà của Philips ở Eindhoven. Bơm dầu thủy lực của cỗ máy đầu tiên ồn tới mức phải chuyển ra ngoài lán[^shed], và cỗ máy đó không bán được[^asmlwiki]. Từ năm 1986 ASML hợp tác với hãng quang học Zeiss của Đức[^shed], và đến năm 1991 mới có dòng máy bán chạy đầu tiên[^asmlwiki].
 
-Bước ngoặt đến năm 2002. Ngành chip khi đó dùng ánh sáng có bước sóng 193nm và đang tìm cách xuống 157nm. Lâm Bản Kiên (Burn-Jeng Lin), kỹ sư của TSMC, đề xuất giữ 193nm nhưng đổ một lớp nước vào khe giữa ống kính và wafer, để ánh sáng bị bẻ cong nhiều hơn và in được nét mảnh hơn[^burnlin]. ASML làm máy theo hướng này cùng TSMC, và đến năm 2004 TSMC đã dùng nó để sản xuất[^asmlwiki]. Hướng 157nm gần như bị bỏ[^photolitho]. Cũng năm 2002, ASML trở thành hãng bán máy quang khắc lớn nhất thế giới[^asmlwiki].
+Năm 2002, ASML trở thành hãng bán máy quang khắc lớn nhất thế giới[^asmlwiki]. Khi đó ngành chip dùng ánh sáng có bước sóng 193nm và đang tìm cách xuống 157nm. Lâm Bản Kiên (Burn-Jeng Lin), kỹ sư của TSMC, đề xuất giữ 193nm nhưng đổ một lớp nước vào khe giữa ống kính và wafer, để ánh sáng bị bẻ cong nhiều hơn và in được nét mảnh hơn[^burnlin]. ASML cùng TSMC làm máy theo hướng này, và đến năm 2004 TSMC đã dùng máy đó để sản xuất[^asmlwiki]. Hướng 157nm sau đó gần như bị bỏ hẳn[^photolitho].
 
-### EUV: canh bạc 30 năm
+### Ba mươi năm làm EUV
 
-Bước sóng 193nm vẫn quá lớn để in những nét vài chục nanomet, nên các nhà máy phải in một lớp nhiều lần, vừa tốn kém vừa dễ lỗi. Lời giải là **EUV** (tia cực tím cực ngắn) với bước sóng 13,5nm. Ý tưởng này có từ năm 1986 ở NTT của Nhật. Thập niên 1990, các phòng thí nghiệm quốc gia của Mỹ nghiên cứu nó trong một liên minh mà Intel bỏ nhiều tiền nhất[^euvwiki][^mittr]. ASML vào liên minh này năm 1999[^asmlwiki].
+Bước sóng 193nm vẫn quá lớn so với những nét chỉ vài chục nanomet, nên các nhà máy phải in mỗi lớp nhiều lần, vừa tốn kém vừa dễ lỗi. Ánh sáng **EUV** (tia cực tím cực ngắn) thì có bước sóng chỉ 13,5nm. Ý tưởng dùng nó để in chip có từ năm 1986 ở NTT của Nhật. Thập niên 1990, các phòng thí nghiệm quốc gia của Mỹ nghiên cứu nó trong một liên minh mà Intel bỏ nhiều tiền nhất[^euvwiki][^mittr]. ASML vào liên minh này năm 1999[^asmlwiki].
 
-Ánh sáng EUV bị cả không khí lẫn thủy tinh hấp thụ, nên cỗ máy phải đặt trong chân không và dùng gương thay cho thấu kính[^euvwiki]. Nguồn sáng được tạo ra như sau:
+Ánh sáng EUV bị cả không khí lẫn thủy tinh hấp thụ, nên cỗ máy phải đặt trong chân không và dùng gương thay cho thấu kính[^euvwiki]. Nguồn sáng của máy hoạt động như sau:
 
 <EuvLight />
 
-Laser của Trumpf bắn vào 50.000 giọt thiếc mỗi giây[^trumpf], tạo ra plasma nóng vài trăm nghìn độ[^mittr]. Gương của Zeiss gồm hàng chục lớp silicon và molypden, mỗi lớp dày vài nanomet[^mittr]. Dù vậy, mỗi lần phản xạ vẫn mất khoảng 30% ánh sáng, và cuối cùng chỉ khoảng 2% ánh sáng từ nguồn tới được wafer[^euvwiki].
+Laser trong máy do Trumpf làm[^trumpf], còn gương do Zeiss làm, gồm hàng chục lớp silicon và molypden, mỗi lớp dày vài nanomet[^mittr]. Dù vậy, mỗi lần phản xạ vẫn mất khoảng 30% ánh sáng, và cuối cùng chỉ khoảng 2% ánh sáng từ nguồn tới được wafer[^euvwiki].
 
-Năm 2006, máy EUV thử nghiệm đầu tiên của ASML mất 23 giờ cho một tấm wafer[^euvwiki]. Để có tiền làm tiếp, năm 2012 ASML bán 23% cổ phần cho Intel, TSMC và Samsung với giá 3,85 tỷ euro, kèm 1,38 tỷ euro cho nghiên cứu[^ccip]. Cùng năm, ASML mua Cymer, công ty Mỹ làm nguồn sáng[^asmlwiki]. Phải đến khoảng năm 2019, TSMC và Samsung mới dùng EUV để sản xuất hàng loạt[^photolitho].
+Năm 2006, máy EUV thử nghiệm đầu tiên của ASML mất 23 giờ mới in xong một tấm wafer[^euvwiki]. Để có tiền làm tiếp, năm 2012 hãng bán 23% cổ phần cho Intel, TSMC và Samsung với giá 3,85 tỷ euro, và ba khách hàng này góp thêm 1,38 tỷ euro cho nghiên cứu[^ccip]. Cùng năm, ASML mua Cymer, công ty Mỹ làm nguồn sáng[^asmlwiki]. Phải đến khoảng năm 2019, TSMC và Samsung mới dùng EUV để sản xuất hàng loạt[^photolitho].
 
-Mỗi máy EUV nặng gần 200 tấn, có khoảng 100.000 bộ phận, và cần ba chiếc Boeing 747 để chở[^inteleuv]. Mỗi máy giá khoảng 180 đến 200 triệu USD, còn thế hệ High-NA giá khoảng 370 triệu USD[^asmlwiki][^euvwiki].
+Một máy EUV nặng gần 200 tấn, có khoảng 100.000 bộ phận và phải chở bằng ba chiếc Boeing 747[^inteleuv]. Giá mỗi máy khoảng 180 đến 200 triệu USD, riêng thế hệ High-NA khoảng 370 triệu USD[^asmlwiki][^euvwiki].
 
-### Cuộc đua chỉ còn lại vài người
+### Cuộc đua ở tiến trình tiên tiến nhất
 
-Mỗi thế hệ công nghệ đắt hơn thế hệ trước, và mỗi lần lại có vài công ty bỏ cuộc. Năm 2001, gần 30 công ty sản xuất được chip ở tiến trình tiên tiến nhất[^cww]. Hôm nay còn ba[^ibm][^umc][^gf].
+Tiến trình sau luôn đắt hơn tiến trình trước, và mỗi lần chuyển lại có vài công ty bỏ cuộc. Năm 2001, gần 30 công ty sản xuất được chip ở tiến trình tiên tiến nhất[^cww]. Bây giờ chỉ còn ba[^ibm][^umc][^gf].
 
 <LeadingEdge />
 
-Intel từng dẫn đầu về sản xuất suốt mấy chục năm, nhưng bị chậm liên tục với tiến trình 10nm rồi 7nm[^intel7]. Rapidus của Nhật đang thử sức ở 2nm, còn SMIC của Trung Quốc làm được chip tương đương 5nm mà không có máy EUV[^semix].
+Intel từng dẫn đầu về sản xuất suốt mấy chục năm, nhưng bị chậm liên tục với tiến trình 10nm rồi 7nm[^intel7]. Rapidus của Nhật đang thử sức ở 2nm[^semix].
 
-TSMC thì ngày càng bỏ xa. Từ khoảng năm 2014, TSMC sản xuất chip cho iPhone, và Apple thành khách hàng quan trọng nhất của họ. TSMC là hãng đầu tiên sản xuất hàng loạt chip 5nm vào năm 2020, rồi 3nm cuối năm 2022 và 2nm cuối năm 2025[^tsmcwiki]. Khi Morris Chang trở lại làm CEO giữa khủng hoảng tài chính năm 2009, ông không cắt giảm như các đối thủ mà nâng chi đầu tư năm 2010 lên 5,9 tỷ USD, gấp hơn hai lần những năm trước[^caixin].
+TSMC thì ngày càng bỏ xa. Khi Morris Chang trở lại làm CEO giữa khủng hoảng tài chính năm 2009, ông nâng chi đầu tư năm 2010 lên 5,9 tỷ USD, gấp hơn hai lần những năm trước, trong lúc các đối thủ cắt giảm[^caixin]. Từ khoảng năm 2014, hãng làm chip cho iPhone, và Apple thành khách hàng quan trọng nhất của họ. TSMC sản xuất hàng loạt chip 5nm từ năm 2020, sớm nhất thế giới, rồi 3nm từ cuối năm 2022 và 2nm từ cuối năm 2025[^tsmcwiki].
+
+Doanh thu của TSMC lần đầu vượt Intel vào năm 2022. Đến năm 2025, TSMC thu hơn 122 tỷ USD, gấp hơn hai lần Intel[^owid][^intel25].
+
+<RevenueRace />
 
 ## Phần 3: Vì sao cả thế giới phụ thuộc vào TSMC và ASML
 
 ### TSMC
 
-Năm 2022, doanh thu của TSMC lần đầu vượt Intel. Năm 2025, TSMC thu hơn 122 tỷ USD, gấp hơn hai lần Intel[^owid][^intel25].
-
-<RevenueRace />
-
-Trong ngành sản xuất chip thuê, TSMC chiếm 72,5% doanh thu quý 2 năm 2026. Hãng đứng thứ hai là Samsung chỉ có 5,9%[^trendforce].
+Trong ngành sản xuất chip thuê, TSMC chiếm 72,5% doanh thu quý 2 năm 2026. Samsung đứng thứ hai, chỉ có 5,9%[^trendforce].
 
 <FoundryShare />
 
 Với chip tiên tiến nhất thì còn tập trung hơn. Năm 2019, 92% năng lực sản xuất chip dưới 10nm của thế giới nằm ở Đài Loan[^bcg2021].
 
-![Đường chân trời Đài Bắc về đêm với tòa tháp Taipei 101](./taipei.webp "Đài Bắc về đêm. Phần lớn nhà máy của TSMC nằm ở Tân Trúc, Đài Trung và Đài Nam. Ảnh: Timo Volz / Unsplash")
-
-Các nước khác khó đuổi kịp vì nhiều lý do. Một dây chuyền sản xuất tiên tiến tốn 15 đến 25 tỷ USD[^semix], và riêng năm 2026 TSMC dự kiến chi 60 đến 64 tỷ USD cho đầu tư[^arizona]. Tỷ lệ chip đạt chuẩn trên mỗi wafer chỉ tăng dần qua sản xuất thật, nên hãng làm nhiều nhất cũng học nhanh nhất. Khách hàng tin TSMC vì TSMC không cạnh tranh với họ. Quanh Tân Trúc còn có cả một mạng lưới nhà cung cấp và kỹ sư hình thành trong gần 40 năm, và xây một nhà máy ở nước khác dễ hơn nhiều so với xây lại mạng lưới đó.
+Đuổi theo TSMC trước hết cần rất nhiều tiền. Một nhà máy chip tiên tiến tốn 15 đến 25 tỷ USD[^semix], còn riêng năm 2026 TSMC dự kiến chi 60 đến 64 tỷ USD cho đầu tư[^arizona]. Có tiền rồi vẫn phải học: tỷ lệ chip đạt chuẩn trên mỗi wafer chỉ tăng dần qua sản xuất thật, nên hãng làm nhiều nhất cũng là hãng học nhanh nhất, đúng như cách Morris Chang tính từ thời ở TI. Quanh Tân Trúc còn có cả một mạng lưới nhà cung cấp và kỹ sư hình thành trong gần 40 năm, và xây một nhà máy ở nước khác dễ hơn nhiều so với xây lại mạng lưới đó.
 
 ### ASML
 
 Năm 2025, ASML chiếm khoảng 83% doanh số máy quang khắc và là hãng duy nhất bán máy EUV[^asmlwiki]. Doanh thu năm đó đạt 32,7 tỷ euro[^asml2025]. Muốn làm máy EUV, một đối thủ phải làm lại ba thập kỷ nghiên cứu của ASML và tìm được những nhà cung cấp ngang Zeiss, Trumpf và Cymer, mà bản thân các hãng này cũng gần như độc quyền ở mảng của mình.
 
-### Không chỉ có hai cái tên
+### Điểm nghẽn
 
-Báo cáo năm 2021 của BCG và Hiệp hội Công nghiệp Bán dẫn Mỹ đếm được hơn 50 điểm trong chuỗi cung ứng mà một khu vực nắm từ 65% thị phần trở lên[^bcg2021]. TSMC và ASML chỉ là hai điểm nổi tiếng nhất.
+Báo cáo năm 2021 của BCG và Hiệp hội Công nghiệp Bán dẫn Mỹ gọi những khâu mà một khu vực nắm từ 65% thị phần trở lên là điểm nghẽn, và đếm được hơn 50 điểm như vậy trong chuỗi cung ứng chip[^bcg2021]. TSMC và ASML chỉ là hai cái tên nổi tiếng nhất.
 
 <Chokepoints />
 
-### Lá chắn silicon
+### Rủi ro ở Đài Loan
 
-Ở Đài Loan, tình trạng này được gọi là **lá chắn silicon**: cả thế giới, kể cả Trung Quốc, đều cần chip của Đài Loan, nên không ai muốn có chiến tranh ở eo biển[^shield]. Không phải ai cũng tin vào điều đó. Năm 2022, cựu quan chức Mỹ Matthew Pottinger cho rằng Trung Quốc không hành xử theo cách mà các nước dân chủ cho là hợp lý[^twsemi].
+Ở Đài Loan, tình trạng này được gọi là **lá chắn silicon**: cả thế giới, kể cả Trung Quốc, đều cần chip của Đài Loan, nên không ai muốn có chiến tranh ở eo biển[^shield]. Không phải ai cũng tin vào điều đó. Năm 2022, cựu quan chức Mỹ Matthew Pottinger cho rằng lá chắn này không có thật, vì Trung Quốc không hành xử theo cách mà các nước dân chủ cho là hợp lý[^twsemi].
 
-Thiên tai cũng là một rủi ro. Sau trận động đất 7,4 độ gần Hoa Liên ngày 3 tháng 4 năm 2024, TSMC mất 10 giờ để khôi phục hơn 70% thiết bị[^quake]. Năm 2021, đợt hạn hán tệ nhất trong hơn 50 năm buộc Đài Loan phải chở nước bằng xe bồn tới các nhà máy chip[^twsemi].
+Đài Loan còn có động đất và hạn hán. Năm 2021, đợt hạn hán tệ nhất trong hơn 50 năm buộc Đài Loan phải chở nước bằng xe bồn tới các nhà máy chip[^twsemi]. Tháng 4 năm 2024, trận động đất 7,4 độ gần Hoa Liên, mạnh nhất trong 25 năm, làm TSMC mất 10 giờ mới khôi phục được hơn 70% thiết bị[^quake].
 
 ## Phần 4: Chiến tranh chip
 
 Các nước đã bắt đầu dùng những điểm nghẽn này để gây sức ép lên nhau. Tháng 7 năm 2019, Nhật siết xuất khẩu sang Hàn Quốc ba loại hóa chất dùng để làm chip, trong đó có chất cản quang[^jt].
 
-Mỹ thì nhắm vào Trung Quốc. Từ năm 2018, Mỹ tìm cách chặn ASML bán máy cho Trung Quốc[^asmlwiki]. Năm 2020, lệnh cấm với Huawei được mở rộng, và từ ngày 14 tháng 9 TSMC ngừng giao chip cho Huawei, khi đó là khách hàng lớn thứ hai của họ[^tsmcwiki].
+Mỹ thì nhắm vào Trung Quốc, và từ năm 2018 đã tìm cách chặn ASML bán máy cho nước này[^asmlwiki]. Năm 2020, lệnh cấm với Huawei được mở rộng, và từ ngày 14 tháng 9 TSMC ngừng giao chip cho Huawei, khi đó là khách hàng lớn thứ hai của họ[^tsmcwiki].
 
-Năm 2022, Mỹ thông qua Đạo luật CHIPS với 52,7 tỷ USD cho ngành bán dẫn, trong đó 39 tỷ USD để xây nhà máy ở Mỹ[^chipsact]. Tháng 10 cùng năm, Mỹ hạn chế xuất khẩu sang Trung Quốc chip AI tiên tiến và thiết bị để làm chip tiên tiến[^export]. Hà Lan và Nhật sau đó cũng siết xuất khẩu thiết bị[^asmlwiki].
+Tháng 10 năm 2022, Mỹ hạn chế xuất khẩu sang Trung Quốc chip AI cao cấp và thiết bị làm chip tiên tiến[^export]. Hà Lan và Nhật sau đó cũng siết xuất khẩu thiết bị[^asmlwiki]. Trung Quốc thì tự làm lấy. Tháng 8 năm 2023, Huawei ra mắt điện thoại Mate 60 Pro với chip 7nm do SMIC sản xuất mà không cần máy EUV[^mate60]. Đến nay SMIC đã làm được chip tương đương 5nm[^semix].
 
-Trung Quốc chọn cách tự làm. Tháng 8 năm 2023, Huawei ra mắt điện thoại Mate 60 Pro với chip 7nm do SMIC sản xuất mà không cần máy EUV[^mate60].
+Mỹ cũng tìm cách kéo nhà máy về nước mình. Đạo luật CHIPS năm 2022 dành 52,7 tỷ USD cho ngành bán dẫn, trong đó 39 tỷ USD để xây nhà máy ở Mỹ[^chipsact]. Cả gói này còn ít hơn số tiền TSMC định chi cho đầu tư chỉ riêng năm 2026. TSMC công bố nhà máy 12 tỷ USD ở Arizona từ năm 2020, và đến tháng 7 năm 2026, tổng cam kết đầu tư của hãng ở Mỹ đã lên 265 tỷ USD[^arizona][^tsmcwiki]. TSMC còn xây nhà máy ở Kumamoto (Nhật Bản) và Dresden (Đức)[^tsmcwiki].
 
-Mỹ cũng kéo TSMC sang đất Mỹ. Năm 2020, TSMC công bố nhà máy 12 tỷ USD ở Arizona. Đến tháng 7 năm 2026, tổng cam kết đầu tư của TSMC ở Mỹ đã lên 265 tỷ USD[^arizona][^tsmcwiki]. TSMC còn xây nhà máy ở Kumamoto (Nhật Bản) và Dresden (Đức)[^tsmcwiki].
-
-Làn sóng AI làm sự phụ thuộc này rõ hơn nữa. Gần như mọi chip AI quan trọng, từ GPU của Nvidia đến chip của Google hay Amazon, đều do TSMC sản xuất, và quý 2 năm 2026 dây chuyền 3nm và 5/4nm của TSMC kín công suất[^trendforce]. Nvidia, công ty gần phá sản năm 1997 khi nhận cuộc gọi của Morris Chang, giờ là một trong những khách hàng lớn nhất của TSMC.
+Cơn sốt AI càng làm sự phụ thuộc này lộ rõ. Gần như mọi chip AI quan trọng, từ GPU của Nvidia đến chip của Google hay Amazon, đều do TSMC sản xuất, và quý 2 năm 2026 các dây chuyền tiên tiến nhất của hãng chạy kín công suất[^trendforce]. Nvidia, công ty đang gần phá sản khi nhận cuộc gọi của Morris Chang năm 1997, giờ là một trong những khách hàng lớn nhất của TSMC.
 
 ## Kết luận
 
-Không ai lên kế hoạch để cả thế giới phải dựa vào TSMC và ASML. Mỗi thế hệ chip lại đắt và khó hơn thế hệ trước, nên số công ty theo kịp ít dần. Những công ty còn lại là những công ty đã dám chi tiền vào lúc khó khăn nhất: Samsung khi giá chip nhớ giảm, TSMC giữa khủng hoảng 2009, ASML suốt ba thập kỷ làm EUV. Các chính phủ giờ đang chi hàng trăm tỷ USD để phân tán chuỗi cung ứng. Sự tập trung này mất mấy chục năm để hình thành, nên theo mình nó cũng sẽ cần chừng ấy thời gian để thay đổi.
+Năm 2021, thiếu những con chip vài đô đã đủ làm nhà máy ô tô khắp thế giới dừng dây chuyền. Với chip tiên tiến nhất, cả thế giới đang trông vào một công ty ở Đài Loan và một công ty ở Hà Lan, và cả hai đều từng dám chi tiền vào lúc khó khăn nhất. Nhà máy mới đang được xây ở Mỹ, Nhật và Đức, nhưng sự tập trung này mất mấy chục năm để hình thành, nên theo mình nó cũng sẽ cần chừng ấy thời gian để thay đổi.
 
 [^chipwar]: Chris Miller (2022), _Chip War: The Fight for the World's Most Critical Technology_, Scribner.
 [^alix]: [Chip shortage expected to cost auto industry \$210 billion in 2021](https://www.cnbc.com/2021/09/23/chip-shortage-expected-to-cost-auto-industry-210-billion-in-2021.html), CNBC, dẫn dự báo của AlixPartners, tháng 9/2021.

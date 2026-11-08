@@ -41,7 +41,7 @@ const vi = (n: number) => n.toFixed(1).replace(".", ",");
           cells.map((c, i) => (
             <span
               data-cell={c}
-              class="block rounded-[2px] bg-[#26262b] transition-[background-color,opacity] duration-300"
+              class="block cursor-pointer rounded-[2px] bg-[#26262b] transition-[background-color,opacity] duration-300"
               style={`transition-delay:${i * 11}ms`}
             />
           ))
@@ -49,13 +49,13 @@ const vi = (n: number) => n.toFixed(1).replace(".", ",");
       </div>
       <div class="min-w-0 flex-1">
         <p class="m-0 text-5xl font-semibold leading-none text-(--ink)">72,5%</p>
-        <p class="mt-2 mb-4 text-sm leading-6 text-(--muted)">doanh thu đúc chip của thế giới thuộc về TSMC trong quý 2 năm 2026</p>
+        <p class="mt-2 mb-4 text-sm leading-6 text-(--muted)">doanh thu sản xuất chip thuê của thế giới thuộc về TSMC, quý 2 năm 2026</p>
         <ul class="m-0 list-none space-y-0.5 p-0">
           {
             cos.map((c, i) => (
               <li
                 data-row={i}
-                class="flex cursor-default items-center gap-2.5 rounded-[0.25rem] px-1 py-0.5 text-sm transition-opacity"
+                class="flex cursor-pointer items-center gap-2.5 rounded-[0.25rem] px-1 py-0.5 text-sm transition-opacity"
               >
                 <span class="h-3 w-3 shrink-0 rounded-[2px]" style={`background:${c.color}`} />
                 <span class="text-(--ink)">{c.name}</span>
@@ -68,8 +68,9 @@ const vi = (n: number) => n.toFixed(1).replace(".", ",");
       </div>
     </div>
   </div>
-  <figcaption class="mt-2 text-center text-sm text-(--muted)">
-    Mỗi ô là 1% doanh thu của ngành đúc chip toàn cầu, quý 2 năm 2026. Nguồn: TrendForce.
+  <figcaption class="mt-2 text-balance text-center text-sm text-(--muted)">
+    Mỗi ô là 1% doanh thu sản xuất chip thuê toàn cầu, quý 2 năm 2026.
+    <span class="mt-0.5 block font-mono text-xs text-(--faint)">Nguồn: TrendForce.</span>
   </figcaption>
 </figure>
 
@@ -91,14 +92,21 @@ const vi = (n: number) => n.toFixed(1).replace(".", ",");
       });
       rows.forEach((r, k) => (r.style.opacity = i === null || k === i ? "1" : "0.45"));
     }
-    cells.forEach((c) => {
-      c.addEventListener("pointerenter", () => focus(+(c.dataset.cell || 0)));
-      c.addEventListener("pointerleave", () => focus(null));
-    });
-    rows.forEach((r, k) => {
-      r.addEventListener("pointerenter", () => focus(k));
-      r.addEventListener("pointerleave", () => focus(null));
-    });
+    // Click or tap pins a company (again to unpin); a mouse hover previews one
+    // and leaving returns to whatever is pinned.
+    let pinned: number | null = null;
+    const bind = (target: HTMLElement, k: number) => {
+      target.addEventListener("pointerenter", (e) => {
+        if ((e as PointerEvent).pointerType !== "touch") focus(k);
+      });
+      target.addEventListener("pointerleave", () => focus(pinned));
+      target.addEventListener("click", () => {
+        pinned = pinned === k ? null : k;
+        focus(pinned);
+      });
+    };
+    cells.forEach((c) => bind(c, +(c.dataset.cell || 0)));
+    rows.forEach((r, k) => bind(r, k));
 
     if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       cells.forEach((c) => (c.style.transitionDelay = "0ms"));

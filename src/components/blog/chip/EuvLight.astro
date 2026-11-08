@@ -5,11 +5,18 @@
  * a lot; the steps below the drawing light up in sync and can be clicked.
  */
 const steps = [
-  "Một giọt thiếc nóng chảy, rộng khoảng 30 micromet, rơi qua buồng chân không.",
-  "Xung laser thứ nhất bắn trúng giọt thiếc và làm nó dẹt ra.",
-  "Xung thứ hai mạnh hơn nhiều, biến giọt thiếc thành plasma nóng vài trăm nghìn độ.",
-  "Plasma phát ra ánh sáng 13,5nm. Gương hứng lấy ánh sáng và dẫn nó đi tiếp tới các gương khác, rồi tới wafer.",
+  { name: "Giọt thiếc", text: "Một giọt thiếc nóng chảy, rộng khoảng 30 micromet, rơi qua buồng chân không." },
+  { name: "Xung thứ nhất", text: "Xung laser thứ nhất bắn trúng giọt thiếc và làm nó dẹt ra." },
+  {
+    name: "Xung thứ hai",
+    text: "Xung thứ hai mạnh hơn nhiều, biến giọt thiếc thành plasma, một đám khí nóng vài trăm nghìn độ.",
+  },
+  {
+    name: "Ánh sáng EUV",
+    text: "Plasma phát ra ánh sáng 13,5nm. Gương hứng ánh sáng này rồi phản chiếu qua các gương khác để tới wafer.",
+  },
 ];
+const stepLabel = (i: number) => `Bước ${i + 1}/${steps.length} · ${steps[i].name}`;
 
 // Geometry (viewBox 600 x 300)
 const fx = 220;
@@ -29,7 +36,7 @@ const cone = `M${tx.toFixed(1)},${ty.toFixed(1)} L${ifx},${fy} L${bx.toFixed(1)}
 const coneEdges = `M${tx.toFixed(1)},${ty.toFixed(1)} L${ifx},${fy} M${bx.toFixed(1)},${by.toFixed(1)} L${ifx},${fy}`;
 ---
 
-<figure class="not-prose my-8" data-euv-light>
+<figure class="not-prose my-8" data-euv-light data-labels={JSON.stringify(steps.map((_, i) => stepLabel(i)))}>
   <div class="rounded-surface overflow-hidden border border-(--line) bg-(--surface)">
     <div class="relative bg-[#0e0e10]">
       <svg
@@ -51,24 +58,24 @@ const coneEdges = `M${tx.toFixed(1)},${ty.toFixed(1)} L${ifx},${fy} M${bx.toFixe
           </linearGradient>
         </defs>
 
-        <rect x="12" y="12" width="576" height="276" rx="12" fill="#141417" stroke="#2a2a2e" stroke-width="1.5"></rect>
-        <text class="euv-l euv-chamber" x="28" y="40" fill="#71717a">buồng chân không</text>
+        <rect x="12" y="12" width="576" height="276" rx="6" fill="#141417" stroke="#2a2a2e" stroke-width="1.5"></rect>
+        <text class="euv-l euv-chamber" x="574" y="278" text-anchor="end" fill="#8f8f98">buồng chân không</text>
 
-        <!-- EUV light cone, from the mirror to the intermediate focus -->
-        <g data-cone opacity="0">
+        <!-- EUV light cone, from the mirror to the intermediate focus. A faint ghost until the light is on. -->
+        <g data-cone opacity=".1">
           <path d={cone} fill="url(#euv-cone)"></path>
           <path data-flow d={coneEdges} fill="none" stroke="#c4b5fd" stroke-width="1.6" stroke-dasharray="6 7"></path>
           <circle cx={ifx} cy={fy} r="5" fill="#c4b5fd"></circle>
         </g>
         <g data-cone-label opacity="0">
-          <text class="euv-l" x={ifx + 4} y={fy - 58} text-anchor="end" fill="#ededed">ánh sáng 13,5nm</text>
+          <text class="euv-l" x={ifx + 4} y={fy - 48} text-anchor="end" fill="#ededed">ánh sáng 13,5nm</text>
           <path d={`M${ifx + 8},${fy} H${ifx + 34} M${ifx + 27},${fy - 6} L${ifx + 35},${fy} L${ifx + 27},${fy + 6}`} fill="none" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
         </g>
 
         <!-- Collector mirror, with a hole in the middle for the laser -->
         <path d={arc(115, 172)} fill="none" stroke="#d4d4d8" stroke-width="7" stroke-linecap="round"></path>
         <path d={arc(188, 245)} fill="none" stroke="#d4d4d8" stroke-width="7" stroke-linecap="round"></path>
-        <text class="euv-l" x={fx - 70} y={fy + 122} text-anchor="middle" fill="#a1a1aa">gương hứng</text>
+        <text class="euv-l" x={fx - 70} y={fy + 118} text-anchor="middle" fill="#a1a1aa">gương hứng</text>
 
         <!-- Droplet path and generator -->
         <line x1={fx} y1={nozzleY + 14} x2={fx} y2={fy - 12} stroke="#3f3f46" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round"></line>
@@ -77,15 +84,23 @@ const coneEdges = `M${tx.toFixed(1)},${ty.toFixed(1)} L${ifx},${fy} M${bx.toFixe
 
         <!-- Laser -->
         <line x1="13" y1={fy} x2={fx - 8} y2={fy} stroke="#f87171" stroke-opacity=".16" stroke-width="3"></line>
-        <text class="euv-l" x="24" y={fy - 62} fill="#f87171">laser CO₂</text>
+        <text class="euv-l euv-laser" x="18" y={fy - 10} fill="#f87171">laser CO₂</text>
         <line data-pre x1="13" y1={fy} x2={fx - 6} y2={fy} stroke="#f87171" stroke-width="3" opacity="0"></line>
-        <line data-main x1="13" y1={fy} x2={fx - 6} y2={fy} stroke="#fca5a5" stroke-width="9" stroke-linecap="round" opacity="0"></line>
+        <line data-main x1="17" y1={fy} x2={fx - 6} y2={fy} stroke="#fca5a5" stroke-width="9" stroke-linecap="round" opacity="0"></line>
 
         <!-- Droplet and plasma -->
         <ellipse data-drop cx={fx} cy={nozzleY + 18} rx="6.5" ry="6.5" fill="#e4e4e7"></ellipse>
         <circle data-glow cx={fx} cy={fy} r="34" fill="url(#euv-glow)" opacity="0"></circle>
         <text data-plasma-label class="euv-l" x={fx + 26} y={fy + 36} fill="#eab308" font-weight="600" opacity="0">plasma</text>
       </svg>
+      <!-- Which step is on screen. Top-left inside the chamber; bottom-right on phones, where the top holds the droplet generator. -->
+      <div
+        data-step-label
+        aria-hidden="true"
+        class="rounded-surface pointer-events-none absolute bottom-[calc(4%+6px)] right-[calc(2%+6px)] bg-[#0e0e10]/85 px-1.5 py-0.5 font-mono text-[11px] text-(--muted) sm:bottom-auto sm:left-[calc(2%+6px)] sm:right-auto sm:top-[calc(4%+6px)]"
+      >
+        {stepLabel(0)}
+      </div>
     </div>
 
     <div class="border-t border-(--line) px-4 pb-4 pt-3">
@@ -100,60 +115,101 @@ const coneEdges = `M${tx.toFixed(1)},${ty.toFixed(1)} L${ifx},${fy} M${bx.toFixe
               >
                 <span
                   data-num
-                  class="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full border border-(--line-strong) font-mono text-[11px] transition-colors"
+                  class="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full border border-(--line-strong) font-mono text-[11px] leading-none transition-colors"
                 >
                   {i + 1}
                 </span>
-                <span data-text class="transition-colors">{s}</span>
+                <span data-text class="transition-colors">{s.text}</span>
               </button>
             </li>
           ))
         }
       </ol>
-      <div class="mt-3 flex items-center gap-3">
+      <div class="mt-3 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3">
         <button
           type="button"
           data-play
-          class="rounded-surface shrink-0 border border-(--line-strong) bg-(--page) px-2.5 py-1 font-mono text-xs text-(--ink) hover:bg-(--surface-hover)"
-          >Tạm dừng</button
+          class="rounded-surface h-8 shrink-0 border border-(--line-strong) bg-(--page) px-3 font-mono text-xs text-(--ink) hover:bg-(--surface-hover)"
+          >❚❚ Tạm dừng</button
         >
-        <p class="m-0 text-xs leading-5 text-(--faint)">
-          Chậm hơn thực tế khoảng 400.000 lần. Máy thật lặp lại chu kỳ này 50.000 lần mỗi giây.
+        <p class="m-0 text-pretty text-xs leading-5 text-(--faint)">
+          <span class="block">Bấm vào từng bước để dừng lại xem.</span>
+          <span class="block">Chậm hơn thực tế khoảng 500.000 lần. Máy thật lặp lại chu kỳ này 50.000 lần mỗi giây.</span>
         </p>
       </div>
     </div>
   </div>
-  <figcaption class="mt-2 text-center text-sm text-(--muted)">
-    Hình vẽ minh họa, không đúng tỉ lệ. Nguồn: ASML, Trumpf, MIT Technology Review.
+  <figcaption class="mt-2 text-balance text-center text-sm text-(--muted)">
+    Hình vẽ minh họa, không đúng tỉ lệ.
+    <span class="mt-0.5 block font-mono text-xs text-(--faint)">Nguồn: ASML, Trumpf, MIT Technology Review.</span>
   </figcaption>
 </figure>
 
 <style>
   .euv-l {
-    font-size: 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
   }
-  @media (max-width: 520px) {
+  /* The drawing shrinks on smaller screens; bigger units keep the labels near 12px on screen. */
+  @media (max-width: 639px) {
+    .euv-l {
+      font-size: 14px;
+    }
+    /* The step label sits bottom-right here. */
+    .euv-chamber {
+      display: none;
+    }
+  }
+  @media (max-width: 560px) {
+    .euv-l {
+      font-size: 17px;
+    }
+  }
+  @media (max-width: 460px) {
     .euv-l {
       font-size: 21px;
     }
-    .euv-chamber {
-      display: none;
+    /* A touch smaller so it fits between the chamber wall and the mirror. */
+    .euv-laser {
+      font-size: 19px;
     }
   }
 </style>
 
 <script>
-  const D = 8; // seconds per loop
+  const D = 8; // seconds of drawing timeline
+  const LOOP = 10; // seconds per loop on screen
   const FX = 220;
   const FY = 160;
   const NOZZLE = 48;
-  // Where each step starts, and the moment shown when a step is clicked.
-  const STARTS = [0, 1.2, 2.3, 3.0];
-  const SHOW = [0.75, 1.42, 2.5, 4.2];
+  // The loop clock u (0..LOOP) maps onto the drawing timeline t (0..D), so the
+  // quick middle steps get more screen time. Pairs are [u, t].
+  const KEYS = [
+    [0, 0],
+    [1.6, 1.18],
+    [2.2, 1.2],
+    [2.9, 1.8],
+    [4.0, 2.28],
+    [5.4, 3.0],
+    [LOOP, D],
+  ];
+  // Where each step starts, and the moment shown when a step is clicked (in u).
+  const STARTS = [0, 2.2, 4.0, 5.4];
+  const SHOW = [1.0, 2.45, 4.55, 7.0];
 
   const clamp = (v: number, a = 0, b = 1) => Math.max(a, Math.min(b, v));
   const lin = (t: number, t0: number, t1: number) => clamp((t - t0) / (t1 - t0));
   const easeOut = (x: number) => 1 - Math.pow(1 - x, 3);
+  function remap(u: number) {
+    for (let i = 1; i < KEYS.length; i++) {
+      const [u1, t1] = KEYS[i];
+      if (u <= u1) {
+        const [u0, t0] = KEYS[i - 1];
+        return t0 + ((t1 - t0) * (u - u0)) / (u1 - u0);
+      }
+    }
+    return D;
+  }
 
   function initEuv(root: HTMLElement) {
     if (root.dataset.ready) return;
@@ -167,10 +223,12 @@ const coneEdges = `M${tx.toFixed(1)},${ty.toFixed(1)} L${ifx},${fy} M${bx.toFixe
     const coneG = q("[data-cone]");
     const coneLabel = q("[data-cone-label]");
     const flow = q("[data-flow]");
+    const stepLabel = root.querySelector("[data-step-label]") as HTMLElement;
+    const stepLabels = JSON.parse(root.dataset.labels || "[]") as string[];
     const playBtn = root.querySelector("[data-play]") as HTMLButtonElement;
     const stepBtns = Array.from(root.querySelectorAll("[data-step]")) as HTMLButtonElement[];
 
-    let t = 0;
+    let u = 0;
     let playing = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let inView = false;
     let last = 0;
@@ -178,6 +236,7 @@ const coneEdges = `M${tx.toFixed(1)},${ty.toFixed(1)} L${ifx},${fy} M${bx.toFixe
     let shownStep = -1;
 
     function draw() {
+      const t = remap(u);
       // Fade the whole cycle out at the end of the loop.
       const out = 1 - lin(t, D - 0.7, D - 0.15);
 
@@ -194,10 +253,10 @@ const coneEdges = `M${tx.toFixed(1)},${ty.toFixed(1)} L${ifx},${fy} M${bx.toFixe
       drop.setAttribute("ry", ry.toFixed(2));
       drop.setAttribute("opacity", dropOn.toFixed(2));
 
-      const preOn = t >= 1.2 && t < 1.5 ? 1 - lin(t, 1.3, 1.5) : 0;
+      const preOn = t >= 1.2 && t < 1.65 ? 1 - lin(t, 1.45, 1.65) : 0;
       pre.setAttribute("opacity", (preOn * 0.95).toFixed(2));
       // 3. Second, stronger pulse turns it into plasma.
-      const mainOn = t >= 2.3 && t < 2.8 ? 1 - lin(t, 2.45, 2.8) : 0;
+      const mainOn = t >= 2.3 && t < 2.85 ? 1 - lin(t, 2.6, 2.85) : 0;
       main.setAttribute("opacity", mainOn.toFixed(2));
 
       let g = 0;
@@ -212,18 +271,19 @@ const coneEdges = `M${tx.toFixed(1)},${ty.toFixed(1)} L${ifx},${fy} M${bx.toFixe
       }
       glow.setAttribute("opacity", (g * out).toFixed(2));
       glow.setAttribute("transform", `translate(${FX} ${FY}) scale(${s.toFixed(3)}) translate(${-FX} ${-FY})`);
-      plasmaLabel.setAttribute("opacity", (lin(t, 2.6, 3.0) * out).toFixed(2));
+      plasmaLabel.setAttribute("opacity", (lin(t, 2.4, 2.55) * out).toFixed(2));
 
       // 4. Light comes off the mirror and converges on the focus point.
       const c = lin(t, 3.0, 3.7) * out;
-      coneG.setAttribute("opacity", c.toFixed(2));
+      coneG.setAttribute("opacity", (0.1 + 0.9 * c).toFixed(2));
       coneLabel.setAttribute("opacity", (lin(t, 3.4, 3.9) * out).toFixed(2));
-      flow.setAttribute("stroke-dashoffset", (-t * 26).toFixed(1));
+      flow.setAttribute("stroke-dashoffset", (-Math.max(0, t - 3) * 26).toFixed(1));
 
       let step = 0;
-      for (let i = 0; i < STARTS.length; i++) if (t >= STARTS[i]) step = i;
+      for (let i = 0; i < STARTS.length; i++) if (u >= STARTS[i]) step = i;
       if (step !== shownStep) {
         shownStep = step;
+        stepLabel.textContent = stepLabels[step];
         stepBtns.forEach((b, i) => {
           const on = i === step;
           const num = b.querySelector("[data-num]") as HTMLElement;
@@ -232,6 +292,8 @@ const coneEdges = `M${tx.toFixed(1)},${ty.toFixed(1)} L${ifx},${fy} M${bx.toFixe
           num.style.borderColor = on ? "#eab308" : "";
           num.style.color = on ? "#0c0c0d" : "";
           txt.style.color = on ? "#ededed" : "";
+          if (on) b.setAttribute("aria-current", "step");
+          else b.removeAttribute("aria-current");
         });
       }
     }
@@ -239,7 +301,7 @@ const coneEdges = `M${tx.toFixed(1)},${ty.toFixed(1)} L${ifx},${fy} M${bx.toFixe
     function tick(now: number) {
       const dt = Math.min((now - last) / 1000, 0.1);
       last = now;
-      t = (t + dt) % D;
+      u = (u + dt) % LOOP;
       draw();
       raf = requestAnimationFrame(tick);
     }
@@ -250,7 +312,7 @@ const coneEdges = `M${tx.toFixed(1)},${ty.toFixed(1)} L${ifx},${fy} M${bx.toFixe
         last = performance.now();
         raf = requestAnimationFrame(tick);
       }
-      playBtn.textContent = playing ? "Tạm dừng" : "Chạy tiếp";
+      playBtn.textContent = playing ? "❚❚ Tạm dừng" : "▶︎ Chạy tiếp";
     }
 
     playBtn.addEventListener("click", () => {
@@ -259,14 +321,14 @@ const coneEdges = `M${tx.toFixed(1)},${ty.toFixed(1)} L${ifx},${fy} M${bx.toFixe
     });
     stepBtns.forEach((b, i) =>
       b.addEventListener("click", () => {
-        t = SHOW[i];
+        u = SHOW[i];
         playing = false;
         draw();
         sync();
       })
     );
 
-    if (!playing) t = SHOW[3];
+    if (!playing) u = SHOW[3];
     draw();
     sync();
 

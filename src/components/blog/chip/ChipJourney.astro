@@ -21,8 +21,8 @@ const steps: Step[] = [
   {
     key: "all",
     label: "Toàn cảnh",
-    title: "Một con chip đi qua ít nhất bảy nước",
-    body: "Mỗi nước giữ một khâu mà nước khác khó thay thế. Bấm Tiếp để đi theo con chip từ bản thiết kế tới tay bạn.",
+    title: "Một con chip đi qua nhiều nước",
+    body: "Bấm Tiếp để đi theo con chip từ bản thiết kế tới tay bạn.",
     pins: [],
     cam: "world",
   },
@@ -54,7 +54,7 @@ const steps: Step[] = [
     key: "jp",
     label: "Nhật Bản",
     title: "Nhật Bản: vật liệu",
-    body: "Tấm wafer silicon siêu tinh khiết và hóa chất cản quang phần lớn đến từ Nhật. Riêng chất cản quang dùng cho máy EUV, ba công ty JSR, Tokyo Ohka và Shin-Etsu nắm khoảng 90% thị trường.",
+    body: "Tấm wafer silicon siêu tinh khiết và chất cản quang phần lớn đến từ Nhật.",
     pins: ["jp"],
     cam: "jp",
   },
@@ -62,15 +62,15 @@ const steps: Step[] = [
     key: "tw",
     label: "Đài Loan",
     title: "Đài Loan: sản xuất",
-    body: "Ở Tân Trúc, TSMC in bản thiết kế lên wafer qua hàng trăm bước, mất khoảng ba tháng. Quý 2 năm 2026, TSMC chiếm 72,5% doanh thu đúc chip của cả thế giới.",
+    body: "Ở Tân Trúc, TSMC in bản thiết kế lên wafer. Đây là khâu khó nhất, và phần lớn chip tiên tiến nhất thế giới được làm ở Đài Loan.",
     pins: ["tw"],
     cam: "tw",
   },
   {
     key: "sea",
     label: "Đông Nam Á",
-    title: "Đông Nam Á: đóng gói, kiểm thử",
-    body: "Wafer được cắt thành từng con chip, đóng vỏ và kiểm tra. Malaysia làm khâu này cho các hãng Mỹ từ năm 1972.",
+    title: "Đông Nam Á: đóng gói, kiểm tra",
+    body: "Wafer được cắt thành từng con chip, đóng gói và kiểm tra. Malaysia có nhiều nhà máy đóng gói, nên các đợt phong tỏa ở đây năm 2021 là một phần lý do ngành ô tô thiếu chip.",
     pins: ["my"],
     cam: "sea",
   },
@@ -102,22 +102,37 @@ const steps: Step[] = [
       </svg>
       <p
         data-where
-        class="pointer-events-none absolute left-3 top-2.5 m-0 font-mono text-xs uppercase tracking-wider text-(--faint)"
+        class="rounded-surface pointer-events-none absolute left-2 top-2 m-0 bg-[#0e0e10]/85 px-1.5 py-0.5 font-mono text-xs uppercase tracking-wider text-(--muted)"
       >
         Toàn cảnh
       </p>
     </div>
     <div class="border-t border-(--line) px-4 pb-4 pt-3">
-      <h3 data-title class="m-0 text-base font-medium leading-6 text-(--ink)">{steps[0].title}</h3>
-      <p data-body class="mt-1.5 mb-0 min-h-[4.9rem] text-sm leading-6 text-(--muted) sm:min-h-[3.4rem]">{steps[0].body}</p>
+      <div data-panels class="grid" aria-live="polite">
+        {
+          steps.map((s, i) => (
+            <div
+              data-panel={i}
+              aria-hidden={i === 0 ? undefined : "true"}
+              class:list={[
+                "col-start-1 row-start-1 transition-[opacity,visibility] duration-200 motion-reduce:transition-none",
+                i !== 0 && "invisible opacity-0",
+              ]}
+            >
+              <h3 class="m-0 text-base font-medium leading-6 text-(--ink)">{s.title}</h3>
+              <p class="mt-1.5 mb-0 text-sm leading-6 text-(--muted)">{s.body}</p>
+            </div>
+          ))
+        }
+      </div>
       <div class="mt-3 flex items-center gap-2">
         <button
           type="button"
           data-prev
-          class="rounded-surface shrink-0 border border-(--line-strong) bg-(--page) px-2.5 py-1 text-sm text-(--ink) hover:bg-(--surface-hover) disabled:opacity-40"
+          class="rounded-surface h-8 shrink-0 border border-(--line-strong) bg-(--page) px-3 font-mono text-xs text-(--ink) hover:bg-(--surface-hover) disabled:opacity-40 disabled:hover:bg-(--page)"
           aria-label="Bước trước">←</button
         >
-        <ol data-dots class="m-0 flex flex-1 list-none items-center justify-center gap-1 p-0 sm:gap-1.5">
+        <ol data-dots class="m-0 flex flex-1 list-none items-center justify-center gap-0.5 p-0 sm:gap-1.5">
           {
             steps.map((s, i) => (
               <li>
@@ -126,9 +141,9 @@ const steps: Step[] = [
                   data-dot={i}
                   aria-label={s.label}
                   title={s.label}
-                  class="grid h-5 min-w-5 place-items-center rounded-full border border-(--line-strong) px-0.5 font-mono text-[10px] text-(--faint) transition-colors sm:h-6 sm:min-w-6 sm:text-[11px]"
+                  class="grid h-6 min-w-6 place-items-center rounded-full border border-(--line-strong) px-0.5 font-mono text-[11px] text-(--faint) transition-colors"
                 >
-                  {i === 0 ? "◎" : i}
+                  {i === 0 ? <span class="block h-2 w-2 rounded-full border border-current" /> : i}
                 </button>
               </li>
             ))
@@ -137,14 +152,16 @@ const steps: Step[] = [
         <button
           type="button"
           data-next
-          class="rounded-surface shrink-0 border border-(--accent) bg-(--page) px-2.5 py-1 text-sm text-(--accent) hover:bg-(--surface-hover) sm:px-3"
-          aria-label="Bước tiếp"><span data-next-label class="hidden sm:inline">Tiếp </span>→</button
+          class="rounded-surface inline-flex h-8 shrink-0 items-center gap-1.5 border border-(--accent) bg-(--page) px-3 font-mono text-xs text-(--accent) hover:bg-(--surface-hover)"
+          aria-label="Bước tiếp"
+          ><span data-next-label class="hidden sm:inline">Tiếp</span><span data-next-icon aria-hidden="true">→</span></button
         >
       </div>
     </div>
   </div>
-  <figcaption class="mt-2 text-center text-sm text-(--muted)">
-    Hành trình đã được đơn giản hóa: mỗi khâu thật ra có nhiều nước cùng làm. Bản đồ: Natural Earth.
+  <figcaption class="mt-2 text-balance text-center text-sm text-(--muted)">
+    Hành trình đã được đơn giản hóa: mỗi khâu thật ra có nhiều nước cùng làm.
+    <span class="mt-0.5 block font-mono text-xs text-(--faint)">Bản đồ: Natural Earth.</span>
   </figcaption>
 </figure>
 
@@ -172,8 +189,16 @@ const steps: Step[] = [
   ];
   const PIN_STEP: Record<string, number> = { us: 1, uk: 2, nl: 3, de: 3, jp: 4, tw: 5, my: 6, cn: 7 };
   const COUNTRY_STEP: Record<string, number> = PIN_STEP;
+  // UK and the Netherlands sit a few pixels apart when zoomed out. Below this
+  // on-screen distance their pins move apart (in screen px) on leader lines,
+  // and the small Germany pin hides.
+  const CROWD_PX = 24;
+  const NUDGE: Record<string, [number, number]> = { uk: [-10, -7], nl: [8, -7] };
+  const FLY_MS = 1200;
+  const ARCS_AT_MS = 700;
 
   const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
   function fitBox(points: [number, number][], pad: number): Box {
     const xs = points.map((p) => p[0]);
@@ -189,6 +214,21 @@ const steps: Step[] = [
     return [(x0 + x1) / 2 - w / 2, (y0 + y1) / 2 - h / 2, w, h];
   }
 
+  // Grow a frame around its centre until every point is at least `m` screen px
+  // from the edges (a pin with its ring is 30px wide). Only bites on small maps.
+  function keepMargin(b: Box, points: [number, number][], m: number, cw: number, ch: number): Box {
+    let f = 1;
+    for (const p of points) {
+      const rx = Math.min(p[0] - b[0], b[0] + b[2] - p[0]) / b[2];
+      const ry = Math.min(p[1] - b[1], b[1] + b[3] - p[1]) / b[3];
+      f = Math.max(f, (0.5 - rx) / (0.5 - m / cw), (0.5 - ry) / (0.5 - m / ch));
+    }
+    if (f <= 1) return b;
+    const cx = b[0] + b[2] / 2;
+    const cy = b[1] + b[3] / 2;
+    return [cx - (b[2] * f) / 2, cy - (b[3] * f) / 2, b[2] * f, b[3] * f];
+  }
+
   function initJourney(root: HTMLElement) {
     if (root.dataset.ready) return;
     root.dataset.ready = "1";
@@ -198,21 +238,35 @@ const steps: Step[] = [
     const arcsG = root.querySelector("[data-arcs]") as SVGGElement;
     const pinsG = root.querySelector("[data-pins]") as SVGGElement;
     const where = root.querySelector("[data-where]") as HTMLElement;
-    const title = root.querySelector("[data-title]") as HTMLElement;
-    const body = root.querySelector("[data-body]") as HTMLElement;
+    const panels = Array.from(root.querySelectorAll("[data-panel]")) as HTMLElement[];
     const prev = root.querySelector("[data-prev]") as HTMLButtonElement;
     const next = root.querySelector("[data-next]") as HTMLButtonElement;
     const nextLabel = root.querySelector("[data-next-label]") as HTMLElement;
+    const nextIcon = root.querySelector("[data-next-icon]") as HTMLElement;
     const dots = Array.from(root.querySelectorAll("[data-dot]")) as HTMLButtonElement[];
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     let data: MapData | null = null;
     let current = 0;
     let vb: Box = [88.6, -22.8, 800.7, 400.3];
     let camAnim = 0;
     let pending = 0;
+    let crowded = false;
     const countryEls: { k: string | null; el: SVGPathElement }[] = [];
     const arcEls: { el: SVGPathElement; flow: (typeof FLOWS)[number]; t: number; target: number }[] = [];
     const pinEls: Record<string, SVGGElement> = {};
+    // The part of each pin that moves aside when crowded, and its leader line.
+    const pinBodies: Record<string, SVGGElement> = {};
+    const leaders: Record<string, SVGGElement> = {};
+
+    const applyCrowd = () => {
+      for (const key in NUDGE) {
+        const [dx, dy] = NUDGE[key];
+        pinBodies[key].style.transform = crowded ? `translate(${dx}px,${dy}px)` : "";
+        leaders[key].style.opacity = crowded ? "1" : "0";
+      }
+      pinBodies.de.style.opacity = crowded ? "0" : "1";
+    };
 
     const setVB = (b: Box) => {
       vb = b;
@@ -225,22 +279,52 @@ const steps: Step[] = [
       }
       for (const a of arcEls) a.el.setAttribute("stroke-width", String(2.4 * k));
       land.setAttribute("stroke-width", String(0.8 * k));
+      checkCrowd();
     };
 
-    const flyTo = (target: Box, ms = 1000) =>
-      new Promise<void>((resolve) => {
-        cancelAnimationFrame(camAnim);
-        const from = vb.slice() as Box;
-        const t0 = performance.now();
-        const tick = (now: number) => {
-          const t = Math.min(1, (now - t0) / ms);
-          const e = ease(t);
-          setVB(from.map((v, i) => v + (target[i] - v) * e) as Box);
-          if (t < 1) camAnim = requestAnimationFrame(tick);
-          else resolve();
-        };
-        camAnim = requestAnimationFrame(tick);
-      });
+    // Spread the UK and NL pins only while both show and would overlap.
+    const checkCrowd = () => {
+      const k = vb[2] / Math.max(svg.clientWidth, 1);
+      const uk = data!.points.uk;
+      const nl = data!.points.nl;
+      const both = current === 0 || current >= PIN_STEP.nl;
+      const crowdedNow = both && Math.hypot(uk[0] - nl[0], uk[1] - nl[1]) / k < CROWD_PX;
+      if (crowdedNow !== crowded) {
+        crowded = crowdedNow;
+        applyCrowd();
+      }
+    };
+
+    const flyTo = (target: Box, ms: number) => {
+      cancelAnimationFrame(camAnim);
+      const from = vb.slice() as Box;
+      const t0 = performance.now();
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - t0) / ms);
+        const e = ease(t);
+        setVB(from.map((v, i) => v + (target[i] - v) * e) as Box);
+        if (t < 1) camAnim = requestAnimationFrame(tick);
+      };
+      camAnim = requestAnimationFrame(tick);
+    };
+
+    // Where the camera ends up for a step. For the far-away places, the frame
+    // holds the step's pins and Taiwan, so the whole arc is in view.
+    const frameFor = (i: number): Box => {
+      const s = steps[i];
+      if (i < 1 || i > 4) return data!.cams[s.cam];
+      const pts = [...s.pins.map((k) => data!.points[k]), data!.points.tw];
+      const cw = Math.max(svg.clientWidth, 1);
+      const ch = Math.max(svg.clientHeight, 1);
+      const b = keepMargin(fitBox(pts, 0.14), pts, 28, cw, ch);
+      // Where there is room below, move the top pin down clear of the step label.
+      const k = b[3] / ch;
+      const top = Math.min(...pts.map((p) => p[1]));
+      const bottom = Math.max(...pts.map((p) => p[1]));
+      const shift = Math.min(60 * k - (top - b[1]), b[1] + b[3] - bottom - 28 * k);
+      if (shift > 0) b[1] -= shift;
+      return b;
+    };
 
     // Quadratic arc between two points, partially drawn up to t (de Casteljau).
     const arcD = (f: (typeof FLOWS)[number], t: number) => {
@@ -304,32 +388,63 @@ const steps: Step[] = [
       for (const key of Object.keys(PIN_STEP)) {
         const g = document.createElementNS(NS, "g") as SVGGElement;
         const isTw = key === "tw";
-        const ring = document.createElementNS(NS, "circle");
-        ring.setAttribute("r", "14");
-        ring.setAttribute("fill", "none");
-        ring.setAttribute("stroke", ACCENT);
-        ring.setAttribute("stroke-width", "1.5");
-        ring.setAttribute("data-ring", "");
-        ring.style.opacity = "0";
         const minor = key === "de";
+        const nudge = NUDGE[key];
+        if (nudge) {
+          // Leader from the true location to the pin, shown only while crowded.
+          const lg = document.createElementNS(NS, "g") as SVGGElement;
+          const line = document.createElementNS(NS, "line");
+          line.setAttribute("x2", String(nudge[0]));
+          line.setAttribute("y2", String(nudge[1]));
+          line.setAttribute("stroke", "#a1a1aa");
+          line.setAttribute("stroke-width", "1");
+          const anchor = document.createElementNS(NS, "circle");
+          anchor.setAttribute("r", "1.5");
+          anchor.setAttribute("fill", "#a1a1aa");
+          lg.appendChild(line);
+          lg.appendChild(anchor);
+          lg.style.opacity = "0";
+          lg.style.transition = "opacity .3s";
+          g.appendChild(lg);
+          leaders[key] = lg;
+        }
+        const pb = document.createElementNS(NS, "g") as SVGGElement;
+        pb.style.transition = "transform .3s, opacity .3s";
+        if (!minor) {
+          const ring = document.createElementNS(NS, "circle");
+          ring.setAttribute("r", "14");
+          ring.setAttribute("fill", "none");
+          ring.setAttribute("stroke", ACCENT);
+          ring.setAttribute("stroke-width", "1.5");
+          ring.setAttribute("data-ring", "");
+          ring.style.opacity = "0";
+          pb.appendChild(ring);
+        }
         const dot = document.createElementNS(NS, "circle");
         dot.setAttribute("r", minor ? "5" : "8");
         dot.setAttribute("fill", isTw ? ACCENT : "#ededed");
         dot.setAttribute("stroke", "#0e0e10");
         dot.setAttribute("stroke-width", "2");
-        const num = document.createElementNS(NS, "text");
-        num.setAttribute("text-anchor", "middle");
-        num.setAttribute("y", "3.6");
-        num.setAttribute("font-size", "10");
-        num.setAttribute("font-weight", "700");
-        num.setAttribute("fill", "#111");
-        num.textContent = minor ? "" : String(PIN_STEP[key]);
-        g.appendChild(ring);
-        g.appendChild(dot);
-        g.appendChild(num);
+        pb.appendChild(dot);
+        if (!minor) {
+          const num = document.createElementNS(NS, "text");
+          num.setAttribute("text-anchor", "middle");
+          num.setAttribute("y", "3.9");
+          num.setAttribute("font-size", "11");
+          num.setAttribute("font-weight", "700");
+          num.setAttribute("fill", "#111");
+          num.textContent = String(PIN_STEP[key]);
+          pb.appendChild(num);
+        }
+        g.appendChild(pb);
         g.style.transition = "opacity .5s";
         pinsG.appendChild(g);
         pinEls[key] = g;
+        pinBodies[key] = pb;
+      }
+      if (reduce.matches) {
+        for (const key in pinBodies) pinBodies[key].style.transition = "none";
+        for (const key in leaders) leaders[key].style.transition = "none";
       }
       setVB(vb);
       show(current, true);
@@ -339,11 +454,19 @@ const steps: Step[] = [
       current = Math.max(0, Math.min(steps.length - 1, i));
       const s = steps[current];
       const token = ++pending;
-      title.textContent = s.title;
-      body.textContent = s.body;
+      const last = current === steps.length - 1;
+      panels.forEach((p, j) => {
+        const on = j === current;
+        p.classList.toggle("opacity-0", !on);
+        p.classList.toggle("invisible", !on);
+        if (on) p.removeAttribute("aria-hidden");
+        else p.setAttribute("aria-hidden", "true");
+      });
       where.textContent = current === 0 ? "Toàn cảnh" : `${current}/7 · ${s.label}`;
       prev.disabled = current === 0;
-      nextLabel.textContent = current === steps.length - 1 ? "Xem lại " : "Tiếp ";
+      nextLabel.textContent = last ? "Xem lại" : "Tiếp";
+      nextIcon.textContent = last ? "↺" : "→";
+      next.setAttribute("aria-label", last ? "Xem lại từ đầu" : "Bước tiếp");
       dots.forEach((d, j) => {
         const on = j === current;
         d.style.borderColor = on ? ACCENT : "";
@@ -352,6 +475,8 @@ const steps: Step[] = [
         d.setAttribute("aria-current", on ? "step" : "false");
       });
       if (!data) return;
+      if (reduce.matches) instant = true;
+      checkCrowd();
 
       const overview = current === 0;
       for (const c of countryEls) {
@@ -360,15 +485,26 @@ const steps: Step[] = [
         const active = !overview && st === current;
         c.el.setAttribute(
           "fill",
-          active ? (c.k === "tw" ? "rgba(234,179,8,.55)" : "rgba(234,179,8,.32)") : overview || st < current ? "#34343b" : "#26262b"
+          active ? (c.k === "tw" ? "rgba(234,179,8,.55)" : "rgba(234,179,8,.16)") : overview || st < current ? "#34343b" : "#26262b"
         );
+        if (active) {
+          c.el.setAttribute("stroke", ACCENT);
+          c.el.setAttribute("stroke-width", "1.2");
+          c.el.setAttribute("vector-effect", "non-scaling-stroke");
+          // Draw the outline above the neighbours.
+          land.appendChild(c.el);
+        } else {
+          c.el.removeAttribute("stroke");
+          c.el.removeAttribute("stroke-width");
+          c.el.removeAttribute("vector-effect");
+        }
       }
       for (const key in pinEls) {
         const st = PIN_STEP[key];
         const visible = overview || st <= current || key === "tw";
         pinEls[key].style.opacity = visible ? (overview || st === current || key === "tw" ? "1" : ".55") : "0";
-        const ring = pinEls[key].querySelector("[data-ring]") as SVGCircleElement;
-        ring.style.opacity = !overview && st === current ? "1" : "0";
+        const ring = pinEls[key].querySelector("[data-ring]") as SVGCircleElement | null;
+        if (ring) ring.style.opacity = !overview && st === current ? "1" : "0";
       }
       for (const a of arcEls) {
         a.target = overview || a.flow.step <= current ? 1 : 0;
@@ -377,29 +513,26 @@ const steps: Step[] = [
         a.el.setAttribute("d", arcD(a.flow, Math.max(a.t, 0.0001)));
       }
 
-      const cam = data.cams[s.cam];
+      const frame = frameFor(current);
       if (instant) {
-        setVB(cam);
+        cancelAnimationFrame(camAnim);
+        setVB(frame);
         return;
       }
-      // Hold the arcs of this step back until the camera lands.
+      // One flight straight to the final frame. This step's arcs start
+      // drawing partway through, so they finish soon after the camera lands.
       const mine = arcEls.filter((a) => a.flow.step === current);
       mine.forEach((a) => {
         a.t = 0;
         a.target = 0;
+        a.el.setAttribute("d", arcD(a.flow, 0.0001));
       });
       animateArcs();
-      await flyTo(cam, 1000);
+      flyTo(frame, FLY_MS);
+      await wait(ARCS_AT_MS);
       if (token !== pending) return;
       mine.forEach((a) => (a.target = 1));
       animateArcs();
-      // For far-away places, pull back so the arc's end (Taiwan) comes into view.
-      if (current >= 1 && current <= 4) {
-        await new Promise((r) => setTimeout(r, 650));
-        if (token !== pending) return;
-        const pts = [...s.pins.map((k) => data!.points[k]), data.points.tw];
-        await flyTo(fitBox(pts, 0.14), 1300);
-      }
     };
 
     prev.addEventListener("click", () => show(current - 1));
@@ -409,7 +542,9 @@ const steps: Step[] = [
       if (e.key === "ArrowRight") show(current + 1);
       if (e.key === "ArrowLeft") show(current - 1);
     });
-    window.addEventListener("resize", () => setVB(vb));
+    window.addEventListener("resize", () => {
+      if (data) setVB(vb);
+    });
 
     const load = () =>
       fetch(URL_MAP)
