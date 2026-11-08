@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="540" viewBox="0 0 640 540" font-family="Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+<style>.a1{transform-box:fill-box;animation:k1 11s cubic-bezier(.2,.7,.2,1) infinite}@keyframes k1{0%,2.7%{opacity:0}6.4%,90%{opacity:1;opacity:1}97%,100%{opacity:1;opacity:0}}.a2{transform-box:fill-box;transform-origin:left;animation:k2 11s cubic-bezier(.2,.7,.2,1) infinite}@keyframes k2{0%,4.5%{transform:scaleX(0)}10.9%,90%{transform:scaleX(1);opacity:1}97%,100%{transform:scaleX(1);opacity:0}}.a3{transform-box:fill-box;animation:k3 11s cubic-bezier(.2,.7,.2,1) infinite}@keyframes k3{0%,9.1%{opacity:0}12.7%,90%{opacity:1;opacity:1}97%,100%{opacity:1;opacity:0}}.a4{transform-box:fill-box;animation:k4 11s cubic-bezier(.2,.7,.2,1) infinite}@keyframes k4{0%,14.5%{opacity:0}18.2%,90%{opacity:1;opacity:1}97%,100%{opacity:1;opacity:0}}.a5{transform-box:fill-box;transform-origin:left;animation:k5 11s cubic-bezier(.2,.7,.2,1) infinite}@keyframes k5{0%,16.4%{transform:scaleX(0)}22.7%,90%{transform:scaleX(1);opacity:1}97%,100%{transform:scaleX(1);opacity:0}}.a6{transform-box:fill-box;animation:k6 11s cubic-bezier(.2,.7,.2,1) infinite}@keyframes k6{0%,20.9%{opacity:0}24.5%,90%{opacity:1;opacity:1}97%,100%{opacity:1;opacity:0}}.a7{transform-box:fill-box;transform-origin:left;animation:k7 11s cubic-bezier(.2,.7,.2,1) infinite}@keyframes k7{0%,19.5%{transform:scaleX(0)}25.9%,90%{transform:scaleX(1);opacity:1}97%,100%{transform:scaleX(1);opacity:0}}.a8{transform-box:fill-box;animation:k8 11s cubic-bezier(.2,.7,.2,1) infinite}@keyframes k8{0%,24.1%{opacity:0}27.7%,90%{opacity:1;opacity:1}97%,100%{opacity:1;opacity:0}}.a9{transform-box:fill-box;animation:k9 11s cubic-bezier(.2,.7,.2,1) infinite}@keyframes k9{0%,26.4%{opacity:0}30.0%,90%{opacity:1;opacity:1}97%,100%{opacity:1;opacity:0}}.a10{transform-box:fill-box;transform-origin:left;animation:k10 11s cubic-bezier(.2,.7,.2,1) infinite}@keyframes k10{0%,28.2%{transform:scaleX(0)}34.5%,90%{transform:scaleX(1);opacity:1}97%,100%{transform:scaleX(1);opacity:0}}.a11{transform-box:fill-box;animation:k11 11s cubic-bezier(.2,.7,.2,1) infinite}@keyframes k11{0%,32.7%{opacity:0}36.4%,90%{opacity:1;opacity:1}97%,100%{opacity:1;opacity:0}}.a12{transform-box:fill-box;transform-origin:left;animation:k12 11s cubic-bezier(.2,.7,.2,1) infinite}@keyframes k12{0%,31.4%{transform:scaleX(0)}37.7%,90%{transform:scaleX(1);opacity:1}97%,100%{transform:scaleX(1);opacity:0}}.a13{transform-box:fill-box;animation:k13 11s cubic-bezier(.2,.7,.2,1) infinite}@keyframes k13{0%,35.9%{opacity:0}39.5%,90%{opacity:1;opacity:1}97%,100%{opacity:1;opacity:0}}.a14{transform-box:fill-box;transform-origin:left;animation:k14 11s cubic-bezier(.2,.7,.2,1) infinite}@keyframes k14{0%,34.5%{transform:scaleX(0)}40.9%,90%{transform:scaleX(1);opacity:1}97%,100%{transform:scaleX(1);opacity:0}}.a15{transform-box:fill-box;animation:k15 11s cubic-bezier(.2,.7,.2,1) infinite}@keyframes k15{0%,39.1%{opacity:0}42.7%,90%{opacity:1;opacity:1}97%,100%{opacity:1;opacity:0}}@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style>
+<rect width="640" height="540" fill="#111113"/>
+<text x="32" y="52" font-size="28" font-weight="600" fill="#ededed">Công ty thuộc về ai</text>
+<text x="32" y="88" font-size="21" fill="#a1a1aa">Theo mức pha loãng trung vị mỗi vòng trên Carta, quý 1/2025</text>
+<text class="a1" x="32" y="144" font-size="20" fill="#ededed">Lúc thành lập</text>
+<rect class="a2" x="32.0" y="158" width="574.0" height="48" fill="#eab308"/>
+<text class="a3" x="320.0" y="189" font-size="19" font-weight="700" fill="#111113" text-anchor="middle">100%</text>
+<text class="a4" x="32" y="244" font-size="20" fill="#ededed">Sau vòng seed (bán 18,8%)</text>
+<rect class="a5" x="32.0" y="258" width="465.7" height="48" fill="#eab308"/>
+<text class="a6" x="265.9" y="289" font-size="19" font-weight="700" fill="#111113" text-anchor="middle">81,2%</text>
+<rect class="a7" x="499.7" y="258" width="106.3" height="48" fill="#71717a"/>
+<text class="a8" x="553.9" y="289" font-size="19" font-weight="700" fill="#111113" text-anchor="middle">18,8%</text>
+<text class="a9" x="32" y="344" font-size="20" fill="#ededed">Sau Series A (bán 17,9%)</text>
+<rect class="a10" x="32.0" y="358" width="382.2" height="48" fill="#eab308"/>
+<text class="a11" x="224.1" y="389" font-size="19" font-weight="700" fill="#111113" text-anchor="middle">66,7%</text>
+<rect class="a12" x="416.2" y="358" width="86.7" height="48" fill="#71717a"/>
+<text class="a13" x="460.5" y="389" font-size="19" font-weight="700" fill="#111113" text-anchor="middle">15,4%</text>
+<rect class="a14" x="504.9" y="358" width="101.1" height="48" fill="#d4d4d8"/>
+<text class="a15" x="556.4" y="389" font-size="19" font-weight="700" fill="#111113" text-anchor="middle">17,9%</text>
+<rect x="32" y="433" width="18" height="18" rx="3" fill="#eab308"/>
+<text x="60" y="448" font-size="16" fill="#ededed">Nhà sáng lập</text>
+<rect x="216" y="433" width="18" height="18" rx="3" fill="#71717a"/>
+<text x="244" y="448" font-size="16" fill="#ededed">Nhà đầu tư seed</text>
+<rect x="400" y="433" width="18" height="18" rx="3" fill="#d4d4d8"/>
+<text x="428" y="448" font-size="16" fill="#ededed">Nhà đầu tư Series A</text>
+<text x="32" y="514" font-size="17" fill="#8f8f98">Chưa tính quỹ quyền chọn (option pool) và SAFE chuyển đổi.</text>
+</svg>
