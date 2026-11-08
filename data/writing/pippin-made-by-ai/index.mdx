@@ -1,7 +1,7 @@
 ---
 title: "Pippin: A Game I Didn't Write a Line Of"
 date: "2026-11-07T22:00:00Z"
-description: "Pippin is a small point-and-click game about an apple tree, made for a game jam. Claude Code wrote all of it, including the code that draws every pixel. How the art, the time slider, the hints and the tests work."
+description: "Pippin is a small point-and-click game about an apple tree. Claude Code made all of it, even the code that draws every pixel. A look at the game, and at how the AI built it."
 tags: ["ai", "games"]
 ---
 
@@ -19,133 +19,101 @@ import ch5Mp4 from "./ch5.mp4";
 import ch5Webm from "./ch5.webm";
 import buildMp4 from "./build.mp4";
 import buildWebm from "./build.webm";
+import botMp4 from "./bot.mp4";
+import botWebm from "./bot.webm";
 import depthMap from "./depth.webp";
+import rooms from "./rooms.webp";
 import hintShot from "./hint.webp";
 
-<LoopVideo webm={ch1Webm} mp4={ch1Mp4} width={644} height={476} label="The Pippin farm diorama moving through one year: pink blossom in spring, green summer, golden autumn harvest, then snow" />
+<LoopVideo webm={ch1Webm} mp4={ch1Mp4} width={644} height={476} label="The Pippin farm diorama moving through one year: pink blossom in spring, green summer, golden autumn, then snow" />
 
-[Pippin](https://th1nhng0.itch.io/pippin) is a short point-and-click game I made for thatgamejam #02. Nell inherits her grandmother's cabinet. It has five drawers, and each drawer holds a tiny living model of a place from Ida's life: a farm, a city block, a harbour, an island, a launch pad. A slider at the bottom of the screen moves the whole model through time. The puzzles are about doing the right thing at the right moment.
+[Pippin](https://th1nhng0.itch.io/pippin) is a short point-and-click game I made for a game jam. Nell gets her grandmother's old cabinet. Each of its five drawers holds a tiny living model of a place, and a slider moves that place through time.
 
-I did not write any of it. Claude Code wrote all the code, drafted the story and dialogue, and generated the voices, music and sounds through ElevenLabs. I directed it and reviewed what came back. The repo has 53 commits over five days, from November 1 to 5.
-
-This post is mostly a look inside: what the AI actually built, and the tricks it used to make a game it can't see or play the way I do.
+I didn't write any of it. Claude Code wrote the code, the story and the dialogue. The voices and music came from ElevenLabs. The whole repo history is five days long.
 
 ## Five drawers
 
-Each chapter is one diorama, and each one covers a different span of time. The slider runs through a year on the farm, a decade on the city block, one night at the harbour, decades on the island, and the last six seconds before a launch.
+Each drawer covers a different stretch of time.
 
-<LoopVideo webm={ch2Webm} mp4={ch2Mp4} width={596} height={596} label="Chapter II: a city block over a decade. An empty lot gets a crane, then a glass tower rises floor by floor and lights up at night" />
+<figure>
+  <LoopVideo webm={ch2Webm} mp4={ch2Mp4} width={596} height={596} label="Chapter II: a city block over ten years. A crane appears and a glass tower rises floor by floor, then lights up at dusk" />
+  <figcaption>Ten years on one city block.</figcaption>
+</figure>
 
-<LoopVideo webm={ch3Webm} mp4={ch3Mp4} width={596} height={508} label="Chapter III: a harbour town with a lighthouse goes from afternoon into a starry night and back to morning" />
+<figure>
+  <LoopVideo webm={ch3Webm} mp4={ch3Mp4} width={596} height={508} label="Chapter III: a harbour town with a lighthouse goes from afternoon into a starry night and back to morning" />
+  <figcaption>One night at the harbour.</figcaption>
+</figure>
 
-<LoopVideo webm={ch4Webm} mp4={ch4Mp4} width={612} height={464} label="Chapter IV: a green island, then the volcano erupts and lava runs down to the sea, then the island slowly turns green again" />
+<figure>
+  <LoopVideo webm={ch4Webm} mp4={ch4Mp4} width={612} height={464} label="Chapter IV: a green island, then the volcano erupts and lava runs to the sea, then the island slowly turns green again" />
+  <figcaption>An island before and after the volcano.</figcaption>
+</figure>
 
-<LoopVideo webm={ch5Webm} mp4={ch5Mp4} width={604} height={556} label="Chapter V: a rocket on a launch pad. Steam starts venting, then the engines light and the rocket lifts off in a cloud of smoke" />
+<figure>
+  <LoopVideo webm={ch5Webm} mp4={ch5Mp4} width={604} height={556} label="Chapter V: a rocket on a launch pad. Steam vents, the engines light and the rocket lifts off in a cloud of smoke" />
+  <figcaption>The last six seconds before a launch.</figcaption>
+</figure>
 
-All of this is drawn live in the browser. There is not a single image file in the game.
+You can also walk inside. There are 16 rooms, and they follow the slider too.
 
-## Every pixel is code
+<figure>
+  <Image
+    src={rooms}
+    alt="A grid of sixteen small isometric pixel-art rooms: a barn, a farmhouse kitchen with a checkered floor, a bedroom, a cellar, a diner, a bedsit, a site cabin, a ship chandlery, a pub, a lighthouse lamp room, a bakery, an island house, a shed, a bell tower, a launch control room and a seed store."
+    sizes="(min-width: 720px) 672px, 100vw"
+  />
+  <figcaption>All 16 rooms, one per tile.</figcaption>
+</figure>
 
-The first thing I wanted to know when I opened the repo was where the art came from. The answer is a few hundred lines of JavaScript that place colored points on an isometric grid, and a lot of scene files that call them.
+## There are no image files
 
-The renderer keeps two buffers the size of the screen: one for color and one for depth. To draw a point in 3D space, it turns the point into a screen position and only writes it if nothing closer has been drawn there yet:
+My first question was where the art came from. There is no art folder. Every pixel is placed by code.
 
-```js
-export function dp(x, y, z, c) {
-  const sx = x - y + ox, sy = ((x + y) >> 1) - z + oy;
-  const i = sy * W + sx, d = x + y + z;
-  if (d >= depth[i]) { depth[i] = d; fb[i] = c; }
-}
-```
+Each scene is built out of colored points in 3D: boxes, roofs, cylinders, tree canopies. The farm alone is 66,414 points. Here it is drawn point by point, in the order the code adds them:
 
-In this isometric view, `x + y + z` is exactly how close a point is to the camera, so the depth test is one comparison. Buildings, roofs, trees and water are made from helpers on top of `dp`, like `box`, `roof`, `cyl` and `canopy`.
+<LoopVideo webm={buildWebm} mp4={buildMp4} width={596} height={380} label="The farm diorama assembling itself: grass, then the soil block, the pond, the field, the orchard, the barn and house, and finally the people and animals" />
+
+To decide which point is in front, the renderer keeps a second image next to the colors: how far away each pixel is.
 
 <figure>
   <Image
     src={depthMap}
-    alt="Left: the farm diorama in color. Right: the same frame as a grey depth map, where nearer parts of the island are lighter and the barn and trees are darker."
+    alt="Left: the farm diorama in color. Right: the same frame as a grey depth map, where nearer parts of the island are lighter."
     sizes="(min-width: 720px) 672px, 100vw"
   />
-  <figcaption>The same frame twice. Left is the color buffer you see. Right is the depth buffer behind it, lighter means closer.</figcaption>
+  <figcaption>What you see, and the depth behind it. Lighter is closer.</figcaption>
 </figure>
 
-The farm is drawn into a 388 by 243 pixel buffer, then scaled up with sharp edges. That is why it looks like pixel art: it really is that many pixels.
+The whole farm is only 388 by 243 pixels, scaled up with sharp edges. That's why it looks like pixel art.
 
-The static parts of a scene are built once and stored as a flat list of points. The farm has 66,414 of them. Each frame, the game just copies those points into the buffers, then draws the things that move on top: people, smoke, birds, water. This is what drawing the farm's point list in order looks like, slowed way down:
+The seasons are simple. Every scene is a function of one number, the slider, from 0 to 1. On the farm that number times 12 is the month. Trees, snow, crops and the sky all read it.
 
-<LoopVideo webm={buildWebm} mp4={buildMp4} width={596} height={380} label="The farm diorama assembling itself: first the grass, then the soil block, the pond, the field, the orchard, the barn and house, and finally the people and animals" />
+## A bot that plays the game
 
-The seasons work because every scene is a function of one number, the slider position from 0 to 1. On the farm, `p * 12` is the month. Tree colors, snow, the crop in the field and the color of the sky all read from it. Drag the slider and you are just calling the same drawing code with a different number.
+The AI can't play the game the way I do, so it wrote a bot that does. This is the bot finishing Chapter I, sped up. The red circle is where it's about to click.
 
-## Doing something early changes later
+<LoopVideo webm={botWebm} mp4={botMp4} width={840} height={524} label="An automated player finishing Chapter I. A caption shows each step: the time on the slider and the thing to click. A red circle marks the click. The farm changes between winter and spring as it moves the slider, and it walks into the kitchen and the cellar." />
 
-The slider was the part of the game that changed the most. In the first version it was only a way to look for the answer: drag until a clickable thing shows up, then click it. A review on November 4 called that out, and the rework built the game around a new rule: what Nell does at one moment shows up in every later moment, and never in earlier ones.
+Before every click it checks that the thing is there at that time, that it's on screen, and that nothing is drawn on top of it. It plays all five chapters to both endings. There are 59 tests and they take about five seconds.
 
-The code for this is tiny:
+There's a test for the voices too. Each line of dialogue is matched to its audio by its exact text, so if a line changes and nobody re-records it, the test fails.
 
-```js
-export const mark = (k, p = S.p) => { G.marks[k] = p; };
-export const since = k => k in G.marks && S.p >= G.marks[k];
-```
+## Hints that point somewhere
 
-When Nell hangs a lit lantern in the orchard, the game calls `mark('smudge')` at that slider position. If that was before the April frost night, the blossom survives and the tree has apples in summer. If it was after, the frost already got them. Do it again at a different time and the mark moves, so a wrong choice can always be fixed by going back. Each chapter has at least one puzzle like this and one choice that costs something. Those rules are written down in the repo as design rules the AI has to follow.
-
-## Hints that have to point somewhere
-
-Point-and-click games are famous for getting players stuck. Pippin's Hint button opens in three steps: a nudge in words, then the room or the time to look at, then an arrow on the exact thing. Each step unlocks 45 seconds after the last one.
+Stuck players get a Hint button in three steps: a nudge, then where to look, then an arrow on the exact thing. The bot also checks that the hint points at something after every step, so it can never send you nowhere.
 
 <figure>
   <Image
     src={hintShot}
-    alt="Pippin's first chapter with the hint open. The hint text reads 'The old man by the barn has been here longest.' A red arrow points at the old man standing by the barn, and white corner brackets mark the other clickable things."
+    alt="Chapter I with the hint open. The text reads 'The old man by the barn has been here longest.' A red arrow points at the old man by the barn."
     sizes="(min-width: 720px) 672px, 100vw"
   />
-  <figcaption>The hint at its last step. The text nudges, the red arrow points at Tobias, and the corner marks show everything else you can click.</figcaption>
+  <figcaption>The last hint step: a red arrow on Tobias.</figcaption>
 </figure>
-
-Every goal in the game is written as `goal(what, how, at)`. `what` is the objective on screen and never says how. `how` is the nudge. `at` names the things the arrow should point to. That last part is what keeps the hints honest, because a test can check it.
-
-## A robot that plays the whole game
-
-The AI can't sit and play the game like I do, so it wrote a player that does.
-
-The intended solution for each chapter is a list of steps. Each step is a slider position, the name of a thing to click, and the item to use on it:
-
-```js
-const START = [[.02, 'Tobias Marsh'], [.92, 'Reeds in the pond'],
-  [.92, 'Barn door', 'KEY'], [.92, 'Orchard ladder'], ...];
-```
-
-Playwright opens the game, and for every step it moves the slider, works out where that thing is on screen, and checks three things before clicking: the thing exists at that time, it is inside the screen, and a click at that pixel really hits it and not something drawn on top of it. After every step it opens the hint and fails if the hint points nowhere.
-
-It plays all five chapters to both endings. It also plays the other branch of Chapter I's choice, and checks that the game can be played with only a keyboard. There are 59 tests, and the whole check (types, lint, build and tests) runs in about five seconds.
-
-There is also a small test for the voices. Every voiced line is matched to its audio file by its exact text. If someone edits a line of dialogue and forgets to regenerate the voice, the test fails. With 279 voice clips, that would be easy to miss by hand.
-
-## Seeing its own work
-
-The AI also needs to see what it drew. The repo has a command that takes a screenshot of one chapter, one room, at one slider position:
-
-```
-CH=1 ROOM=barn P=.5 npm run shots
-```
-
-The project notes tell the agent to always narrow it down like this and only open that one image, so it doesn't fill its context with dozens of screenshots. A lot of the commit history is the AI fixing what it saw in those images: "Move the front floodlight mast off Ida's line at the gantry", "Prune the orchard and give the harbour boats real hulls", "Break the vertical curtains on the island's slopes".
-
-It also wrote down what it couldn't check. The game audit says plainly that it did not hear the audio, and judged the sound mix only from the code. The to-do list says tests prove the game can be finished, not that it is fun, and that only people playing it can answer that.
-
-## Notes for the agent
-
-The file that holds all of this together is `CLAUDE.md`, the instructions the agent reads before it does anything. It has a table of which file to open for which kind of change, the coordinate system, the design rules, and writing rules for the dialogue, such as:
-
-- Every clickable thing must do something. A thing that only makes a remark gets removed.
-- No character says the solution. People state the problem, and the scene shows the way.
-- Each character has their own way of talking, and no line ends with a moral.
-
-Some rules are lessons from mistakes. One says flag names are shared across chapters, because Chapter III's first version reused a flag from Chapter I and broke the whole-game run. Another says agents working in parallel must each use their own port, since several chapters were reworked at the same time in separate worktrees.
 
 ## What I actually did
 
-{/* TODO(Thinh): a few lines in your own words. What you decided, what you pushed back on, what surprised you. I didn't want to guess. */}
+{/* TODO(Thinh): a few lines in your own words. What you decided, what you pushed back on, what surprised you. */}
 
-Pippin is free on [itch.io](https://th1nhng0.itch.io/pippin) and takes about an hour. If you play it, I'd like to hear where you got stuck.
+Pippin is free on [itch.io](https://th1nhng0.itch.io/pippin) and takes about an hour.
