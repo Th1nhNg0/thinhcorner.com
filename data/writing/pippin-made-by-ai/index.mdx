@@ -19,8 +19,12 @@ import ch5Mp4 from "./ch5.mp4";
 import ch5Webm from "./ch5.webm";
 import buildMp4 from "./build.mp4";
 import buildWebm from "./build.webm";
-import botMp4 from "./bot.mp4";
-import botWebm from "./bot.webm";
+import layersMp4 from "./layers.mp4";
+import layersWebm from "./layers.webm";
+import zoomMp4 from "./zoom.mp4";
+import zoomWebm from "./zoom.webm";
+import sliderMp4 from "./slider.mp4";
+import sliderWebm from "./slider.webm";
 import depthMap from "./depth.webp";
 import rooms from "./rooms.webp";
 import hintShot from "./hint.webp";
@@ -74,6 +78,10 @@ Each scene is built out of colored points in 3D: boxes, roofs, cylinders, tree c
 
 <LoopVideo webm={buildWebm} mp4={buildMp4} width={596} height={380} label="The farm diorama assembling itself: grass, then the soil block, the pond, the field, the orchard, the barn and house, and finally the people and animals" />
 
+A point on its own is just one color. The look comes from a few cheap tricks stacked on top of each other: each material has one base color, each face of a box gets darker the more it faces away from the light, and every point picks a slightly different shade from its material at random. Things that move, like the cows, the windmill and falling leaves, are drawn fresh every frame on top.
+
+<LoopVideo webm={layersWebm} mp4={layersMp4} width={644} height={520} label="The farm drawn in four steps: flat colors, then darker shading on the sides, then grainy texture on every surface, then the animated parts like cows, the windmill and falling leaves" />
+
 To decide which point is in front, the renderer keeps a second image next to the colors: how far away each pixel is.
 
 <figure>
@@ -85,23 +93,19 @@ To decide which point is in front, the renderer keeps a second image next to the
   <figcaption>What you see, and the depth behind it. Lighter is closer.</figcaption>
 </figure>
 
-The whole farm is only 388 by 243 pixels, scaled up with sharp edges. That's why it looks like pixel art.
+The whole farm is only 388 by 243 pixels, scaled up with sharp edges. Zoom in and you can count them.
 
-The seasons are simple. Every scene is a function of one number, the slider, from 0 to 1. On the farm that number times 12 is the month. Trees, snow, crops and the sky all read it.
+<LoopVideo webm={zoomWebm} mp4={zoomMp4} width={644} height={476} label="A slow zoom from the whole farm into the barn and an autumn tree until single pixels are visible as big squares" />
 
-## A bot that plays the game
+## Time is one number
 
-The AI can't play the game the way I do, so it wrote a bot that does. This is the bot finishing Chapter I, sped up. The red circle is where it's about to click.
+Every scene is a function of one number, the slider, from 0 to 1. On the farm, that number times 12 is the month. Trees, snow, crops and the sky all read it, so moving the slider is just drawing the same scene again with a different number.
 
-<LoopVideo webm={botWebm} mp4={botMp4} width={840} height={524} label="An automated player finishing Chapter I. A caption shows each step: the time on the slider and the thing to click. A red circle marks the click. The farm changes between winter and spring as it moves the slider, and it walks into the kitchen and the cellar." />
-
-Before every click it checks that the thing is there at that time, that it's on screen, and that nothing is drawn on top of it. It plays all five chapters to both endings. There are 59 tests and they take about five seconds.
-
-There's a test for the voices too. Each line of dialogue is matched to its audio by its exact text, so if a line changes and nobody re-records it, the test fails.
+<LoopVideo webm={sliderWebm} mp4={sliderMp4} width={644} height={536} label="The farm with a slider under it. As the slider moves from 0 to 1, the month label runs from March to February and the farm goes through blossom, summer, harvest and snow" />
 
 ## Hints that point somewhere
 
-Stuck players get a Hint button in three steps: a nudge, then where to look, then an arrow on the exact thing. The bot also checks that the hint points at something after every step, so it can never send you nowhere.
+Stuck players get a Hint button in three steps: a nudge, then where to look, then an arrow on the exact thing. A test plays the whole game and checks after every step that the hint points at something, so it can never send you nowhere.
 
 <figure>
   <Image
