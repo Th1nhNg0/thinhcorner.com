@@ -62,7 +62,7 @@ const steps: Step[] = [
     key: "tw",
     label: "Đài Loan",
     title: "Đài Loan: sản xuất",
-    body: "Ở Tân Trúc, TSMC in bản thiết kế lên wafer qua khoảng một nghìn bước, mất vài tháng. Quý 2 năm 2026, TSMC chiếm 72,5% doanh thu đúc chip của cả thế giới.",
+    body: "Ở Tân Trúc, TSMC in bản thiết kế lên wafer qua hàng trăm bước, mất khoảng ba tháng. Quý 2 năm 2026, TSMC chiếm 72,5% doanh thu đúc chip của cả thế giới.",
     pins: ["tw"],
     cam: "tw",
   },
@@ -70,8 +70,8 @@ const steps: Step[] = [
     key: "sea",
     label: "Đông Nam Á",
     title: "Đông Nam Á: đóng gói, kiểm thử",
-    body: "Wafer được cắt thành từng con chip, đóng vỏ và kiểm tra. Malaysia đã làm việc này từ năm 1972. Nhà máy lắp ráp và kiểm thử lớn nhất của Intel nằm ở Khu Công nghệ cao TP.HCM.",
-    pins: ["my", "vn"],
+    body: "Wafer được cắt thành từng con chip, đóng vỏ và kiểm tra. Malaysia làm khâu này cho các hãng Mỹ từ năm 1972.",
+    pins: ["my"],
     cam: "sea",
   },
   {
@@ -168,10 +168,9 @@ const steps: Step[] = [
     { from: "nl", to: "tw", step: 3, bend: 0.16 },
     { from: "jp", to: "tw", step: 4, bend: 0.25 },
     { from: "tw", to: "my", step: 6, bend: -0.2 },
-    { from: "tw", to: "vn", step: 6, bend: -0.2 },
-    { from: "vn", to: "cn", step: 7, bend: 0.25 },
+    { from: "my", to: "cn", step: 7, bend: 0.25 },
   ];
-  const PIN_STEP: Record<string, number> = { us: 1, uk: 2, nl: 3, de: 3, jp: 4, tw: 5, my: 6, vn: 6, cn: 7 };
+  const PIN_STEP: Record<string, number> = { us: 1, uk: 2, nl: 3, de: 3, jp: 4, tw: 5, my: 6, cn: 7 };
   const COUNTRY_STEP: Record<string, number> = PIN_STEP;
 
   const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
@@ -285,10 +284,11 @@ const steps: Step[] = [
       for (const c of d.countries) {
         const el = document.createElementNS(NS, "path") as SVGPathElement;
         el.setAttribute("d", c.d);
-        el.setAttribute("fill", c.k ? "#303036" : "#1d1d21");
+        const k = c.k && c.k in COUNTRY_STEP ? c.k : null;
+        el.setAttribute("fill", k ? "#303036" : "#1d1d21");
         el.style.transition = "fill .6s";
         frag.appendChild(el);
-        countryEls.push({ k: c.k, el });
+        countryEls.push({ k, el });
       }
       land.setAttribute("stroke", "#0e0e10");
       land.appendChild(frag);
@@ -311,7 +311,7 @@ const steps: Step[] = [
         ring.setAttribute("stroke-width", "1.5");
         ring.setAttribute("data-ring", "");
         ring.style.opacity = "0";
-        const minor = key === "de" || key === "my";
+        const minor = key === "de";
         const dot = document.createElementNS(NS, "circle");
         dot.setAttribute("r", minor ? "5" : "8");
         dot.setAttribute("fill", isTw ? ACCENT : "#ededed");
