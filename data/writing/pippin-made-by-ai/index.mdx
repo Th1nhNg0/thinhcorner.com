@@ -1,0 +1,123 @@
+---
+title: "Pippin: A Game I Didn't Write a Line Of"
+date: "2026-11-07T22:00:00Z"
+description: "Pippin is a small point-and-click game about an apple tree. Claude Code made all of it, even the code that draws every pixel. A look at the game, and at how the AI built it."
+tags: ["ai", "games"]
+---
+
+import { Image } from "astro:assets";
+import LoopVideo from "@/components/LoopVideo.astro";
+import ch1Mp4 from "./ch1.mp4";
+import ch1Webm from "./ch1.webm";
+import ch2Mp4 from "./ch2.mp4";
+import ch2Webm from "./ch2.webm";
+import ch3Mp4 from "./ch3.mp4";
+import ch3Webm from "./ch3.webm";
+import ch4Mp4 from "./ch4.mp4";
+import ch4Webm from "./ch4.webm";
+import ch5Mp4 from "./ch5.mp4";
+import ch5Webm from "./ch5.webm";
+import buildMp4 from "./build.mp4";
+import buildWebm from "./build.webm";
+import layersMp4 from "./layers.mp4";
+import layersWebm from "./layers.webm";
+import zoomMp4 from "./zoom.mp4";
+import zoomWebm from "./zoom.webm";
+import sliderMp4 from "./slider.mp4";
+import sliderWebm from "./slider.webm";
+import depthMap from "./depth.webp";
+import rooms from "./rooms.webp";
+import hintShot from "./hint.webp";
+
+<LoopVideo webm={ch1Webm} mp4={ch1Mp4} width={644} height={476} label="The Pippin farm diorama moving through one year: pink blossom in spring, green summer, golden autumn, then snow" />
+
+[Pippin](https://th1nhng0.itch.io/pippin) is a short point-and-click game I made for a game jam. Nell gets her grandmother's old cabinet. Each of its five drawers holds a tiny living model of a place, and a slider moves that place through time.
+
+I didn't write any of it. Claude Code wrote the code, the story and the dialogue. The voices and music came from ElevenLabs. The whole repo history is five days long.
+
+## Five drawers
+
+Each drawer covers a different stretch of time.
+
+<figure>
+  <LoopVideo webm={ch2Webm} mp4={ch2Mp4} width={596} height={596} label="Chapter II: a city block over ten years. A crane appears and a glass tower rises floor by floor, then lights up at dusk" />
+  <figcaption>Ten years on one city block.</figcaption>
+</figure>
+
+<figure>
+  <LoopVideo webm={ch3Webm} mp4={ch3Mp4} width={596} height={508} label="Chapter III: a harbour town with a lighthouse goes from afternoon into a starry night and back to morning" />
+  <figcaption>One night at the harbour.</figcaption>
+</figure>
+
+<figure>
+  <LoopVideo webm={ch4Webm} mp4={ch4Mp4} width={612} height={464} label="Chapter IV: a green island, then the volcano erupts and lava runs to the sea, then the island slowly turns green again" />
+  <figcaption>An island before and after the volcano.</figcaption>
+</figure>
+
+<figure>
+  <LoopVideo webm={ch5Webm} mp4={ch5Mp4} width={604} height={556} label="Chapter V: a rocket on a launch pad. Steam vents, the engines light and the rocket lifts off in a cloud of smoke" />
+  <figcaption>The last six seconds before a launch.</figcaption>
+</figure>
+
+You can also walk inside. There are 16 rooms, and they follow the slider too.
+
+<figure>
+  <Image
+    src={rooms}
+    alt="A grid of sixteen small isometric pixel-art rooms: a barn, a farmhouse kitchen with a checkered floor, a bedroom, a cellar, a diner, a bedsit, a site cabin, a ship chandlery, a pub, a lighthouse lamp room, a bakery, an island house, a shed, a bell tower, a launch control room and a seed store."
+    sizes="(min-width: 720px) 672px, 100vw"
+  />
+  <figcaption>All 16 rooms, one per tile.</figcaption>
+</figure>
+
+## There are no image files
+
+My first question was where the art came from. There is no art folder. Every pixel is placed by code.
+
+Each scene is built out of colored points in 3D: boxes, roofs, cylinders, tree canopies. The farm alone is 66,414 points. Here it is drawn point by point, in the order the code adds them:
+
+<LoopVideo webm={buildWebm} mp4={buildMp4} width={596} height={380} label="The farm diorama assembling itself: grass, then the soil block, the pond, the field, the orchard, the barn and house, and finally the people and animals" />
+
+A point on its own is just one color. The look comes from a few cheap tricks stacked on top of each other: each material has one base color, each face of a box gets darker the more it faces away from the light, and every point picks a slightly different shade from its material at random. Things that move, like the cows, the windmill and falling leaves, are drawn fresh every frame on top.
+
+<LoopVideo webm={layersWebm} mp4={layersMp4} width={644} height={520} label="The farm drawn in four steps: flat colors, then darker shading on the sides, then grainy texture on every surface, then the animated parts like cows, the windmill and falling leaves" />
+
+To decide which point is in front, the renderer keeps a second image next to the colors: how far away each pixel is.
+
+<figure>
+  <Image
+    src={depthMap}
+    alt="Left: the farm diorama in color. Right: the same frame as a grey depth map, where nearer parts of the island are lighter."
+    sizes="(min-width: 720px) 672px, 100vw"
+  />
+  <figcaption>What you see, and the depth behind it. Lighter is closer.</figcaption>
+</figure>
+
+The whole farm is only 388 by 243 pixels, scaled up with sharp edges. Zoom in and you can count them.
+
+<LoopVideo webm={zoomWebm} mp4={zoomMp4} width={644} height={476} label="A slow zoom from the whole farm into the barn and an autumn tree until single pixels are visible as big squares" />
+
+## Time is one number
+
+Every scene is a function of one number, the slider, from 0 to 1. On the farm, that number times 12 is the month. Trees, snow, crops and the sky all read it, so moving the slider is just drawing the same scene again with a different number.
+
+<LoopVideo webm={sliderWebm} mp4={sliderMp4} width={644} height={536} label="The farm with a slider under it. As the slider moves from 0 to 1, the month label runs from March to February and the farm goes through blossom, summer, harvest and snow" />
+
+## Hints that point somewhere
+
+Stuck players get a Hint button in three steps: a nudge, then where to look, then an arrow on the exact thing. A test plays the whole game and checks after every step that the hint points at something, so it can never send you nowhere.
+
+<figure>
+  <Image
+    src={hintShot}
+    alt="Chapter I with the hint open. The text reads 'The old man by the barn has been here longest.' A red arrow points at the old man by the barn."
+    sizes="(min-width: 720px) 672px, 100vw"
+  />
+  <figcaption>The last hint step: a red arrow on Tobias.</figcaption>
+</figure>
+
+## What I actually did
+
+Prompting. =))
+
+Pippin is free on [itch.io](https://th1nhng0.itch.io/pippin) and takes about an hour.
