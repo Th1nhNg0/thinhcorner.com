@@ -1,5 +1,5 @@
 ---
-// Shared header for every /data page: breadcrumb, title, intro and a mono
+// Shared header for every /data page: back link, title, intro and a mono
 // meta line with the data source and when the page was rendered.
 interface Props {
   title: string;
@@ -12,11 +12,9 @@ const { title, source, sourceHref, updated } = Astro.props;
 ---
 
 <header class="page-header">
-  <nav aria-label="Breadcrumb" class="font-mono text-xs text-zinc-600">
-    <a href="/data" class="transition-colors hover:text-[#eab308]">data</a>
-    <span class="px-1 text-zinc-700" aria-hidden="true">/</span>
-    <span class="text-zinc-500" aria-current="page">{title.toLowerCase()}</span>
-  </nav>
+  <a href="/data" class="page-kicker arrow-link transition-colors hover:text-[#eab308]"
+    ><span class="arrow" aria-hidden="true">←</span> Data</a
+  >
   <h1 class="page-title">{title}</h1>
   {Astro.slots.has("default") && <p class="page-intro"><slot /></p>}
   {

@@ -10,6 +10,7 @@ import getReadingTime from "reading-time";
 import { getModifiedDate } from "@/lib/post-dates";
 import EditOnGithub from "../../../components/EditOnGithub.astro";
 import { getRelatedPosts, tagLabel } from "@/lib/tags";
+import PostRow from "@/components/PostRow.astro";
 
 export async function getStaticPaths() {
   const paths = (await getCollection("writing")).sort(
@@ -49,6 +50,7 @@ const { Content, headings } = await render(post);
 const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const showToc = tocHeadings.filter((h) => h.depth === 2).length >= 4;
 const minutesRead = post.body ? getReadingTime(post.body).text : undefined;
+const tocLabel = postLang === "vi" ? "Mục lục" : "On this page";
 
 const modifiedTime = getModifiedDate(post).toISOString();
 
@@ -136,177 +138,282 @@ let slug = Array.isArray(Astro.params.id)
   <Container>
     {
       post.data.draft && (
-        <div class="mb-5 border border-[#eab308]/30 bg-[#eab308]/5 px-3 py-2 text-[#eab308]">
-          <p class="font-mono text-xs uppercase tracking-wider">
-            Draft — this post may be incomplete or contain incorrect
-            information.
-          </p>
+        <div class="mb-5 border border-[#eab308]/30 bg-[#eab308]/5 px-3 py-2 text-sm text-[#eab308]">
+          <p>Draft: this post may be incomplete or contain incorrect information.</p>
         </div>
       )
     }
-    <article
-      aria-labelledby="post-title"
-      data-pagefind-body={post.data.draft ? undefined : ""}
-      data-pagefind-filter={`lang:${postLang}`}
-      data-pagefind-meta={`date:${post.data.date.toISOString()}`}
-    >
-      <header class="mb-8 border-b border-[#27272a] pb-6">
-        <a
-          href="/writing"
-          data-pagefind-ignore
-          class="page-kicker transition-colors hover:text-white"
-          >Writing / {postLang}</a
+    <div class="grid gap-x-12 lg:grid-cols-[minmax(0,45rem)_minmax(0,1fr)]">
+      <div class="min-w-0">
+        <article
+          aria-labelledby="post-title"
+          data-pagefind-body={post.data.draft ? undefined : ""}
+          data-pagefind-filter={`lang:${postLang}`}
+          data-pagefind-meta={`date:${post.data.date.toISOString()}`}
         >
-        <h1
-          id="post-title"
-          class="mt-3 max-w-3xl text-[clamp(1.75rem,6vw,2.75rem)] font-semibold leading-[1.08] tracking-[-0.04em] text-zinc-100"
-        >
-          {post.data.title}
-        </h1>
-        <div
-          data-pagefind-ignore
-          class="mt-4 flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-zinc-600"
-        >
-          <time
-            datetime={post.data.date.toISOString()}
-            title={post.data.date.toISOString()}
+          <header class="mb-8 border-b border-[#27272a] pb-7 pt-2 sm:pt-6">
+            <a
+              href="/writing"
+              data-pagefind-ignore
+              class="page-kicker arrow-link transition-colors hover:text-[#eab308]"
+              ><span class="arrow" aria-hidden="true">←</span> Writing</a
+            >
+            <h1
+              id="post-title"
+              class="mt-4 text-[clamp(1.875rem,6vw,3rem)] font-semibold leading-[1.08] tracking-[-0.04em] text-zinc-100"
+            >
+              {post.data.title}
+            </h1>
+            <p
+              data-pagefind-ignore
+              class="mt-4 text-[1.0625rem] leading-[1.6] text-zinc-400 sm:text-lg sm:leading-[1.6]"
+            >
+              {post.data.description}
+            </p>
+            <div
+              data-pagefind-ignore
+              class="mt-5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-zinc-500 lg:hidden"
+            >
+              <time datetime={post.data.date.toISOString()} title={post.data.date.toISOString()}>
+                {format(post.data.date, "MMM dd, yyyy")}
+              </time>
+              {
+                post.data.updated && (
+                  <>
+                    <span aria-hidden="true">·</span>
+                    <span>
+                      {postLang === "vi" ? "Cập nhật" : "Updated"}{" "}
+                      <time datetime={post.data.updated.toISOString()}>
+                        {format(post.data.updated, "MMM dd, yyyy")}
+                      </time>
+                    </span>
+                  </>
+                )
+              }
+              {
+                minutesRead && (
+                  <>
+                    <span aria-hidden="true">·</span>
+                    <span>{minutesRead}</span>
+                  </>
+                )
+              }
+              {
+                post.data.tags.map((tag) => (
+                  <>
+                    <span aria-hidden="true">·</span>
+                    <a
+                      href={`/writing/tag/${tag}`}
+                      class="inline-flex min-h-6 items-center transition-colors hover:text-[#eab308]"
+                    >
+                      {tagLabel(tag)}
+                    </a>
+                  </>
+                ))
+              }
+            </div>
+          </header>
+          {
+            showToc && (
+              <details data-pagefind-ignore class="mb-8 rounded border border-[#27272a] px-4 py-3 text-sm lg:hidden">
+                <summary class="cursor-pointer text-zinc-400 transition-colors hover:text-zinc-200">
+                  {tocLabel}
+                </summary>
+                <ol class="mt-3 space-y-1.5">
+                  {tocHeadings.map((h) => (
+                    <li class:list={[h.depth === 3 && "pl-4"]}>
+                      <a
+                        href={`#${h.slug}`}
+                        class="text-zinc-400 transition-colors hover:text-[#eab308]"
+                      >
+                        {h.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </details>
+            )
+          }
+          <div
+            class="prose max-w-none prose-invert prose-headings:mb-3 prose-headings:leading-tight prose-h2:mt-11 prose-h3:mt-8 prose-h4:mt-6 prose-p:my-4 prose-p:leading-[1.75] prose-ul:my-4 prose-ol:my-4 prose-li:my-1 prose-blockquote:my-6 prose-figure:my-6 prose-pre:my-5 prose-hr:my-10 prose-code:before:content-[''] prose-code:after:content-[''] prose-img:mx-auto prose-img:my-6 prose-video:my-6 prose-table:my-5 prose-table:text-xs"
           >
-            {format(new Date(post.data.date), "dd MMMM yyyy")}
-          </time>
-          {
-            post.data.updated && (
-              <>
-                <span aria-hidden="true">/</span>
-                <span>
-                  Updated{" "}
-                  <time datetime={post.data.updated.toISOString()}>
-                    {format(post.data.updated, "dd MMMM yyyy")}
-                  </time>
-                </span>
-              </>
-            )
-          }
-          {
-            post.body && (
-              <>
-                <>
-                  <span aria-hidden="true">/</span>
-                  <span>{minutesRead}</span>
-                </>
-              </>
-            )
-          }
-        </div>
+            <Content />
+          </div>
+        </article>
+
+        <EditOnGithub slug={slug} />
+
         {
-          post.data.tags.length > 0 && (
-            <ul data-pagefind-ignore class="mt-3 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-wider" aria-label="Tags">
-              {post.data.tags.map((tag) => (
-                <li>
-                  <a
-                    href={`/writing/tag/${tag}`}
-                    class="text-zinc-500 transition-colors hover:text-[#eab308]"
-                  >
-                    #{tagLabel(tag)}
-                  </a>
-                </li>
-              ))}
-            </ul>
+          relatedPosts.length > 0 && (
+            <section class="mb-10" aria-labelledby="related-heading">
+              <h2 id="related-heading" class="corner-heading mb-2">
+                {postLang === "vi" ? "Bài liên quan" : "Related"}
+              </h2>
+              <ul class="border-t border-[#1f1f23]">
+                {relatedPosts.map((p) => (
+                  <li>
+                    <PostRow post={p} description={false} />
+                  </li>
+                ))}
+              </ul>
+            </section>
           )
         }
-      </header>
-      {
-        showToc && (
-          <details data-pagefind-ignore class="mb-8 border border-[#27272a] px-4 py-3 text-sm">
-            <summary class="cursor-pointer font-mono text-xs uppercase tracking-wider text-zinc-500 transition-colors hover:text-zinc-200">
-              {postLang === "vi" ? "Mục lục" : "Contents"}
-            </summary>
-            <ol class="mt-3 space-y-1.5">
-              {tocHeadings.map((h) => (
-                <li class:list={[h.depth === 3 && "pl-4"]}>
-                  <a
-                    href={`#${h.slug}`}
-                    class="text-zinc-400 transition-colors hover:text-[#eab308]"
-                  >
-                    {h.text}
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </details>
-        )
-      }
-      <div
-        class="prose max-w-none prose-invert prose-headings:mt-7 prose-headings:mb-3 prose-headings:leading-tight prose-p:my-3 prose-p:leading-7 prose-ul:my-3 prose-ol:my-3 prose-li:my-1 prose-blockquote:my-5 prose-figure:my-5 prose-pre:my-4 prose-hr:my-8 prose-code:before:content-[''] prose-code:after:content-[''] prose-img:mx-auto prose-img:my-5 prose-video:my-5 prose-table:my-4 prose-table:text-xs"
-      >
-        <Content />
+
+        <nav class="grid gap-x-8 gap-y-5 border-t border-[#27272a] pt-5 sm:grid-cols-2" aria-label="Post navigation">
+          {
+            prevPost ? (
+              <a href={`/writing/${prevPost.id}`} class="arrow-link group block">
+                <div class="text-sm text-zinc-500">
+                  <span class="arrow" aria-hidden="true">←</span> {postLang === "vi" ? "Mới hơn" : "Newer"}
+                </div>
+                <div class="mt-1 line-clamp-2 font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
+                  {prevPost.data.title}
+                </div>
+              </a>
+            ) : (
+              <span class="hidden sm:block" />
+            )
+          }
+          {
+            nextPost && (
+              <a href={`/writing/${nextPost.id}`} class="arrow-link group block sm:text-right">
+                <div class="text-sm text-zinc-500">
+                  {postLang === "vi" ? "Cũ hơn" : "Older"} <span class="arrow" aria-hidden="true">→</span>
+                </div>
+                <div class="mt-1 line-clamp-2 font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
+                  {nextPost.data.title}
+                </div>
+              </a>
+            )
+          }
+        </nav>
       </div>
-    </article>
 
-    <EditOnGithub slug={slug} />
+      <aside class="hidden lg:block" aria-label={postLang === "vi" ? "Thông tin bài viết" : "About this post"}>
+        <div class="post-rail">
+          <dl class="space-y-3 text-sm">
+            <div>
+              <dt class="text-xs text-zinc-600">{postLang === "vi" ? "Ngày đăng" : "Published"}</dt>
+              <dd class="text-zinc-300">
+                <time datetime={post.data.date.toISOString()} title={post.data.date.toISOString()}>
+                  {format(post.data.date, "MMM dd, yyyy")}
+                </time>
+              </dd>
+            </div>
+            {
+              post.data.updated && (
+                <div>
+                  <dt class="text-xs text-zinc-600">{postLang === "vi" ? "Cập nhật" : "Updated"}</dt>
+                  <dd class="text-zinc-300">
+                    <time datetime={post.data.updated.toISOString()}>
+                      {format(post.data.updated, "MMM dd, yyyy")}
+                    </time>
+                  </dd>
+                </div>
+              )
+            }
+            {
+              minutesRead && (
+                <div>
+                  <dt class="text-xs text-zinc-600">{postLang === "vi" ? "Thời gian đọc" : "Reading time"}</dt>
+                  <dd class="text-zinc-300">{minutesRead}</dd>
+                </div>
+              )
+            }
+            {
+              post.data.tags.length > 0 && (
+                <div>
+                  <dt class="text-xs text-zinc-600">{postLang === "vi" ? "Chủ đề" : "Topics"}</dt>
+                  <dd class="flex flex-wrap gap-x-3">
+                    {post.data.tags.map((tag) => (
+                      <a
+                        href={`/writing/tag/${tag}`}
+                        class="text-zinc-300 underline decoration-[#3f3f46] underline-offset-4 transition-colors hover:text-[#eab308] hover:decoration-[#eab308]"
+                      >
+                        {tagLabel(tag)}
+                      </a>
+                    ))}
+                  </dd>
+                </div>
+              )
+            }
+          </dl>
+          {
+            showToc && (
+              <nav class="mt-8" aria-labelledby="toc-heading">
+                <h2 id="toc-heading" class="text-xs text-zinc-600">
+                  {tocLabel}
+                </h2>
+                <ol id="postToc" class="post-toc mt-2">
+                  {tocHeadings.map((h) => (
+                    <li>
+                      <a href={`#${h.slug}`} class:list={[h.depth === 3 && "post-toc-sub"]}>
+                        {h.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )
+          }
+        </div>
+      </aside>
+    </div>
+    <script>
+      // Highlight the section being read in the side table of contents.
+      let tocLinks = new Map<string, HTMLAnchorElement>();
+      let tocHeadings: HTMLElement[] = [];
+      let tocTicking = false;
 
-    {
-      relatedPosts.length > 0 && (
-        <section class="mb-8" aria-labelledby="related-heading">
-          <h2
-            id="related-heading"
-            class="mb-2 font-mono text-xs uppercase tracking-wider text-zinc-600"
-          >
-            {postLang === "vi" ? "Bài liên quan" : "Related"}
-          </h2>
-          <ul>
-            {relatedPosts.map((p) => (
-              <li>
-                <a
-                  href={`/writing/${p.id}`}
-                  hreflang={p.data.lang ?? "en"}
-                  class="block py-1.5 text-sm text-zinc-400 transition-colors hover:text-[#eab308]"
-                >
-                  {p.data.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )
-    }
+      const updateToc = () => {
+        tocTicking = false;
+        if (tocHeadings.length === 0) return;
+        // The current section is the last heading that has scrolled past the top third.
+        const line = window.innerHeight * 0.3;
+        let current = tocHeadings[0];
+        for (const h of tocHeadings) {
+          if (h.getBoundingClientRect().top <= line) current = h;
+          else break;
+        }
+        tocLinks.forEach((a, id) => {
+          if (id !== current.id) {
+            a.removeAttribute("aria-current");
+          } else if (!a.hasAttribute("aria-current")) {
+            a.setAttribute("aria-current", "location");
+            // Long tables of contents scroll inside the rail; keep the current entry visible.
+            const rail = a.closest<HTMLElement>(".post-rail");
+            if (rail && rail.scrollHeight > rail.clientHeight) {
+              rail.scrollTo({ top: a.offsetTop - rail.clientHeight / 2 });
+            }
+          }
+        });
+      };
 
-    <nav
-      class="grid border-y border-[#27272a] sm:grid-cols-2"
-      aria-label="Post navigation"
-    >
-      {
-        prevPost ? (
-          <a
-            href={`/writing/${prevPost.id}`}
-            class="group px-3 py-4 transition-colors hover:bg-[#111113] sm:border-r sm:border-[#27272a]"
-          >
-            <div class="font-mono text-xs uppercase tracking-wider text-zinc-600">
-              Newer
-            </div>
-            <div class="mt-1 line-clamp-2 text-sm text-zinc-300 group-hover:text-[#eab308]">
-              {prevPost.data.title}
-            </div>
-          </a>
-        ) : (
-          <span />
-        )
-      }
-      {
-        nextPost && (
-          <a
-            href={`/writing/${nextPost.id}`}
-            class="group px-3 py-4 text-right transition-colors hover:bg-[#111113]"
-          >
-            <div class="font-mono text-xs uppercase tracking-wider text-zinc-600">
-              Older
-            </div>
-            <div class="mt-1 line-clamp-2 text-sm text-zinc-300 group-hover:text-[#eab308]">
-              {nextPost.data.title}
-            </div>
-          </a>
-        )
-      }
-    </nav>
+      const initTocSpy = () => {
+        tocLinks = new Map();
+        document
+          .querySelectorAll<HTMLAnchorElement>("#postToc a[href^='#']")
+          .forEach((a) => tocLinks.set(decodeURIComponent(a.hash.slice(1)), a));
+        tocHeadings = [...tocLinks.keys()]
+          .map((id) => document.getElementById(id))
+          .filter((el): el is HTMLElement => el !== null);
+        updateToc();
+      };
+
+      // One listener for the whole session; it does nothing on pages without a contents list.
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (tocTicking || tocHeadings.length === 0) return;
+          tocTicking = true;
+          requestAnimationFrame(updateToc);
+        },
+        { passive: true },
+      );
+
+      document.addEventListener("astro:page-load", initTocSpy);
+    </script>
     <script>
       // Lazy-load medium-zoom after the page is idle for better LCP/TBT.
       // astro:page-load also runs after ClientRouter navigations.

@@ -1,62 +1,10 @@
 ---
 import Container from "@/components/Container.astro";
 import Layout from "@/layouts/Layout.astro";
-import BookIcon from "@/assets/icons/book-bookmark-bold.svg";
-import MusicIcon from "@/assets/icons/music-note-bold.svg";
-import ChessIcon from "@/assets/icons/chess-com.svg";
-import SteamIcon from "@/assets/icons/steam.svg";
-import ChartIcon from "@/assets/icons/chart-bar.svg";
+import { analyses } from "@/data/analyses";
 
-// One entry per analysis — add new ones here and they show up automatically.
-// Icons are .svg files in src/assets/icons, imported as Astro components and
-// rendered with fill=currentColor so they inherit the card styling.
-// Books & Music use the Solar set (https://icones.js.org/collection/solar,
-// CC BY 4.0); Steam & Chess use simple-icons brand marks (CC0) for accuracy.
 const pageDescription =
   "Live views of what I read, listen to, play and build with, pulled from the services I use.";
-
-const analyses = [
-  {
-    href: "/data/books",
-    Icon: BookIcon,
-    title: "Books",
-    source: "goodreads",
-    description:
-      "Everything I have read on Goodreads, by year and month, with ratings.",
-  },
-  {
-    href: "/data/music",
-    Icon: MusicIcon,
-    title: "Music",
-    source: "spotify",
-    description:
-      "What I have been listening to lately, plus top tracks and artists over time.",
-  },
-  {
-    href: "/data/chess",
-    Icon: ChessIcon,
-    title: "Chess",
-    source: "chess.com",
-    description:
-      "Ratings, win rates, favourite openings and recent games from chess.com.",
-  },
-  {
-    href: "/data/steam",
-    Icon: SteamIcon,
-    title: "Steam",
-    source: "steam web api",
-    description:
-      "My Steam library: where the hours went and what I am playing now.",
-  },
-  {
-    href: "/data/token-usage",
-    Icon: ChartIcon,
-    title: "Token usage",
-    source: "ccusage",
-    description:
-      "Daily tokens and spend across the coding agents and models I use.",
-  },
-];
 ---
 
 <Layout
@@ -72,55 +20,41 @@ const analyses = [
   }}
 >
   <Container>
-    <div class="collection-page">
-      <header class="page-header">
-        <h1 class="page-title">Data</h1>
-        <p class="page-intro">
-          Live views of what I read, listen to, play and build with, pulled
-          from the services I use and refreshed every few minutes.
-        </p>
-      </header>
+    <header class="page-header">
+      <h1 class="page-title">Data</h1>
+      <p class="page-intro">
+        Live views of what I read, listen to, play and build with, pulled from the services I use
+        and refreshed every few minutes.
+      </p>
+    </header>
 
-      <section class="mb-10">
-        <ul class="grid grid-cols-1 border-l border-t border-[#27272a] md:grid-cols-2">
-          {
-            analyses.map(({ href, Icon, title, source, description }, i) => (
-              <li
-                class:list={[
-                  "border-b border-r border-[#27272a]",
-                  analyses.length % 2 === 1 && i === analyses.length - 1 && "md:col-span-2",
-                ]}
-              >
-                <a
-                  href={href}
-                  class="group flex h-full gap-4 p-5 transition-colors hover:bg-[#111113]"
-                >
-                  <span
-                    class="flex size-10 shrink-0 items-center justify-center border border-[#27272a] bg-[#111113] text-zinc-400 transition-colors group-hover:border-[#eab308]/50 group-hover:text-[#eab308]"
-                    aria-hidden="true"
-                  >
-                    <Icon class="size-5" />
-                  </span>
-                  <span class="flex min-w-0 flex-1 flex-col">
-                    <span class="flex items-baseline justify-between gap-3">
-                      <span class="text-base font-medium text-zinc-100 transition-colors group-hover:text-[#eab308]">
-                        {title}
-                      </span>
-                      <span class="font-mono text-xs text-zinc-600">{source}</span>
-                    </span>
-                    <span class="mt-1 text-sm leading-relaxed text-zinc-400">
-                      {description}
-                    </span>
-                    <span class="mt-3 font-mono text-xs text-zinc-600 transition-colors group-hover:text-[#eab308]">
-                      {href} <span aria-hidden="true" class="inline-block transition-transform group-hover:translate-x-0.5">→</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </section>
-    </div>
+    <ul class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        analyses.map(({ href, title, source, description, cover }, i) => (
+          <li>
+            <a href={href} class="cover-card group block">
+              <span class="cover-frame">
+                <img
+                  src={cover.src}
+                  width={cover.width}
+                  height={cover.height}
+                  alt=""
+                  loading={i < 3 ? "eager" : "lazy"}
+                  fetchpriority={i === 0 ? "high" : undefined}
+                  decoding="async"
+                />
+              </span>
+              <span class="mt-3 flex items-baseline justify-between gap-3">
+                <span class="text-base font-medium text-zinc-100 transition-colors group-hover:text-[#eab308]">
+                  {title}
+                </span>
+                <span class="shrink-0 font-mono text-xs text-zinc-600">{source}</span>
+              </span>
+              <span class="mt-1 block text-sm leading-relaxed text-zinc-500">{description}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
   </Container>
 </Layout>

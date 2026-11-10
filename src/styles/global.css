@@ -16,12 +16,14 @@
   --surface: #111113;
   --surface-hover: #151517;
   --line: #27272a;
+  --line-soft: #1f1f23;
   --line-strong: #3f3f46;
   --ink: #ededed;
   --muted: #a1a1aa;
   --faint: #8f8f98;
   --accent: #eab308;
   --radius-surface: 0.25rem;
+  --header-height: 3.75rem;
 }
 
 * {
@@ -33,6 +35,8 @@ html {
   scrollbar-gutter: stable;
   background: var(--page);
   scroll-behavior: smooth;
+  /* Anchored headings stop below the sticky header. */
+  scroll-padding-top: calc(var(--header-height) + 1.25rem);
 }
 
 body {
@@ -43,8 +47,16 @@ body {
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.65;
+  /* Iosevka Aile keeps the wide word space of its monospace parent; pull it in for prose. */
+  word-spacing: -0.05em;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  word-spacing: -0.1em;
 }
 
 ::selection {
@@ -71,6 +83,15 @@ samp {
   font-family: var(--font-mono);
 }
 
+/* Monospace text keeps its full-width spaces so columns still line up. */
+pre,
+code,
+kbd,
+samp,
+.font-mono {
+  word-spacing: normal;
+}
+
 img {
   border-radius: var(--radius-surface);
 }
@@ -89,8 +110,82 @@ img {
   border-radius: 32% !important;
 }
 
+/* ---- Site chrome ------------------------------------------------------ */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 1px solid var(--line-soft);
+  background: color-mix(in srgb, var(--page) 86%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.site-brand {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--ink);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.site-nav-link {
+  position: relative;
+  display: inline-flex;
+  min-width: 1.5rem;
+  align-items: center;
+  color: var(--faint);
+  font-size: 0.9375rem;
+  white-space: nowrap;
+  transition: color 150ms ease;
+}
+
+.site-nav-link:hover {
+  color: var(--ink);
+}
+
+.site-nav-link[aria-current="page"] {
+  color: var(--ink);
+}
+
+/* The current section is marked on the header's bottom rule, like a tab. */
+.site-nav-link[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: var(--accent);
+}
+
+.site-footer {
+  margin-top: 2rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+.footer-link {
+  display: inline-flex;
+  min-height: 1.75rem;
+  align-items: center;
+  color: var(--muted);
+  transition: color 150ms ease;
+}
+
+.footer-link:hover {
+  color: var(--accent);
+}
+
+/* ---- Page furniture ---------------------------------------------------- */
+
 .page-header {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  padding-top: 1.5rem;
 }
 
 .page-kicker {
@@ -104,7 +199,7 @@ img {
 .page-title {
   margin-top: 0.4rem;
   color: var(--ink);
-  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-size: clamp(2rem, 5vw, 2.75rem);
   font-weight: 600;
   letter-spacing: -0.04em;
   line-height: 1.1;
@@ -112,10 +207,271 @@ img {
 
 .page-intro {
   max-width: 38rem;
-  margin-top: 0.75rem;
+  margin-top: 0.875rem;
   color: var(--muted);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+
+/* Small corner in the accent colour, used to mark section headings. */
+.corner-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--ink);
   font-size: 1rem;
-  line-height: 1.7;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+.corner-heading::before {
+  content: "";
+  width: 0.4375rem;
+  height: 0.4375rem;
+  flex-shrink: 0;
+  border-top: 2px solid var(--accent);
+  border-left: 2px solid var(--accent);
+  border-top-left-radius: 2px;
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  border-top: 1px solid var(--line-soft);
+  padding-top: 1rem;
+}
+
+.section-link {
+  color: var(--faint);
+  font-size: 0.875rem;
+  white-space: nowrap;
+  transition: color 150ms ease;
+}
+
+.section-link:hover {
+  color: var(--accent);
+}
+
+.section-link .arrow,
+.arrow-link .arrow {
+  display: inline-block;
+  transition: transform 150ms ease;
+}
+
+.section-link:hover .arrow,
+.arrow-link:hover .arrow {
+  transform: translateX(2px);
+}
+
+/* ---- Post lists ---------------------------------------------------------- */
+
+.post-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.125rem 1.5rem;
+  border-bottom: 1px solid var(--line-soft);
+  padding: 0.875rem 0;
+}
+
+.post-row-title {
+  color: #e4e4e7;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  transition: color 150ms ease;
+}
+
+.post-row:hover .post-row-title {
+  color: var(--accent);
+}
+
+.post-row-date {
+  color: var(--faint);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.post-row-desc {
+  grid-column: 1;
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--faint);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+@media (min-width: 48rem) {
+  .post-row-desc {
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
+}
+
+/* ---- Post page ------------------------------------------------------------ */
+
+.post-rail {
+  position: sticky;
+  top: calc(var(--header-height) + 2rem);
+  max-height: calc(100vh - var(--header-height) - 4rem);
+  overflow-y: auto;
+  padding-top: 2.25rem;
+  scrollbar-width: none;
+}
+
+.post-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.post-toc {
+  border-left: 1px solid var(--line);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.post-toc a {
+  display: block;
+  margin-left: -1px;
+  border-left: 2px solid transparent;
+  padding: 0.3rem 0 0.3rem 0.875rem;
+  color: var(--faint);
+  transition: color 150ms ease, border-color 150ms ease;
+}
+
+.post-toc a.post-toc-sub {
+  padding-left: 1.75rem;
+}
+
+.post-toc a:hover {
+  color: var(--ink);
+}
+
+.post-toc a[aria-current] {
+  border-left-color: var(--accent);
+  color: var(--ink);
+}
+
+/* ---- Timeline (/now) ------------------------------------------------------- */
+
+.timeline-item {
+  position: relative;
+  display: grid;
+  gap: 0.125rem 1.75rem;
+  border-left: 1px solid var(--line);
+  padding: 0 0 2.25rem 1.5rem;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0.5rem;
+}
+
+/* The dot sits on the line; the first entry ("Now") gets the accent. */
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  top: 0.5rem;
+  left: -4.5px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--line-strong);
+  box-shadow: 0 0 0 4px var(--page);
+}
+
+.timeline-item[data-now]::before {
+  background: var(--accent);
+}
+
+.timeline-date {
+  color: var(--faint);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.6rem;
+  word-spacing: normal;
+}
+
+.timeline-item[data-now] .timeline-date {
+  color: var(--accent);
+}
+
+@media (min-width: 40rem) {
+  .timeline-item {
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    border-left: 0;
+    padding: 0;
+  }
+
+  .timeline-item::before {
+    left: calc(8.25rem - 4px);
+  }
+
+  .timeline-date {
+    text-align: right;
+  }
+
+  .timeline-body {
+    border-left: 1px solid var(--line);
+    padding: 0 0 2.25rem 1.75rem;
+  }
+
+  .timeline-item:last-child .timeline-body {
+    padding-bottom: 0.5rem;
+  }
+}
+
+/* ---- Cover cards (projects, data) ---------------------------------------- */
+
+.cover-frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-surface);
+  background: var(--surface);
+  transition: border-color 150ms ease;
+}
+
+.cover-frame img {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  object-fit: cover;
+}
+
+/* On hover the frame's top-left corner lights up, echoing the site mark. */
+.cover-frame::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-top: 2px solid var(--accent);
+  border-left: 2px solid var(--accent);
+  border-top-left-radius: var(--radius-surface);
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.cover-card:hover .cover-frame,
+.cover-frame:hover {
+  border-color: var(--line-strong);
+}
+
+.cover-card:hover .cover-frame::after,
+.cover-frame:hover::after {
+  opacity: 1;
 }
 
 .text-link {
@@ -140,6 +496,7 @@ img {
 }
 
 .prose {
+  font-size: 1.0625rem;
   --tw-prose-body: #c4c4c8;
   --tw-prose-headings: var(--ink);
   --tw-prose-lead: #b4b4ba;
@@ -255,6 +612,12 @@ img {
   outline: none;
 }
 
+/* Search excerpts get two lines so the matched words stay in view. */
+.search-excerpt.post-row-desc {
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
 .search-excerpt mark {
   background: transparent;
   color: var(--accent);
@@ -262,6 +625,14 @@ img {
 
 .prose :where(img) {
   border: 1px solid var(--line);
+}
+
+/* Wide tables scroll sideways on phones instead of stretching the page. */
+@media (max-width: 40rem) {
+  .prose :where(table) {
+    display: block;
+    overflow-x: auto;
+  }
 }
 
 .scrollbar-hide::-webkit-scrollbar {
@@ -280,7 +651,8 @@ img {
   }
 
   .page-header {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
+    padding-top: 0.5rem;
   }
 }
 
@@ -359,10 +731,12 @@ img {
   .data-section-heading h2::before,
   .data-h2::before {
     content: "";
-    width: 0.375rem;
-    height: 0.375rem;
+    width: 0.4375rem;
+    height: 0.4375rem;
     flex-shrink: 0;
-    background: var(--accent);
+    border-top: 2px solid var(--accent);
+    border-left: 2px solid var(--accent);
+    border-top-left-radius: 2px;
   }
 
   .data-section-note {

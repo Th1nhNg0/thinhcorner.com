@@ -27,7 +27,7 @@ const isExternal = (link: ProjectLink) => link.href.startsWith("http");
   }}
 >
   <Container>
-    <div class="pb-12">
+    <div>
       <header class="page-header">
         <h1 class="page-title">Projects</h1>
         <p class="page-intro">
@@ -42,27 +42,26 @@ const isExternal = (link: ProjectLink) => link.href.startsWith("http");
         </p>
       </header>
 
-      <div class="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2">
+      <div class="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
         {
           projects.map((project, i) => (
-            <article>
+            <article class="cover-card">
               <a
                 href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 tabindex="-1"
                 aria-hidden="true"
-                class="block aspect-[16/10] overflow-hidden rounded-[var(--radius-surface)] border border-[var(--line)] transition-colors hover:border-[var(--line-strong)]"
+                class="cover-frame"
               >
                 <img
                   src={project.cover.src}
                   width={project.cover.width}
                   height={project.cover.height}
                   alt=""
-                  loading={i < 2 ? "eager" : "lazy"}
+                  loading={i < 3 ? "eager" : "lazy"}
                   fetchpriority={i === 0 ? "high" : undefined}
                   decoding="async"
-                  class="h-full w-full object-cover"
                 />
               </a>
               <div class="mt-3 flex items-baseline justify-between gap-3">

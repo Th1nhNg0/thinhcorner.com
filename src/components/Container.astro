@@ -1,3 +1,20 @@
-<div class="mx-auto w-full max-w-[45rem] px-4 sm:px-6">
+---
+// Page width. "wide" is the site canvas that the header and footer share;
+// "text" is the reading measure used for long-form prose.
+interface Props {
+  size?: "wide" | "text";
+  class?: string;
+}
+
+const { size = "wide", class: className } = Astro.props;
+---
+
+<div
+  class:list={[
+    "mx-auto w-full px-4 sm:px-6",
+    size === "wide" ? "max-w-[66rem]" : "max-w-[45rem]",
+    className,
+  ]}
+>
   <slot />
 </div>

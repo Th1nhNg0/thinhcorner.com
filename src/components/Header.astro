@@ -1,17 +1,15 @@
 ---
 import Container from "./Container.astro";
+import CornerMark from "./CornerMark.astro";
+import { SITE } from "../../data/consts";
 
 const pathname = Astro.url.pathname;
-function isActive(href: string) {
-  if (href === "/") return pathname === "/";
-  return pathname.startsWith(href);
-}
+const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 const navLinks = [
-  { href: "/", label: "home" },
-  { href: "/writing", label: "writing" },
-  { href: "/now", label: "now" },
-  { href: "/projects", label: "projects" },
-  { href: "/data", label: "data" },
+  { href: "/writing", label: "Writing" },
+  { href: "/projects", label: "Projects" },
+  { href: "/data", label: "Data" },
+  { href: "/now", label: "Now" },
 ];
 ---
 
@@ -21,28 +19,31 @@ const navLinks = [
 >
   Skip to content
 </a>
-<header>
+<header class="site-header">
   <Container>
-    <nav
-      class="scrollbar-hide flex h-14 items-center gap-5 overflow-x-auto"
-      aria-label="Main navigation"
-    >
-      {
-        navLinks.map((link) => (
-          <a
-            href={link.href}
-            class:list={[
-              "inline-flex min-h-11 items-center whitespace-nowrap text-base transition-colors focus-visible:outline-none",
-              isActive(link.href)
-                ? "text-[#eab308]"
-                : "text-zinc-500 hover:text-zinc-200",
-            ]}
-            aria-current={isActive(link.href) ? "page" : undefined}
-          >
-            {link.label}
-          </a>
-        ))
-      }
-    </nav>
+    <div class="flex h-15 items-center justify-between gap-4">
+      <a
+        href="/"
+        class="site-brand"
+        aria-label={`${SITE.title}, home`}
+        aria-current={pathname === "/" ? "page" : undefined}
+      >
+        <CornerMark class="size-4 shrink-0 text-[#eab308]" />
+        <span class="max-[26rem]:hidden">{SITE.title.replace("'", "’")}</span>
+      </a>
+      <nav class="flex h-full items-stretch gap-5 sm:gap-7" aria-label="Main navigation">
+        {
+          navLinks.map((link) => (
+            <a
+              href={link.href}
+              class="site-nav-link"
+              aria-current={isActive(link.href) ? "page" : undefined}
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
   </Container>
 </header>
