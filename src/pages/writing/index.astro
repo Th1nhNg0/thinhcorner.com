@@ -32,7 +32,7 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
 ---
 
 <Layout
-  description="Read my collection of posts and the things that interest me"
+  description="Every post on Thinh's Corner: essays and notes on AI, programming, history and economics, in English and Vietnamese."
   title="Writing — Thinh's Corner"
   image="/og/writing.jpg"
   lang="en"
@@ -41,7 +41,8 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: "Writing",
-    description: "Read my collection of posts and the things that interest me",
+    description:
+      "Every post on Thinh's Corner: essays and notes on AI, programming, history and economics, in English and Vietnamese.",
     url: new URL("/writing", Astro.site).toString(),
   }}
 >
@@ -50,7 +51,7 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
       <div class="flex items-start justify-between gap-6">
         <div>
           <h1 class="page-title">Writing</h1>
-          <p class="page-intro">Notes and essays on technology, research, and things I’m learning.</p>
+          <p class="page-intro">Essays and notes on AI, programming, history and economics, in English and Vietnamese.</p>
         </div>
         <div class="mt-3 flex items-center gap-1 text-sm text-zinc-500">
           <a href="/rss.xml" class="inline-flex min-h-6 min-w-6 items-center justify-center px-1 transition-colors hover:text-[#eab308]">RSS</a>

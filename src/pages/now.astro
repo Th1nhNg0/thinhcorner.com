@@ -13,7 +13,7 @@ import imgVts from "@/assets/timeline/vts.jpg";
 
 <Layout
   title="Now — Thinh's Corner"
-  description="My personal timeline — where I've been and what I'm doing now."
+  description="What Ngô Phú Thịnh is doing now, and a timeline of the school, research and work that came before."
   image="/og/now.jpg"
   lang="en"
   locale="en_US"
@@ -21,26 +21,31 @@ import imgVts from "@/assets/timeline/vts.jpg";
     "@context": "https://schema.org",
     "@type": "ProfilePage",
     name: "Now",
-    description: "My personal timeline — where I've been and what I'm doing now.",
+    description:
+      "What Ngô Phú Thịnh is doing now, and a timeline of the school, research and work that came before.",
     url: new URL("/now", Astro.site).toString(),
   }}
 >
   <Container>
     <header class="page-header">
       <h1 class="page-title">Now & then</h1>
-      <p class="page-intro">A compact timeline of what I’m doing now and the stops that brought me here.</p>
+      <p class="page-intro">What I’m doing now, and everything that came before it, back to the Big Bang.</p>
     </header>
     <ol class="timeline">
       <TimelineItem title="What am I doing now?" time="now">
         <p>Wrapping up the last stretch of my MBA at UEH.</p>
+        <p>
+          Building small games and tools with AI coding agents. The latest ones are on the{" "}
+          <a href="/projects">projects page</a>.
+        </p>
         <p>Also waiting for AI to replace me 🤖</p>
       </TimelineItem>
       <TimelineItem
-        title="Start learning Master of Business Administration at UEH University of Economics Ho Chi Minh City"
+        title="Started an MBA at UEH, the University of Economics Ho Chi Minh City"
         time="2024-10-01"
       />
       <TimelineItem
-        title="Third research paper published"
+        title="Published my third research paper"
         time="2024"
       >
         <a
@@ -55,7 +60,7 @@ import imgVts from "@/assets/timeline/vts.jpg";
         </a>
       </TimelineItem>
       <TimelineItem
-        title="Second research paper published"
+        title="Published my second research paper"
         time="2024"
       >
         <a
@@ -71,11 +76,11 @@ import imgVts from "@/assets/timeline/vts.jpg";
       </TimelineItem>
 
       <TimelineItem
-        title="Graduated from University of Science, Vietnam National University Ho Chi Minh City"
+        title="Graduated from the University of Science, Vietnam National University Ho Chi Minh City"
         time="2023-11-25"
       />
       <TimelineItem
-        title="Finished my graduation thesis at University of Science, Vietnam National University Ho Chi Minh City"
+        title="Finished my graduation thesis"
         time="2023-07-16"
       >
         <a href="/timeline/thesis.pdf" class="text-link">
@@ -83,7 +88,7 @@ import imgVts from "@/assets/timeline/vts.jpg";
         </a>
       </TimelineItem>
       <TimelineItem
-        title="First research paper published"
+        title="Published my first research paper"
         time="2023-07-18"
       >
         <a
@@ -106,7 +111,7 @@ import imgVts from "@/assets/timeline/vts.jpg";
           rel="noopener noreferrer"
           class="text-link"
         >
-          Link to Project
+          Travel Flow, the project that won
           <span class="sr-only">(opens in new tab)</span>
         </a>
         <Image
@@ -122,11 +127,11 @@ import imgVts from "@/assets/timeline/vts.jpg";
         />
       </TimelineItem>
       <TimelineItem
-        title="Start working at KING ATTORNEY JOINT STOCK COMPANY"
+        title="Started working at King Attorney Joint Stock Company"
         time="2021-01-01"
       />
       <TimelineItem
-        title="Start studying at University of Science, Vietnam National University Ho Chi Minh City"
+        title="Started studying at the University of Science, Vietnam National University Ho Chi Minh City"
         time="2019-08-15"
       >
         <Image
@@ -146,15 +151,15 @@ import imgVts from "@/assets/timeline/vts.jpg";
         time="2019-05-21"
       />
       <TimelineItem
-        title="Won the Consolation prize at the national competition for excellent students in high school"
+        title="Won a consolation prize at the national competition for excellent high school students"
         time="2019-04-21"
       />
       <TimelineItem
-        title="Won the First prize at the provincial competition for excellent students in high school"
+        title="Won first prize at the provincial competition for excellent high school students"
         time="2017-10-11"
       />
       <TimelineItem
-        title="Won Silver medal at olympic competition 30/4 XXIII"
+        title="Won a silver medal at the 23rd 30/4 Olympic competition"
         time="2017-04-16"
       >
         <Image
@@ -163,14 +168,14 @@ import imgVts from "@/assets/timeline/vts.jpg";
           widths={[400, 640, 800]}
           sizes="(min-width: 720px) 640px, calc(100vw - 4rem)"
           src={imgOlp}
-          alt="Silver medal at Olympic competition 30/4 XXIII"
+          alt="Silver medal at the 23rd 30/4 Olympic competition"
           loading="lazy"
           decoding="async"
           class="mt-2"
         />
       </TimelineItem>
       <TimelineItem
-        title="Start studying at Phan Ngoc Hien High School for the Gifted"
+        title="Started studying at Phan Ngoc Hien High School for the Gifted"
         time="2016-09-10"
       >
         <Image
@@ -189,9 +194,9 @@ import imgVts from "@/assets/timeline/vts.jpg";
         title="Graduated from Vo Thi Sau Secondary School"
         time="2016-07-15"
       />
-      <TimelineItem title="Learning to play guitar" time="2012" />
+      <TimelineItem title="Started learning guitar" time="2012" />
       <TimelineItem
-        title="Start studying at Vo Thi Sau Secondary School"
+        title="Started studying at Vo Thi Sau Secondary School"
         time="2012"
       >
         <Image
@@ -211,7 +216,7 @@ import imgVts from "@/assets/timeline/vts.jpg";
         time="2001-09-08"
       />
       <TimelineItem
-        title="Big Bang - The Beginning of Everything"
+        title="The Big Bang, the beginning of everything"
         time="13.8 billion years ago"
       >
         <p class="text-zinc-400 italic">
