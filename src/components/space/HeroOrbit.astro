@@ -1,0 +1,85 @@
+---
+// Home page art: a planet, two orbits, a moon, and a rocket that circles it.
+// The rocket is drawn twice, behind and in front of the planet, so it passes behind
+// the disc on the far side.
+import HeroOrbitCraft from "./HeroOrbitCraft.astro";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const cx = 360;
+const cy = 220;
+const r = 104;
+const orbit = (rx: number, ry: number) =>
+  `M${cx - rx} ${cy}a${rx} ${ry} 0 1 0 ${rx * 2} 0a${rx} ${ry} 0 1 0 ${-rx * 2} 0`;
+const front = (rx: number, ry: number) => `M${cx - rx} ${cy}a${rx} ${ry} 0 1 0 ${rx * 2} 0`;
+const back = (rx: number, ry: number) => `M${cx + rx} ${cy}a${rx} ${ry} 0 1 0 ${-rx * 2} 0`;
+const inner = [212, 60] as const;
+const outer = [292, 96] as const;
+const flightPath = orbit(...inner);
+const lap = 36;
+---
+
+<svg
+  viewBox="0 0 640 440"
+  class:list={["hero-orbit", className]}
+  aria-hidden="true"
+  focusable="false"
+>
+  <defs>
+    <radialGradient id="ho-planet" cx="0.32" cy="0.26" r="0.9">
+      <stop offset="0" stop-color="#34343a"></stop>
+      <stop offset="0.45" stop-color="#1b1b1f"></stop>
+      <stop offset="1" stop-color="#0e0e10"></stop>
+    </radialGradient>
+    <radialGradient id="ho-halo" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0.62" stop-color="#fff" stop-opacity="0.07"></stop>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
+    </radialGradient>
+    <clipPath id="ho-disc"><circle cx={cx} cy={cy} r={r}></circle></clipPath>
+    <clipPath id="ho-front"><rect x={cx - 400} y={cy} width="800" height="300"></rect></clipPath>
+  </defs>
+
+  <circle cx={cx} cy={cy} r={r * 1.62} fill="url(#ho-halo)"></circle>
+
+  <g transform={`rotate(-20 ${cx} ${cy})`} fill="none">
+    <path d={back(...outer)} stroke="#27272a" stroke-dasharray="2 7" stroke-linecap="round"></path>
+    <path d={back(...inner)} stroke="#3f3f46"></path>
+    <HeroOrbitCraft path={flightPath} lap={lap} />
+
+    <circle cx={cx} cy={cy} r={r} fill="url(#ho-planet)"></circle>
+    <g clip-path="url(#ho-disc)" stroke="#fff" stroke-opacity="0.055" stroke-width="7">
+      <path d={`M${cx - r} ${cy - 46}q${r} 26 ${r * 2} 0`}></path>
+      <path d={`M${cx - r} ${cy - 8}q${r} 34 ${r * 2} 0`} stroke-width="14"></path>
+      <path d={`M${cx - r} ${cy + 40}q${r} 28 ${r * 2} 0`} stroke-width="4"></path>
+    </g>
+    <circle cx={cx} cy={cy} r={r - 0.5} stroke="#52525b" stroke-opacity="0.7"></circle>
+
+    <path d={front(...outer)} stroke="#27272a" stroke-dasharray="2 7" stroke-linecap="round"></path>
+    <path d={front(...inner)} stroke="#3f3f46"></path>
+    <g clip-path="url(#ho-front)"><HeroOrbitCraft path={flightPath} lap={lap} /></g>
+
+    <g class="hero-orbit-moon">
+      <circle cx={cx + outer[0] * 0.8} cy={cy - outer[1] * 0.6} r="6.500" fill="#52525b"></circle>
+    </g>
+  </g>
+</svg>
+
+<script>
+  // Only fly the rocket while the art is on screen.
+  let observer: IntersectionObserver | undefined;
+
+  document.addEventListener("astro:page-load", () => {
+    observer?.disconnect();
+    const art = document.querySelector<SVGSVGElement>(".hero-orbit");
+    if (!art) return;
+    observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) art.unpauseAnimations();
+      else art.pauseAnimations();
+    });
+    observer.observe(art);
+  });
+</script>

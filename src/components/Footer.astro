@@ -1,6 +1,7 @@
 ---
 import Container from "./Container.astro";
-import CornerMark from "./CornerMark.astro";
+import SiteMark from "./SiteMark.astro";
+import Horizon from "./space/Horizon.astro";
 import { AUTHOR_EMAIL, AUTHOR_NAME, SITE, SOCIAL_MEDIA } from "../../data/consts";
 
 const siteLinks = [
@@ -21,15 +22,16 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
+  <Horizon />
   <Container>
     <div class="flex flex-col gap-8 py-10 sm:flex-row sm:items-start sm:justify-between">
       <div>
         <a href="/" class="site-brand">
-          <CornerMark class="size-4 shrink-0 text-[#eab308]" />
+          <SiteMark class="size-5 shrink-0 text-[#eab308]" />
           <span>{SITE.title.replace("'", "’")}</span>
         </a>
         <p class="mt-3 max-w-[22rem] text-sm leading-relaxed text-zinc-500">
-          Notes on technology, research and things I’m learning, written in Ho Chi Minh City.
+          Essays, projects and live data. Written in Ho Chi Minh City, Earth.
         </p>
       </div>
       <div class="flex gap-14 text-sm sm:gap-16">
@@ -62,8 +64,11 @@ const year = new Date().getFullYear();
         </ul>
       </div>
     </div>
-    <p class="border-t border-[#1f1f23] py-5 text-xs text-zinc-600">
-      © {year} {AUTHOR_NAME}
-    </p>
+    <div class="flex items-center justify-between gap-4 border-t border-[#1f1f23] py-5 text-xs text-zinc-600">
+      <p>© {year} {AUTHOR_NAME}</p>
+      <a href="#top" class="footer-top arrow-link transition-colors hover:text-[#eab308]">
+        Back to top <span class="arrow" aria-hidden="true">↑</span>
+      </a>
+    </div>
   </Container>
 </footer>

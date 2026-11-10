@@ -89,8 +89,8 @@ const pages: Page[] = [
     slug: "404",
     section: "error",
     label: "404",
-    title: "Nothing here.",
-    footer: "END OF LINE",
+    title: "Lost in space.",
+    footer: "OFF COURSE",
   },
 ];
 

@@ -6,6 +6,7 @@ import DataHeader from "@/components/data/DataHeader.astro";
 import SectionHeading from "@/components/data/SectionHeading.astro";
 import StatGrid from "@/components/data/StatGrid.astro";
 import { get_book } from "@/lib/goodread";
+import type { Book } from "@/lib/goodreads-shelves";
 import { format } from "date-fns";
 import { GOODREADS_USER_URL } from "../../../data/consts";
 import { env } from "cloudflare:workers";
@@ -19,28 +20,32 @@ Astro.response.headers.set(
   "public, s-maxage=600, stale-while-revalidate=300",
 );
 
+// Goodreads stopped publishing read dates, so only books finished since the sync
+// began carry one. The rest keep Goodreads' order (most recently read first) under
+// one heading.
+const dated = read.filter((book) => book.user_read_at);
+const undated = read.filter((book) => !book.user_read_at);
+const UNDATED = dated.length > 0 ? "Earlier" : "Read";
+
 const readByYear = read.reduce(
-  (acc, post) => {
-    if (!post.user_read_at) {
-      if (!acc["Long time ago"]) {
-        acc["Long time ago"] = [];
-      }
-      acc["Long time ago"].push(post);
-      return acc;
-    }
-    const year = new Date(post.user_read_at).getFullYear();
-    if (!acc[year]) {
-      acc[year] = [];
-    }
-    acc[year].push(post);
+  (acc, book) => {
+    const group = book.user_read_at
+      ? String(new Date(book.user_read_at).getFullYear())
+      : UNDATED;
+    (acc[group] ??= []).push(book);
     return acc;
   },
-  {} as Record<string, any[]>,
+  {} as Record<string, Book[]>,
 );
 
-const years = Object.keys(readByYear).sort((a, b) => Number(b) - Number(a));
+// Year headings newest first, then the undated books.
+const years = Object.keys(readByYear).sort(
+  (a, b) => (Number(b) || -Infinity) - (Number(a) || -Infinity),
+);
 const now = new Date();
 const currentYear = now.getFullYear();
+// Charts by year and month would mislead while most books have no date.
+const showTimeline = dated.length > 0 && dated.length >= undated.length;
 
 // --- Stats ---
 const booksThisYear = readByYear[currentYear]?.length ?? 0;
@@ -53,7 +58,7 @@ const totalHours = Math.round(totalMinutes / 60);
 
 // --- Year-over-year chart data ---
 const numericYears = years
-  .filter((y) => y !== "Long time ago")
+  .filter((y) => y !== UNDATED)
   .map(Number)
   .sort((a, b) => a - b);
 const booksPerYear = numericYears.map((y) => ({
@@ -106,8 +111,31 @@ const ratingLabels = {
   5: "it was amazing",
 };
 
-const pageDescription =
-  "Reading analytics from Goodreads: books read, yearly trends and ratings.";
+const rated = read.filter((book) => book.rating > 0);
+const averageRating = rated.reduce((sum, book) => sum + book.rating, 0) / Math.max(rated.length, 1);
+const fiveStars = rated.filter((book) => Math.round(book.rating) === 5).length;
+
+const stats = [
+  {
+    label: "Books read",
+    value: read.length,
+    note: showTimeline ? `${numericYears.length} years tracked` : "most recent first",
+  },
+  showTimeline
+    ? { label: `In ${currentYear}`, value: booksThisYear, note: `${books.current_reads.length} in progress` }
+    : { label: "Reading now", value: books.current_reads.length, note: books.current_reads[0]?.title },
+  ...(totalPages > 0
+    ? [
+        { label: "Pages", value: totalPages.toLocaleString(), note: `~${Math.round(totalPages / Math.max(read.length, 1))} per book` },
+        { label: "Time spent", value: `~${totalHours.toLocaleString()}h`, note: "at 1.5 min / page" },
+      ]
+    : [
+        { label: "Average rating", value: rated.length ? averageRating.toFixed(1) : "–", note: `across ${rated.length} rated` },
+        { label: "Five stars", value: fiveStars, note: `${Math.round((fiveStars / Math.max(rated.length, 1)) * 100)}% of rated books` },
+      ]),
+];
+
+const pageDescription = "Books I have read and rated, synced from Goodreads.";
 
 ---
 
@@ -125,20 +153,20 @@ const pageDescription =
 >
   <Container>
     <div class="collection-page">
-      <DataHeader title="Books" source="goodreads" sourceHref={GOODREADS_USER_URL} updated={now}>
-        Everything I have finished reading, by year and month, synced from my{" "}
+      <DataHeader title="Books" source="Goodreads" sourceHref={GOODREADS_USER_URL} updated={now}>
+        Everything I have finished reading, synced from my{" "}
         <a href={GOODREADS_USER_URL} class="text-link">Goodreads profile</a>.
       </DataHeader>
 
       {
         !hasBooks && (
           <section class="data-section">
-            <div class="space-y-2 border border-[#27272a] bg-[#0c0c0d] p-6 font-mono text-xs leading-relaxed text-zinc-400">
-              <p class="text-[#eab308]">Goodreads isn’t sharing right now.</p>
+            <div class="data-notice">
+              <p>Goodreads isn’t sharing right now.</p>
               <p>
-                The RSS feed came back empty — Goodreads sometimes blocks
-                server-side requests. This page caches its data, so it will
-                recover on its own within a few hours.
+                The synced copy of my shelves couldn’t be loaded and Goodreads didn’t answer
+                directly either. The shelves sync every six hours, so this should clear up on
+                its own.
               </p>
               <p>
                 Meanwhile, everything lives on my{" "}
@@ -161,14 +189,7 @@ const pageDescription =
           <>
       <!-- Stats Bar -->
       <section class="data-section">
-        <StatGrid
-          stats={[
-            { label: "Books read", value: read.length, note: `${numericYears.length} years tracked` },
-            { label: `In ${currentYear}`, value: booksThisYear, note: `${books.current_reads.length} in progress` },
-            { label: "Pages", value: totalPages.toLocaleString(), note: `~${Math.round(totalPages / Math.max(read.length, 1))} per book` },
-            { label: "Time spent", value: `~${totalHours.toLocaleString()}h`, note: "at 1.5 min / page" },
-          ]}
-        />
+        <StatGrid stats={stats} />
       </section>
 
       <!-- Currently Reading -->
@@ -179,68 +200,66 @@ const pageDescription =
               title="Currently reading"
               note={`${books.current_reads.length} ${books.current_reads.length === 1 ? "book" : "books"}`}
             />
-            <div
-              class:list={[
-                "grid grid-cols-1 border-l border-t border-[#27272a]",
-                books.current_reads.length > 1 && "sm:grid-cols-2",
-              ]}
-            >
+            <ul class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
               {books.current_reads.map((book) => (
-                <a
-                  href={book.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="compact-row group flex items-center gap-3 border-b border-r border-[#27272a] p-3"
-                >
-                  {book.cover ? (
-                    <img
-                      src={book.cover}
-                      alt=""
-                      width="40"
-                      height="60"
-                      class="h-[60px] w-[40px] shrink-0 border border-[#27272a] object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : (
-                    <span class="h-[60px] w-[40px] shrink-0 border border-[#27272a] bg-zinc-900" />
-                  )}
-                  <span class="min-w-0">
-                    <span class="block truncate text-sm font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
-                      {book.title}
+                <li>
+                  <a
+                    href={book.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex items-center gap-5"
+                  >
+                    {book.cover ? (
+                      <img
+                        src={book.cover}
+                        alt=""
+                        width="96"
+                        height="144"
+                        class="book-cover w-20 shrink-0 sm:w-24"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <span class="book-cover w-20 shrink-0 sm:w-24" />
+                    )}
+                    <span class="min-w-0">
+                      <span class="inline-flex items-center gap-2 text-sm text-[#eab308]">
+                        <span class="data-live-dot" aria-hidden="true" />
+                        Reading now
+                      </span>
+                      <span class="mt-1.5 block text-xl font-medium leading-snug tracking-tight text-zinc-100 transition-colors group-hover:text-[#eab308]">
+                        {book.title}
+                      </span>
+                      <span class="mt-1 block text-zinc-500">{book.author}</span>
                     </span>
-                    <span class="block truncate text-xs text-zinc-500">{book.author}</span>
-                    <span class="mt-1 inline-flex items-center gap-1.5 font-mono text-[11px] text-[#eab308]">
-                      <span class="data-live-dot" aria-hidden="true" />
-                      reading now
-                    </span>
-                  </span>
-                  <span class="sr-only">(opens in new tab)</span>
-                </a>
+                    <span class="sr-only">(opens in new tab)</span>
+                  </a>
+                </li>
               ))}
-            </div>
+            </ul>
           </section>
         )
       }
 
       <!-- Charts Section -->
+      {showTimeline && (
       <section class="data-section grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
         <!-- Year-over-year chart -->
         <div>
           <SectionHeading title="Books per year" note={`${numericYears.length} years`} />
-          <div class="data-panel px-4 pb-3 pt-4">
-            <div class="flex h-36 items-end gap-1.5 border-b border-[#27272a]">
+          <div class="data-panel">
+            <div class="flex h-36 items-end gap-1.5 border-b border-[#1f1f23]">
               {
                 booksPerYear.map((d) => (
                   <div
                     class="group flex h-full flex-1 flex-col items-center justify-end gap-1"
                     title={`${d.year}: ${d.count} books`}
                   >
-                    <span class="font-mono text-[11px] text-zinc-400 transition-colors group-hover:text-[#eab308]">
+                    <span class="data-figure transition-colors group-hover:text-[#eab308]">
                       {d.count || ""}
                     </span>
                     <div
-                      class="w-full bg-[#eab308]/70 transition-colors group-hover:bg-[#eab308]"
+                      class="w-full rounded-t-sm bg-[#eab308]/70 transition-colors group-hover:bg-[#eab308]"
                       style={`height: ${Math.max((d.count / maxBooksInYear) * 82, d.count ? 4 : 1)}%;`}
                     />
                   </div>
@@ -249,7 +268,7 @@ const pageDescription =
             </div>
             <div class="mt-1.5 flex gap-1.5">
               {booksPerYear.map((d) => (
-                <span class="flex-1 text-center font-mono text-[11px] text-zinc-600">
+                <span class="data-figure flex-1 text-center">
                   '{String(d.year).slice(-2)}
                 </span>
               ))}
@@ -269,7 +288,7 @@ const pageDescription =
               </button>
             </div>
           </SectionHeading>
-          <div class="data-panel px-4 pb-3 pt-4">
+          <div class="data-panel">
             {
               [
                 { id: "chart-this-year", counts: booksPerMonthThisYear, hidden: false },
@@ -277,7 +296,7 @@ const pageDescription =
               ].map(({ id, counts, hidden }) => (
                 <div
                   id={id}
-                  class:list={["h-36 items-end gap-1.5 border-b border-[#27272a]", hidden ? "hidden" : "flex"]}
+                  class:list={["h-36 items-end gap-1.5 border-b border-[#1f1f23]", hidden ? "hidden" : "flex"]}
                 >
                   {monthNames.map((m, i) => {
                     const count = counts[i];
@@ -287,12 +306,12 @@ const pageDescription =
                         class="group flex h-full flex-1 flex-col items-center justify-end gap-1"
                         title={`${m}: ${count} books`}
                       >
-                        <span class="font-mono text-[11px] text-zinc-400 transition-colors group-hover:text-[#eab308]">
+                        <span class="data-figure transition-colors group-hover:text-[#eab308]">
                           {count || ""}
                         </span>
                         <div
                           class:list={[
-                            "w-full transition-colors",
+                            "w-full rounded-t-sm transition-colors",
                             isFuture
                               ? "bg-zinc-800/40"
                               : count > 0
@@ -309,7 +328,7 @@ const pageDescription =
             }
             <div class="mt-1.5 flex gap-1.5">
               {monthNames.map((m) => (
-                <span class="flex-1 text-center font-mono text-[11px] text-zinc-600" title={m}>
+                <span class="data-figure flex-1 text-center" title={m}>
                   {m[0]}
                 </span>
               ))}
@@ -317,6 +336,7 @@ const pageDescription =
           </div>
         </div>
       </section>
+      )}
 
       <!-- Book List -->
       <section id="book-list">
@@ -327,62 +347,52 @@ const pageDescription =
                 title={year}
                 note={`${readByYear[year].length} ${readByYear[year].length === 1 ? "book" : "books"}`}
               />
-              <ul class="grid grid-cols-1 border-l border-t border-[#27272a] md:grid-cols-2">
+              <ul class="grid grid-cols-3 gap-x-4 gap-y-8 sm:grid-cols-4 sm:gap-x-6 md:grid-cols-6">
                 {readByYear[year].map((book) => {
                   const r = Math.round(book.rating);
                   return (
-                    <li class="compact-row group relative flex gap-3.5 border-b border-r border-[#27272a] p-3">
+                    <li class="group relative min-w-0">
                       {book.cover ? (
                         <img
                           src={book.cover}
-                          alt={`Cover of ${book.title}`}
-                          width="72"
-                          height="108"
-                          class="h-[96px] w-[64px] shrink-0 border border-[#27272a] object-cover"
+                          alt=""
+                          width="160"
+                          height="240"
+                          class="book-cover w-full"
                           loading="lazy"
                           decoding="async"
                         />
                       ) : (
-                        <div class="flex h-[96px] w-[64px] shrink-0 items-center justify-center border border-[#27272a] bg-zinc-900 p-1 text-center font-mono text-[10px] uppercase tracking-wide text-zinc-700">
-                          No cover
+                        <div class="book-cover flex w-full items-center justify-center p-3 text-center text-xs leading-snug text-zinc-500">
+                          {book.title}
                         </div>
                       )}
-                      <div class="flex min-w-0 flex-1 flex-col">
-                        <a
-                          href={book.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="line-clamp-2 text-sm font-medium leading-snug text-zinc-200 transition-colors after:absolute after:inset-0 hover:text-[#eab308] group-hover:text-[#eab308]"
+                      <a
+                        href={book.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="mt-3 line-clamp-2 text-sm font-medium leading-snug text-zinc-200 transition-colors after:absolute after:inset-0 group-hover:text-[#eab308]"
+                      >
+                        {book.title}
+                        <span class="sr-only">(opens in new tab)</span>
+                      </a>
+                      <p class="mt-0.5 truncate text-xs text-zinc-500">{book.author}</p>
+                      {r > 0 && (
+                        <p
+                          class="mt-1 text-xs leading-none tracking-[0.08em]"
+                          title={`${r}/5 · ${ratingLabels[r as keyof typeof ratingLabels]}`}
                         >
-                          {book.title}
-                          <span class="sr-only">(opens in new tab)</span>
-                        </a>
-                        <p class="mt-0.5 truncate text-xs text-zinc-500">{book.author}</p>
-                        {r > 0 && (
-                          <p
-                            class="mt-1.5 flex items-center gap-0.5 text-xs leading-none"
-                            title={`${r}/5 · ${ratingLabels[r as keyof typeof ratingLabels]}`}
-                          >
-                            <span class="sr-only">Rated {r} out of 5</span>
-                            {[1, 2, 3, 4, 5].map((n) => (
-                              <span aria-hidden="true" class={n <= r ? "text-[#eab308]" : "text-zinc-700"}>
-                                ★
-                              </span>
-                            ))}
-                            <span class="ml-1.5 font-mono text-[11px] text-zinc-600">
-                              {ratingLabels[r as keyof typeof ratingLabels]}
-                            </span>
-                          </p>
-                        )}
-                        <div class="mt-auto flex items-center gap-2 pt-2 font-mono text-[11px] text-zinc-600">
-                          {book.num_pages && <span>{book.num_pages} pp</span>}
-                          {book.user_read_at && (
-                            <span class="ml-auto">
-                              finished {format(new Date(book.user_read_at), "MMM d")}
-                            </span>
-                          )}
-                        </div>
-                      </div>
+                          <span class="sr-only">Rated {r} out of 5</span>
+                          <span aria-hidden="true" class="text-[#eab308]">{"★".repeat(r)}</span><span aria-hidden="true" class="text-zinc-700">{"★".repeat(5 - r)}</span>
+                        </p>
+                      )}
+                      {(book.user_read_at || book.num_pages) && (
+                        <p class="data-figure mt-1.5 truncate">
+                          {book.user_read_at && format(new Date(book.user_read_at), "MMM d")}
+                          {book.user_read_at && book.num_pages && " · "}
+                          {book.num_pages && `${book.num_pages} pp`}
+                        </p>
+                      )}
                     </li>
                   );
                 })}

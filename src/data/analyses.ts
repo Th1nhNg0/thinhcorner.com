@@ -21,7 +21,7 @@ export const analyses: Analysis[] = [
     href: "/data/books",
     title: "Books",
     source: "Goodreads",
-    description: "Everything I have read on Goodreads, by year and month, with ratings.",
+    description: "Everything I have read on Goodreads, with covers and ratings.",
     cover: booksCover,
   },
   {

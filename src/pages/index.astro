@@ -2,6 +2,7 @@
 import Container from "@/components/Container.astro";
 import PostRow from "@/components/PostRow.astro";
 import SectionHead from "@/components/SectionHead.astro";
+import HeroOrbit from "@/components/space/HeroOrbit.astro";
 import { AUTHOR_EMAIL, AUTHOR_NAME, SITE, SOCIAL_MEDIA } from "../../data/consts";
 import Layout from "@/layouts/Layout.astro";
 import { getCollection } from "astro:content";
@@ -64,43 +65,44 @@ const elsewhere = [
   ]}
 >
   <Container>
-    <header class="grid gap-x-12 gap-y-8 pb-14 pt-8 sm:pt-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:pb-20">
+    <header class="home-hero relative pb-14 pt-8 sm:pt-12 lg:pb-24 lg:pt-16">
+      <HeroOrbit />
       <div>
         <h1 class="text-[clamp(2.25rem,7vw,3.75rem)] font-semibold leading-[1.05] tracking-[-0.045em] text-zinc-100">
           {AUTHOR_NAME}
         </h1>
-        <p class="mt-6 max-w-[40rem] text-[1.1875rem] leading-[1.6] text-zinc-300 sm:text-xl sm:leading-[1.6]">
-          I’m based in Ho Chi Minh City, exploring technology, research, books, games, and ideas
-          worth understanding.
+        <p class="mt-6 max-w-[40rem] text-balance text-[1.1875rem] leading-[1.6] text-zinc-300 sm:text-xl sm:leading-[1.6] lg:max-w-[35rem]">
+          I write about AI, programming, history and economics from Ho Chi Minh City.
         </p>
-        <p class="mt-4 max-w-[40rem] leading-[1.7] text-zinc-400">
-          This is where I keep notes on what I’m learning and building. You can also see what I’m{" "}
+        <p class="mt-4 max-w-[40rem] leading-[1.7] text-zinc-400 lg:max-w-[35rem]">
+          This is my small corner of the universe: essays,{" "}
+          <a href="/projects" class="text-link">projects</a>, and what I’m{" "}
           <a href="/data/books" class="text-link">reading</a>,{" "}
-          <a href="/data/music" class="text-link">listening to</a>, or{" "}
-          <a href="/projects" class="text-link">working on</a>.
+          <a href="/data/music" class="text-link">listening to</a> and{" "}
+          <a href="/data/steam" class="text-link">playing</a>.
         </p>
+        <ul class="mt-6 flex flex-wrap gap-x-5 gap-y-1 text-sm">
+          {
+            elsewhere.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="inline-flex min-h-7 items-center text-zinc-500 transition-colors hover:text-[#eab308]"
+                  {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                >
+                  {link.label}
+                  {link.external && (
+                    <>
+                      <span aria-hidden="true" class="ml-0.5">↗</span>
+                      <span class="sr-only">(opens in new tab)</span>
+                    </>
+                  )}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
       </div>
-      <ul class="flex flex-wrap gap-x-5 gap-y-1 text-sm lg:flex-col lg:items-end lg:gap-y-0.5">
-        {
-          elsewhere.map((link) => (
-            <li>
-              <a
-                href={link.href}
-                class="inline-flex min-h-7 items-center text-zinc-500 transition-colors hover:text-[#eab308]"
-                {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              >
-                {link.label}
-                {link.external && (
-                  <>
-                    <span aria-hidden="true" class="ml-0.5">↗</span>
-                    <span class="sr-only">(opens in new tab)</span>
-                  </>
-                )}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
     </header>
 
     <section aria-labelledby="home-writing">

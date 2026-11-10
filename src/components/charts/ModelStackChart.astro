@@ -33,7 +33,7 @@ type Props = {
 const { metric, series, days, maxDayValue, formatCost, formatCompact, formatDay } =
   Astro.props;
 
-const TRACK_HEIGHT = 112;
+const TRACK_HEIGHT = 168;
 const MIN_COLUMN_PX = 1.5;
 const isCost = metric === "cost";
 
@@ -95,13 +95,13 @@ for (const day of days) {
 ---
 
 <div>
-  <div class="flex items-baseline justify-between font-mono text-[10px] text-zinc-600">
-    <span>stacked by model · {isCost ? "linear scale" : "log scale"}</span>
-    <span>peak {formatValue(maxDayValue)}/day</span>
+  <div class="flex items-baseline justify-between text-sm text-zinc-500">
+    <span>By model, {isCost ? "linear scale" : "log scale"}</span>
+    <span>Peak {formatValue(maxDayValue)} a day</span>
   </div>
 
   <div
-    class="mt-2 flex items-end gap-px"
+    class="mt-3 flex items-end gap-px border-b border-[#1f1f23]"
     style={`height:${TRACK_HEIGHT}px`}
     role="img"
     aria-label={`Daily ${isCost ? "estimated cost" : "token volume"}, stacked by model`}
@@ -125,7 +125,7 @@ for (const day of days) {
   </div>
 
   <!-- Month axis: flex-grow proportional to each month's active-day count -->
-  <div class="mt-1.5 flex font-mono text-[10px] text-zinc-600">
+  <div class="data-figure mt-2 flex h-4 text-xs">
     {
       monthGroups.map((group) => (
         <div class="relative min-w-0" style={`flex:${group.days} 1 0%`}>
@@ -135,19 +135,19 @@ for (const day of days) {
     }
   </div>
 
-  <ul class="mt-4 grid grid-cols-1 gap-x-5 gap-y-1.5 border-t border-[#27272a] pt-3 font-mono text-[11px] sm:grid-cols-2">
+  <ul class="mt-6 grid grid-cols-1 gap-x-10 gap-y-2.5 text-sm sm:grid-cols-2">
     {
       series.map((entry) => (
-        <li class="flex items-baseline gap-2">
+        <li class="flex items-center gap-3">
           <span
-            class="size-2 shrink-0 translate-y-px"
+            class="size-2.5 shrink-0 rounded-full"
             style={`background:${entry.color}`}
             aria-hidden="true"
           />
-          <span class="min-w-0 flex-1 truncate text-zinc-400" title={entry.modelName}>
+          <span class="min-w-0 flex-1 truncate text-zinc-200" title={entry.modelName}>
             {entry.modelName}
           </span>
-          <span class="shrink-0 text-zinc-500">
+          <span class="data-figure shrink-0">
             {formatValue(entry.value)} · {(entry.share * 100).toFixed(1)}%
           </span>
         </li>
