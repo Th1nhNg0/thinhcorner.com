@@ -2,6 +2,7 @@
 import Head from "@/components/Head.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import Sky from "@/components/space/Sky.astro";
 import { ClientRouter } from "astro:transitions";
 
 type Props = {
@@ -63,6 +64,7 @@ const {
     <ClientRouter />
   </Head>
   <body>
+    <Sky />
     <Header />
     <main id="main-content" class="pb-16 pt-8 sm:pt-10">
       <slot />

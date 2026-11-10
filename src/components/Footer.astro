@@ -1,6 +1,7 @@
 ---
 import Container from "./Container.astro";
-import CornerMark from "./CornerMark.astro";
+import SiteMark from "./SiteMark.astro";
+import Horizon from "./space/Horizon.astro";
 import { AUTHOR_EMAIL, AUTHOR_NAME, SITE, SOCIAL_MEDIA } from "../../data/consts";
 
 const siteLinks = [
@@ -21,11 +22,12 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
+  <Horizon />
   <Container>
     <div class="flex flex-col gap-8 py-10 sm:flex-row sm:items-start sm:justify-between">
       <div>
         <a href="/" class="site-brand">
-          <CornerMark class="size-4 shrink-0 text-[#eab308]" />
+          <SiteMark class="size-5 shrink-0 text-[#eab308]" />
           <span>{SITE.title.replace("'", "’")}</span>
         </a>
         <p class="mt-3 max-w-[22rem] text-sm leading-relaxed text-zinc-500">

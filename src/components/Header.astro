@@ -1,6 +1,6 @@
 ---
 import Container from "./Container.astro";
-import CornerMark from "./CornerMark.astro";
+import SiteMark from "./SiteMark.astro";
 import { SITE } from "../../data/consts";
 
 const pathname = Astro.url.pathname;
@@ -28,7 +28,7 @@ const navLinks = [
         aria-label={`${SITE.title}, home`}
         aria-current={pathname === "/" ? "page" : undefined}
       >
-        <CornerMark class="size-4 shrink-0 text-[#eab308]" />
+        <SiteMark class="size-5 shrink-0 text-[#eab308]" />
         <span class="max-[26rem]:hidden">{SITE.title.replace("'", "’")}</span>
       </a>
       <nav class="flex h-full items-stretch gap-5 sm:gap-7" aria-label="Main navigation">
