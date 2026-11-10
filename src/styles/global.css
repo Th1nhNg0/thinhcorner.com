@@ -1036,9 +1036,11 @@ body::after {
   stroke-linecap: round;
 }
 
-/* Footer horizon. */
+/* Footer horizon. The scene is 6:1 and is cropped to fill this box, so the height
+   follows the width up to wide desktops and the top of the sky is only cut on screens
+   wider than about 2100px. */
 .site-horizon {
   display: block;
   width: 100%;
-  height: clamp(8.5rem, 19vw, 15rem);
+  height: clamp(8.5rem, 16.7vw, 22rem);
 }

@@ -1,12 +1,27 @@
 ---
 // The scene above the footer: the edge of a planet with the sun coming up behind it,
-// a few stars, and a rocket that lifts off from the horizon and leaves a light trail.
-// Motion is SMIL, paused by the script below while the scene is off screen.
+// a few stars, a small moon, and a rocket that lifts off from the horizon and flies to
+// the moon, leaving a light trail. Motion is SMIL, paused by the script below while
+// the scene is off screen.
 const limb = "M0 232Q720 120 1440 232";
-const ascent = "M520 180C526 108 610 32 860 -34";
-// One launch cycle: climb for the first 55%, then the trail fades and the sky rests.
+// The whole flight stays inside the part of the scene that every screen width shows
+// (the sides are cropped on phones and the top on very wide screens), so the rocket
+// never leaves through an edge: it gets smaller with distance and arrives at the moon.
+const moon = { x: 922, y: 108, r: 13 };
+const ascent = "M520 180C528 96 700 50 908 103";
+// One cycle: fly for the first 60%, let the trail fade, then the next rocket rolls out
+// on the horizon and waits for the cycle to start again.
 const cycle = "14s";
-const climb = { keyTimes: "0;0.55;1", keySplines: "0.42 0 1 1;0 0 1 1" };
+const FLY = 0.6;
+const flight = {
+  // Distance along the path. It snaps back to the start at 0.75, while the rocket is hidden.
+  keyPoints: "0;1;1;0;0",
+  keyTimes: `0;${FLY};0.74;0.75;1`,
+  keySplines: "0.5 0 0.5 1;0 0 1 1;0 0 1 1;0 0 1 1",
+  // The rocket shrinks to a speck as it gets far away.
+  scale: "1;0.28;0.28;1;1",
+  opacity: { values: "1;1;0;0;1;1", keyTimes: `0;${FLY - 0.05};${FLY};0.8;0.88;1` },
+};
 ---
 
 <svg
@@ -41,11 +56,12 @@ const climb = { keyTimes: "0;0.55;1", keySplines: "0.42 0 1 1;0 0 1 1" };
       <stop offset="0.45" stop-color="#eab308" stop-opacity="0.1"></stop>
       <stop offset="1" stop-color="#eab308" stop-opacity="0"></stop>
     </radialGradient>
-    <linearGradient id="hz-trail" gradientUnits="userSpaceOnUse" x1="520" y1="180" x2="790" y2="0">
+    <linearGradient id="hz-trail" gradientUnits="userSpaceOnUse" x1="520" y1="180" x2="908" y2="103">
       <stop offset="0" stop-color="#eab308" stop-opacity="0.15"></stop>
-      <stop offset="0.5" stop-color="#eab308" stop-opacity="0.85"></stop>
-      <stop offset="1" stop-color="#fde68a"></stop>
+      <stop offset="0.35" stop-color="#eab308" stop-opacity="0.85"></stop>
+      <stop offset="1" stop-color="#fde68a" stop-opacity="0.35"></stop>
     </linearGradient>
+    <clipPath id="hz-moon"><circle cx={moon.x} cy={moon.y} r={moon.r}></circle></clipPath>
     <radialGradient id="hz-flash">
       <stop offset="0" stop-color="#fde68a" stop-opacity="0.9"></stop>
       <stop offset="1" stop-color="#eab308" stop-opacity="0"></stop>
@@ -107,13 +123,20 @@ const climb = { keyTimes: "0;0.55;1", keySplines: "0.42 0 1 1;0 0 1 1" };
       <animate attributeName="opacity" values="0.65;1;0.65" dur="9s" repeatCount="indefinite"></animate>
     </rect>
 
+    <!-- The moon: lit from below by the sunrise, the rest in shadow. -->
+    <g clip-path="url(#hz-moon)">
+      <circle cx={moon.x} cy={moon.y} r={moon.r} fill="#e4e4e7"></circle>
+      <circle cx={moon.x - 4} cy={moon.y - 6} r={moon.r + 1} fill="#18181b"></circle>
+    </g>
+    <circle cx={moon.x} cy={moon.y} r={moon.r} fill="none" stroke="#fff" stroke-opacity="0.14"></circle>
+
     <g fill="none" stroke="url(#hz-trail)" stroke-linecap="round">
-      <animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.62;0.88;1" dur={cycle} repeatCount="indefinite"
+      <animate attributeName="opacity" values="1;1;0;0" keyTimes={`0;${FLY + 0.04};0.8;1`} dur={cycle} repeatCount="indefinite"
       ></animate>
       {
         [
-          { width: 7, opacity: 0.14 },
-          { width: 1.8, opacity: 1 },
+          { width: 6, opacity: 0.14 },
+          { width: 1.6, opacity: 1 },
         ].map((stroke) => (
           <path
             d={ascent}
@@ -126,9 +149,9 @@ const climb = { keyTimes: "0;0.55;1", keySplines: "0.42 0 1 1;0 0 1 1" };
             <animate
               attributeName="stroke-dashoffset"
               values="100;0;0"
-              keyTimes={climb.keyTimes}
+              keyTimes={`0;${FLY};1`}
               calcMode="spline"
-              keySplines={climb.keySplines}
+              keySplines="0.5 0 0.5 1;0 0 1 1"
               dur={cycle}
               repeatCount="indefinite"
             />
@@ -137,24 +160,42 @@ const climb = { keyTimes: "0;0.55;1", keySplines: "0.42 0 1 1;0 0 1 1" };
       }
     </g>
 
+    <!-- Lift-off flash on the horizon, and a small glint when the rocket reaches the moon. -->
     <circle cx="520" cy="180" r="26" fill="url(#hz-flash)" opacity="0">
       <animate attributeName="opacity" values="0;1;0.3;0;0" keyTimes="0;0.04;0.2;0.4;1" dur={cycle} repeatCount="indefinite"
+      ></animate>
+    </circle>
+    <circle cx="908" cy="103" r="9" fill="url(#hz-flash)" opacity="0">
+      <animate attributeName="opacity" values="0;0;1;0;0" keyTimes={`0;${FLY - 0.03};${FLY + 0.01};${FLY + 0.12};1`} dur={cycle} repeatCount="indefinite"
       ></animate>
     </circle>
 
     <g fill="#eab308">
       <animateMotion
         path={ascent}
-        keyPoints="0;1;1"
-        keyTimes={climb.keyTimes}
+        keyPoints={flight.keyPoints}
+        keyTimes={flight.keyTimes}
         calcMode="spline"
-        keySplines={climb.keySplines}
+        keySplines={flight.keySplines}
         dur={cycle}
         repeatCount="indefinite"
         rotate="auto"></animateMotion>
-      <path d="M15 0C11-3.600 6-5 .500-5H-7v10H.500C6 5 11 3.600 15 0z"></path>
-      <path d="M-1-5-6.800-9.600h-3.800l2.400 4.600zM-1 5l-5.800 4.600h-3.800l2.400-4.600z"></path>
-      <circle cx="5.500" cy="0" r="2.100" fill="#0c0c0d"></circle>
+      <animate attributeName="opacity" values={flight.opacity.values} keyTimes={flight.opacity.keyTimes} dur={cycle} repeatCount="indefinite"
+      ></animate>
+      <g>
+        <animateTransform
+          attributeName="transform"
+          type="scale"
+          values={flight.scale}
+          keyTimes={flight.keyTimes}
+          calcMode="spline"
+          keySplines={flight.keySplines}
+          dur={cycle}
+          repeatCount="indefinite"></animateTransform>
+        <path d="M15 0C11-3.600 6-5 .500-5H-7v10H.500C6 5 11 3.600 15 0z"></path>
+        <path d="M-1-5-6.800-9.600h-3.800l2.400 4.600zM-1 5l-5.800 4.600h-3.800l2.400-4.600z"></path>
+        <circle cx="5.500" cy="0" r="2.100" fill="#0c0c0d"></circle>
+      </g>
     </g>
   </g>
 
