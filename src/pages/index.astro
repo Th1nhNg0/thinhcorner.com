@@ -1,13 +1,31 @@
 ---
 import Container from "@/components/Container.astro";
-import { AUTHOR_NAME, SITE, SOCIAL_MEDIA } from "../../data/consts";
+import PostRow from "@/components/PostRow.astro";
+import SectionHead from "@/components/SectionHead.astro";
+import { AUTHOR_EMAIL, AUTHOR_NAME, SITE, SOCIAL_MEDIA } from "../../data/consts";
 import Layout from "@/layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import { format } from "date-fns";
+import getReadingTime from "reading-time";
+import { analyses } from "@/data/analyses";
+import { projects } from "@/data/projects";
+import { tagLabel } from "@/lib/tags";
 
-const blog = (await getCollection("blog"))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 6);
+const posts = (await getCollection("writing"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const [latest, ...rest] = posts;
+const morePosts = rest.slice(0, 5);
+const latestReadingTime = latest.body ? getReadingTime(latest.body).text : undefined;
+
+const featuredProjects = projects.slice(0, 3);
+
+const elsewhere = [
+  { href: SOCIAL_MEDIA.github, label: "GitHub", external: true },
+  { href: SOCIAL_MEDIA.linkedin, label: "LinkedIn", external: true },
+  { href: `mailto:${AUTHOR_EMAIL}`, label: "Email", external: false },
+  { href: "/rss.xml", label: "RSS", external: false },
+].filter((link): link is { href: string; label: string; external: boolean } => Boolean(link.href));
 ---
 
 <Layout
@@ -46,55 +64,157 @@ const blog = (await getCollection("blog"))
   ]}
 >
   <Container>
-    <header class="page-header pt-4">
-      <h1 class="page-title">{AUTHOR_NAME}</h1>
-      <div class="page-intro space-y-3">
-        <p>
-          I’m based in Ho Chi Minh City, exploring technology, research, books,
-          games, and ideas worth understanding.
+    <header class="grid gap-x-12 gap-y-8 pb-14 pt-8 sm:pt-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:pb-20">
+      <div>
+        <h1 class="text-[clamp(2.25rem,7vw,3.75rem)] font-semibold leading-[1.05] tracking-[-0.045em] text-zinc-100">
+          {AUTHOR_NAME}
+        </h1>
+        <p class="mt-6 max-w-[40rem] text-[1.1875rem] leading-[1.6] text-zinc-300 sm:text-xl sm:leading-[1.6]">
+          I’m based in Ho Chi Minh City, exploring technology, research, books, games, and ideas
+          worth understanding.
         </p>
-        <p>
-          This is where I keep notes on what I’m learning and building. You can
-          also see what I’m <a href="/data/books" class="text-link">reading</a>,{" "}
+        <p class="mt-4 max-w-[40rem] leading-[1.7] text-zinc-400">
+          This is where I keep notes on what I’m learning and building. You can also see what I’m{" "}
+          <a href="/data/books" class="text-link">reading</a>,{" "}
           <a href="/data/music" class="text-link">listening to</a>, or{" "}
           <a href="/projects" class="text-link">working on</a>.
         </p>
       </div>
-    </header>
-
-    <section class="mt-10">
-      <div class="mb-3 flex items-center justify-between">
-        <h2 class="text-base font-medium text-zinc-200">Latest writing</h2>
-        <a
-          href="/writing"
-          class="text-sm text-zinc-500 transition-colors hover:text-[#eab308]"
-          >View all</a
-        >
-      </div>
-      <ol>
+      <ul class="flex flex-wrap gap-x-5 gap-y-1 text-sm lg:flex-col lg:items-end lg:gap-y-0.5">
         {
-          blog.map((post) => (
+          elsewhere.map((link) => (
             <li>
               <a
-                data-astro-prefetch
-                href={`/writing/${post.id}`}
-                class="group grid grid-cols-[1fr_auto] items-baseline gap-4 py-2"
+                href={link.href}
+                class="inline-flex min-h-7 items-center text-zinc-500 transition-colors hover:text-[#eab308]"
+                {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               >
-                <span class="min-w-0 text-base text-zinc-400 transition-colors group-hover:text-zinc-100">
-                  {post.data.title}
-                </span>
-                <time
-                  datetime={post.data.date.toISOString()}
-                  class="font-mono text-xs text-zinc-600"
-                >
-                  {format(new Date(post.data.date), "MMM dd, yyyy")}
-                </time>
+                {link.label}
+                {link.external && (
+                  <>
+                    <span aria-hidden="true" class="ml-0.5">↗</span>
+                    <span class="sr-only">(opens in new tab)</span>
+                  </>
+                )}
               </a>
             </li>
           ))
         }
-      </ol>
+      </ul>
+    </header>
+
+    <section aria-labelledby="home-writing">
+      <SectionHead
+        id="home-writing"
+        title="Writing"
+        href="/writing"
+        linkLabel={`All ${posts.length} posts`}
+      />
+      <div class="grid gap-x-14 gap-y-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+        <a
+          data-astro-prefetch
+          href={`/writing/${latest.id}`}
+          hreflang={latest.data.lang ?? "en"}
+          class="group block pb-2 pt-3 focus-visible:outline-none"
+        >
+          <p class="text-sm text-zinc-500">
+            Latest ·{" "}
+            <time datetime={latest.data.date.toISOString()}>
+              {format(latest.data.date, "MMM dd, yyyy")}
+            </time>
+          </p>
+          <h3 class="mt-3 text-[clamp(1.625rem,4vw,2.125rem)] font-semibold leading-[1.15] tracking-[-0.035em] text-zinc-100 transition-colors group-hover:text-[#eab308]">
+            {latest.data.title}
+          </h3>
+          <p class="mt-3 max-w-[30rem] leading-[1.65] text-zinc-400">{latest.data.description}</p>
+          <p class="mt-4 text-sm text-zinc-500">
+            {[latestReadingTime, ...latest.data.tags.map(tagLabel)].filter(Boolean).join(" · ")}
+          </p>
+        </a>
+        <ol class="border-t border-[#1f1f23] lg:border-t-0">
+          {
+            morePosts.map((post) => (
+              <li>
+                <PostRow post={post} description={false} />
+              </li>
+            ))
+          }
+        </ol>
+      </div>
     </section>
 
+    <section class="mt-16 lg:mt-20" aria-labelledby="home-projects">
+      <SectionHead
+        id="home-projects"
+        title="Projects"
+        href="/projects"
+        linkLabel={`All ${projects.length} projects`}
+      />
+      <ul class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-3">
+        {
+          featuredProjects.map((project) => (
+            <li>
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="cover-card group block"
+              >
+                <span class="cover-frame">
+                  <img
+                    src={project.cover.src}
+                    width={project.cover.width}
+                    height={project.cover.height}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+                <span class="mt-3 flex items-baseline justify-between gap-3">
+                  <span class="text-base font-medium text-zinc-100 transition-colors group-hover:text-[#eab308]">
+                    {project.name}
+                    <span class="sr-only">(opens in new tab)</span>
+                  </span>
+                  <span class="shrink-0 font-mono text-xs tabular-nums text-zinc-600">
+                    {project.year}
+                  </span>
+                </span>
+                <span class="mt-1 block text-sm leading-relaxed text-zinc-500">
+                  {project.summary}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="mt-16 lg:mt-20" aria-labelledby="home-data">
+      <SectionHead id="home-data" title="Data" href="/data" linkLabel="All data pages" />
+      <ul class="grid grid-cols-2 gap-x-5 gap-y-6 sm:grid-cols-5">
+        {
+          analyses.map(({ href, title, source, cover }) => (
+            <li>
+              <a href={href} class="cover-card group block">
+                <span class="cover-frame">
+                  <img
+                    src={cover.src}
+                    width={cover.width}
+                    height={cover.height}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+                <span class="mt-2.5 block text-[0.9375rem] font-medium text-zinc-100 transition-colors group-hover:text-[#eab308]">
+                  {title}
+                </span>
+                <span class="block font-mono text-xs text-zinc-600">{source}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
   </Container>
 </Layout>

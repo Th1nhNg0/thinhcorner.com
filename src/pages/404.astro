@@ -10,15 +10,14 @@ import Layout from "@/layouts/Layout.astro";
   robots="noindex,nofollow"
 >
   <Container>
-    <section class="mx-auto max-w-xl py-16">
-      <p class="page-kicker">Error / 404</p>
+    <section class="py-16 sm:py-24">
+      <p class="page-kicker">404</p>
       <h1 class="page-title">Nothing here.</h1>
       <p class="page-intro">This page moved, never existed, or took a wrong turn somewhere.</p>
-      <div class="mt-8 flex gap-2">
-        <a href="/" class="bg-[#eab308] px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-black transition-colors hover:bg-white">Go home</a>
-        <a href="/writing" class="border border-[#27272a] px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-zinc-400 transition-colors hover:border-zinc-500 hover:text-white">Browse writing</a>
+      <div class="mt-8 flex flex-wrap gap-x-6 gap-y-2">
+        <a href="/" class="text-link arrow-link">Go home <span class="arrow" aria-hidden="true">→</span></a>
+        <a href="/writing" class="text-link arrow-link">Browse writing <span class="arrow" aria-hidden="true">→</span></a>
       </div>
-      <p class="mt-16 border-t border-[#27272a] pt-3 font-mono text-xs uppercase tracking-wider text-zinc-700">End of line.</p>
     </section>
   </Container>
 </Layout>

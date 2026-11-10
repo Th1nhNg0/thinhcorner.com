@@ -1,30 +1,32 @@
 ---
-import { formatDistanceToNow } from "date-fns";
+import { format } from "date-fns";
 
 interface Props {
   title: string;
+  /** "now", a year ("2024"), an ISO date, or free text such as "13.8 billion years ago". */
   time?: string;
 }
 
-const { title, time = new Date().toISOString() } = Astro.props;
-const isValidDate = !isNaN(Date.parse(time));
-const formattedTime = isValidDate
-  ? formatDistanceToNow(new Date(time), { addSuffix: true })
-  : time;
-const dateTimeAttr = isValidDate ? new Date(time).toISOString() : undefined;
+const { title, time = "now" } = Astro.props;
+const isNow = time === "now";
+const isYear = /^\d{4}$/.test(time);
+const isDate = !isNow && !isYear && !isNaN(Date.parse(time));
+// Absolute dates: this page is prerendered, so "2 years ago" would go stale between builds.
+const label = isNow ? "Now" : isDate ? format(new Date(time), "MMM yyyy") : time;
+const dateTimeAttr = isYear ? time : isDate ? new Date(time).toISOString() : undefined;
 ---
 
-<li class="grid gap-1 border-t border-[#27272a] pt-3 sm:grid-cols-[8rem_1fr] sm:gap-4">
+<li class="timeline-item" data-now={isNow ? "" : undefined}>
   {
-    isValidDate ? (
-      <time class="font-mono text-xs uppercase tracking-wider text-zinc-600" datetime={dateTimeAttr}>{formattedTime}</time>
+    dateTimeAttr ? (
+      <time class="timeline-date" datetime={dateTimeAttr}>{label}</time>
     ) : (
-      <span class="font-mono text-xs uppercase tracking-wider text-zinc-600">{formattedTime}</span>
+      <span class="timeline-date">{label}</span>
     )
   }
-  <div>
-    <h2 class="max-w-2xl text-base font-medium leading-6 text-zinc-300">{title}</h2>
-    <div class="mt-2 max-w-2xl text-sm leading-6 text-zinc-500 [&_a]:text-zinc-300 [&_a]:underline [&_a]:decoration-zinc-700 [&_a]:underline-offset-2 [&_a:hover]:text-[#eab308] [&_img]:mt-3 [&_img]:border [&_img]:border-[#27272a]">
+  <div class="timeline-body">
+    <h2 class="max-w-2xl text-[1.0625rem] font-medium leading-snug text-zinc-200">{title}</h2>
+    <div class="mt-1.5 max-w-2xl text-[0.9375rem] leading-relaxed text-zinc-400 empty:hidden [&_a]:text-zinc-200 [&_a]:underline [&_a]:decoration-zinc-700 [&_a]:underline-offset-4 [&_a:hover]:text-[#eab308] [&_a:hover]:decoration-[#eab308] [&_img]:mt-3 [&_img]:border [&_img]:border-[#27272a]">
       <slot />
     </div>
   </div>

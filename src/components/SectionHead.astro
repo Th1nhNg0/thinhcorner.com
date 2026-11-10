@@ -1,0 +1,22 @@
+---
+// Section title with an optional "see all" link on the right.
+interface Props {
+  title: string;
+  href?: string;
+  linkLabel?: string;
+  id?: string;
+}
+
+const { title, href, linkLabel, id } = Astro.props;
+---
+
+<div class="section-head">
+  <h2 id={id} class="corner-heading">{title}</h2>
+  {
+    href && linkLabel && (
+      <a href={href} class="section-link">
+        {linkLabel} <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    )
+  }
+</div>

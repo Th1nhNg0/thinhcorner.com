@@ -1,0 +1,35 @@
+---
+// One post in a list: title, optional one-line description, date on the right.
+import type { CollectionEntry } from "astro:content";
+import { format } from "date-fns";
+
+interface Props {
+  post: CollectionEntry<"writing">;
+  /** date-fns pattern for the date column. */
+  dateFormat?: string;
+  description?: boolean;
+}
+
+const { post, dateFormat = "MMM dd, yyyy", description = true } = Astro.props;
+const lang = post.data.lang ?? "en";
+---
+
+<a
+  data-astro-prefetch
+  href={`/writing/${post.id}`}
+  hreflang={lang}
+  class="post-row focus-visible:outline-none"
+>
+  <span class="post-row-title">
+    {post.data.draft && <span class="mr-2 text-xs font-normal text-[#eab308]">Draft</span>}
+    {post.data.title}
+  </span>
+  <time
+    datetime={post.data.date.toISOString()}
+    title={post.data.date.toISOString()}
+    class="post-row-date"
+  >
+    {format(post.data.date, dateFormat)}
+  </time>
+  {description && <span class="post-row-desc">{post.data.description}</span>}
+</a>

@@ -1,0 +1,16 @@
+---
+// The site mark: the top-left corner from the favicon.
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<svg viewBox="4 4 15 15" class={className} aria-hidden="true" focusable="false">
+  <path
+    fill="none"
+    stroke="currentColor"
+    stroke-width="3.5"
+    d="M6.75 17.25V8.75Q6.75 6.75 8.75 6.75H17.25"></path>
+</svg>
