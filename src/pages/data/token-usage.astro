@@ -90,24 +90,24 @@ const isStale = daysStale > 2;
 // --- Headline stats -------------------------------------------------------
 const statCells = [
   {
-    label: "tokens",
+    label: "Tokens",
     value: formatCompact(totals.totalTokens),
     detail: formatNumber(totals.totalTokens),
   },
-  { label: "est. cost", value: formatCost(totals.totalCost), detail: "ccusage pricing" },
+  { label: "Estimated cost", value: formatCost(totals.totalCost), detail: "ccusage pricing" },
   {
-    label: "blended rate",
+    label: "Blended rate",
     value: `${formatRate(costPerMillion)}/M`,
     detail: "per million tokens",
   },
-  { label: "active days", value: formatNumber(activeDayCount), detail: "days with usage" },
+  { label: "Active days", value: formatNumber(activeDayCount), detail: "days with usage" },
   {
-    label: "per active day",
+    label: "Per active day",
     value: formatCompact(averageTokensPerDay),
     detail: `${formatCost(averageCostPerDay)} · median ${formatCompact(medianTokensPerDay)}`,
   },
   {
-    label: "output share",
+    label: "Output share",
     value: formatPercent(outputShare, 1),
     detail: `${formatCompact(totals.outputTokens)} generated`,
   },
@@ -322,17 +322,17 @@ const pageDescription =
 
       <!-- Headline stats -->
       <section class="data-section">
-        <div class="grid grid-cols-2 border-l border-t border-[#27272a] sm:grid-cols-3">
+        <dl class="data-stats" data-cols="3">
           {
             statCells.map((cell) => (
               <div class="data-stat">
-                <p class="data-stat-label">{cell.label}</p>
-                <p class="data-stat-value">{cell.value}</p>
-                <p class="data-stat-note">{cell.detail}</p>
+                <dt class="data-stat-label">{cell.label}</dt>
+                <dd class="data-stat-value">{cell.value}</dd>
+                <dd class="data-stat-note">{cell.detail}</dd>
               </div>
             ))
           }
-        </div>
+        </dl>
       </section>
 
       <!--
@@ -344,7 +344,7 @@ const pageDescription =
         still works with scripting disabled.
       -->
       <section class="data-section">
-        <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-2 border-t border-[#1f1f23] pt-4">
           <input
             id="stack-metric-cost"
             type="radio"
@@ -370,23 +370,21 @@ const pageDescription =
             Daily tokens by model
           </h2>
 
-          <div class="flex border border-[#27272a] p-0.5 font-mono text-xs uppercase">
-            <label
-              for="stack-metric-cost"
-              class="cursor-pointer px-2 py-0.5 text-zinc-500 transition-colors hover:text-zinc-300 peer-checked/cost:bg-[#eab308] peer-checked/cost:text-[#0c0c0d]"
-            >
-              Cost
-            </label>
-            <label
-              for="stack-metric-tokens"
-              class="cursor-pointer px-2 py-0.5 text-zinc-500 transition-colors hover:text-zinc-300 peer-checked/tokens:bg-[#eab308] peer-checked/tokens:text-[#0c0c0d]"
-            >
-              Tokens
-            </label>
-          </div>
+          <label
+            for="stack-metric-cost"
+            class="data-tab peer-checked/cost:border-[#eab308] peer-checked/cost:text-zinc-100"
+          >
+            Cost
+          </label>
+          <label
+            for="stack-metric-tokens"
+            class="data-tab ml-1.5 peer-checked/tokens:border-[#eab308] peer-checked/tokens:text-zinc-100"
+          >
+            Tokens
+          </label>
 
-          <div class="hidden basis-full peer-checked/cost:block">
-            <div class="border border-[#27272a] bg-[#0c0c0d] p-4">
+          <div class="mt-3 hidden basis-full peer-checked/cost:block">
+            <div>
               <ModelStackChart
                 metric="cost"
                 series={costStack.series}
@@ -396,23 +394,23 @@ const pageDescription =
                 formatCompact={formatCompact}
                 formatDay={formatDay}
               />
-              <dl class="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-mono text-[11px]">
+              <dl class="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm">
                 <div class="flex items-baseline gap-2">
-                  <dt class="text-zinc-600">priciest</dt>
+                  <dt class="text-zinc-500">Priciest day</dt>
                   <dd class="text-zinc-400">
                     {formatDay(priciestDay.period, true)} · {formatCost(priciestDay.totalCost)}
                   </dd>
                 </div>
                 <div class="flex items-baseline gap-2">
-                  <dt class="text-zinc-600">days</dt>
+                  <dt class="text-zinc-500">Days</dt>
                   <dd class="text-zinc-400">{activeDayCount} with usage</dd>
                 </div>
               </dl>
             </div>
           </div>
 
-          <div class="hidden basis-full peer-checked/tokens:block">
-            <div class="border border-[#27272a] bg-[#0c0c0d] p-4">
+          <div class="mt-3 hidden basis-full peer-checked/tokens:block">
+            <div>
               <ModelStackChart
                 metric="tokens"
                 series={tokenStack.series}
@@ -422,15 +420,15 @@ const pageDescription =
                 formatCompact={formatCompact}
                 formatDay={formatDay}
               />
-              <dl class="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-mono text-[11px]">
+              <dl class="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm">
                 <div class="flex items-baseline gap-2">
-                  <dt class="text-zinc-600">busiest</dt>
+                  <dt class="text-zinc-500">Busiest day</dt>
                   <dd class="text-zinc-400">
                     {formatDay(peakDay.period, true)} · {formatCompact(peakDay.totalTokens)} tokens
                   </dd>
                 </div>
                 <div class="flex items-baseline gap-2">
-                  <dt class="text-zinc-600">median day</dt>
+                  <dt class="text-zinc-500">Median day</dt>
                   <dd class="text-zinc-400">{formatCompact(medianTokensPerDay)} tokens</dd>
                 </div>
               </dl>
@@ -443,10 +441,10 @@ const pageDescription =
       <section class="data-section">
         <div class="data-section-heading">
           <h2>Token mix</h2>
-          <span class="font-mono text-xs text-zinc-600">{formatCost(totals.totalCost)} total</span>
+          <span class="data-section-note">{formatCost(totals.totalCost)} total</span>
         </div>
 
-        <div class="border border-[#27272a] bg-[#0c0c0d]">
+        <div>
           <!--
             One bar, as a true 100% stack: flex-grow is the raw token count, so
             segment widths are exact shares. Cache write is 0.01% of the total and
@@ -454,7 +452,7 @@ const pageDescription =
             0.6% of the bar, against exact figures in the legend below.
           -->
           <div
-            class="flex h-9 w-full"
+            class="flex h-4 w-full gap-0.5 overflow-hidden rounded-full"
             role="img"
             aria-label={`Token mix: ${mixRows
               .map((row) => `${row.label} ${row.shareLabel}`)
@@ -471,17 +469,17 @@ const pageDescription =
             }
           </div>
 
-          <ul class="grid grid-cols-1 gap-x-5 gap-y-1.5 border-t border-[#27272a] p-3.5 font-mono text-[11px] sm:grid-cols-2">
+          <ul class="mt-5 grid grid-cols-1 gap-x-10 gap-y-2.5 text-sm sm:grid-cols-2">
             {
               mixRows.map((row) => (
-                <li class="flex items-baseline gap-2">
+                <li class="flex items-center gap-3">
                   <span
-                    class="size-2 shrink-0 translate-y-px"
+                    class="size-2.5 shrink-0 rounded-full"
                     style={`background:${row.color}`}
                     aria-hidden="true"
                   />
-                  <span class="min-w-0 flex-1 truncate text-zinc-300">{row.label}</span>
-                  <span class="shrink-0 text-zinc-500">
+                  <span class="min-w-0 flex-1 truncate text-zinc-200">{row.label}</span>
+                  <span class="data-figure shrink-0">
                     {row.shareLabel} · {row.compactValue} · {row.displayCost}
                   </span>
                 </li>
@@ -495,28 +493,26 @@ const pageDescription =
       <section class="data-section">
         <div class="data-section-heading">
           <h2>Agents</h2>
-          <span class="font-mono text-xs text-zinc-600">by tokens</span>
+          <span class="data-section-note">By tokens</span>
         </div>
 
-        <div class="grid grid-cols-1 border-l border-t border-[#27272a] sm:grid-cols-2">
+        <div class="grid grid-cols-1 gap-x-10 gap-y-7 sm:grid-cols-2">
           {
             agents.map((agent) => (
-              <div class="border-b border-r border-[#27272a] bg-[#0c0c0d] p-3.5">
+              <div>
                 <div class="flex items-baseline justify-between gap-2">
-                  <p class="text-sm text-zinc-200">{agent.agent}</p>
-                  <span class="font-mono text-xs text-zinc-500">
+                  <p class="font-medium text-zinc-200">{agent.agent}</p>
+                  <span class="data-figure text-zinc-300">
                     {formatPercent(agent.tokenShare, 1)}
                   </span>
                 </div>
-                <div class="mt-2 h-1.5 bg-[#18181b]">
-                  <div class="h-full bg-[#a78bfa]" style={`width:${agent.tokenShare * 100}%`} />
+                <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-[#1f1f23]">
+                  <div class="h-full min-w-[2px] rounded-full bg-[#a78bfa]" style={`width:${agent.tokenShare * 100}%`} />
                 </div>
-                <p class="mt-2 font-mono text-[11px] leading-snug text-zinc-500">
-                  {formatCompact(agent.totalTokens)} tokens
-                </p>
-                <p class="mt-0.5 font-mono text-[11px] leading-snug text-zinc-600">
-                  {formatCost(agent.totalCost)} · {formatRate(agent.costPerMillion)}/M ·{" "}
-                  {agent.activeDays} {agent.activeDays === 1 ? "day" : "days"}
+                <p class="mt-2 text-sm text-zinc-500">
+                  {formatCompact(agent.totalTokens)} tokens · {formatCost(agent.totalCost)} ·{" "}
+                  {formatRate(agent.costPerMillion)}/M · {agent.activeDays}{" "}
+                  {agent.activeDays === 1 ? "day" : "days"}
                 </p>
               </div>
             ))
@@ -530,7 +526,7 @@ const pageDescription =
         switch views (JS only drives the hover tooltips).
       -->
       <section class="data-section">
-        <div class="flex flex-wrap items-center gap-y-2">
+        <div class="flex flex-wrap items-baseline gap-y-2 border-t border-[#1f1f23] pt-4">
           {
             activityViews.map((view, index) => (
               <input
@@ -552,11 +548,11 @@ const pageDescription =
               <label
                 for={`activity-${view.id}`}
                 class:list={[
-                  "cursor-pointer border border-[#27272a] px-2.5 py-1 font-mono text-xs uppercase text-zinc-500 transition-colors hover:text-zinc-300",
-                  index > 0 && "-ml-px",
-                  view.id === "daily" && "peer-checked/daily:border-[#eab308] peer-checked/daily:bg-[#eab308] peer-checked/daily:text-[#0c0c0d]!",
-                  view.id === "weekly" && "peer-checked/weekly:border-[#eab308] peer-checked/weekly:bg-[#eab308] peer-checked/weekly:text-[#0c0c0d]!",
-                  view.id === "cumulative" && "peer-checked/cumulative:border-[#eab308] peer-checked/cumulative:bg-[#eab308] peer-checked/cumulative:text-[#0c0c0d]!",
+                  "data-tab",
+                  index > 0 && "ml-[1.125rem]",
+                  view.id === "daily" && "peer-checked/daily:border-[#eab308] peer-checked/daily:text-zinc-100",
+                  view.id === "weekly" && "peer-checked/weekly:border-[#eab308] peer-checked/weekly:text-zinc-100",
+                  view.id === "cumulative" && "peer-checked/cumulative:border-[#eab308] peer-checked/cumulative:text-zinc-100",
                 ]}
               >
                 {view.label}
@@ -568,13 +564,13 @@ const pageDescription =
             activityViews.map((view) => (
               <div
                 class:list={[
-                  "hidden min-w-0 basis-full",
+                  "mt-4 hidden min-w-0 basis-full",
                   view.id === "daily" && "peer-checked/daily:block",
                   view.id === "weekly" && "peer-checked/weekly:block",
                   view.id === "cumulative" && "peer-checked/cumulative:block",
                 ]}
               >
-                <div class="border border-[#27272a] bg-[#0c0c0d] p-4 sm:p-5">
+                <div>
                   <!-- Narrow screens scroll sideways rather than shrinking dots to specks;
                        the script parks the scroll position on the latest weeks. -->
                   <div class="-mx-1 overflow-x-auto overflow-y-hidden px-1 pb-1" data-activity-scroll>
@@ -613,7 +609,7 @@ const pageDescription =
                         ))}
                       </div>
 
-                      <div class="mt-2 flex gap-[3px] font-mono text-[10px] text-zinc-500" aria-hidden="true">
+                      <div class="data-figure mt-2 flex gap-[3px] text-xs" aria-hidden="true">
                         {weekMonths.map((label) => (
                           <div class="relative h-3.5 min-w-0 flex-1">
                             <span class="absolute left-0 top-0 whitespace-nowrap leading-[0.875rem]">{label}</span>
@@ -623,17 +619,17 @@ const pageDescription =
                     </div>
                   </div>
 
-                  <div class="mt-4 flex flex-wrap items-center justify-between gap-x-5 gap-y-2 font-mono text-[11px] text-zinc-500">
+                  <div class="mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-sm text-zinc-500">
                     {view.id === "daily" && (
-                      <dl class="flex flex-wrap gap-x-5 gap-y-1">
+                      <dl class="flex flex-wrap gap-x-6 gap-y-1">
                         <div class="flex items-baseline gap-2">
-                          <dt class="text-zinc-600">busiest</dt>
+                          <dt class="text-zinc-500">Busiest day</dt>
                           <dd class="text-zinc-400">
                             {formatDay(peakDay.period)} · {formatCompact(peakDay.totalTokens)}
                           </dd>
                         </div>
                         <div class="flex items-baseline gap-2">
-                          <dt class="text-zinc-600">longest streak</dt>
+                          <dt class="text-zinc-500">Longest streak</dt>
                           <dd class="text-zinc-400">{longestStreak} days</dd>
                         </div>
                       </dl>
@@ -650,7 +646,7 @@ const pageDescription =
                         latest week.
                       </p>
                     )}
-                    <span class="flex items-center gap-1.5 text-[10px]" aria-hidden="true">
+                    <span class="flex items-center gap-1.5 text-xs" aria-hidden="true">
                       Less
                       {[0, 1, 2, 3, 4, 5].map((level) => (
                         <span class:list={["activity-dot size-2.5 shrink-0", intensityClasses[level]]} />
@@ -668,7 +664,7 @@ const pageDescription =
       <div
         id="daily-usage-tooltip"
         role="tooltip"
-        class="pointer-events-none fixed z-50 hidden whitespace-pre border border-[#3f3f46] bg-[#18181b]/95 px-2.5 py-1.5 font-mono text-[11px] leading-snug text-zinc-200 shadow-lg"
+        class="pointer-events-none fixed z-50 hidden whitespace-pre rounded-surface border border-[#3f3f46] bg-[#18181b]/95 px-3 py-2 text-xs leading-snug text-zinc-200 shadow-lg"
       >
       </div>
 
@@ -676,38 +672,38 @@ const pageDescription =
       <section class="data-section">
         <div class="data-section-heading">
           <h2>Models</h2>
-          <span class="font-mono text-xs text-zinc-600">
-            {models.length} total · by spend
+          <span class="data-section-note">
+            {models.length} models, by spend
           </span>
         </div>
 
-        <div class="border border-[#27272a] bg-[#0c0c0d]">
+        <div>
           <table class="w-full table-fixed border-collapse text-left">
             <thead>
-              <tr class="border-b border-[#27272a] font-mono text-[10px] uppercase tracking-wide text-zinc-600">
-                <th scope="col" class="w-[34%] p-2.5 font-normal">Model</th>
+              <tr class="border-b border-[#1f1f23] text-xs text-zinc-500">
+                <th scope="col" class="w-[34%] pb-2.5 pr-2.5 font-normal">Model</th>
                 <th
                   scope="col"
-                  class="w-[18%] p-2.5 text-right font-normal"
+                  class="w-[18%] px-2.5 pb-2.5 text-right font-normal"
                   title="Tokens processed, and share of all tokens"
                 >
                   Tokens
                 </th>
                 <th
                   scope="col"
-                  class="w-[20%] p-2.5 text-right font-normal"
+                  class="w-[20%] px-2.5 pb-2.5 text-right font-normal"
                   title="Estimated cost, and share of total spend"
                 >
                   Cost
                 </th>
                 <th
                   scope="col"
-                  class="w-[16%] p-2.5 text-right font-normal"
+                  class="w-[16%] px-2.5 pb-2.5 text-right font-normal"
                   title="Blended cost per million tokens"
                 >
                   Rate
                 </th>
-                <th scope="col" class="w-[12%] p-2.5 text-right font-normal">Days</th>
+                <th scope="col" class="w-[12%] pb-2.5 pl-2.5 text-right font-normal">Days</th>
               </tr>
             </thead>
             <tbody>
@@ -715,38 +711,38 @@ const pageDescription =
                 modelRows.map((model, index) => (
                   <tr
                     class:list={[
-                      "border-b border-[#27272a] transition-colors last:border-b-0 hover:bg-[#111113]",
+                      "border-b border-[#1f1f23] transition-colors last:border-b-0",
                       index >= INITIAL_MODELS && "hidden",
                     ]}
                     data-extra-model={index >= INITIAL_MODELS ? "" : undefined}
                   >
-                    <th scope="row" class="p-2.5 text-left font-normal" title={model.modelName}>
-                      <span class="block truncate text-xs text-zinc-300">
+                    <th scope="row" class="py-3 pr-2.5 text-left font-normal" title={model.modelName}>
+                      <span class="block truncate text-sm text-zinc-200">
                         {model.modelName}
                       </span>
-                      <span class="mt-1.5 block h-1 bg-[#18181b]">
+                      <span class="mt-2 block h-1 overflow-hidden rounded-full bg-[#1f1f23]">
                         <span
-                          class="block h-full bg-[#eab308]"
+                          class="block h-full rounded-full bg-[#eab308]"
                           style={`width:${model.costBar}%`}
                         />
                       </span>
                     </th>
-                    <td class="whitespace-nowrap p-2.5 text-right font-mono text-xs text-zinc-400">
+                    <td class="data-figure whitespace-nowrap px-2.5 py-3 text-right text-zinc-300">
                       {model.displayTokens}
-                      <span class="mt-0.5 block text-[10px] text-zinc-600">
+                      <span class="block text-xs text-zinc-500">
                         {model.tokenShareLabel}
                       </span>
                     </td>
-                    <td class="whitespace-nowrap p-2.5 text-right font-mono text-xs text-zinc-300">
+                    <td class="data-figure whitespace-nowrap px-2.5 py-3 text-right text-zinc-200">
                       {model.displayCost}
-                      <span class="mt-0.5 block text-[10px] text-zinc-600">
+                      <span class="block text-xs text-zinc-500">
                         {model.costShareLabel}
                       </span>
                     </td>
-                    <td class="whitespace-nowrap p-2.5 text-right font-mono text-xs text-zinc-500">
+                    <td class="data-figure whitespace-nowrap px-2.5 py-3 text-right">
                       {model.rate}
                     </td>
-                    <td class="whitespace-nowrap p-2.5 text-right font-mono text-xs text-zinc-600">
+                    <td class="data-figure whitespace-nowrap py-3 pl-2.5 text-right">
                       {model.activeDays}
                     </td>
                   </tr>
@@ -760,7 +756,7 @@ const pageDescription =
               <button
                 type="button"
                 id="models-show-all"
-                class="block w-full border-t border-[#27272a] p-2.5 text-center font-mono text-[11px] text-zinc-400 transition-colors hover:bg-[#111113] hover:text-[#eab308]"
+                class="data-show-more"
               >
                 Show {modelRows.length - INITIAL_MODELS} more paid models ↓
               </button>
@@ -769,32 +765,31 @@ const pageDescription =
 
           {
             freeModelRows.length > 0 && (
-              <details class="border-t border-[#27272a]">
-                <summary class="cursor-pointer p-2.5 font-mono text-[11px] text-zinc-500 transition-colors hover:text-zinc-300">
-                  + {freeModelRows.length} free-tier models · {formatCompact(freeTokens)} tokens ·
-                  $0.00
+              <details class="mt-4">
+                <summary class="cursor-pointer text-sm text-zinc-500 transition-colors hover:text-zinc-200">
+                  {freeModelRows.length} free-tier models, {formatCompact(freeTokens)} tokens at no cost
                 </summary>
                 <table class="w-full table-fixed border-collapse text-left">
                   <tbody>
                     {freeModelRows.map((model) => (
-                      <tr class="border-t border-[#27272a]">
+                      <tr class="border-b border-[#1f1f23] last:border-b-0">
                         <th
                           scope="row"
-                          class="w-[42%] p-2.5 text-left text-xs font-normal text-zinc-500"
+                          class="w-[42%] py-2.5 pr-2.5 text-left text-sm font-normal text-zinc-400"
                           title={model.modelName}
                         >
                           <span class="block truncate">{model.modelName}</span>
                         </th>
-                        <td class="w-[16%] whitespace-nowrap p-2.5 text-right font-mono text-xs text-zinc-600">
+                        <td class="data-figure w-[16%] whitespace-nowrap p-2.5 text-right">
                           {model.displayTokens}
                         </td>
-                        <td class="w-[18%] p-2.5 text-right font-mono text-xs text-[#4ade80]">
+                        <td class="data-figure w-[18%] p-2.5 text-right text-[#4ade80]">
                           free
                         </td>
-                        <td class="w-[16%] p-2.5 text-right font-mono text-xs text-zinc-700">
+                        <td class="data-figure w-[16%] p-2.5 text-right">
                           —
                         </td>
-                        <td class="w-[8%] p-2.5 text-right font-mono text-xs text-zinc-700">
+                        <td class="data-figure w-[8%] py-2.5 pl-2.5 text-right">
                           {model.activeDays}
                         </td>
                       </tr>
@@ -807,11 +802,9 @@ const pageDescription =
         </div>
       </section>
 
-      <p class="mb-8 border-t border-[#27272a] pt-3 text-right font-mono text-[11px] leading-relaxed text-zinc-600">
-        Data source: ccusage · through {latestDay ? formatDay(latestDay.period, true) : "—"} ·{" "}
-        <span class={isStale ? "text-[#ca8a04]" : "text-zinc-500"}>{freshnessCopy}</span>
-        <br />
-        Refresh with <span class="text-zinc-500">bun run data:usage</span>
+      <p class="mb-8 border-t border-[#1f1f23] pt-4 text-sm text-zinc-500">
+        Counted by ccusage through {latestDay ? formatDay(latestDay.period, true) : "—"},{" "}
+        <span class={isStale ? "text-[#ca8a04]" : undefined}>{freshnessCopy}</span>.
       </p>
     </div>
   </Container>

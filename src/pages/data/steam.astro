@@ -36,7 +36,7 @@ const statCells = data
         note: `~${Math.round((data.totals?.hours ?? 0) / 24).toLocaleString()} days`,
       },
       {
-        label: "Avg / game",
+        label: "Average per game",
         value: `${(data.totals?.avgHours ?? 0).toLocaleString()} h`,
         note: "mean playtime",
       },
@@ -54,10 +54,10 @@ const hourShares = (data?.hourShares ?? []).map((share, i) => ({
   ...share,
   color: SHARE_COLORS[i % SHARE_COLORS.length],
 }));
-const otherSharePct = Math.max(
-  0,
-  100 - hourShares.reduce((sum, share) => sum + share.pct, 0),
-);
+const otherSharePct =
+  Math.round(
+    Math.max(0, 100 - hourShares.reduce((sum, share) => sum + share.pct, 0)) * 10,
+  ) / 10;
 const otherHours = Math.max(
   0,
   Math.round(
@@ -90,7 +90,7 @@ const pageDescription =
     <div class="collection-page">
       <DataHeader
         title="Steam"
-        source={data ? "steam web api" : undefined}
+        source={data ? "Steam Web API" : undefined}
         sourceHref={STEAM_PROFILE_URL}
         updated={data ? now : undefined}
       >
@@ -101,8 +101,8 @@ const pageDescription =
       {
         !data ? (
           <section class="data-section">
-            <div class="space-y-2 border border-[#27272a] bg-[#0c0c0d] p-6 font-mono text-xs leading-relaxed text-zinc-400">
-              <p class="text-[#eab308]">
+            <div class="data-notice">
+              <p>
                 This view needs a Steam API key.
               </p>
               <p>
@@ -133,8 +133,8 @@ const pageDescription =
         ) : (
           <>
             <!-- Profile -->
-            <section class="mb-4">
-              <div class="flex items-center gap-4 border border-[#27272a] p-3">
+            <section class="data-section">
+              <div class="flex items-center gap-4">
                 {
                   data.profile.avatarUrl ? (
                     <img
@@ -144,29 +144,28 @@ const pageDescription =
                       height="64"
                       loading="lazy"
                       decoding="async"
-                      class="size-12 shrink-0 border border-[#27272a]"
+                      class="size-14 shrink-0 rounded-full object-cover"
                     />
                   ) : (
-                    <div class="size-12 shrink-0 border border-[#27272a]" />
+                    <div class="size-14 shrink-0 rounded-full bg-zinc-900" />
                   )
                 }
                 <div class="min-w-0 flex-1">
-                  <h2 class="truncate text-sm font-medium text-zinc-100">
+                  <h2 class="truncate text-lg font-medium tracking-tight text-zinc-100">
                     {data.profile.personaName}
                   </h2>
-                  <p class="flex flex-wrap gap-x-2 font-mono text-xs text-zinc-600">
+                  <p class="text-sm text-zinc-500">
                     <a
                       href={STEAM_PROFILE_URL}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="text-zinc-500 transition-colors hover:text-[#eab308]"
+                      class="transition-colors hover:text-[#eab308]"
                     >
                       @{STEAM_VANITY_ID}
                     </a>
-                    {data.profile.countryCode && <span>· {data.profile.countryCode}</span>}
                     {
                       data.profile.memberSince && !isNaN(new Date(data.profile.memberSince).getTime()) && (
-                        <span>· since {format(new Date(data.profile.memberSince), "yyyy")}</span>
+                        <span> · on Steam since {format(new Date(data.profile.memberSince), "yyyy")}</span>
                       )
                     }
                   </p>
@@ -183,24 +182,22 @@ const pageDescription =
             <section class="data-section">
               <SectionHeading
                 title="Played recently"
-                note={`${recentGames.length} ${recentGames.length === 1 ? "game" : "games"} · last 2 weeks`}
+                note="Last 2 weeks"
               />
               {
                 recentGames.length === 0 ? (
-                  <p class="data-panel p-6 text-center font-mono text-xs text-zinc-600">
-                    Nothing played in the last two weeks.
-                  </p>
+                  <p class="text-sm text-zinc-500">Nothing played in the last two weeks.</p>
                 ) : (
-                  <ul class="border-t border-[#27272a]">
+                  <ul class="[&>li:last-child>a]:border-b-0">
                     {recentGames.map((game) => (
                       <li>
                         <a
                           href={`https://store.steampowered.com/app/${game.appId}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          class="compact-row group flex items-center gap-3.5 border-b border-[#27272a] px-2 py-2.5"
+                          class="data-row group flex items-center gap-4 py-3"
                         >
-                          <span class="relative h-[44px] w-[94px] shrink-0 overflow-hidden border border-[#27272a] bg-zinc-900">
+                          <span class="relative aspect-[460/215] w-24 shrink-0 overflow-hidden rounded-surface bg-zinc-900 sm:w-32">
                             <img
                               src={game.headerUrl || `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/header.jpg`}
                               data-fallback={game.iconUrl || `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/capsule_184x69.jpg`}
@@ -213,10 +210,10 @@ const pageDescription =
                             />
                           </span>
                           <span class="min-w-0 flex-1">
-                            <span class="block truncate text-sm font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
+                            <span class="block truncate font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
                               {game.name}
                             </span>
-                            <span class="block truncate font-mono text-[11px] text-zinc-600">
+                            <span class="block truncate text-sm text-zinc-500">
                               {game.lastPlayed
                                 ? `played ${formatDistanceToNow(new Date(game.lastPlayed), { addSuffix: true })}`
                                 : "recent session"}
@@ -224,11 +221,8 @@ const pageDescription =
                               {(game.hoursTotal ?? 0).toLocaleString()} h total
                             </span>
                           </span>
-                          <span class="shrink-0 text-right font-mono">
-                            <span class="block whitespace-nowrap text-sm text-[#eab308]">
-                              +{(game.hoursLastTwoWeeks ?? 0).toLocaleString()} h
-                            </span>
-                            <span class="block text-[10px] text-zinc-600">2 weeks</span>
+                          <span class="shrink-0 whitespace-nowrap text-right text-lg font-medium tracking-tight text-[#eab308]">
+                            +{(game.hoursLastTwoWeeks ?? 0).toLocaleString()} h
                           </span>
                           <span class="sr-only">(opens in new tab)</span>
                         </a>
@@ -242,15 +236,15 @@ const pageDescription =
             <!-- Where the hours went + playtime spread -->
             {
               (hourShares.length > 0 || tiers.length > 0) && (
-                <section class="data-section grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
+                <section class="data-section grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-2">
                   {hourShares.length > 0 && (
                     <div>
                       <SectionHeading
                         title="Where the hours went"
-                        note={`top ${hourShares.length} = ${data.topSharePct}%`}
+                        note={`Top ${hourShares.length} take ${data.topSharePct}%`}
                       />
-                      <div class="data-panel p-4">
-                        <div class="flex h-2.5 w-full overflow-hidden bg-[#18181b]">
+                      <div class="data-panel">
+                        <div class="flex h-3 w-full gap-0.5 overflow-hidden rounded-full">
                           {hourShares.map((share) => (
                             <span
                               class="h-full"
@@ -264,26 +258,26 @@ const pageDescription =
                             title={`Everything else: ${otherSharePct}%`}
                           />
                         </div>
-                        <ul class="mt-4 space-y-2">
+                        <ul class="mt-5 space-y-2.5">
                           {hourShares.map((share) => (
-                            <li class="flex items-center gap-2.5 text-xs">
-                              <span class="size-2 shrink-0" style={`background:${share.color}`} aria-hidden="true" />
-                              <span class="min-w-0 flex-1 truncate text-zinc-300">{share.name}</span>
-                              <span class="whitespace-nowrap font-mono text-[11px] text-zinc-500">
+                            <li class="flex items-center gap-3 text-sm">
+                              <span class="size-2.5 shrink-0 rounded-full" style={`background:${share.color}`} aria-hidden="true" />
+                              <span class="min-w-0 flex-1 truncate text-zinc-200">{share.name}</span>
+                              <span class="data-figure whitespace-nowrap">
                                 {share.hours.toLocaleString()} h
                               </span>
-                              <span class="w-9 text-right font-mono text-[11px] text-zinc-300">{share.pct}%</span>
+                              <span class="data-figure w-11 text-right text-zinc-300">{share.pct}%</span>
                             </li>
                           ))}
-                          <li class="flex items-center gap-2.5 text-xs">
-                            <span class="size-2 shrink-0 bg-zinc-700" aria-hidden="true" />
+                          <li class="flex items-center gap-3 text-sm">
+                            <span class="size-2.5 shrink-0 rounded-full bg-zinc-700" aria-hidden="true" />
                             <span class="min-w-0 flex-1 truncate text-zinc-500">
                               Everything else ({Math.max(allGames.length - hourShares.length, 0)} games)
                             </span>
-                            <span class="whitespace-nowrap font-mono text-[11px] text-zinc-500">
+                            <span class="data-figure whitespace-nowrap">
                               {otherHours.toLocaleString()} h
                             </span>
-                            <span class="w-9 text-right font-mono text-[11px] text-zinc-500">{otherSharePct}%</span>
+                            <span class="data-figure w-11 text-right">{otherSharePct}%</span>
                           </li>
                         </ul>
                       </div>
@@ -291,27 +285,27 @@ const pageDescription =
                   )}
                   {tiers.length > 0 && (
                     <div>
-                      <SectionHeading title="Playtime spread" note="games by lifetime hours" />
-                      <div class="data-panel px-4 pb-3 pt-4">
-                        <div class="flex h-40 items-end gap-2 border-b border-[#27272a]">
+                      <SectionHeading title="Playtime spread" note="Games by lifetime hours" />
+                      <div class="data-panel">
+                        <div class="flex h-40 items-end gap-3 border-b border-[#1f1f23]">
                           {tiers.map((tier) => (
                             <div
                               class="group flex h-full flex-1 flex-col items-center justify-end gap-1"
                               title={`${tier.label}: ${tier.count} games`}
                             >
-                              <span class="font-mono text-[11px] text-zinc-400 transition-colors group-hover:text-[#eab308]">
+                              <span class="data-figure transition-colors group-hover:text-[#eab308]">
                                 {tier.count}
                               </span>
                               <div
-                                class="w-full bg-[#eab308]/70 transition-colors group-hover:bg-[#eab308]"
+                                class="w-full rounded-t-sm bg-[#eab308]/70 transition-colors group-hover:bg-[#eab308]"
                                 style={`height:${Math.max((tier.count / maxTier) * 82, tier.count ? 3 : 1)}%`}
                               />
                             </div>
                           ))}
                         </div>
-                        <div class="mt-1.5 flex gap-2">
+                        <div class="mt-2 flex gap-3">
                           {tiers.map((tier) => (
-                            <span class="flex-1 text-center font-mono text-[10px] text-zinc-600">
+                            <span class="data-figure flex-1 text-center">
                               {tier.label.replace("Under ", "<")}
                             </span>
                           ))}
@@ -334,11 +328,11 @@ const pageDescription =
                   </SectionHeading>
 
                   <!-- Search and filter controls -->
-                  <div class="mb-4 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+                  <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
                     <div class="relative flex-1">
-                      <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5 text-zinc-600">
+                      <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center text-zinc-500">
                         <svg
-                          class="size-3.5"
+                          class="size-4"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
@@ -353,22 +347,22 @@ const pageDescription =
                       <input
                         type="text"
                         id="steam-search-input"
-                        placeholder="Search games by title..."
-                        class="h-[1.875rem] w-full border border-[#27272a] bg-[#0c0c0d] pl-8 pr-8 font-mono text-xs text-zinc-200 placeholder:text-zinc-600 focus:border-[#eab308] focus:outline-none transition-colors"
+                        placeholder="Search games"
+                        class="h-9 w-full border-b border-[#27272a] bg-transparent pl-7 pr-8 text-sm text-zinc-200 transition-colors placeholder:text-zinc-600 focus:border-[#eab308] focus:outline-none"
                         autocomplete="off"
                         spellcheck="false"
                       />
                       <button
                         type="button"
                         id="steam-search-clear"
-                        class="hidden absolute inset-y-0 right-0 items-center pr-2.5 text-zinc-600 hover:text-zinc-300 font-mono text-xs"
+                        class="absolute inset-y-0 right-0 hidden items-center pr-1 text-sm text-zinc-500 hover:text-zinc-200"
                         aria-label="Clear search"
                       >
                         ✕
                       </button>
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-2">
+                    <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
                       <!-- Filter status -->
                       <div class="segmented" role="group" aria-label="Filter games">
                         <button
@@ -401,16 +395,14 @@ const pageDescription =
                       <div>
                         <select
                           id="steam-sort-select"
-                          class="h-[1.875rem] cursor-pointer border border-[#27272a] bg-[#0c0c0d] px-2 font-mono text-xs text-zinc-300 focus:border-[#eab308] focus:outline-none"
+                          class="h-9 cursor-pointer rounded-surface border border-[#27272a] bg-[#0c0c0d] px-2.5 text-sm text-zinc-300 focus:border-[#eab308] focus:outline-none"
                           aria-label="Sort games"
                         >
-                          <option value="hours-desc">Sort: Most played</option>
-                          <option value="hours-asc">Sort: Least played</option>
-                          <option value="name-asc">Sort: Title (A–Z)</option>
-                          <option value="name-desc">Sort: Title (Z–A)</option>
-                          <option value="recent-desc">
-                            Sort: Recently played
-                          </option>
+                          <option value="hours-desc">Most played</option>
+                          <option value="hours-asc">Least played</option>
+                          <option value="name-asc">Title A to Z</option>
+                          <option value="name-desc">Title Z to A</option>
+                          <option value="recent-desc">Recently played</option>
                         </select>
                       </div>
                     </div>
@@ -419,7 +411,7 @@ const pageDescription =
                   <!-- Games grid -->
                   <div
                     id="steam-games-list"
-                    class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-4"
+                    class="grid grid-cols-2 gap-x-5 gap-y-7 md:grid-cols-4"
                   >
                     {allGames.map((game, index) => (
                       <a
@@ -427,7 +419,7 @@ const pageDescription =
                         target="_blank"
                         rel="noopener noreferrer"
                         class:list={[
-                          "steam-game-item compact-row group flex flex-col justify-between border-b border-r border-[#27272a] p-2.5",
+                          "steam-game-item group flex min-w-0 flex-col justify-between",
                           index >= INITIAL_GAMES && "hidden",
                         ]}
                         data-name={game.name.toLowerCase()}
@@ -436,7 +428,7 @@ const pageDescription =
                         data-default-order={index}
                       >
                         <div>
-                          <div class="relative mb-2 aspect-[460/215] w-full overflow-hidden border border-[#27272a] bg-zinc-900">
+                          <div class="relative mb-2.5 aspect-[460/215] w-full overflow-hidden rounded-surface bg-zinc-900">
                             <img
                               src={game.headerUrl || `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/header.jpg`}
                               data-fallback={game.iconUrl || `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/capsule_184x69.jpg`}
@@ -449,22 +441,20 @@ const pageDescription =
                             />
                             {game.hoursLastTwoWeeks !== undefined &&
                               game.hoursLastTwoWeeks > 0 && (
-                                <span class="absolute bottom-1.5 right-1.5 border border-[#eab308]/40 bg-black/85 px-1 py-0.5 font-mono text-[10px] text-[#eab308]">
-                                  +{game.hoursLastTwoWeeks}h
+                                <span class="absolute bottom-1.5 right-1.5 rounded-sm bg-black/80 px-1.5 py-0.5 font-mono text-xs text-[#eab308]">
+                                  +{game.hoursLastTwoWeeks} h
                                 </span>
                               )}
                           </div>
-                          <p class="truncate text-xs font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
+                          <p class="truncate text-sm font-medium text-zinc-200 transition-colors group-hover:text-[#eab308]">
                             {game.name}
                           </p>
                         </div>
-                        <div class="mt-1.5 flex items-baseline justify-between gap-2">
+                        <div class="mt-0.5 flex items-baseline justify-between gap-2">
                           <p
                             class:list={[
-                              "shrink-0 whitespace-nowrap font-mono text-xs",
-                              (game.hours ?? 0) > 0
-                                ? "text-[#eab308]"
-                                : "text-zinc-600",
+                              "data-figure shrink-0 whitespace-nowrap",
+                              (game.hours ?? 0) > 0 && "text-[#eab308]",
                             ]}
                           >
                             {(game.hours ?? 0) > 0
@@ -472,15 +462,13 @@ const pageDescription =
                               : "0 h"}
                           </p>
                           {game.lastPlayed ? (
-                            <p class="truncate font-mono text-[11px] text-zinc-600">
+                            <p class="truncate text-xs text-zinc-500">
                               {formatDistanceToNow(new Date(game.lastPlayed), {
                                 addSuffix: true,
                               })}
                             </p>
                           ) : (
-                            <p class="font-mono text-[11px] text-zinc-700">
-                              Unplayed
-                            </p>
+                            <p class="text-xs text-zinc-500">Unplayed</p>
                           )}
                         </div>
                       </a>
@@ -495,7 +483,7 @@ const pageDescription =
 
                   <div
                     id="steam-no-results"
-                    class="hidden border border-t-0 border-[#27272a] p-8 text-center font-mono text-xs text-zinc-600"
+                    class="hidden py-6 text-sm text-zinc-500"
                   >
                     No games match your search or filter.
                   </div>

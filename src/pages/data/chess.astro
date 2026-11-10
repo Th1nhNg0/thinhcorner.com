@@ -117,9 +117,9 @@ const maxOpeningCount = data.openings[0]?.count ?? 1;
 
 // --- Recent games helpers ---------------------------------------------------
 const outcomeStyles = {
-  win: { text: "W", class: "text-[#4ade80] border-[#14532d]" },
-  loss: { text: "L", class: "text-[#f87171] border-[#7f1d1d]" },
-  draw: { text: "D", class: "text-zinc-400 border-zinc-700" },
+  win: { text: "Won", class: "text-[#4ade80]" },
+  loss: { text: "Lost", class: "text-[#f87171]" },
+  draw: { text: "Draw", class: "text-zinc-400" },
 } as const;
 
 const formatDelta = (delta: number) =>
@@ -132,7 +132,8 @@ const streakStyles = {
   draw: { class: "text-zinc-300" },
 } as const satisfies Record<GameOutcome, { class: string }>;
 
-const streakSuffix = { win: "W", loss: "L", draw: "D" } as const;
+const streakNoun = { win: "win", loss: "loss", draw: "draw" } as const;
+const streakPlural = { win: "wins", loss: "losses", draw: "draws" } as const;
 
 const hasGames = data.gamesFetched > 0;
 const pageDescription =
@@ -143,12 +144,12 @@ const perfViews = [
   {
     side: "white" as const,
     label: "As White",
-    swatchClass: "border border-zinc-400 bg-white",
+    swatchClass: "bg-white",
   },
   {
     side: "black" as const,
     label: "As Black",
-    swatchClass: "border border-zinc-600 bg-black",
+    swatchClass: "border border-zinc-500 bg-black",
   },
 ].map(({ side, label, swatchClass }) => {
   const perf = data.byColor[side];
@@ -178,7 +179,7 @@ const perfViews = [
 >
   <Container>
     <div class="collection-page">
-      <DataHeader title="Chess" source="chess.com" sourceHref={CHESS_PROFILE_URL} updated={unavailable ? undefined : now}>
+      <DataHeader title="Chess" source="Chess.com" sourceHref={CHESS_PROFILE_URL} updated={unavailable ? undefined : now}>
         My rated games from the last {data.monthsCovered} months: ratings, form,
         openings and recent results, synced from{" "}
         <a href={CHESS_PROFILE_URL} class="text-link">chess.com</a>.
@@ -186,11 +187,13 @@ const perfViews = [
 
       {
         unavailable && (
-          <p class="data-section border border-[#27272a] bg-[#0c0c0d] p-3 text-sm text-zinc-400">
-            Chess.com isn’t responding right now, so there’s nothing to show. Try again
-            in a few minutes, or see the{" "}
-            <a href={CHESS_PROFILE_URL} class="text-link">profile on chess.com</a>.
-          </p>
+          <div class="data-section data-notice">
+            <p>Chess.com isn’t responding right now.</p>
+            <p>
+              There’s nothing to show yet. Try again in a few minutes, or see the{" "}
+              <a href={CHESS_PROFILE_URL} class="text-link">profile on chess.com</a>.
+            </p>
+          </div>
         )
       }
 
@@ -199,46 +202,37 @@ const perfViews = [
       {!unavailable && (
       <>
       <section class="data-section">
-        <div class="flex items-center gap-3.5 border border-[#27272a] bg-[#0c0c0d] p-3">
+        <div class="flex items-center gap-4">
           {
             data.profile.avatar ? (
               <img
                 src={data.profile.avatar}
-                alt={data.profile.name}
-                width="48"
-                height="48"
+                alt=""
+                width="56"
+                height="56"
                 loading="lazy"
                 decoding="async"
-                class="size-12 shrink-0 border border-[#27272a] object-cover"
+                class="size-14 shrink-0 rounded-full object-cover"
               />
             ) : (
-              <div class="size-12 shrink-0 border border-[#27272a] bg-zinc-900" />
+              <div class="size-14 shrink-0 rounded-full bg-zinc-900" />
             )
           }
           <div class="min-w-0">
-            <div class="flex items-center gap-2">
-              <h2 class="truncate text-sm font-medium text-zinc-200">
-                {data.profile.name}
-              </h2>
-              {
-                data.profile.league && (
-                  <span class="shrink-0 border border-[#27272a] bg-zinc-900/60 px-1.5 py-0.5 font-mono text-[10px] uppercase text-zinc-500">
-                    {data.profile.league}
-                  </span>
-                )
-              }
-            </div>
-            <p class="font-mono text-xs text-zinc-500">
+            <h2 class="truncate text-lg font-medium tracking-tight text-zinc-100">
+              {data.profile.name}
+            </h2>
+            <p class="text-sm text-zinc-500">
               <a
                 href={CHESS_PROFILE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="transition-colors hover:text-zinc-300"
+                class="transition-colors hover:text-[#eab308]"
               >
                 @{data.profile.username}
               </a>
-              {data.profile.country && <span class="text-zinc-600"> · {data.profile.country}</span>}
-              <span class="text-zinc-600"> · since {format(data.profile.joined * 1000, "yyyy")}</span>
+              {data.profile.league && <span> · {data.profile.league} league</span>}
+              <span> · playing since {format(data.profile.joined * 1000, "yyyy")}</span>
             </p>
           </div>
         </div>
@@ -249,114 +243,74 @@ const perfViews = [
         (statViews.length > 0 || hasGames) && (
           <section class="data-section">
             <div class="data-section-heading">
-              <h2>Ratings &amp; record</h2>
+              <h2>Ratings and form</h2>
               {data.gamesFetched > 0 && (
-                <span class="font-mono text-xs text-zinc-600">
-                  {data.gamesFetched.toLocaleString()} rated games in window
+                <span class="data-section-note">
+                  {data.gamesFetched.toLocaleString()} rated games in {data.monthsCovered} months
                 </span>
               )}
             </div>
-            <div class="grid grid-cols-2 border-l border-t border-[#27272a] md:grid-cols-3">
+            <dl class="data-stats" data-cols="3">
               {statViews.map((stat) => (
-                <div class="border-b border-r border-[#27272a] p-3">
-                  <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
-                    {stat.label}
-                  </p>
-                  <p class="mt-1 text-xl font-medium text-zinc-100">{stat.rating}</p>
-                  {stat.best && (
-                    <p class="font-mono text-xs text-zinc-600">
-                      peak {stat.best}
-                    </p>
-                  )}
-                  <div class="mt-2 flex h-1 overflow-hidden bg-[#27272a]">
-                    <div class="bg-[#4ade80]/70" style={`width:${stat.winPct}%`} />
-                    <div class="bg-zinc-600/70" style={`width:${stat.drawPct}%`} />
-                    <div class="bg-[#f87171]/70" style={`width:${stat.lossPct}%`} />
-                  </div>
-                  <p class="mt-1.5 font-mono text-xs text-zinc-600">
-                    <span class="text-[#4ade80]">{stat.win}W</span>{" "}
-                    <span class="text-zinc-500">{stat.draw}D</span>{" "}
-                    <span class="text-[#f87171]">{stat.loss}L</span>
-                  </p>
+                <div class="data-stat">
+                  <dt class="data-stat-label">{stat.label} rating</dt>
+                  <dd class="data-stat-value">{stat.rating}</dd>
+                  <dd class="order-3 mt-3">
+                    <span class="record-bar">
+                      <span class="bg-[#4ade80]/80" style={`width:${stat.winPct}%`} />
+                      <span class="bg-zinc-600" style={`width:${stat.drawPct}%`} />
+                      <span class="bg-[#f87171]/80" style={`width:${stat.lossPct}%`} />
+                    </span>
+                    <span class="data-figure mt-1.5 block">
+                      <span class="text-[#4ade80]">{stat.win}W</span>{" "}
+                      <span>{stat.draw}D</span>{" "}
+                      <span class="text-[#f87171]">{stat.loss}L</span>
+                      {stat.best && <span> · peak {stat.best}</span>}
+                    </span>
+                  </dd>
                 </div>
               ))}
               {hasGames && (
                 <>
-                  <div class="border-b border-r border-[#27272a] p-3">
-                    <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
-                      Avg accuracy
-                    </p>
-                    <p class="mt-1 text-xl font-medium text-zinc-100">
-                      {data.avgAccuracy !== undefined ? `${data.avgAccuracy}%` : "—"}
-                    </p>
-                    <p class="mt-1 font-mono text-xs text-zinc-600">
-                      across analyzed games
-                    </p>
-                  </div>
-                  <div class="border-b border-r border-[#27272a] p-3">
-                    <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
-                      Streaks
-                    </p>
-                    <div class="mt-1 grid grid-cols-2 gap-2">
-                      <div>
-                        <p
-                          class:list={[
-                            "text-xl font-medium",
-                            data.currentStreak
-                              ? streakStyles[data.currentStreak.outcome].class
-                              : "text-zinc-100",
-                          ]}
-                        >
-                          {data.currentStreak
-                            ? `${data.currentStreak.length}${streakSuffix[data.currentStreak.outcome]}`
-                            : "—"}
-                        </p>
-                        <p class="mt-1 font-mono text-xs text-zinc-600">
-                          current
-                        </p>
-                      </div>
-                      <div>
-                        <p class="text-xl font-medium text-[#4ade80]">
-                          {data.bestWinStreak}W
-                        </p>
-                        <p class="mt-1 font-mono text-xs text-zinc-600">best</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="border-b border-r border-[#27272a] p-3">
-                    <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
-                      Avg opponent
-                    </p>
-                    <p class="mt-1 text-xl font-medium text-zinc-100">
-                      {data.avgOpponentRating || "—"}
-                    </p>
-                    <p class="mt-1 font-mono text-xs text-zinc-600">
-                      average rating
-                    </p>
-                  </div>
-                  <div class="border-b border-r border-[#27272a] p-3">
-                    <p class="font-mono text-xs uppercase tracking-wide text-zinc-500">
-                      Rating change
-                    </p>
-                    <p
+                  <div class="data-stat">
+                    <dt class="data-stat-label">Rating change</dt>
+                    <dd
                       class:list={[
-                        "mt-1 text-xl font-medium",
-                        data.ratingChange > 0
-                          ? "text-[#4ade80]"
-                          : data.ratingChange < 0
-                            ? "text-[#f87171]"
-                            : "text-zinc-100",
+                        "data-stat-value",
+                        data.ratingChange > 0 && "text-[#4ade80]",
+                        data.ratingChange < 0 && "text-[#f87171]",
                       ]}
                     >
                       {formatDelta(data.ratingChange)}
-                    </p>
-                    <p class="mt-1 font-mono text-xs text-zinc-600">
-                      net points, this window
-                    </p>
+                    </dd>
+                    <dd class="data-stat-note">net points in this window</dd>
+                  </div>
+                  <div class="data-stat">
+                    <dt class="data-stat-label">Current streak</dt>
+                    <dd
+                      class:list={[
+                        "data-stat-value",
+                        data.currentStreak && streakStyles[data.currentStreak.outcome].class,
+                      ]}
+                    >
+                      {data.currentStreak
+                        ? `${data.currentStreak.length} ${(data.currentStreak.length === 1 ? streakNoun : streakPlural)[data.currentStreak.outcome]}`
+                        : "—"}
+                    </dd>
+                    <dd class="data-stat-note">best run: {data.bestWinStreak} wins</dd>
+                  </div>
+                  <div class="data-stat">
+                    <dt class="data-stat-label">Average accuracy</dt>
+                    <dd class="data-stat-value">
+                      {data.avgAccuracy !== undefined ? `${data.avgAccuracy}%` : "—"}
+                    </dd>
+                    <dd class="data-stat-note">
+                      opponents average {data.avgOpponentRating || "—"}
+                    </dd>
                   </div>
                 </>
               )}
-            </div>
+            </dl>
           </section>
         )
       }
@@ -366,35 +320,33 @@ const perfViews = [
         hasGames && (
           <section class="data-section">
             <div class="data-section-heading">
-              <h2>Performance</h2>
+              <h2>By colour</h2>
             </div>
-            <div class="grid border-l border-t border-[#27272a] md:grid-cols-2">
+            <div class="grid gap-x-10 gap-y-8 md:grid-cols-2">
               {perfViews.map((perf) => (
-                <div class="border-b border-r border-[#27272a] p-3">
-                  <div class="flex items-center justify-between gap-3">
-                    <p class="flex items-center gap-2 font-mono text-xs uppercase tracking-wide text-zinc-500">
-                      <span class:list={["size-2.5 shrink-0", perf.swatchClass]} />
+                <div>
+                  <div class="flex items-baseline justify-between gap-3">
+                    <p class="flex items-center gap-2.5 text-zinc-300">
+                      <span class:list={["size-3 shrink-0 rounded-full", perf.swatchClass]} />
                       {perf.label}
                     </p>
-                    <span class="shrink-0 font-mono text-xs text-zinc-600">
+                    <span class="data-section-note shrink-0">
                       {perf.games} {perf.games === 1 ? "game" : "games"}
                     </span>
                   </div>
-                  <p class="mt-2 text-xl font-medium text-zinc-100">
+                  <p class="mt-2 text-2xl font-semibold tracking-tight">
                     <span class="text-[#4ade80]">{perf.win}W</span>{" "}
                     <span class="text-zinc-500">{perf.draw}D</span>{" "}
                     <span class="text-[#f87171]">{perf.loss}L</span>
                   </p>
-                  <div class="mt-2 flex h-1 overflow-hidden bg-[#27272a]">
-                    <div class="bg-[#4ade80]/70" style={`width:${perf.winPct}%`} />
-                    <div class="bg-zinc-600/70" style={`width:${perf.drawPct}%`} />
-                    <div class="bg-[#f87171]/70" style={`width:${perf.lossPct}%`} />
-                  </div>
-                  <p class="mt-1.5 flex flex-wrap gap-x-3 font-mono text-xs text-zinc-600">
-                    <span>avg opponent {perf.avgOpponentRating || "—"}</span>
-                    {perf.avgAccuracy !== undefined && (
-                      <span>avg accuracy {perf.avgAccuracy}%</span>
-                    )}
+                  <span class="record-bar mt-3">
+                    <span class="bg-[#4ade80]/80" style={`width:${perf.winPct}%`} />
+                    <span class="bg-zinc-600" style={`width:${perf.drawPct}%`} />
+                    <span class="bg-[#f87171]/80" style={`width:${perf.lossPct}%`} />
+                  </span>
+                  <p class="mt-2 text-sm text-zinc-500">
+                    Won {Math.round(perf.winPct)}% against an average rating of {perf.avgOpponentRating || "—"}
+                    {perf.avgAccuracy !== undefined && <span>, {perf.avgAccuracy}% accuracy</span>}
                   </p>
                 </div>
               ))}
@@ -409,24 +361,15 @@ const perfViews = [
           <h2>Rating history</h2>
           {
             hasChart && (
-              <div
-                class="flex flex-wrap gap-1"
-                role="group"
-                aria-label="Toggle time classes"
-              >
+              <div class="flex flex-wrap gap-4" role="group" aria-label="Toggle time classes">
                 {seriesViews.map((series) => (
                   <button
                     type="button"
                     data-series-toggle={series.key}
                     aria-pressed="true"
-                    class:list={[
-                      "flex items-center gap-1.5 border border-[#27272a] bg-[#0c0c0d] px-2 py-0.5 font-mono text-xs uppercase transition-opacity",
-                    ]}
+                    class="flex items-center gap-2 text-sm text-zinc-300 transition-opacity"
                   >
-                    <span
-                      class="size-1.5 rounded-full"
-                      style={`background:${series.color}`}
-                    />
+                    <span class="size-2 rounded-full" style={`background:${series.color}`} />
                     {series.label}
                   </button>
                 ))}
@@ -439,7 +382,7 @@ const perfViews = [
           hasChart ? (
             <svg
               viewBox={`0 0 ${W} ${H}`}
-              class="w-full border border-[#27272a] bg-[#0c0c0d]"
+              class="w-full"
               role="img"
               aria-label="Daily rating history per time class"
               preserveAspectRatio="xMidYMid meet"
@@ -451,30 +394,30 @@ const perfViews = [
                     x2={W - PAD.r}
                     y1={y(tick)}
                     y2={y(tick)}
-                    stroke="#27272a"
+                    stroke="#1f1f23"
                     stroke-width="1"
                   />
                   <text
-                    x={PAD.l - 6}
+                    x={PAD.l - 8}
                     y={y(tick) + 3}
                     text-anchor="end"
-                    fill="#71717a"
-                    font-size="9"
-                    font-family="ui-monospace, monospace"
+                    fill="#8f8f98"
+                    font-size="10"
+                    style="font-family: var(--font-mono)"
                   >
                     {Math.round(tick)}
                   </text>
                 </g>
               ))}
 
-              {xTicks.map((tick) => (
+              {xTicks.map((tick, i) => (
                 <text
                   x={Math.min(Math.max(x(tick), PAD.l), W - PAD.r)}
-                  y={H - 10}
-                  text-anchor="middle"
-                  fill="#71717a"
-                  font-size="9"
-                  font-family="ui-monospace, monospace"
+                  y={H - 8}
+                  text-anchor={i === 0 ? "start" : i === xTicks.length - 1 ? "end" : "middle"}
+                  fill="#8f8f98"
+                  font-size="10"
+                  style="font-family: var(--font-mono)"
                 >
                   {format(tick, "MMM d")}
                 </text>
@@ -490,20 +433,28 @@ const perfViews = [
                       fill={series.color}
                     />
                   ) : (
-                    <polyline
-                      points={series.pointsAttr}
-                      fill="none"
-                      stroke={series.color}
-                      stroke-width="1.5"
-                      stroke-linejoin="round"
-                      stroke-linecap="round"
-                    />
+                    <>
+                      <polyline
+                        points={series.pointsAttr}
+                        fill="none"
+                        stroke={series.color}
+                        stroke-width="1.75"
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                      />
+                      <circle
+                        cx={x(series.points[series.points.length - 1].t)}
+                        cy={y(series.points[series.points.length - 1].r)}
+                        r="3"
+                        fill={series.color}
+                      />
+                    </>
                   )}
                 </g>
               ))}
             </svg>
           ) : (
-            <p class="border border-[#27272a] bg-[#0c0c0d] p-6 text-center font-mono text-xs text-zinc-600">
+            <p class="text-sm text-zinc-500">
               Not enough rated games in the window to draw a chart yet.
             </p>
           )
@@ -516,25 +467,22 @@ const perfViews = [
           <section class="data-section">
             <div class="data-section-heading">
               <h2>Most played openings</h2>
+              <span class="data-section-note">games</span>
             </div>
-            <div class="border-y border-[#27272a]">
+            <ol class="space-y-3">
               {data.openings.map((opening) => (
-                <div class="border-b border-[#27272a] px-1 py-2 last:border-b-0">
-                  <div class="flex items-baseline justify-between gap-3">
-                    <p class="line-clamp-1 text-xs text-zinc-300">{opening.name}</p>
-                    <span class="shrink-0 font-mono text-xs text-zinc-600">
-                      {opening.count}
-                    </span>
-                  </div>
-                  <div class="mt-1 h-0.5 w-full bg-[#27272a]">
-                    <div
-                      class="h-full bg-[#eab308]/80"
+                <li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1.5 sm:grid-cols-[minmax(0,15rem)_minmax(0,1fr)_2rem]">
+                  <span class="truncate text-sm text-zinc-200">{opening.name}</span>
+                  <span class="data-figure text-right sm:order-3">{opening.count}</span>
+                  <span class="col-span-2 block h-1.5 overflow-hidden rounded-full bg-[#1f1f23] sm:col-span-1">
+                    <span
+                      class="block h-full rounded-full bg-[#eab308]/85"
                       style={`width:${(opening.count / maxOpeningCount) * 100}%`}
                     />
-                  </div>
-                </div>
+                  </span>
+                </li>
               ))}
-            </div>
+            </ol>
           </section>
         )
       }
@@ -543,25 +491,23 @@ const perfViews = [
       <section class="data-section">
         <div class="data-section-heading">
           <h2>Recent games</h2>
-          <span class="font-mono text-xs text-zinc-600">{data.recent.length} games</span>
+          <span class="data-section-note">Last {data.recent.length}</span>
         </div>
         {
           data.recent.length === 0 ? (
-            <p class="border border-[#27272a] bg-[#0c0c0d] p-6 text-center font-mono text-xs text-zinc-600">
-              No rated games found in the window.
-            </p>
+            <p class="text-sm text-zinc-500">No rated games found in the window.</p>
           ) : (
-            <div class="border-y border-[#27272a]">
+            <div class="[&>a:last-child]:border-b-0">
               {data.recent.map((game) => (
                 <a
                   href={game.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="compact-row group flex items-center gap-3 border-b border-[#27272a] p-2 last:border-b-0"
+                  class="data-row group flex items-center gap-3 py-3 sm:gap-4"
                 >
                   <span
                     class:list={[
-                      "flex size-6 shrink-0 items-center justify-center border font-mono text-xs",
+                      "w-10 shrink-0 text-sm font-medium",
                       outcomeStyles[game.outcome].class,
                     ]}
                   >
@@ -569,32 +515,23 @@ const perfViews = [
                   </span>
                   <span
                     class:list={[
-                      "size-2.5 shrink-0 rounded-none",
-                      game.color === "white"
-                        ? "border border-zinc-400 bg-white"
-                        : "border border-zinc-600 bg-black",
+                      "size-3 shrink-0 rounded-full",
+                      game.color === "white" ? "bg-white" : "border border-zinc-500 bg-black",
                     ]}
                     title={`Played ${game.color}`}
                   />
                   <div class="min-w-0 flex-1">
-                    <p class="line-clamp-1 text-xs text-zinc-300 transition-colors group-hover:text-[#eab308]">
-                      vs{" "}
+                    <p class="truncate text-zinc-200 transition-colors group-hover:text-[#eab308]">
                       <span class="font-medium">{game.opponent}</span>
-                      <span class="ml-1.5 font-mono text-xs text-zinc-500">
-                        ({game.opponentRating})
-                      </span>
+                      <span class="data-figure ml-2">{game.opponentRating}</span>
                     </p>
-                    <p class="line-clamp-1 font-mono text-xs text-zinc-700">
+                    <p class="truncate text-sm text-zinc-500">
                       {game.opening ?? game.timeClass}
                     </p>
                   </div>
-                  <div class="shrink-0 text-right">
-                    <p class="font-mono text-xs text-zinc-500">
-                      {format(game.endTime, "MMM d, HH:mm")}
-                    </p>
-                    <p class="font-mono text-xs text-zinc-700">
-                      {game.timeClass}
-                      {" · "}
+                  <div class="hidden shrink-0 text-right sm:block">
+                    <p class="text-sm capitalize text-zinc-400">{game.timeClass}</p>
+                    <p class="data-figure">
                       {formatDistanceToNow(new Date(game.endTime), { addSuffix: true })}
                     </p>
                   </div>
@@ -602,14 +539,15 @@ const perfViews = [
                     game.delta !== null && (
                       <span
                         class:list={[
-                          "w-9 shrink-0 text-right font-mono text-xs",
-                          game.delta > 0 ? "text-[#4ade80]" : game.delta < 0 ? "text-[#f87171]" : "text-zinc-600",
+                          "data-figure w-9 shrink-0 text-right",
+                          game.delta > 0 ? "text-[#4ade80]" : game.delta < 0 ? "text-[#f87171]" : "",
                         ]}
                       >
                         {formatDelta(game.delta)}
                       </span>
                     )
                   }
+                  <span class="sr-only">(opens in new tab)</span>
                 </a>
               ))}
             </div>
