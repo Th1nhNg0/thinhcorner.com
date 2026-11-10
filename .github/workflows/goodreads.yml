@@ -1,0 +1,74 @@
+name: Sync Goodreads
+
+# Reads the Goodreads shelves and publishes them to the `goodreads-data` branch,
+# where the /data/books page picks them up. The site's own server can't do this:
+# Goodreads turns away requests from Cloudflare's network.
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - scripts/update-goodreads.ts
+      - src/lib/goodreads-feed.ts
+      - .github/workflows/goodreads.yml
+  # On a pull request this only checks that the feed can be read; nothing is published.
+  pull_request:
+    paths:
+      - scripts/update-goodreads.ts
+      - src/lib/goodreads-feed.ts
+      - .github/workflows/goodreads.yml
+
+concurrency:
+  group: goodreads-sync-${{ github.event_name == 'pull_request' && github.ref || 'publish' }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DATA_BRANCH: goodreads-data
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Fetch shelves
+        run: bun scripts/update-goodreads.ts --out "$RUNNER_TEMP/goodreads.json"
+
+      - name: Publish to the data branch
+        if: github.event_name != 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -eu
+          work="$RUNNER_TEMP/data-branch"
+          mkdir -p "$work" && cd "$work"
+          git init -q
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git fetch -q --depth 1 origin "$DATA_BRANCH"; then
+            git checkout -q -b "$DATA_BRANCH" FETCH_HEAD
+          else
+            git checkout -q --orphan "$DATA_BRANCH"
+          fi
+          mkdir -p data
+          cp "$RUNNER_TEMP/goodreads.json" data/goodreads.json
+          git add data/goodreads.json
+          if git diff --cached --quiet; then
+            echo "Shelves unchanged; nothing to publish."
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "chore(goodreads): sync shelves"
+          git push -q origin "$DATA_BRANCH"
+          echo "Published data/goodreads.json to $DATA_BRANCH."
