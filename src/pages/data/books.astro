@@ -6,6 +6,7 @@ import DataHeader from "@/components/data/DataHeader.astro";
 import SectionHeading from "@/components/data/SectionHeading.astro";
 import StatGrid from "@/components/data/StatGrid.astro";
 import { get_book } from "@/lib/goodread";
+import type { Book } from "@/lib/goodreads-shelves";
 import { format } from "date-fns";
 import { GOODREADS_USER_URL } from "../../../data/consts";
 import { env } from "cloudflare:workers";
@@ -19,28 +20,32 @@ Astro.response.headers.set(
   "public, s-maxage=600, stale-while-revalidate=300",
 );
 
+// Goodreads stopped publishing read dates, so only books finished since the sync
+// began carry one. The rest keep Goodreads' order (most recently read first) under
+// one heading.
+const dated = read.filter((book) => book.user_read_at);
+const undated = read.filter((book) => !book.user_read_at);
+const UNDATED = dated.length > 0 ? "Earlier" : "Read";
+
 const readByYear = read.reduce(
-  (acc, post) => {
-    if (!post.user_read_at) {
-      if (!acc["Long time ago"]) {
-        acc["Long time ago"] = [];
-      }
-      acc["Long time ago"].push(post);
-      return acc;
-    }
-    const year = new Date(post.user_read_at).getFullYear();
-    if (!acc[year]) {
-      acc[year] = [];
-    }
-    acc[year].push(post);
+  (acc, book) => {
+    const group = book.user_read_at
+      ? String(new Date(book.user_read_at).getFullYear())
+      : UNDATED;
+    (acc[group] ??= []).push(book);
     return acc;
   },
-  {} as Record<string, any[]>,
+  {} as Record<string, Book[]>,
 );
 
-const years = Object.keys(readByYear).sort((a, b) => Number(b) - Number(a));
+// Year headings newest first, then the undated books.
+const years = Object.keys(readByYear).sort(
+  (a, b) => (Number(b) || -Infinity) - (Number(a) || -Infinity),
+);
 const now = new Date();
 const currentYear = now.getFullYear();
+// Charts by year and month would mislead while most books have no date.
+const showTimeline = dated.length > 0 && dated.length >= undated.length;
 
 // --- Stats ---
 const booksThisYear = readByYear[currentYear]?.length ?? 0;
@@ -53,7 +58,7 @@ const totalHours = Math.round(totalMinutes / 60);
 
 // --- Year-over-year chart data ---
 const numericYears = years
-  .filter((y) => y !== "Long time ago")
+  .filter((y) => y !== UNDATED)
   .map(Number)
   .sort((a, b) => a - b);
 const booksPerYear = numericYears.map((y) => ({
@@ -106,8 +111,31 @@ const ratingLabels = {
   5: "it was amazing",
 };
 
-const pageDescription =
-  "Reading analytics from Goodreads: books read, yearly trends and ratings.";
+const rated = read.filter((book) => book.rating > 0);
+const averageRating = rated.reduce((sum, book) => sum + book.rating, 0) / Math.max(rated.length, 1);
+const fiveStars = rated.filter((book) => Math.round(book.rating) === 5).length;
+
+const stats = [
+  {
+    label: "Books read",
+    value: read.length,
+    note: showTimeline ? `${numericYears.length} years tracked` : "most recent first",
+  },
+  showTimeline
+    ? { label: `In ${currentYear}`, value: booksThisYear, note: `${books.current_reads.length} in progress` }
+    : { label: "Reading now", value: books.current_reads.length, note: books.current_reads[0]?.title },
+  ...(totalPages > 0
+    ? [
+        { label: "Pages", value: totalPages.toLocaleString(), note: `~${Math.round(totalPages / Math.max(read.length, 1))} per book` },
+        { label: "Time spent", value: `~${totalHours.toLocaleString()}h`, note: "at 1.5 min / page" },
+      ]
+    : [
+        { label: "Average rating", value: rated.length ? averageRating.toFixed(1) : "–", note: `across ${rated.length} rated` },
+        { label: "Five stars", value: fiveStars, note: `${Math.round((fiveStars / Math.max(rated.length, 1)) * 100)}% of rated books` },
+      ]),
+];
+
+const pageDescription = "Books I have read and rated, synced from Goodreads.";
 
 ---
 
@@ -126,7 +154,7 @@ const pageDescription =
   <Container>
     <div class="collection-page">
       <DataHeader title="Books" source="goodreads" sourceHref={GOODREADS_USER_URL} updated={now}>
-        Everything I have finished reading, by year and month, synced from my{" "}
+        Everything I have finished reading, synced from my{" "}
         <a href={GOODREADS_USER_URL} class="text-link">Goodreads profile</a>.
       </DataHeader>
 
@@ -161,14 +189,7 @@ const pageDescription =
           <>
       <!-- Stats Bar -->
       <section class="data-section">
-        <StatGrid
-          stats={[
-            { label: "Books read", value: read.length, note: `${numericYears.length} years tracked` },
-            { label: `In ${currentYear}`, value: booksThisYear, note: `${books.current_reads.length} in progress` },
-            { label: "Pages", value: totalPages.toLocaleString(), note: `~${Math.round(totalPages / Math.max(read.length, 1))} per book` },
-            { label: "Time spent", value: `~${totalHours.toLocaleString()}h`, note: "at 1.5 min / page" },
-          ]}
-        />
+        <StatGrid stats={stats} />
       </section>
 
       <!-- Currently Reading -->
@@ -224,6 +245,7 @@ const pageDescription =
       }
 
       <!-- Charts Section -->
+      {showTimeline && (
       <section class="data-section grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
         <!-- Year-over-year chart -->
         <div>
@@ -317,6 +339,7 @@ const pageDescription =
           </div>
         </div>
       </section>
+      )}
 
       <!-- Book List -->
       <section id="book-list">
