@@ -1,35 +1,187 @@
 ---
-// The edge of a planet at the foot of the page, with the sun coming up behind it.
+// The scene above the footer: the edge of a planet with the sun coming up behind it,
+// a few stars, and a rocket that lifts off from the horizon and leaves a light trail.
+// Motion is SMIL, paused by the script below while the scene is off screen.
+const limb = "M0 232Q720 120 1440 232";
+const ascent = "M520 180C526 108 610 32 860 -34";
+// One launch cycle: climb for the first 55%, then the trail fades and the sky rests.
+const cycle = "14s";
+const climb = { keyTimes: "0;0.55;1", keySplines: "0.42 0 1 1;0 0 1 1" };
 ---
 
-<svg class="site-horizon" viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+<svg
+  class="site-horizon"
+  viewBox="0 0 1440 240"
+  preserveAspectRatio="xMidYMax slice"
+  aria-hidden="true"
+  focusable="false"
+>
   <defs>
-    <linearGradient id="hz-limb" x1="0" x2="1" y1="0" y2="0">
+    <linearGradient id="hz-limb" gradientUnits="userSpaceOnUse" x1="0" x2="1440" y1="0" y2="0">
       <stop offset="0" stop-color="#fff" stop-opacity="0"></stop>
       <stop offset="0.3" stop-color="#fff" stop-opacity="0.22"></stop>
-      <stop offset="0.62" stop-color="#fde68a" stop-opacity="0.75"></stop>
-      <stop offset="0.68" stop-color="#eab308" stop-opacity="1"></stop>
-      <stop offset="0.76" stop-color="#fde68a" stop-opacity="0.6"></stop>
+      <stop offset="0.59" stop-color="#fde68a" stop-opacity="0.75"></stop>
+      <stop offset="0.653" stop-color="#eab308" stop-opacity="1"></stop>
+      <stop offset="0.73" stop-color="#fde68a" stop-opacity="0.6"></stop>
       <stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
     </linearGradient>
     <linearGradient id="hz-ground" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0.3" stop-color="#151518"></stop>
+      <stop offset="0.25" stop-color="#151518"></stop>
       <stop offset="1" stop-color="#0c0c0d"></stop>
     </linearGradient>
-    <radialGradient id="hz-sun" cx="0.68" cy="0.42" r="0.5" gradientTransform="translate(0.68 0.42) scale(0.36 1) translate(-0.68 -0.42)">
-      <stop offset="0" stop-color="#eab308" stop-opacity="0.34"></stop>
-      <stop offset="0.5" stop-color="#eab308" stop-opacity="0.08"></stop>
+    <radialGradient
+      id="hz-sun"
+      gradientUnits="userSpaceOnUse"
+      cx="940"
+      cy="190"
+      r="300"
+      gradientTransform="translate(940 190) scale(1 0.42) translate(-940 -190)"
+    >
+      <stop offset="0" stop-color="#eab308" stop-opacity="0.42"></stop>
+      <stop offset="0.45" stop-color="#eab308" stop-opacity="0.1"></stop>
       <stop offset="1" stop-color="#eab308" stop-opacity="0"></stop>
     </radialGradient>
-    <linearGradient id="hz-air" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0" stop-color="#fff" stop-opacity="0"></stop>
-      <stop offset="1" stop-color="#fff" stop-opacity="0.05"></stop>
+    <linearGradient id="hz-trail" gradientUnits="userSpaceOnUse" x1="520" y1="180" x2="790" y2="0">
+      <stop offset="0" stop-color="#eab308" stop-opacity="0.15"></stop>
+      <stop offset="0.5" stop-color="#eab308" stop-opacity="0.85"></stop>
+      <stop offset="1" stop-color="#fde68a"></stop>
     </linearGradient>
-    <clipPath id="hz-sky"><path d="M0 0H1440V150Q720 -30 0 150z"></path></clipPath>
+    <radialGradient id="hz-flash">
+      <stop offset="0" stop-color="#fde68a" stop-opacity="0.9"></stop>
+      <stop offset="1" stop-color="#eab308" stop-opacity="0"></stop>
+    </radialGradient>
+    <clipPath id="hz-sky"><path d={`${limb}V-60H0z`}></path></clipPath>
   </defs>
+
   <g clip-path="url(#hz-sky)">
-    <rect width="1440" height="160" fill="url(#hz-sun)"></rect>
+    <g fill="#e4e4e7">
+      <circle cx="1277" cy="21" r="0.82" opacity="0.27"></circle>
+      <circle cx="320" cy="93" r="0.52" opacity="0.36"></circle>
+      <circle cx="933" cy="93" r="0.67" opacity="0.57"></circle>
+      <circle cx="1159" cy="5" r="1.10" opacity="0.63"></circle>
+      <circle cx="493" cy="29" r="1.22" opacity="0.44"></circle>
+      <circle cx="142" cy="23" r="1.14" opacity="0.58"></circle>
+      <circle cx="1156" cy="134" r="0.90" opacity="0.79"></circle>
+      <circle cx="1010" cy="12" r="0.67" opacity="0.41"></circle>
+      <circle cx="123" cy="50" r="0.58" opacity="0.40"></circle>
+      <circle cx="913" cy="63" r="0.78" opacity="0.37"></circle>
+      <circle cx="389" cy="163" r="0.99" opacity="0.59"></circle>
+      <circle cx="253" cy="136" r="0.62" opacity="0.46"></circle>
+      <circle cx="1415" cy="139" r="0.92" opacity="0.63"></circle>
+      <circle cx="1207" cy="146" r="0.67" opacity="0.27"></circle>
+      <circle cx="941" cy="69" r="1.19" opacity="0.50"></circle>
+      <circle cx="386" cy="46" r="0.92" opacity="0.39"></circle>
+      <circle cx="840" cy="147" r="0.80" opacity="0.37"></circle>
+      <circle cx="1427" cy="112" r="0.57" opacity="0.28"></circle>
+      <circle cx="166" cy="124" r="1.09" opacity="0.48"></circle>
+      <circle cx="100" cy="80" r="1.25" opacity="0.54"></circle>
+      <circle cx="1389" cy="182" r="0.51" opacity="0.65"></circle>
+      <circle cx="654" cy="155" r="1.16" opacity="0.39"></circle>
+      <circle cx="721" cy="32" r="1.18" opacity="0.73"></circle>
+      <circle cx="434" cy="111" r="0.96" opacity="0.33"></circle>
+      <circle cx="1093" cy="97" r="1.08" opacity="0.54"></circle>
+      <circle cx="11" cy="73" r="0.51" opacity="0.76"></circle>
+      <circle cx="1258" cy="161" r="0.73" opacity="0.28"></circle>
+      <circle cx="1257" cy="183" r="0.56" opacity="0.52"></circle>
+      <circle cx="386" cy="152" r="0.82" opacity="0.37"></circle>
+      <circle cx="776" cy="120" r="0.65" opacity="0.42"></circle>
+      <circle cx="1423" cy="141" r="0.83" opacity="0.53"></circle>
+      <circle cx="182" cy="47" r="0.75" opacity="0.57"></circle>
+      <circle cx="337" cy="42" r="0.55" opacity="0.60"></circle>
+      <circle cx="335" cy="162" r="1.14" opacity="0.29"></circle>
+      <circle cx="348" cy="120" r="0.66" opacity="0.32"></circle>
+      <circle cx="148" cy="87" r="0.82" opacity="0.51"></circle>
+      <circle cx="1045" cy="118" r="1.24" opacity="0.30"></circle>
+      <circle cx="582" cy="58" r="1.15" opacity="0.39"></circle>
+      <circle cx="280" cy="84" r="0.82" opacity="0.40"></circle>
+      <circle cx="365" cy="162" r="0.83" opacity="0.72"></circle>
+      <circle cx="918" cy="8" r="0.90"><animate attributeName="opacity" values="0.9;0.15;0.9" dur="5.7s" begin="-2.7s" repeatCount="indefinite"></animate></circle>
+      <circle cx="548" cy="93" r="1.12"><animate attributeName="opacity" values="0.9;0.15;0.9" dur="6.1s" begin="-2.3s" repeatCount="indefinite"></animate></circle>
+      <circle cx="458" cy="48" r="0.90"><animate attributeName="opacity" values="0.9;0.15;0.9" dur="6.1s" begin="-1.3s" repeatCount="indefinite"></animate></circle>
+      <circle cx="978" cy="93" r="0.90"><animate attributeName="opacity" values="0.9;0.15;0.9" dur="3.8s" begin="-1.7s" repeatCount="indefinite"></animate></circle>
+      <circle cx="108" cy="155" r="1.07"><animate attributeName="opacity" values="0.9;0.15;0.9" dur="4.9s" begin="-2.2s" repeatCount="indefinite"></animate></circle>
+      <circle cx="1338" cy="118" r="0.90"><animate attributeName="opacity" values="0.9;0.15;0.9" dur="5.9s" begin="-0.8s" repeatCount="indefinite"></animate></circle>
+    </g>
+
+    <rect x="0" y="0" width="1440" height="240" fill="url(#hz-sun)">
+      <animate attributeName="opacity" values="0.65;1;0.65" dur="9s" repeatCount="indefinite"></animate>
+    </rect>
+
+    <g fill="none" stroke="url(#hz-trail)" stroke-linecap="round">
+      <animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.62;0.88;1" dur={cycle} repeatCount="indefinite"
+      ></animate>
+      {
+        [
+          { width: 7, opacity: 0.14 },
+          { width: 1.8, opacity: 1 },
+        ].map((stroke) => (
+          <path
+            d={ascent}
+            pathLength="100"
+            stroke-width={stroke.width}
+            stroke-opacity={stroke.opacity}
+            stroke-dasharray="100 100"
+            stroke-dashoffset="100"
+          >
+            <animate
+              attributeName="stroke-dashoffset"
+              values="100;0;0"
+              keyTimes={climb.keyTimes}
+              calcMode="spline"
+              keySplines={climb.keySplines}
+              dur={cycle}
+              repeatCount="indefinite"
+            />
+          </path>
+        ))
+      }
+    </g>
+
+    <circle cx="520" cy="180" r="26" fill="url(#hz-flash)" opacity="0">
+      <animate attributeName="opacity" values="0;1;0.3;0;0" keyTimes="0;0.04;0.2;0.4;1" dur={cycle} repeatCount="indefinite"
+      ></animate>
+    </circle>
+
+    <g fill="#eab308">
+      <animateMotion
+        path={ascent}
+        keyPoints="0;1;1"
+        keyTimes={climb.keyTimes}
+        calcMode="spline"
+        keySplines={climb.keySplines}
+        dur={cycle}
+        repeatCount="indefinite"
+        rotate="auto"></animateMotion>
+      <path d="M15 0C11-3.600 6-5 .500-5H-7v10H.500C6 5 11 3.600 15 0z"></path>
+      <path d="M-1-5-6.800-9.600h-3.800l2.400 4.600zM-1 5l-5.800 4.600h-3.800l2.400-4.600z"></path>
+      <circle cx="5.500" cy="0" r="2.100" fill="#0c0c0d"></circle>
+    </g>
   </g>
-  <path d="M0 150Q720 -30 1440 150V160H0z" fill="url(#hz-ground)"></path>
-  <path d="M0 150Q720 -30 1440 150" fill="none" stroke="url(#hz-limb)" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+
+  <path d={`${limb}V240H0z`} fill="url(#hz-ground)"></path>
+  <path d={limb} fill="none" stroke="url(#hz-limb)" stroke-width="1.5"></path>
 </svg>
+
+<script>
+  // Run the scene only while it is on screen, and start each visit with a fresh launch.
+  let observer: IntersectionObserver | undefined;
+
+  document.addEventListener("astro:page-load", () => {
+    observer?.disconnect();
+    const scene = document.querySelector<SVGSVGElement>(".site-horizon");
+    if (!scene) return;
+    scene.pauseAnimations();
+    observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          scene.setCurrentTime(0);
+          scene.unpauseAnimations();
+        } else {
+          scene.pauseAnimations();
+        }
+      },
+      { threshold: 0.4 },
+    );
+    observer.observe(scene);
+  });
+</script>

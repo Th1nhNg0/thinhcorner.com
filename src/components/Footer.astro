@@ -64,8 +64,11 @@ const year = new Date().getFullYear();
         </ul>
       </div>
     </div>
-    <p class="border-t border-[#1f1f23] py-5 text-xs text-zinc-600">
-      © {year} {AUTHOR_NAME}
-    </p>
+    <div class="flex items-center justify-between gap-4 border-t border-[#1f1f23] py-5 text-xs text-zinc-600">
+      <p>© {year} {AUTHOR_NAME}</p>
+      <a href="#top" class="footer-top arrow-link transition-colors hover:text-[#eab308]">
+        Back to top <span class="arrow" aria-hidden="true">↑</span>
+      </a>
+    </div>
   </Container>
 </footer>

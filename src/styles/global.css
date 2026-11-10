@@ -266,6 +266,10 @@ img {
   transform: translateX(2px);
 }
 
+.footer-top:hover .arrow {
+  transform: translateY(-2px);
+}
+
 /* ---- Post lists ---------------------------------------------------------- */
 
 .post-row {
@@ -943,5 +947,5 @@ body::after {
 .site-horizon {
   display: block;
   width: 100%;
-  height: clamp(4.5rem, 10vw, 9rem);
+  height: clamp(8.5rem, 19vw, 15rem);
 }
