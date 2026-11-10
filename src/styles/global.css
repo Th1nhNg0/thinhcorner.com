@@ -816,7 +816,9 @@ main {
   overflow-x: clip;
 }
 
-/* Stars sit behind the top of every page and fade out before the reading starts. */
+/* Stars sit behind the top of every page and fade out before the reading starts.
+   The twinkle and the rocket's flight are small, slow and decorative, so they keep
+   running when the system asks for reduced motion (the site owner's call). */
 .site-sky {
   position: absolute;
   inset: 0 0 auto;
@@ -862,6 +864,19 @@ main {
   background-image: url("../assets/space/stars-twinkle-b.svg");
   animation-duration: 6.5s;
   animation-delay: -3s;
+}
+
+/* The site-wide reduced-motion rule cuts every animation to a single instant frame.
+   The twinkle opts back in. */
+@media (prefers-reduced-motion: reduce) {
+  .site-sky-twinkle {
+    animation-duration: 4.5s !important;
+    animation-iteration-count: infinite !important;
+  }
+
+  .site-sky-twinkle-b {
+    animation-duration: 6.5s !important;
+  }
 }
 
 @keyframes twinkle {
@@ -924,28 +939,9 @@ body::after {
   stroke-linecap: round;
 }
 
-/* The resting rocket only shows when motion is turned off. */
-.hero-orbit-rest {
-  display: none;
-}
-
 /* Footer horizon. */
 .site-horizon {
   display: block;
   width: 100%;
   height: clamp(4.5rem, 10vw, 9rem);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .site-sky-twinkle {
-    animation: none;
-  }
-
-  .hero-orbit-craft {
-    display: none;
-  }
-
-  .hero-orbit-rest {
-    display: inline;
-  }
 }
