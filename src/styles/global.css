@@ -873,6 +873,26 @@ main {
   }
 }
 
+/* Film grain over the whole page: one small noise tile, repeated, with no blending so
+   scrolling stays cheap. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background-image: url("../assets/space/grain.svg");
+  background-size: 200px 200px;
+  opacity: 0.11;
+  pointer-events: none;
+}
+
+@media print {
+  body::after,
+  .site-sky {
+    display: none;
+  }
+}
+
 /* Home hero art. */
 .hero-orbit {
   position: absolute;
@@ -896,57 +916,17 @@ main {
 
 .hero-orbit-rocket {
   fill: var(--accent);
-  offset-path: var(--flight);
-  offset-rotate: auto;
-  animation: orbit-flight 48s linear infinite;
 }
 
 .hero-orbit-trail {
   fill: none;
   stroke: var(--accent);
   stroke-linecap: round;
-  stroke-dasharray: 150 850;
-  stroke-dashoffset: 150;
-  animation: orbit-trail 48s linear infinite;
 }
 
-.hero-orbit-trail-short {
-  stroke-dasharray: 50 950;
-  stroke-dashoffset: 50;
-  animation-name: orbit-trail-short;
-}
-
-/* The flight stops while the hero is scrolled out of view. */
-.hero-orbit[data-paused] .hero-orbit-rocket,
-.hero-orbit[data-paused] .hero-orbit-trail {
-  animation-play-state: paused;
-}
-
-@keyframes orbit-flight {
-  from {
-    offset-distance: 0%;
-  }
-  to {
-    offset-distance: 100%;
-  }
-}
-
-@keyframes orbit-trail {
-  from {
-    stroke-dashoffset: 150;
-  }
-  to {
-    stroke-dashoffset: -850;
-  }
-}
-
-@keyframes orbit-trail-short {
-  from {
-    stroke-dashoffset: 50;
-  }
-  to {
-    stroke-dashoffset: -950;
-  }
+/* The resting rocket only shows when motion is turned off. */
+.hero-orbit-rest {
+  display: none;
 }
 
 /* Footer horizon. */
@@ -957,21 +937,15 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .site-sky-twinkle,
-  .hero-orbit-rocket,
-  .hero-orbit-trail {
+  .site-sky-twinkle {
     animation: none;
   }
 
-  .hero-orbit-rocket {
-    offset-distance: 18%;
+  .hero-orbit-craft {
+    display: none;
   }
 
-  .hero-orbit-trail {
-    stroke-dashoffset: -30;
-  }
-
-  .hero-orbit-trail-short {
-    stroke-dashoffset: -130;
+  .hero-orbit-rest {
+    display: inline;
   }
 }

@@ -1,0 +1,45 @@
+---
+// The rocket and its trail, flying along `path`. HeroOrbit draws this twice, behind and
+// in front of the planet. The motion is SMIL so it runs the same in every browser engine.
+interface Props {
+  path: string;
+  /** Seconds for one lap. */
+  lap: number;
+}
+
+const { path, lap } = Astro.props;
+const dur = `${lap}s`;
+---
+
+<g class="hero-orbit-craft">
+  <path
+    class="hero-orbit-trail"
+    d={path}
+    pathLength="1000"
+    stroke-width="1.5"
+    stroke-dasharray="150 850"
+    stroke-dashoffset="150"
+    opacity="0.28"
+  >
+    <animate attributeName="stroke-dashoffset" from="150" to="-850" dur={dur} repeatCount="indefinite"
+    ></animate>
+  </path>
+  <path
+    class="hero-orbit-trail"
+    d={path}
+    pathLength="1000"
+    stroke-width="2"
+    stroke-dasharray="50 950"
+    stroke-dashoffset="50"
+    opacity="0.7"
+  >
+    <animate attributeName="stroke-dashoffset" from="50" to="-950" dur={dur} repeatCount="indefinite"
+    ></animate>
+  </path>
+  <g class="hero-orbit-rocket">
+    <animateMotion path={path} dur={dur} repeatCount="indefinite" rotate="auto"></animateMotion>
+    <path d="M15 0C11-3.600 6-5 .500-5H-7v10H.500C6 5 11 3.600 15 0z"></path>
+    <path d="M-1-5-6.800-9.600h-3.800l2.400 4.600zM-1 5l-5.800 4.600h-3.800l2.400-4.600z"></path>
+    <circle cx="5.500" cy="0" r="2.100" fill="#0c0c0d"></circle>
+  </g>
+</g>

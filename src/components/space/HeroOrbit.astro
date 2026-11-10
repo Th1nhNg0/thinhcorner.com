@@ -1,7 +1,9 @@
 ---
 // Home page art: a planet, two orbits, a moon, and a rocket that circles it.
-// Everything on the orbit is drawn twice, behind and in front of the planet, so the
-// rocket passes behind the disc on the far side.
+// The rocket is drawn twice, behind and in front of the planet, so it passes behind
+// the disc on the far side.
+import HeroOrbitCraft from "./HeroOrbitCraft.astro";
+
 interface Props {
   class?: string;
 }
@@ -18,12 +20,21 @@ const back = (rx: number, ry: number) => `M${cx + rx} ${cy}a${rx} ${ry} 0 1 0 ${
 const inner = [212, 60] as const;
 const outer = [292, 96] as const;
 const flightPath = orbit(...inner);
+const lap = 36;
+
+// Where the rocket rests when motion is turned off: a point on the near side of the orbit.
+const restAngle = (55 * Math.PI) / 180;
+const rest = {
+  x: cx - inner[0] * Math.cos(restAngle),
+  y: cy + inner[1] * Math.sin(restAngle),
+  heading:
+    (Math.atan2(inner[1] * Math.cos(restAngle), inner[0] * Math.sin(restAngle)) * 180) / Math.PI,
+};
 ---
 
 <svg
   viewBox="0 0 640 440"
   class:list={["hero-orbit", className]}
-  style={`--flight: path("${flightPath}")`}
   aria-hidden="true"
   focusable="false"
 >
@@ -39,21 +50,6 @@ const flightPath = orbit(...inner);
     </radialGradient>
     <clipPath id="ho-disc"><circle cx={cx} cy={cy} r={r}></circle></clipPath>
     <clipPath id="ho-front"><rect x={cx - 400} y={cy} width="800" height="300"></rect></clipPath>
-    <g id="ho-craft">
-      <path class="hero-orbit-trail" pathLength="1000" d={flightPath} stroke-width="1.5" opacity="0.28"
-      ></path>
-      <path
-        class="hero-orbit-trail hero-orbit-trail-short"
-        pathLength="1000"
-        d={flightPath}
-        stroke-width="2"
-        opacity="0.7"></path>
-      <g class="hero-orbit-rocket">
-        <path d="M15 0C11-3.600 6-5 .500-5H-7v10H.500C6 5 11 3.600 15 0z"></path>
-        <path d="M-1-5-6.800-9.600h-3.800l2.400 4.600zM-1 5l-5.800 4.600h-3.800l2.400-4.600z"></path>
-        <circle cx="5.500" cy="0" r="2.100" fill="#0c0c0d"></circle>
-      </g>
-    </g>
   </defs>
 
   <circle cx={cx} cy={cy} r={r * 1.62} fill="url(#ho-halo)"></circle>
@@ -61,7 +57,7 @@ const flightPath = orbit(...inner);
   <g transform={`rotate(-20 ${cx} ${cy})`} fill="none">
     <path d={back(...outer)} stroke="#27272a" stroke-dasharray="2 7" stroke-linecap="round"></path>
     <path d={back(...inner)} stroke="#3f3f46"></path>
-    <use href="#ho-craft"></use>
+    <HeroOrbitCraft path={flightPath} lap={lap} />
 
     <circle cx={cx} cy={cy} r={r} fill="url(#ho-planet)"></circle>
     <g clip-path="url(#ho-disc)" stroke="#fff" stroke-opacity="0.055" stroke-width="7">
@@ -73,7 +69,15 @@ const flightPath = orbit(...inner);
 
     <path d={front(...outer)} stroke="#27272a" stroke-dasharray="2 7" stroke-linecap="round"></path>
     <path d={front(...inner)} stroke="#3f3f46"></path>
-    <g clip-path="url(#ho-front)"><use href="#ho-craft"></use></g>
+    <g clip-path="url(#ho-front)"><HeroOrbitCraft path={flightPath} lap={lap} /></g>
+    <g
+      class="hero-orbit-rest hero-orbit-rocket"
+      transform={`translate(${rest.x.toFixed(1)} ${rest.y.toFixed(1)}) rotate(${rest.heading.toFixed(1)})`}
+    >
+      <path d="M15 0C11-3.600 6-5 .500-5H-7v10H.500C6 5 11 3.600 15 0z"></path>
+      <path d="M-1-5-6.800-9.600h-3.800l2.400 4.600zM-1 5l-5.800 4.600h-3.800l2.400-4.600z"></path>
+      <circle cx="5.500" cy="0" r="2.100" fill="#0c0c0d"></circle>
+    </g>
 
     <g class="hero-orbit-moon">
       <circle cx={cx + outer[0] * 0.8} cy={cy - outer[1] * 0.6} r="6.500" fill="#52525b"></circle>
@@ -82,15 +86,22 @@ const flightPath = orbit(...inner);
 </svg>
 
 <script>
-  // Only fly the rocket while the art is on screen.
+  // Only fly the rocket while the art is on screen, and not at all when the visitor
+  // has asked for reduced motion (CSS then shows the resting rocket instead).
   let observer: IntersectionObserver | undefined;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   document.addEventListener("astro:page-load", () => {
     observer?.disconnect();
-    const art = document.querySelector<SVGElement>(".hero-orbit");
+    const art = document.querySelector<SVGSVGElement>(".hero-orbit");
     if (!art) return;
+    if (reduceMotion.matches) {
+      art.pauseAnimations();
+      return;
+    }
     observer = new IntersectionObserver(([entry]) => {
-      art.toggleAttribute("data-paused", !entry.isIntersecting);
+      if (entry.isIntersecting) art.unpauseAnimations();
+      else art.pauseAnimations();
     });
     observer.observe(art);
   });
