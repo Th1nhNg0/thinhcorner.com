@@ -49,3 +49,22 @@ Length of software task (in human time) a model finishes with 50% success.
 - Anthropic AI Fluency Index (Feb 23 2026, 9,830 conversations): https://www.anthropic.com/research/AI-fluency-index
   - 85.7% iterate; iterative chats 5.6x more likely to question reasoning, 4x more likely to flag missing context. Only 30% tell the AI how to work with them.
 - METR 2025 developer RCT (verify before use): experienced OSS devs were ~19% slower with AI while believing they were faster.
+
+## 5. Checks and test runs (2026-11-11, second pass)
+- **METR 2025 RCT verified**: https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/
+  - 16 experienced open source developers, 246 real issues, AI allowed on a random half. 19% longer with AI. They forecast a 24% speedup and afterwards still estimated 20%. Tools: mostly Cursor Pro with Claude 3.5/3.7 Sonnet.
+  - METR now labels the page out of date. Follow-up (2026-02-24): https://metr.org/blog/2026-02-24-uplift-update/ says late-2025 tools likely speed developers up, but the data is unreliable (selection effects), so no clean number. Cite both together.
+- **Doubling time correction**: Time Horizon 1.1 gives 131 days for models since 2023 and 89 days since 2024 (about 7x and 17x a year). The "3.5 months" in section 2 matches the older TH1.0 figure (109 days). "About 10x a year" is a rounding between the two, not a METR number.
+- **TimeHorizon chart**: GPT-4 3.5, Claude 3.7 60, o3 121, GPT-5 214, Opus 4.5 320 min all match TH1.1. GPT-4o is 6 min in the chart; TH1.1 text gives about 5 [3, 10]. Opus 4.6 and Mythos values not re-checked (not on the pages fetched).
+- **ModelGap chart**: all low/max scores match the AA leaderboard as fetched today. The page does not show an index version number, so "v5" is unconfirmed.
+- **Rocket game runs** (prompt A, one try each, files in scratch/game-compare):
+  - ChatGPT Plus, thinking set to Medium (default), 2m 14s. Model name not shown in the UI. Bug: bottom walls are drawn as a thin line only (collision still works).
+  - Claude, Fable 5.2, medium effort. No bugs found in the recorded run.
+  - Gemini, 3.8 Flash (default "All-around help"), run on a Pro account, so label it by model and not as "Gemini Free". Bug: ignores devicePixelRatio when drawing, so on a 2x screen the game fills only the top-left quarter. Looks normal on a 1x desktop monitor.
+  - ChatGPT Free: not run yet. Also pending: B-lazy, B-good.
+  - Clips: 360x640 viewport at 2x, touch input, Playwright fake clock, same bot for every game (flies 3 gaps, crashes, taps restart).
+- **ChatGPT Free runs** (done later the same day in a clean Chromium window with no account, so "Free" here means logged out):
+  - Prompt A, first try: no game. Reply said the request "triggered an image-generation capability that requires logging in", with a "Log in to create and download files for free" box. Screenshot: A-free-loggedout.webp.
+  - Prompt A, second try in a new chat: wrote the game inline (about 12 KB). It plays correctly in the recorded run, no bugs found. This is the clip, so it is not a first try like the others.
+  - Prompt B lazy: a generic 3-day list (Xuan Huong Lake, railway station, night market, Datanla, cable car, strawberry farm) with photo strips, then a 6-question form. No costs. Screenshot: B-lazy.webp.
+  - Prompt B good: asked 3 questions (dates, bus type, room type). I answered "that weekend, overnight sleeper bus, budget guesthouse private room" as stand-ins. Plan: 4.5M VND budget table, noticed "back Monday morning" means the Sunday night bus so only one guesthouse night, per-item costs, flagged fares as needing confirmation. After the follow-up it cut Sunday to one walk, one cafe, meals, and listed 5 things removed. A sign-up dialog appeared after the second reply, and a sponsored hotel ad sits under the last one. Screenshot: B-good.webp (720 x 11713, needs cropping for the post). Full text in the scratchpad only.

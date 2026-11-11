@@ -1,0 +1,37 @@
+---
+/**
+ * The same game prompt, answered by different AI products. Each clip is the
+ * generated HTML file running untouched in a phone-sized window.
+ */
+import LoopVideo from "@/components/LoopVideo.astro";
+
+interface Clip {
+  name: string;
+  note: string;
+  webm: string;
+  mp4: string;
+  label: string;
+}
+interface Props {
+  clips: Clip[];
+  caption: string;
+}
+
+const { clips, caption } = Astro.props;
+const cols = clips.length === 4 ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-3";
+---
+
+<figure class="not-prose my-8">
+  <div class={`grid gap-3 ${cols}`}>
+    {
+      clips.map((c) => (
+        <div class="min-w-0 [&_video]:h-auto [&_video]:w-full">
+          <LoopVideo webm={c.webm} mp4={c.mp4} width={360} height={640} label={c.label} />
+          <p class="mt-2 mb-0 text-sm leading-tight text-(--ink)">{c.name}</p>
+          <p class="m-0 font-mono text-xs text-(--faint)">{c.note}</p>
+        </div>
+      ))
+    }
+  </div>
+  <figcaption class="mt-3 text-balance text-center text-sm text-(--muted)">{caption}</figcaption>
+</figure>

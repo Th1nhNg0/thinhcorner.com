@@ -1,19 +1,167 @@
 ---
-title: "Chart preview"
+title: "Why You Should Learn to Use AI Before It's Too Late"
 date: "2026-11-11T09:00:00Z"
-description: "preview"
+description: "The free chatbot most people tried is a small slice of what AI can do now, and it keeps moving. What I think matters more than the paid plan is how you use it."
 tags: ["ai"]
-draft: true
 ---
 
 import ModelGap from "@/components/blog/learn-ai/ModelGap.astro";
 import TimeHorizon from "@/components/blog/learn-ai/TimeHorizon.astro";
 import SkillGap from "@/components/blog/learn-ai/SkillGap.astro";
+import GameClips from "@/components/blog/learn-ai/GameClips.astro";
+import loggedOut from "./A-free-loggedout.webp";
+import lazyAnswer from "./lazy-answer.webp";
+import goodAnswer from "./good-answer.webp";
+import gameFreeWebm from "./game-free.webm";
+import gameFreeMp4 from "./game-free.mp4";
+import gamePlusWebm from "./game-plus.webm";
+import gamePlusMp4 from "./game-plus.mp4";
+import gameClaudeWebm from "./game-claude.webm";
+import gameClaudeMp4 from "./game-claude.mp4";
+import gameGeminiWebm from "./game-gemini.webm";
+import gameGeminiMp4 from "./game-gemini.mp4";
 
-Text.
+A lot of people have already made up their mind about AI. They opened a free chatbot, asked it something, got an average answer and went back to what they were doing.
+
+I think that verdict is out of date, for two reasons. The free chatbot is a small part of what AI can do today. And all of it improves so quickly that an opinion from last year describes a different tool.
+
+This post is for anyone, including people who never write code. I ran a few small tests for it, and I show the results even where they went against what I expected. The paid plan turned out to be the less important part. How you use AI matters more, and that takes practice, so it is worth starting early.
+
+## The AI most people tried
+
+In February OpenAI said ChatGPT had 900 million weekly users and 50 million paying subscribers[^openai]. That leaves about 94 of every 100 people on the free version. When someone tells me AI is overrated, this is usually the AI they mean.
+
+The free version runs a smaller model called GPT-6 Luna[^plans]. Artificial Analysis runs every major model through the same set of hard tasks and gives each one a single score[^aa].
 
 <ModelGap />
 
+The switch on that chart matters as much as the bars. Most chat apps answer quickly by default. The same model does much better when it is allowed to think first. On ChatGPT, setting a higher thinking level by hand is a paid feature[^plans].
+
+I wanted to see the gap with my own eyes, so I gave four chat apps one prompt. I asked for a single HTML file with a Flappy Bird style game where a small rocket flies through gaps between asteroids. It had to keep score, have a restart button and work with touch. I did not edit any of the code, and a small bot plays every game the same way.
+
+<GameClips
+  caption="One prompt, played by the same small bot on a phone-sized screen."
+  clips={[
+    {
+      name: "ChatGPT Free",
+      note: "no account, 2nd try",
+      webm: gameFreeWebm,
+      mp4: gameFreeMp4,
+      label: "The free ChatGPT game: a rocket flies between grey rock columns, crashes into one, and restarts from a Try Again button.",
+    },
+    {
+      name: "ChatGPT Plus",
+      note: "medium thinking",
+      webm: gamePlusWebm,
+      mp4: gamePlusMp4,
+      label: "The ChatGPT Plus game: a rocket flies between rock walls. The top walls are drawn in full, the bottom walls only as a thin glowing line.",
+    },
+    {
+      name: "Claude",
+      note: "Fable 5.2, medium",
+      webm: gameClaudeWebm,
+      mp4: gameClaudeMp4,
+      label: "The Claude game: a rocket flies through gaps in columns of round asteroids, crashes, and restarts from a Restart button.",
+    },
+    {
+      name: "Gemini",
+      note: "3.8 Flash",
+      webm: gameGeminiWebm,
+      mp4: gameGeminiMp4,
+      label: "The Gemini game: the whole game is drawn at half size in the top left corner of the screen, with a tiny rocket.",
+    },
+  ]}
+/>
+
+The result surprised me. Free ChatGPT wrote a game that works. It needed two tries, because the first time it told me to log in before it could create a file. The Plus version thought for over two minutes and then drew the bottom walls as thin lines you can barely see. Gemini's game is squeezed into one corner on a phone screen. Claude's game and the free one were the two that played without a bug I could find.
+
+<figure>
+  <img
+    src={loggedOut.src}
+    alt="ChatGPT without an account replying to the game prompt. It says the request triggered an image-generation capability that requires logging in, and shows a box that reads: Log in to create and download files for free."
+    width={loggedOut.width}
+    height={loggedOut.height}
+    loading="lazy"
+  />
+  <figcaption>The first reply from free ChatGPT. The same prompt in a new chat produced the game.</figcaption>
+</figure>
+
+So a small and familiar task does not show the gap. My guess is that a Flappy Bird clone has been written too many times to be hard for any of them. The scores in the chart come from much harder work, and that kind of work is where things are moving fastest.
+
+## A moving target
+
+METR is a research group that measures how long a task an AI can finish by itself. They time how long each task takes a skilled human. Then they look for the task length where the model succeeds half of the time[^metr].
+
 <TimeHorizon />
 
+For models released since 2023, that length has doubled about every 131 days[^th11]. For models released since 2024, it doubled every 89 days. That works out to somewhere between 7 and 17 times longer every year. I round it to ten.
+
+The line stops in early 2026 because the test ran out of room. METR says its numbers above 16 hours are unreliable with the tasks it has[^metr]. In September 2026 it stopped updating the page.
+
+All of this was measured on software tasks, and METR has written up the limits of the method[^limits]. I would not stretch the exact figure to other kinds of work.
+
+This is why I think waiting is expensive. The AI you put off learning this year will be a different tool next year. Someone who used it every day in between got to learn each new ability as it arrived. You would have to learn all of them at once.
+
+## The gap between users
+
+Anthropic looked at how results change the longer someone has used Claude[^learning]. People who signed up at least six months earlier had about a 10% higher success rate in their conversations than newer users. They went back and forth with the AI more and handed over whole tasks less often. Anthropic points out that people who stay for six months may have been different from the start, so the pattern may have other causes.
+
+A second Anthropic study read 9,830 conversations to see what skilled use looks like[^fluency]. In 85.7% of them the person kept refining the answer over several turns. Those conversations were 5.6 times more likely to question the AI's reasoning. Only 30% of people told the AI how they wanted it to work with them.
+
+Money shows up in the same picture. Menlo Ventures surveyed 5,067 American adults this July, and 55% of the ones who use AI pay for at least one AI product[^menlo]. The typical payer spends between \$20 and \$49 a month. A quarter of Americans now use AI every day, up from 19% a year earlier.
+
 <SkillGap />
+
+I read this chart as a picture of habit. Someone who opens AI every day runs into the limits of the free version and learns what the better tools can do. After that, \$20 a month looks cheap. The survey can't say which came first, so that part is my guess.
+
+One more study keeps me careful. In early 2025 METR had 16 experienced open source developers work through 246 real tasks, with AI allowed on a random half of them[^rct]. With AI they took 19% longer. Afterwards they still believed it had made them 20% faster. METR now marks that result as out of date, and its 2026 follow-up says newer tools probably do speed developers up, although it could not measure by how much[^uplift]. The part I keep is that those developers could not tell they were slower.
+
+## Using it properly
+
+The cheapest improvement is context. I ran one more test on free ChatGPT, without an account. First I typed "help me plan a trip to da lat". Then I opened a new chat and wrote four sentences about who was going, when, our budget and what we like. I also told it to ask me questions before answering and to mark anything it was unsure about.
+
+<figure>
+  <div class="grid items-start gap-3 sm:grid-cols-2 [&_img]:m-0!">
+    <img
+      src={lazyAnswer.src}
+      alt='ChatGPT answering "help me plan a trip to da lat" with a general description of Da Lat and a day one list: Xuan Huong Lake, the railway station, a scenic café, local specialties and the night market.'
+      width={lazyAnswer.width}
+      height={lazyAnswer.height}
+      loading="lazy"
+    />
+    <img
+      src={goodAnswer.src}
+      alt="ChatGPT answering the detailed prompt with a budget table for two people that totals 4,500,000 VND, a note that the bus fares need confirmation, and later a list of five things it removed from the second day."
+      width={goodAnswer.width}
+      height={goodAnswer.height}
+      loading="lazy"
+    />
+  </div>
+  <figcaption>The same free model, first with one line and then with four sentences and a follow-up.</figcaption>
+</figure>
+
+The one-line prompt got a list any travel blog could have given me. The longer prompt got three questions back and then a budget for two people with a cost next to every item. It noticed that being home on Monday morning means taking the Sunday night bus, so we would only pay for one night in a guesthouse. It also told me the bus fares still needed confirming.
+
+The second habit is to keep going after the first answer. I told it the second day was too packed. It cut the day down to one walk, one café and the meals, and it listed the five things it had taken out. This is the back and forth that the long-time users in Anthropic's data do more of.
+
+The third habit is checking. That plan names real cafés and gives prices, and I have not verified any of them. AI writes a wrong opening hour in the same confident voice as a right one. The Plus game looked finished until the bot flew into a wall nobody could see. I check anything that costs money or goes out under my name.
+
+It helps to know where AI is weak, and in my tests the weak spots were small and specific. One model ignored how dense a phone screen is. One forgot to draw half of a wall. One refused a request that it completed a minute later. I found all three by running the games, and reading the replies would have shown me none of them.
+
+The last habit is matching the tool to the job. For a quick question the default mode is fine. For something hard, I pick the stronger model or turn thinking on and wait. For a big job with many steps I use an agent, which is an AI that can run tools and keep working for a while without me. That is the habit with the widest gap in the Menlo survey.
+
+## Where to start
+
+You can start on the free version today, and the rocket game is my proof that it is good enough to learn on. Pick one real task from your week, something that would normally take you an hour, and do it with AI from start to finish. Give it context, push back on its answers and check the parts that matter. Next week, try a harder one. If the free version starts holding you back you will notice, and by then \$20 a month will be an easy call. I would start this week, because the people who already use it every day keep getting further ahead.
+
+[^openai]: [ChatGPT reaches 900M weekly active users](https://techcrunch.com/2026/02/27/chatgpt-reaches-900m-weekly-active-users), TechCrunch
+[^plans]: From third-party plan guides by Layer3 Labs and Build Fast with AI. I could not load OpenAI's own help page to confirm it.
+[^aa]: [Artificial Analysis model leaderboard](https://artificialanalysis.ai/leaderboards/models), fetched November 11, 2026
+[^metr]: [Time horizons](https://metr.org/time-horizons/), METR
+[^th11]: [Time Horizon 1.1](https://metr.org/blog/2026-01-29-time-horizon-1-1/), METR
+[^limits]: [Notes on the limitations of time horizons](https://metr.org/notes/2026-01-22-time-horizon-limitations/), METR
+[^learning]: [Anthropic Economic Index, March 2026 report](https://www.anthropic.com/research/economic-index-march-2026-report), Anthropic
+[^fluency]: [AI Fluency Index](https://www.anthropic.com/research/AI-fluency-index), Anthropic
+[^menlo]: [2026: The State of Consumer AI](https://www.menlovc.com/perspective/2026-the-state-of-consumer-ai/), Menlo Ventures
+[^rct]: [Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/), METR
+[^uplift]: [We are Changing our Developer Productivity Experiment Design](https://metr.org/blog/2026-02-24-uplift-update/), METR
