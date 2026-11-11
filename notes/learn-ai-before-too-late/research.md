@@ -68,3 +68,16 @@ Length of software task (in human time) a model finishes with 50% success.
   - Prompt A, second try in a new chat: wrote the game inline (about 12 KB). It plays correctly in the recorded run, no bugs found. This is the clip, so it is not a first try like the others.
   - Prompt B lazy: a generic 3-day list (Xuan Huong Lake, railway station, night market, Datanla, cable car, strawberry farm) with photo strips, then a 6-question form. No costs. Screenshot: B-lazy.webp.
   - Prompt B good: asked 3 questions (dates, bus type, room type). I answered "that weekend, overnight sleeper bus, budget guesthouse private room" as stand-ins. Plan: 4.5M VND budget table, noticed "back Monday morning" means the Sunday night bus so only one guesthouse night, per-item costs, flagged fares as needing confirmation. After the follow-up it cut Sunday to one walk, one cafe, meals, and listed 5 things removed. A sign-up dialog appeared after the second reply, and a sponsored hotel ad sits under the last one. Screenshot: B-good.webp (720 x 11713, needs cropping for the post). Full text in the scratchpad only.
+
+## 6. Second round of comparisons (2026-11-11, prompts in scratch/game-compare/C-, D-, E-*.txt)
+Gemini dropped from the comparison. One try each on ChatGPT Free (no account), ChatGPT Plus (Medium) and Claude (Fable 5.2, medium).
+- **Seating puzzle** (unique answer checked by brute force: Hoa, An, Giang, Chi, Binh, Dung): all three correct. Free took 8 seconds.
+- **Messy trip expenses** (correct balances: Minh +1,510k, Lan +95k, Tuan -470k, Vy -1,135k): all three correct, all found a 3-transfer settlement.
+- **Pelican SVG**: Claude drew a real SVG. Plus returned a generated picture, not an SVG. Free refused twice ("Image creation is only available when you're logged in").
+- Reading: on chat-sized tasks the free model kept up. The only differences were login walls and Plus not following "SVG".
+
+## 7. Third round, harder tests (2026-11-11, prompts F-, G-, H-*.txt and H-*.html in scratch/game-compare)
+- **Sudoku, 23 clues, unique solution**: Free, Plus and Claude all returned the correct grid.
+- **Planning log, 26 entries, 7 planted errors**: all three found all 7 with no false positives (Free listed one of them twice).
+- **Spreadsheet app, 18 Playwright checks**: Free 18, Plus 18, Claude 14. Claude's version does not update dependent cells after a cell is edited by typing, does not show the formula again on focus, and misses indirect circular references in the same flow. Confirmed by hand with click, type, Enter.
+- Across seven tests the free model matched the paid ones wherever there is a right answer. Section 2 of the post now says this, and the rocket clips and Gemini are out of the post.

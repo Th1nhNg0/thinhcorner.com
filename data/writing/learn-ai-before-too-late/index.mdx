@@ -8,18 +8,9 @@ tags: ["ai"]
 import ModelGap from "@/components/blog/learn-ai/ModelGap.astro";
 import TimeHorizon from "@/components/blog/learn-ai/TimeHorizon.astro";
 import SkillGap from "@/components/blog/learn-ai/SkillGap.astro";
-import GameClips from "@/components/blog/learn-ai/GameClips.astro";
 import loggedOut from "./A-free-loggedout.webp";
 import lazyAnswer from "./lazy-answer.webp";
 import goodAnswer from "./good-answer.webp";
-import gameFreeWebm from "./game-free.webm";
-import gameFreeMp4 from "./game-free.mp4";
-import gamePlusWebm from "./game-plus.webm";
-import gamePlusMp4 from "./game-plus.mp4";
-import gameClaudeWebm from "./game-claude.webm";
-import gameClaudeMp4 from "./game-claude.mp4";
-import gameGeminiWebm from "./game-gemini.webm";
-import gameGeminiMp4 from "./game-gemini.mp4";
 
 A lot of people have already made up their mind about AI. They opened a free chatbot, asked it something, got an average answer and went back to what they were doing.
 
@@ -37,43 +28,25 @@ The free version runs a smaller model called GPT-6 Luna[^plans]. Artificial Anal
 
 The switch on that chart matters as much as the bars. Most chat apps answer quickly by default. The same model does much better when it is allowed to think first. On ChatGPT, setting a higher thinking level by hand is a paid feature[^plans].
 
-I wanted to see the gap with my own eyes, so I gave four chat apps one prompt. I asked for a single HTML file with a Flappy Bird style game where a small rocket flies through gaps between asteroids. It had to keep score, have a restart button and work with touch. I did not edit any of the code, and a small bot plays every game the same way.
+I wanted to see the gap with my own eyes, so I wrote seven tests. I ran each one on free ChatGPT without an account, on ChatGPT Plus and on Claude's best model. Most of them have an answer I could check with code.
 
-<GameClips
-  caption="One prompt, played by the same small bot on a phone-sized screen."
-  clips={[
-    {
-      name: "ChatGPT Free",
-      note: "no account, 2nd try",
-      webm: gameFreeWebm,
-      mp4: gameFreeMp4,
-      label: "The free ChatGPT game: a rocket flies between grey rock columns, crashes into one, and restarts from a Try Again button.",
-    },
-    {
-      name: "ChatGPT Plus",
-      note: "medium thinking",
-      webm: gamePlusWebm,
-      mp4: gamePlusMp4,
-      label: "The ChatGPT Plus game: a rocket flies between rock walls. The top walls are drawn in full, the bottom walls only as a thin glowing line.",
-    },
-    {
-      name: "Claude",
-      note: "Fable 5.2, medium",
-      webm: gameClaudeWebm,
-      mp4: gameClaudeMp4,
-      label: "The Claude game: a rocket flies through gaps in columns of round asteroids, crashes, and restarts from a Restart button.",
-    },
-    {
-      name: "Gemini",
-      note: "3.8 Flash",
-      webm: gameGeminiWebm,
-      mp4: gameGeminiMp4,
-      label: "The Gemini game: the whole game is drawn at half size in the top left corner of the screen, with a tiny rocket.",
-    },
-  ]}
-/>
+<div class="overflow-x-auto">
 
-The result surprised me. Free ChatGPT wrote a game that works. It needed two tries, because the first time it told me to log in before it could create a file. The Plus version thought for over two minutes and then drew the bottom walls as thin lines you can barely see. Gemini's game is squeezed into one corner on a phone screen. Claude's game and the free one were the two that played without a bug I could find.
+| Test | ChatGPT Free | ChatGPT Plus | Claude |
+| --- | --- | --- | --- |
+| Seating puzzle with one valid answer | Correct | Correct | Correct |
+| Splitting messy trip expenses | Correct | Correct | Correct |
+| Sudoku with 23 clues | Solved | Solved | Solved |
+| 7 errors hidden in a planning log | Found 7 | Found 7 | Found 7 |
+| Spreadsheet app, 18 automatic checks | 18 passed | 18 passed | 14 passed |
+| Rocket game in one HTML file | Works, on the second try | Bottom walls barely drawn | Works |
+| Pelican on a bicycle as an SVG | Refused | Drew a picture, no SVG | Drew the SVG |
+
+</div>
+
+I expected the free version to lose most of these, and it lost almost none. It matched the paid models on every test that has a right answer. On the spreadsheet it beat Claude, whose version stopped updating other cells after I changed a number.
+
+The two places where free ChatGPT fell behind were walls. It would not draw the pelican without a login. The first time I asked for the game, it told me to log in before it could create a file.
 
 <figure>
   <img
@@ -86,7 +59,7 @@ The result surprised me. Free ChatGPT wrote a game that works. It needed two tri
   <figcaption>The first reply from free ChatGPT. The same prompt in a new chat produced the game.</figcaption>
 </figure>
 
-So a small and familiar task does not show the gap. My guess is that a Flappy Bird clone has been written too many times to be hard for any of them. The scores in the chart come from much harder work, and that kind of work is where things are moving fastest.
+The gap in the chart comes from a different kind of work. Each of my tests fits in one message, and a person could do it in under an hour. The index is built from tasks that are much longer and have many steps, and that kind of work is where things are moving fastest.
 
 ## A moving target
 
@@ -144,15 +117,15 @@ The one-line prompt got a list any travel blog could have given me. The longer p
 
 The second habit is to keep going after the first answer. I told it the second day was too packed. It cut the day down to one walk, one café and the meals, and it listed the five things it had taken out. This is the back and forth that the long-time users in Anthropic's data do more of.
 
-The third habit is checking. That plan names real cafés and gives prices, and I have not verified any of them. AI writes a wrong opening hour in the same confident voice as a right one. The Plus game looked finished until the bot flew into a wall nobody could see. I check anything that costs money or goes out under my name.
+The third habit is checking. That plan names real cafés and gives prices, and I have not verified any of them. AI writes a wrong opening hour in the same confident voice as a right one. Claude told me its spreadsheet had passed 30 tests, and it still broke the first time I edited a cell by hand. I check anything that costs money or goes out under my name.
 
-It helps to know where AI is weak, and in my tests the weak spots were small and specific. One model ignored how dense a phone screen is. One forgot to draw half of a wall. One refused a request that it completed a minute later. I found all three by running the games, and reading the replies would have shown me none of them.
+It helps to know where AI is weak, and in my tests the weak spots were small and specific. One model was asked for an SVG and returned a picture. One wrote a game with walls you could barely see. I found both by opening the results, and reading the replies would have shown me neither.
 
 The last habit is matching the tool to the job. For a quick question the default mode is fine. For something hard, I pick the stronger model or turn thinking on and wait. For a big job with many steps I use an agent, which is an AI that can run tools and keep working for a while without me. That is the habit with the widest gap in the Menlo survey.
 
 ## Where to start
 
-You can start on the free version today, and the rocket game is my proof that it is good enough to learn on. Pick one real task from your week, something that would normally take you an hour, and do it with AI from start to finish. Give it context, push back on its answers and check the parts that matter. Next week, try a harder one. If the free version starts holding you back you will notice, and by then \$20 a month will be an easy call. I would start this week, because the people who already use it every day keep getting further ahead.
+You can start on the free version today, and my tests are the reason I think it is good enough to learn on. Pick one real task from your week, something that would normally take you an hour, and do it with AI from start to finish. Give it context, push back on its answers and check the parts that matter. Next week, try a harder one. If the free version starts holding you back you will notice, and by then \$20 a month will be an easy call. I would start this week, because the people who already use it every day keep getting further ahead.
 
 [^openai]: [ChatGPT reaches 900M weekly active users](https://techcrunch.com/2026/02/27/chatgpt-reaches-900m-weekly-active-users), TechCrunch
 [^plans]: From third-party plan guides by Layer3 Labs and Build Fast with AI. I could not load OpenAI's own help page to confirm it.
