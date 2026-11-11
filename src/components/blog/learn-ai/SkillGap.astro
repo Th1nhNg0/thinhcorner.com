@@ -1,0 +1,52 @@
+---
+/** Menlo Ventures 2026 consumer survey: payers vs non-payers. */
+const rows = [
+  { q: "Use AI every day", a: 50, b: 26 },
+  { q: "Use an AI agent", a: 65, b: 13 },
+];
+---
+
+<figure class="not-prose my-8" data-skill-gap>
+  <div class="rounded-surface border border-(--line) bg-(--surface) p-4">
+    <div class="mb-4 flex gap-4 text-xs text-(--muted)">
+      <span class="flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-[2px] bg-[#eab308]" />people who pay for AI</span>
+      <span class="flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-[2px] bg-[#71717a]" />people who don't</span>
+    </div>
+    <div class="space-y-5">
+      {rows.map((r) => (
+        <div>
+          <p class="mb-1.5 text-sm text-(--ink)">{r.q}</p>
+          {[{ v: r.a, c: "#eab308" }, { v: r.b, c: "#71717a" }].map((s) => (
+            <div class="mb-1 flex items-center gap-2">
+              <div class="h-3 flex-1 rounded-[2px] bg-[#1c1c20]">
+                <div data-bar data-w={s.v} class="h-full rounded-[2px] transition-[width] duration-700 ease-out" style={`width:0%;background:${s.c}`} />
+              </div>
+              <span class="w-9 text-right font-mono text-xs tabular-nums text-(--muted)">{s.v}%</span>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+  <figcaption class="mt-2 text-balance text-center text-sm text-(--muted)">
+    Among US adults who use AI.
+    <span class="mt-0.5 block font-mono text-xs text-(--faint)">Source: Menlo Ventures, State of Consumer AI 2026 (5,067 adults, July 2026).</span>
+  </figcaption>
+</figure>
+
+<script>
+  const boot = () =>
+    (Array.from(document.querySelectorAll("[data-skill-gap]")) as HTMLElement[]).forEach((root) => {
+      if (root.dataset.ready) return;
+      root.dataset.ready = "1";
+      const bars = Array.from(root.querySelectorAll("[data-bar]")) as HTMLElement[];
+      const fill = () => bars.forEach((b) => (b.style.width = b.dataset.w + "%"));
+      if (!("IntersectionObserver" in window)) return fill();
+      const io = new IntersectionObserver((es) => {
+        if (es.some((e) => e.isIntersecting)) { io.disconnect(); fill(); }
+      }, { threshold: 0.3 });
+      io.observe(root);
+    });
+  boot();
+  document.addEventListener("astro:page-load", boot);
+</script>

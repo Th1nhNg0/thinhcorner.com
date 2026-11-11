@@ -1,0 +1,96 @@
+---
+/**
+ * Artificial Analysis Intelligence Index v5 (leaderboard, 2026-11-11).
+ * Each model has a low-effort and a max-effort score; the toggle flips
+ * between them so readers see how much the "thinking" setting matters.
+ */
+type Row = { name: string; maker: string; low: number; high: number; lowLabel: string; tier: string; best?: boolean };
+const rows: Row[] = [
+  { name: "GPT-6 Luna", maker: "OpenAI", low: 9, high: 28, lowLabel: "no thinking", tier: "ChatGPT Free" },
+  { name: "Claude Sonnet 5.5", maker: "Anthropic", low: 26, high: 55, lowLabel: "low", tier: "Anthropic" },
+  { name: "Claude Opus 5.5", maker: "Anthropic", low: 35, high: 59, lowLabel: "low", tier: "Anthropic" },
+  { name: "GPT-6 Astra", maker: "OpenAI", low: 43, high: 57, lowLabel: "low", tier: "ChatGPT Pro ($100+)" },
+  { name: "Gemini 4 Carbon", maker: "Google", low: 54, high: 60, lowLabel: "low", tier: "Google" },
+  { name: "Claude Fable 5.2", maker: "Anthropic", low: 54, high: 65, lowLabel: "low", tier: "Anthropic", best: true },
+];
+const MAX = 70;
+---
+
+<figure class="not-prose my-8" data-model-gap>
+  <div class="rounded-surface border border-(--line) bg-(--surface) p-4">
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+      <p class="m-0 text-sm text-(--muted)">Intelligence Index score</p>
+      <div class="flex rounded-[0.25rem] border border-(--line) p-0.5 font-mono text-xs" role="group" aria-label="Thinking effort">
+        <button type="button" data-mode="low" class="rounded-[0.2rem] px-2.5 py-1 text-(--muted) transition-colors">quick answer</button>
+        <button type="button" data-mode="high" aria-pressed="true" class="rounded-[0.2rem] bg-(--line) px-2.5 py-1 text-(--ink) transition-colors">max thinking</button>
+      </div>
+    </div>
+    <ul class="m-0 list-none space-y-3 p-0">
+      {
+        rows.map((r) => (
+          <li data-low={r.low} data-high={r.high}>
+            <div class="mb-1 flex items-baseline gap-2 text-sm">
+              <span class="text-(--ink)">{r.name}</span>
+              <span class="text-xs text-(--faint)">{r.tier}</span>
+              <span data-score class="ml-auto font-mono text-xs tabular-nums text-(--ink)">{r.high}</span>
+            </div>
+            <div class="h-3 w-full rounded-[2px] bg-[#1c1c20]">
+              <div
+                data-bar
+                class="h-full rounded-[2px] transition-[width] duration-700 ease-out"
+                style={`width:0%;background:${r.best ? "#eab308" : r.tier === "ChatGPT Free" ? "#71717a" : "#a1a1aa"}`}
+                data-w={(r.high / MAX) * 100}
+                data-wl={(r.low / MAX) * 100}
+              />
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <figcaption class="mt-2 text-balance text-center text-sm text-(--muted)">
+    The model in free ChatGPT, against the best models you can pay for. Flip the switch to see what the same models score when they answer without thinking.
+    <span class="mt-0.5 block font-mono text-xs text-(--faint)">Source: Artificial Analysis Intelligence Index v5, November 2026.</span>
+  </figcaption>
+</figure>
+
+<script>
+  function initGap(root: HTMLElement) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    const items = Array.from(root.querySelectorAll("li[data-low]")) as HTMLElement[];
+    const buttons = Array.from(root.querySelectorAll("button[data-mode]")) as HTMLButtonElement[];
+    let mode = "high";
+    const draw = () => {
+      items.forEach((li) => {
+        const bar = li.querySelector("[data-bar]") as HTMLElement;
+        const score = li.querySelector("[data-score]") as HTMLElement;
+        bar.style.width = (mode === "high" ? bar.dataset.w : bar.dataset.wl) + "%";
+        score.textContent = (mode === "high" ? li.dataset.high : li.dataset.low) || "";
+      });
+      buttons.forEach((b) => {
+        const on = b.dataset.mode === mode;
+        b.setAttribute("aria-pressed", String(on));
+        b.style.background = on ? "var(--line)" : "transparent";
+        b.style.color = on ? "var(--ink)" : "var(--muted)";
+      });
+    };
+    buttons.forEach((b) =>
+      b.addEventListener("click", () => {
+        mode = b.dataset.mode || "high";
+        draw();
+      }),
+    );
+    if (!("IntersectionObserver" in window)) return draw();
+    const io = new IntersectionObserver((es) => {
+      if (es.some((e) => e.isIntersecting)) {
+        io.disconnect();
+        draw();
+      }
+    }, { threshold: 0.3 });
+    io.observe(root);
+  }
+  const boot = () => (Array.from(document.querySelectorAll("[data-model-gap]")) as HTMLElement[]).forEach((el) => initGap(el as HTMLElement));
+  boot();
+  document.addEventListener("astro:page-load", boot);
+</script>

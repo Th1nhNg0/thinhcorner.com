@@ -1,0 +1,92 @@
+---
+/**
+ * METR 50% task-completion time horizons (Time Horizon 1.1 numbers where
+ * METR re-estimated them). The line draws itself when scrolled into view.
+ */
+type P = { name: string; date: string; min: number; label: string };
+const pts: P[] = [
+  { name: "GPT-4", date: "2023-03-14", min: 3.5, label: "3.5 min" },
+  { name: "GPT-4o", date: "2024-05-13", min: 6, label: "6 min" },
+  { name: "Claude 3.7 Sonnet", date: "2025-02-24", min: 60, label: "1 hr" },
+  { name: "o3", date: "2025-04-16", min: 121, label: "2 hr" },
+  { name: "GPT-5", date: "2025-08-07", min: 214, label: "3.6 hr" },
+  { name: "Claude Opus 4.5", date: "2025-11-24", min: 320, label: "5.3 hr" },
+  { name: "Claude Opus 4.6", date: "2026-02-05", min: 720, label: "~12 hr" },
+  { name: "Claude Mythos Preview", date: "2026-03-20", min: 1044, label: "~17 hr" },
+];
+const W = 440, H = 460, L = 58, R = 16, T = 12, B = 34;
+const t0 = Date.parse("2023-01-01"), t1 = Date.parse("2026-06-30");
+const x = (d: string) => L + ((Date.parse(d) - t0) / (t1 - t0)) * (W - L - R);
+const lo = Math.log10(2), hi = Math.log10(2200);
+const y = (m: number) => T + (1 - (Math.log10(m) - lo) / (hi - lo)) * (H - T - B);
+const path = pts.map((p, i) => `${i ? "L" : "M"}${x(p.date).toFixed(1)},${y(p.min).toFixed(1)}`).join(" ");
+const grid = [
+  { m: 5, t: "5 min" },
+  { m: 60, t: "1 hour" },
+  { m: 480, t: "8 hours" },
+];
+const years = ["2023", "2024", "2025", "2026"];
+const yx = (yr: string) => x(`${yr}-01-01`);
+---
+
+<figure class="not-prose mx-auto my-8 max-w-[30rem]" data-time-horizon>
+  <div class="rounded-surface border border-(--line) bg-(--surface) p-3">
+    <svg viewBox={`0 0 ${W} ${H}`} class="block h-auto w-full" role="img"
+      aria-label="Length of coding task AI can finish half the time: GPT-4 3.5 minutes in 2023, Claude 3.7 Sonnet 1 hour in early 2025, Claude Mythos Preview about 17 hours in 2026">
+      {grid.map((g) => (
+        <g>
+          <line x1={L} x2={W - R} y1={y(g.m)} y2={y(g.m)} stroke="#27272a" stroke-dasharray={g.m === 480 ? "0" : "3 4"} />
+          <text x={L - 8} y={y(g.m) + 4} text-anchor="end" font-size="13" fill="#8f8f98" font-family="var(--font-mono)">{g.t}</text>
+        </g>
+      ))}
+      <rect x={L} y={T} width={W - L - R} height={y(960) - T} fill="#eab308" opacity="0.05" />
+      <text x={L + 8} y={T + 18} font-size="13" fill="#8f8f98">over 16 h: past what METR can test</text>
+      {years.map((yr) => (
+        <g>
+          <line x1={yx(yr)} x2={yx(yr)} y1={H - B} y2={H - B + 5} stroke="#3f3f46" />
+          <text x={yx(yr)} y={H - 10} text-anchor="middle" font-size="13" fill="#8f8f98" font-family="var(--font-mono)">{yr}</text>
+        </g>
+      ))}
+      <line x1={L} x2={W - R} y1={H - B} y2={H - B} stroke="#3f3f46" />
+      <path data-line d={path} fill="none" stroke="#eab308" stroke-width="2.5" stroke-linejoin="round" />
+      {pts.map((p, i) => (
+        <g data-pt style="opacity:0;transition:opacity .4s" data-i={i}>
+          <circle cx={x(p.date)} cy={y(p.min)} r="4.5" fill="#0c0c0d" stroke="#eab308" stroke-width="2.5" />
+          <text x={x(p.date) + (i < 2 ? 10 : -10)} y={y(p.min) + (i < 2 ? 20 : 4.5)} text-anchor={i < 2 ? "start" : "end"} font-size="13.5" fill="#ededed">
+            {p.name} <tspan fill="#eab308" font-family="var(--font-mono)">{p.label}</tspan>
+          </text>
+        </g>
+      ))}
+    </svg>
+  </div>
+  <figcaption class="mt-2 text-balance text-center text-sm text-(--muted)">
+    How long a coding task (in human working time) each model can finish half of the time. The vertical axis is logarithmic.
+    <span class="mt-0.5 block font-mono text-xs text-(--faint)">Source: METR time horizons (Time Horizon 1.1), 2023–2026.</span>
+  </figcaption>
+</figure>
+
+<script>
+  function initTH(root: HTMLElement) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = "1";
+    const line = root.querySelector("[data-line]") as SVGPathElement;
+    const dots = Array.from(root.querySelectorAll("[data-pt]")) as SVGGElement[];
+    const len = line.getTotalLength();
+    const show = () => dots.forEach((d) => (d.style.opacity = "1"));
+    if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return show();
+    line.style.strokeDasharray = `${len}`;
+    line.style.strokeDashoffset = `${len}`;
+    const io = new IntersectionObserver((es) => {
+      if (!es.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      const dur = 2400;
+      line.style.transition = `stroke-dashoffset ${dur}ms ease-in-out`;
+      line.style.strokeDashoffset = "0";
+      dots.forEach((d, i) => setTimeout(() => (d.style.opacity = "1"), (dur * i) / (dots.length - 1)));
+    }, { threshold: 0.4 });
+    io.observe(root);
+  }
+  const boot = () => (Array.from(document.querySelectorAll("[data-time-horizon]")) as HTMLElement[]).forEach(initTH);
+  boot();
+  document.addEventListener("astro:page-load", boot);
+</script>
