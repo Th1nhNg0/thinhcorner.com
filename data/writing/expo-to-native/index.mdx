@@ -1,0 +1,110 @@
+---
+title: "I Rewrote My Expo App in Swift and Kotlin in Four Days"
+date: "2026-11-14T16:00:00Z"
+description: "Shopify rebuilt their React Native app in Swift and Kotlin with 30 engineers and 12 weeks. I did the same with my Expo app, alone, in four days. The plan, the timeline, the cost, and benchmarks from two real phones."
+tags: ["ai", "mobile"]
+---
+
+import ActivityTimeline from "@/components/blog/expo-native/ActivityTimeline.astro";
+import NativeVsExpo from "@/components/blog/expo-native/NativeVsExpo.astro";
+import CostTable from "@/components/blog/expo-native/CostTable.astro";
+import { activity, benchmarks, cost } from "./charts.ts";
+
+On November 10, Shopify published [How we rebuilt the Shopify app in 12 weeks](https://shopify.engineering/shopify-app-rebuild). They moved a React Native app with more than 300 screens to native Swift and Kotlin. About 30 engineers worked in pairs, each one steering several agents, and the old app was the spec.
+
+I have an Expo app too. It's a legal-information app with a law library, search, a news feed, and an AI assistant that answers legal questions. It has 29 screens, three languages, and 317 commits going back to May 2024. One person maintains it: me.
+
+So I tried the same thing. Four days later, a fully native version was waiting for review on both stores.
+
+
+## I'd tried before
+
+In early October I tried twice and gave up both times.
+
+The first time, I asked an agent to build "the UI first, no logic" inside the Expo repo. It was slow, the simulator was slower, and I had it delete everything.
+
+The second time, I got clever. One model acted as a "chief of staff" and handed work to cheaper models through [Pi](/writing/pi-agent). It spent most of its time waiting for usage limits to reset. At one point I typed: *the way we work will take forever and cost forever, can we work smarter?* We couldn't, so I stopped.
+
+The models weren't the problem. I didn't have a plan. Shopify's post gave me one.
+
+## The plan
+
+Four ideas, mostly borrowed.
+
+**The old app is the spec.** No agent got a written spec. Each one got the Expo source and one rule: match it. Specs go stale, but the running app doesn't. When an audit compared the first ports against Expo, it found things they had quietly dropped, like the "Show N more" link on chat sources, the "Didn't get a code?" line before Resend, and the not-found screens. All of them came back.
+
+**Agents check their own work.** The logic lives in a Swift package and a Kotlin module that run their tests without a phone. A debug harness opens any of the 29 screens in any of its 87 states, like loading, empty, offline, or error, and screenshots it. A screen is done when the tests pass, the screenshots match Expo, and a separate reviewer agent agrees. It's never done just because the agent says so. One test against a real connection caught a bug that recorded data never would have: Apple's line reader drops the blank lines between streamed chat messages, so two messages got glued into broken JSON. The agent wrote its own reader and kept the test.
+
+**Port twice, then merge.** iOS and Android were ported in separate sessions, each straight from Expo. Then one session merged them into a single repo with shared strings (627 of them, in three languages), shared design tokens, and 129 recorded API responses that both apps must decode. Two independent ports make every gap visible. If one app has something the other doesn't, it's a bug or a decision.
+
+**A lead agent with a team.** For the merge, I wrote one long prompt and had an agent tighten it. A lead agent then ran the whole job. It wrote a brief for each role, iOS engineer, Android engineer, product designer, and parity reviewer, and started sub-agents batch by batch. Every judgment call went into a decision log, 38 entries in the end, each with the choice, the reason, and the options it turned down. When I came back after a few hours, I read the log, not the transcript.
+
+## Four days
+
+Each lane is one agent session, and each column is one hour of work. The shaded bands are midnight to 7 a.m., when I was asleep and the agents weren't.
+
+<ActivityTimeline
+  lanes={activity.lanes}
+  days={activity.days}
+  marker={activity.marker}
+  caption="Agent events per hour, local time (UTC+7). Codex started the iOS port. Claude Code took it over that evening and did everything after."
+/>
+
+From the first prompt to store submission took 3 days and 10 hours. The agents worked about 38 hours of it. I sent around 160 messages, and most were one line: "no dark mode", "keep the navy background", "is it done?".
+
+Here's what came out:
+
+| | Expo | iOS | Android |
+|---|---:|---:|---:|
+| Source files | 102 TS/TSX | 101 Swift | 74 Kotlin |
+| Lines of code | 19.2k | 13.5k | 14.0k |
+| Unit tests | none | 76 | 76 |
+| UI tests | none | 66 | 59 |
+
+Each native app has less code than the Expo app had, and it comes with the tests Expo never had.
+
+## Results on real phones
+
+I put each store version of the Expo app next to the native build on my own two phones and ran the same tests on both, 10 times each, alternating between the apps. Every bar below is the native app as a share of Expo, so a shorter bar is a win.
+
+<NativeVsExpo
+  groups={benchmarks}
+  caption="Medians. iPhone tests driven by XCTest on iOS 27.2; Android cold launches on Android 17 with memory read 5 seconds after launch."
+/>
+
+**Android is where native shines.** The app launches 32% faster, uses 57% less memory (169 MB instead of 397 MB), and installs at 3.6 MB instead of 56 MB. That build leaves out the push notification SDK, but even the full Play release is under 8 MB. Shopify saw almost the same thing: Android launch about 50% faster, memory down from 470 MB to 200 MB.
+
+**On the iPhone, memory drops by more than a third** on every screen I measured, and the app comes back from the background 17% faster. Scrolling holds about 58 of 60 frames per second on both apps, with zero hitches in a typical run, and opening a law takes the same time. The iOS app bundle also shrank, from 79.7 MB to 20.8 MB.
+
+The one number that went the wrong way is launch on iOS: 0.37 seconds against Expo's 0.27. You won't feel a tenth of a second, but it's the next thing an agent gets to profile.
+
+## What it cost
+
+I'm on a flat Claude subscription, so there was no bill. To get a number, I added up every token in the Claude Code transcripts and priced them at the public API rates.
+
+<CostTable
+  rows={cost}
+  caption="The first 5.7 hours in Codex aren't included."
+/>
+
+That's **\$528** for two native apps. Half of it is cache reads, because an agent re-reads its whole conversation on every step. The merge cost more than both ports together, because 19 sub-agents reviewed two codebases over and over.
+
+The real limit was the subscription's weekly quota. Halfway through the merge it hit 85%, and the lead agent logged a decision to cut the remaining work from five batches to three so it would finish in time. It finished at 89%.
+
+## The new bottlenecks
+
+Shopify says the bottleneck moves once agents write the code. Mine moved to three places:
+
+- **The laptop.** It's an Intel i5 MacBook with 16 GB of RAM. Only one simulator could run at a time, so iOS and Android took turns.
+- **The quota.** It decided how big each batch could be.
+- **Me.** The slowest steps were the human ones: trying a build on my phone and pressing submit.
+
+## You don't need React Native anymore
+
+The case for React Native and Expo was always about people. Two native codebases needed two teams, and a small team couldn't keep Swift and Kotlin in sync.
+
+That's no longer true. Agents write both apps, and shared strings, shared test data, and a reviewer that compares every screen keep them in sync. Work that used to need an iOS team, an Android team, a designer, and QA took me four days, and most of what I did was review.
+
+And you get everything native always promised: real system controls, new platform features the day they ship, a fraction of the memory, and a much smaller app.
+
+If I were starting a new app today, I'd start native. If you already have an Expo app, you already have the spec. Point the agents at it.
