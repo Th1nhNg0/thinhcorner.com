@@ -1,0 +1,76 @@
+---
+/**
+ * Four days of agent work. One lane per session; each hour is a column whose
+ * height is the number of agent events in that hour. Night hours (00–07) are
+ * shaded so the overnight runs stand out. One marker: the store submission.
+ * Lane names sit beside the plot on wide screens and above it on phones, so the
+ * plot always gets the full width it can and nothing collides.
+ */
+type Lane = { label: string; detail: string; hours: number[] };
+type Marker = { hour: number; label: string };
+type Props = { lanes: Lane[]; days: string[]; marker?: Marker; caption?: string };
+const { lanes, days, marker, caption } = Astro.props;
+
+const HOURS = days.length * 24;
+const max = Math.max(...lanes.flatMap((lane) => lane.hours));
+const pct = (hour: number) => (hour / HOURS) * 100;
+const nights = days.map((_, d) => ({ left: pct(d * 24), width: pct(7) }));
+const columns = (hours: number[]) =>
+  hours.slice(0, HOURS).map((count, hour) => ({
+    height: count ? Math.max(8, Math.sqrt(count / max) * 100) : 0,
+    title: count
+      ? `${days[Math.floor(hour / 24)]}, ${String(hour % 24).padStart(2, "0")}:00 · ${count} agent events`
+      : undefined,
+  }));
+const row = "sm:grid sm:grid-cols-[9.5rem_1fr] sm:gap-x-4";
+---
+
+<figure class="not-prose my-12">
+  <div class={row}>
+    <div class="hidden sm:block" />
+    <div class="relative h-6">
+      {
+        marker && (
+          <span
+            class="data-figure absolute top-0 -translate-x-full whitespace-nowrap pr-1.5 !text-[#e3b341]"
+            style={`left:${pct(marker.hour)}%`}
+          >
+            {marker.label}
+          </span>
+        )
+      }
+    </div>
+  </div>
+
+  {
+    lanes.map((lane) => (
+      <div class:list={[row, "border-t border-[#1f1f23]"]}>
+        <div class="flex items-baseline gap-2 pt-2 sm:flex-col sm:justify-center sm:gap-0.5 sm:py-2">
+          <span class="text-sm leading-tight text-zinc-200">{lane.label}</span>
+          <span class="data-figure !text-xs leading-tight">{lane.detail}</span>
+        </div>
+        <div class="relative h-12 sm:h-14">
+          {nights.map((n) => (
+            <div class="absolute inset-y-0 bg-white/[0.045]" style={`left:${n.left}%;width:${n.width}%`} />
+          ))}
+          <div class="absolute inset-x-0 bottom-0 top-2 flex items-end gap-px">
+            {columns(lane.hours).map((c) => (
+              <div class="flex h-full flex-1 items-end" title={c.title}>
+                {c.height > 0 && <div class="w-full rounded-t-[1px] bg-[#c98500]" style={`height:${c.height}%`} />}
+              </div>
+            ))}
+          </div>
+          {marker && <div class="absolute -top-px bottom-0 w-px bg-[#e3b341]/70" style={`left:${pct(marker.hour)}%`} />}
+        </div>
+      </div>
+    ))
+  }
+
+  <div class={row}>
+    <div class="hidden sm:block" />
+    <div class="flex border-t border-[#3f3f46]">
+      {days.map((day) => <div class="data-figure flex-1 pt-2">{day}</div>)}
+    </div>
+  </div>
+  {caption && <figcaption class="mt-5 text-sm text-zinc-500">{caption}</figcaption>}
+</figure>

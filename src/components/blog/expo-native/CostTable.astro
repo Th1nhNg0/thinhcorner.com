@@ -1,0 +1,49 @@
+---
+/**
+ * Cost per session as a table with an inline bar in the cost column, so the
+ * numbers and the proportions are one visual instead of a chart plus a table.
+ */
+type Row = { label: string; hours: number; tokens: string; cost: number };
+type Props = { rows: Row[]; caption?: string };
+const { rows, caption } = Astro.props;
+
+const max = Math.max(...rows.map((r) => r.cost));
+const total = {
+  hours: rows.reduce((s, r) => s + r.hours, 0),
+  cost: rows.reduce((s, r) => s + r.cost, 0),
+};
+const usd = (v: number) => `$${Math.round(v).toLocaleString("en-US")}`;
+---
+
+<figure class="not-prose my-12">
+  <div class="grid grid-cols-[1fr_3.5rem_4.5rem] gap-x-4 border-b border-[#3f3f46] pb-2 text-xs text-zinc-500 sm:grid-cols-[11rem_4rem_4.5rem_1fr]">
+    <span>Session</span>
+    <span class="text-right">Agent</span>
+    <span class="text-right">Tokens</span>
+    <span class="hidden sm:block">Cost at API prices</span>
+  </div>
+  {
+    rows.map((r) => (
+      <div class="grid grid-cols-[1fr_3.5rem_4.5rem] items-center gap-x-4 gap-y-2 border-b border-[#1f1f23] py-3 sm:grid-cols-[11rem_4rem_4.5rem_1fr]">
+        <span class="text-sm text-zinc-200">{r.label}</span>
+        <span class="data-figure text-right">{r.hours.toFixed(1)} h</span>
+        <span class="data-figure text-right">{r.tokens}</span>
+        <div class="col-span-3 flex items-center gap-3 sm:col-span-1">
+          <div class="h-2.5 flex-1">
+            <div class="h-full rounded-sm bg-[#c98500]" style={`width:${Math.max(0.8, (r.cost / max) * 100)}%`} />
+          </div>
+          <span class="data-figure w-12 text-right !text-zinc-200">{usd(r.cost)}</span>
+        </div>
+      </div>
+    ))
+  }
+  <div class="grid grid-cols-[1fr_3.5rem_4.5rem] items-center gap-x-4 gap-y-2 py-3 sm:grid-cols-[11rem_4rem_4.5rem_1fr]">
+    <span class="text-sm font-medium text-zinc-100">Total</span>
+    <span class="data-figure text-right !text-zinc-100">{total.hours.toFixed(1)} h</span>
+    <span class="data-figure text-right !text-zinc-100">1.36B</span>
+    <div class="col-span-3 flex items-center justify-end sm:col-span-1">
+      <span class="font-mono text-lg text-[#e3b341]">{usd(total.cost)}</span>
+    </div>
+  </div>
+  {caption && <figcaption class="mt-4 text-sm text-zinc-500">{caption}</figcaption>}
+</figure>
