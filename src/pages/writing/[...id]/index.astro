@@ -11,6 +11,7 @@ import { getModifiedDate } from "@/lib/post-dates";
 import EditOnGithub from "../../../components/EditOnGithub.astro";
 import { getRelatedPosts, tagLabel } from "@/lib/tags";
 import PostRow from "@/components/PostRow.astro";
+import { postTitleName } from "@/lib/transitions";
 
 export async function getStaticPaths() {
   const paths = (await getCollection("writing")).sort(
@@ -72,6 +73,7 @@ let slug = Array.isArray(Astro.params.id)
   image={`/writing/${post.id}/og.jpg`}
   type="article"
   katex={hasMath}
+  readingProgress
   robots={post.data.draft ? "noindex,nofollow" : undefined}
   lang={postLang}
   locale={postLang === "vi" ? "vi_VN" : "en_US"}
@@ -160,7 +162,8 @@ let slug = Array.isArray(Astro.params.id)
             >
             <h1
               id="post-title"
-              class="mt-4 text-[clamp(1.875rem,6vw,3rem)] font-semibold leading-[1.08] tracking-[-0.04em] text-zinc-100"
+              transition:name={postTitleName(post.id)}
+              class="post-title-morph mt-4 text-[clamp(1.875rem,6vw,3rem)] font-semibold leading-[1.08] tracking-[-0.04em] text-zinc-100"
             >
               {post.data.title}
             </h1>
@@ -413,6 +416,38 @@ let slug = Array.isArray(Astro.params.id)
       );
 
       document.addEventListener("astro:page-load", initTocSpy);
+    </script>
+    <script>
+      // Reading progress: a line under the header that fills as the article is read.
+      // It counts from the top of the article to its last line reaching the bottom of
+      // the screen, so the bar is full when the reader reaches the end of the text.
+      let article: HTMLElement | null = null;
+      let bar: HTMLElement | null = null;
+      let ticking = false;
+
+      const updateProgress = () => {
+        ticking = false;
+        if (!article || !bar) return;
+        const box = article.getBoundingClientRect();
+        const span = box.height - window.innerHeight * 0.85;
+        const read = span > 0 ? -box.top / span : 1;
+        bar.style.transform = `scaleX(${Math.min(1, Math.max(0, read))})`;
+      };
+
+      const queue = () => {
+        if (ticking || !bar) return;
+        ticking = true;
+        requestAnimationFrame(updateProgress);
+      };
+
+      window.addEventListener("scroll", queue, { passive: true });
+      window.addEventListener("resize", queue, { passive: true });
+
+      document.addEventListener("astro:page-load", () => {
+        bar = document.getElementById("readProgress");
+        article = bar ? document.querySelector("article[aria-labelledby='post-title']") : null;
+        updateProgress();
+      });
     </script>
     <script>
       // Lazy-load medium-zoom after the page is idle for better LCP/TBT.

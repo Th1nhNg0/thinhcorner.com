@@ -2,6 +2,7 @@
 // One post in a list: title, optional one-line description, date on the right.
 import type { CollectionEntry } from "astro:content";
 import { format } from "date-fns";
+import { postTitleName } from "@/lib/transitions";
 
 interface Props {
   post: CollectionEntry<"writing">;
@@ -20,7 +21,7 @@ const lang = post.data.lang ?? "en";
   hreflang={lang}
   class="post-row focus-visible:outline-none"
 >
-  <span class="post-row-title">
+  <span class="post-row-title" transition:name={postTitleName(post.id)}>
     {post.data.draft && <span class="mr-2 text-xs font-normal text-[#eab308]">Draft</span>}
     {post.data.title}
   </span>
