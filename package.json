@@ -11,14 +11,14 @@
     "generate-types": "wrangler types"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "14.4.3",
-    "@astrojs/markdown-remark": "7.3.5",
-    "@astrojs/markdown-satteri": "0.4.6",
-    "@astrojs/mdx": "8.1.2",
+    "@astrojs/cloudflare": "14.4.8",
+    "@astrojs/markdown-remark": "7.3.9",
+    "@astrojs/markdown-satteri": "0.4.10",
+    "@astrojs/mdx": "8.1.6",
     "@astrojs/rss": "4.0.19",
-    "@astrojs/sitemap": "3.7.4",
-    "@tailwindcss/vite": "^4.3.3",
-    "astro": "7.4.4",
+    "@astrojs/sitemap": "3.7.5",
+    "@tailwindcss/vite": "^4.3.5",
+    "astro": "7.4.12",
     "cheerio": "^1.2.0",
     "date-fns": "^4.4.0",
     "katex": "^0.19.1",
@@ -26,8 +26,8 @@
     "reading-time": "^1.5.0",
     "satori": "^0.63.2",
     "sharp": "^0.35.5",
-    "tailwindcss": "^4.3.3",
-    "wrangler": "4.156.0"
+    "tailwindcss": "^4.3.5",
+    "wrangler": "4.162.0"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
