@@ -4,6 +4,7 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Sky from "@/components/space/Sky.astro";
 import { ClientRouter } from "astro:transitions";
+import { pageSwap } from "@/lib/transitions";
 
 type Props = {
   title: string;
@@ -11,6 +12,8 @@ type Props = {
   image?: string;
   lang?: string; // e.g., en or vi
   katex?: boolean;
+  /** Show the reading-progress line under the header (posts). */
+  readingProgress?: boolean;
   // Extended SEO props passthrough
   type?: "website" | "article";
   robots?: string;
@@ -30,6 +33,7 @@ const {
   image,
   lang = "en",
   katex,
+  readingProgress,
   type,
   robots,
   locale,
@@ -65,8 +69,8 @@ const {
   </Head>
   <body id="top">
     <Sky />
-    <Header />
-    <main id="main-content" class="pb-16 pt-8 sm:pt-10">
+    <Header readingProgress={readingProgress} />
+    <main id="main-content" class="pb-16 pt-8 sm:pt-10" transition:name="page" transition:animate={pageSwap}>
       <slot />
     </main>
     <Footer />

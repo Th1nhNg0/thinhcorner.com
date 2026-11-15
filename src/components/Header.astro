@@ -3,6 +3,11 @@ import Container from "./Container.astro";
 import SiteMark from "./SiteMark.astro";
 import { SITE } from "../../data/consts";
 
+interface Props {
+  readingProgress?: boolean;
+}
+
+const { readingProgress } = Astro.props;
 const pathname = Astro.url.pathname;
 const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 const navLinks = [
@@ -19,7 +24,7 @@ const navLinks = [
 >
   Skip to content
 </a>
-<header class="site-header">
+<header class="site-header" transition:name="site-header" transition:animate="none">
   <Container>
     <div class="flex h-15 items-center justify-between gap-4">
       <a
@@ -40,10 +45,20 @@ const navLinks = [
               aria-current={isActive(link.href) ? "page" : undefined}
             >
               {link.label}
+              {isActive(link.href) && (
+                <span class="site-nav-bar" transition:name="site-nav-bar" aria-hidden="true" />
+              )}
             </a>
           ))
         }
       </nav>
     </div>
   </Container>
+  {
+    readingProgress && (
+      <div class="read-progress" aria-hidden="true">
+        <span id="readProgress" class="read-progress-bar" />
+      </div>
+    )
+  }
 </header>
