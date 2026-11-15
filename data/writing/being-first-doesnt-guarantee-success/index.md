@@ -1,5 +1,5 @@
 ---
-title: "Being First Doesn't Guarantee Success"
+title: "Being First Doesn’t Guarantee Success"
 date: "2026-03-25"
 description: "OpenAI just shut down Sora, the AI video app that hit #1 on the App Store. What its rise and fall says about first-mover advantage."
 tags: ["ai", "business"]

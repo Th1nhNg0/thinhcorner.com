@@ -11,6 +11,7 @@ export const TAG_LABELS: Record<string, string> = {
   geopolitics: "Geopolitics",
   history: "History",
   law: "Law",
+  mobile: "Mobile",
   personal: "Personal",
   programming: "Programming",
   science: "Science",

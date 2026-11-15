@@ -28,6 +28,8 @@ for (const post of blog) {
 }
 const tags = [...tagCounts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
 
+const PHONE_TOPICS = 6;
+
 const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
 ---
 
@@ -82,14 +84,35 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
       </div>
     </form>
 
-    <nav class="mb-8 flex flex-wrap gap-x-4 text-sm" aria-label="Topics">
+    {/* On phones only the biggest topics show, so the list starts on the first screen. */}
+    <nav id="topicList" class="group/topics mb-8 flex flex-wrap gap-x-4 text-sm" aria-label="Topics">
       {
-        tags.map(([tag, count]) => (
-          <a href={`/writing/tag/${tag}`} class="group inline-flex min-h-7 items-baseline gap-1.5 py-0.5 text-zinc-400 transition-colors hover:text-[#eab308]">
+        tags.map(([tag, count], i) => (
+          <a
+            href={`/writing/tag/${tag}`}
+            class:list={[
+              "group inline-flex min-h-7 items-baseline gap-1.5 py-0.5 text-zinc-400 transition-colors hover:text-[#eab308]",
+              i >= PHONE_TOPICS && "max-sm:hidden max-sm:group-data-[open]/topics:inline-flex",
+            ]}
+          >
             {tagLabel(tag)}
             <span class="font-mono text-xs text-zinc-600">{count}</span>
           </a>
         ))
+      }
+      {
+        tags.length > PHONE_TOPICS && (
+          <button
+            id="topicToggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="topicList"
+            class="inline-flex min-h-7 cursor-pointer items-baseline py-0.5 text-zinc-500 transition-colors hover:text-[#eab308] sm:hidden"
+          >
+            <span class="group-data-[open]/topics:hidden">{tags.length - PHONE_TOPICS} more</span>
+            <span class="hidden group-data-[open]/topics:inline">Fewer</span>
+          </button>
+        )
       }
     </nav>
 
@@ -182,6 +205,17 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
   }
 
   document.addEventListener("astro:page-load", initLanguageFilter);
+
+  // Phones: show the rest of the topics on request.
+  document.addEventListener("astro:page-load", () => {
+    const toggle = document.getElementById("topicToggle");
+    const list = document.getElementById("topicList");
+    if (!toggle || !list) return;
+    toggle.addEventListener("click", () => {
+      const open = list.toggleAttribute("data-open");
+      toggle.setAttribute("aria-expanded", String(open));
+    });
+  });
 
   // Full-text search over the static Pagefind index built after `astro build`
   // (see pagefind.yml). The index only exists in built output, not under `astro dev`.
