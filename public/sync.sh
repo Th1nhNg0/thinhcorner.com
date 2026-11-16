@@ -24,4 +24,5 @@ curl -fsSL "$url" -o "$tmp" || {
   exit 1
 }
 
-THINHCORNER_SCRIPT_URL="$url" sh "$tmp" "$@"
+# Just downloaded, so the script can skip its own update check.
+THINHCORNER_SCRIPT_URL="$url" THINHCORNER_SELF_UPDATED=1 sh "$tmp" "$@"

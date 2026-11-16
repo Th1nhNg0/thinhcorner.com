@@ -160,6 +160,81 @@ const mergeModels = (models: NamedModel[]) => {
   return [...merged.values()];
 };
 
+const mergeAgents = (agents: NamedAgent[]) => {
+  const merged = new Map<string, NamedAgent>();
+  for (const [agent, totalTokens, costCents] of agents) {
+    const current = merged.get(agent);
+    if (current) {
+      current[1] += totalTokens;
+      current[2] += costCents;
+    } else {
+      merged.set(agent, [agent, totalTokens, costCents]);
+    }
+  }
+  return [...merged.values()];
+};
+
+const dayTokens = (day: NamedDay) => day[0] + day[1] + day[2];
+
+/**
+ * Merge a freshly collected day into the stored copy without ever losing usage.
+ *
+ * Agents prune their own logs (Claude Code deletes transcripts after
+ * `cleanupPeriodDays`, 30 by default) and a home that fails to read just
+ * reports nothing, so ccusage re-reading an old day can return less than it
+ * did before. The stored copy is the record, so per agent it only grows:
+ * - nothing shrank   -> take the incoming day (normal: today is still growing)
+ * - nothing grew     -> keep the stored day (logs were pruned or unreadable)
+ * - some of each     -> keep the stored day and add only what grew; models are
+ *   not split by agent in ccusage output, so the incoming models and token
+ *   kinds are scaled down to that growth.
+ */
+const mergeDay = (stored: NamedDay, incoming: NamedDay): NamedDay => {
+  const storedAgents = new Map(mergeAgents(stored[4]).map((a) => [a[0], a]));
+  const incomingAgents = new Map(mergeAgents(incoming[4]).map((a) => [a[0], a]));
+
+  if (storedAgents.size === 0 && incomingAgents.size === 0) {
+    return dayTokens(incoming) >= dayTokens(stored) ? incoming : stored;
+  }
+
+  let grew = 0;
+  let shrank = false;
+  const agents: NamedAgent[] = [];
+  for (const name of new Set([...storedAgents.keys(), ...incomingAgents.keys()])) {
+    const before = storedAgents.get(name);
+    const after = incomingAgents.get(name);
+    const beforeTokens = before?.[1] ?? 0;
+    const afterTokens = after?.[1] ?? 0;
+    if (afterTokens > beforeTokens) grew += afterTokens - beforeTokens;
+    if (afterTokens < beforeTokens) shrank = true;
+    const winner = afterTokens >= beforeTokens ? after : before;
+    if (winner) agents.push([name, winner[1], winner[2]]);
+  }
+
+  if (!shrank) return incoming;
+  if (grew === 0) return stored;
+
+  const incomingTotal = [...incomingAgents.values()].reduce((sum, a) => sum + a[1], 0);
+  const ratio = incomingTotal > 0 ? Math.min(1, grew / incomingTotal) : 0;
+  const scale = (value: number) => Math.round(value * ratio);
+  return [
+    stored[0] + scale(incoming[0]),
+    stored[1] + scale(incoming[1]),
+    stored[2] + scale(incoming[2]),
+    mergeModels([
+      ...stored[3],
+      ...incoming[3].map(
+        ([modelName, totalTokens, costCents]): NamedModel => [
+          modelName,
+          scale(totalTokens),
+          scale(costCents),
+        ],
+      ),
+    ]),
+    agents,
+  ];
+};
+
 const normalizeRawDay = (day: RawDay): NamedDay => [
   day.inputTokens ?? 0,
   day.outputTokens ?? 0,
@@ -176,12 +251,14 @@ const normalizeRawDay = (day: RawDay): NamedDay => [
       ],
     ),
   ),
-  (day.agents ?? []).map(
-    (agent): NamedAgent => [
-      agent.agent,
-      agent.totalTokens ?? 0,
-      toCents(agent.totalCost),
-    ],
+  mergeAgents(
+    (day.agents ?? []).map(
+      (agent): NamedAgent => [
+        agent.agent,
+        agent.totalTokens ?? 0,
+        toCents(agent.totalCost),
+      ],
+    ),
   ),
 ];
 
@@ -416,32 +493,13 @@ if (!existing.sources && existing.daily) {
 
 const currentSource = namedSources[sourceId] ?? {};
 const previousPeriods = new Set(Object.keys(currentSource));
+let keptPeriods = 0;
 for (const day of incomingDays) {
   const normalized = normalizeRawDay(day);
   const existingDay = currentSource[day.period];
-  if (!existingDay) {
-    currentSource[day.period] = normalized;
-  } else {
-    const incomingAgentNames = new Set(normalized[4].map(([name]) => name));
-    const missingExistingAgents = existingDay[4].filter(([name]) => !incomingAgentNames.has(name));
-    if (missingExistingAgents.length === 0) {
-      currentSource[day.period] = normalized;
-    } else {
-      const incomingMatchesExisting = normalized[4].every(([agentName, tokens]) => {
-        const match = existingDay[4].find(([name]) => name === agentName);
-        return match && match[1] === tokens;
-      });
-      if (!incomingMatchesExisting) {
-        currentSource[day.period] = [
-          normalized[0] + existingDay[0],
-          normalized[1] + existingDay[1],
-          normalized[2] + existingDay[2],
-          mergeModels([...normalized[3], ...existingDay[3]]),
-          [...normalized[4], ...missingExistingAgents],
-        ];
-      }
-    }
-  }
+  const merged = existingDay ? mergeDay(existingDay, normalized) : normalized;
+  if (existingDay && merged !== normalized) keptPeriods += 1;
+  currentSource[day.period] = merged;
 }
 namedSources[sourceId] = currentSource;
 
@@ -481,9 +539,9 @@ await writeFile(
 const newPeriods = incomingDays.filter(
   (day) => !previousPeriods.has(day.period),
 ).length;
-const refreshedPeriods = incomingDays.length - newPeriods;
+const refreshedPeriods = incomingDays.length - newPeriods - keptPeriods;
 process.stdout.write(
-  `Upserted ${incomingDays.length} days from ${sourceId} across ${targetHomes.length} home(s): ${newPeriods} new, ${refreshedPeriods} refreshed, ${Object.values(namedSources).reduce((sum, source) => sum + Object.keys(source).length, 0)} stored source-days.\n`,
+  `Upserted ${incomingDays.length} days from ${sourceId} across ${targetHomes.length} home(s): ${newPeriods} new, ${refreshedPeriods} refreshed, ${keptPeriods} kept (local logs had less than the stored copy), ${Object.values(namedSources).reduce((sum, source) => sum + Object.keys(source).length, 0)} stored source-days.\n`,
 );
 
 // Usage data is committed to its own branch (see scripts/sync-ccusage.sh) so sync
