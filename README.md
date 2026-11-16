@@ -162,10 +162,35 @@ downloads `scripts/update-ccusage.ts` from `master` next to it, runs it, commits
 pushes to `ccusage-data` (the first run creates the branch from `master`'s snapshot).
 `bun run data:usage` on a `master` checkout only updates the local file and never
 commits. Nothing is left behind except the cached copy the scheduler runs, which
-refreshes itself from `master` on every scheduled run and catches up automatically
-on boot/login if the machine was off during the scheduled time; `--help` lists the passthrough flags (`--no-commit`,
-`--no-push`, `ccusage` filters, …). `bun` and `git` are required, and git needs push
-credentials: a stored credential helper, or `GH_TOKEN` in the config file below.
+catches up automatically on boot/login if the machine was off during the scheduled
+time; `--help` lists the passthrough flags (`--no-commit`, `--no-push`, `ccusage`
+filters, …). `bun` and `git` are required, and git needs push credentials: a stored
+credential helper, or `GH_TOKEN` in the config file below.
+
+### Auto-update
+
+Every run from a saved copy of `sync-ccusage.sh` downloads the latest one from
+`master` first, replaces itself and re-runs with the same arguments. That holds for
+the scheduler's cached copy and for a copy you keep on a server and call from your own
+crontab over SSH, for example:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Th1nhNg0/thinhcorner.com/master/scripts/sync-ccusage.sh -o ~/sync-ccusage.sh
+# crontab -e
+55 23 * * * /bin/sh ~/sync-ccusage.sh --yes >> ~/ccusage-sync.log 2>&1
+```
+
+A download that fails, or does not look like the script, is ignored and the current
+copy runs. A copy inside a git checkout is never overwritten. `THINHCORNER_NO_UPDATE=1`
+turns it off. `scripts/update-ccusage.ts` is always fetched fresh from `master`.
+
+### Merging never loses usage
+
+Claude Code deletes old transcripts (`cleanupPeriodDays`, 30 days by default), so
+ccusage re-reading an old day can report less than it did before. The updater keeps,
+per machine, day and agent, the larger of the stored and the new count: a day only
+grows. If one agent shrank and another grew on the same day, the stored day is kept and
+only the growth is added.
 
 ### Machine identity
 

@@ -21,6 +21,8 @@
 #      ~15 min), so no site rebuild is needed
 #   4. scheduled runs catch up automatically on boot, login, or resume if the
 #      machine was powered off or sleeping during the scheduled time
+#   5. a saved copy (the scheduler's cache, or one your own crontab calls) updates
+#      itself from master on every run; THINHCORNER_NO_UPDATE=1 turns that off
 #
 # Options
 #   (no arguments + a terminal)  interactive menu:
@@ -49,7 +51,6 @@
 #     GIT_AUTHOR_NAME=... / GIT_AUTHOR_EMAIL=...
 # ---------------------------------------------------------------------------
 set -eu
-orig_argc=$#
 
 REPO_SLUG="Th1nhNg0/thinhcorner.com"
 BRANCH="master"
@@ -71,6 +72,49 @@ die() {
   printf '[ccusage-sync] error: %s\n' "$*" >&2
   exit 1
 }
+
+# --- self-update -----------------------------------------------------------
+# Any run from a saved copy updates itself from master before doing anything,
+# then re-runs with the same arguments. That covers the scheduler's cached copy
+# and a copy you keep on a server and call from your own crontab over SSH, so
+# cron always runs the latest script. A `curl | sh` run is already the latest,
+# and a git checkout of the repo is left alone so local edits are not lost.
+# Opt out with THINHCORNER_NO_UPDATE=1.
+self_update() {
+  [ -z "${THINHCORNER_SELF_UPDATED:-}" ] || return 0
+  [ "${THINHCORNER_NO_UPDATE:-0}" != 1 ] || return 0
+  [ -f "$0" ] || return 0
+  command -v curl >/dev/null 2>&1 || return 0
+  self_dir=$(cd "$(dirname "$0")" 2>/dev/null && pwd) || return 0
+  [ ! -e "$self_dir/../.git" ] || return 0
+
+  self_tmp="$self_dir/.sync-ccusage.sh.tmp.$$"
+  if ! curl -fsSL --max-time 60 "$SCRIPT_URL" -o "$self_tmp" 2>/dev/null; then
+    rm -f "$self_tmp" 2>/dev/null || true
+    warn "could not check for a newer script at $SCRIPT_URL; running this copy"
+    return 0
+  fi
+  # Only take a download that is this script and parses (not a proxy error page).
+  if ! grep -q "$MARKER" "$self_tmp" 2>/dev/null || ! sh -n "$self_tmp" 2>/dev/null; then
+    rm -f "$self_tmp"
+    warn "downloaded script looks wrong; running this copy"
+    return 0
+  fi
+  if cmp -s "$self_tmp" "$0"; then
+    rm -f "$self_tmp"
+    return 0
+  fi
+  if mv "$self_tmp" "$0" 2>/dev/null; then
+    chmod +x "$0" 2>/dev/null || true
+    say "updated $0 from $SCRIPT_URL"
+    THINHCORNER_SELF_UPDATED=1
+    export THINHCORNER_SELF_UPDATED
+    exec /bin/sh "$0" "$@"
+  fi
+  rm -f "$self_tmp" 2>/dev/null || true
+  warn "could not replace $0 (read-only?); running this copy"
+}
+self_update "$@"
 
 # --- arguments -------------------------------------------------------------
 at="$DEFAULT_AT"
@@ -459,6 +503,11 @@ print_status() {
   printf 'config file   : %s%s\n' "$config_path" "$([ -f "$config_path" ] && printf ' (found)' || printf ' (absent)')"
   printf 'cached script : %s%s\n' "$cache_path" "$([ -f "$cache_path" ] && printf ' (present)' || printf ' (absent)')"
   printf 'log file      : %s\n' "$log_path"
+  if [ "${THINHCORNER_NO_UPDATE:-0}" = 1 ]; then
+    printf 'auto-update   : off (THINHCORNER_NO_UPDATE=1)\n'
+  else
+    printf 'auto-update   : on, every run from %s\n' "$SCRIPT_URL"
+  fi
   if schedule_installed; then
     printf 'schedule      : on (daily %s + auto catch-up)\n' "$(scheduled_at)"
   else
@@ -676,23 +725,6 @@ menu() {
   done
   exec 3<&-
 }
-
-# --- self-update -----------------------------------------------------------
-# Scheduled runs execute the cached copy; refresh it from master first so
-# fixes reach every machine without re-installing the schedule.
-if { [ "$orig_argc" = 0 ] || { [ "$orig_argc" = 1 ] && [ "${1:-}" = "--catch-up" ]; }; } &&
-  [ "$0" = "$cache_path" ] && [ -z "${THINHCORNER_SELF_UPDATED:-}" ] &&
-  command -v curl >/dev/null 2>&1; then
-  tmp_cache="$cache_path.tmp.$$"
-  if curl -fsSL "$SCRIPT_URL" -o "$tmp_cache" 2>/dev/null && ! cmp -s "$tmp_cache" "$cache_path"; then
-    mv "$tmp_cache" "$cache_path"
-    say "updated the cached script from $SCRIPT_URL"
-    THINHCORNER_SELF_UPDATED=1
-    export THINHCORNER_SELF_UPDATED
-    exec /bin/sh "$cache_path" "$@"
-  fi
-  rm -f "$tmp_cache"
-fi
 
 # --- main ------------------------------------------------------------------
 [ "$install_cron" = 0 ] || install_schedule
