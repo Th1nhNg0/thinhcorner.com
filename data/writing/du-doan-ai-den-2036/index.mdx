@@ -16,7 +16,18 @@ Bài viết này ghi lại một số dự đoán của tôi về AI từ nay đ
 
 ## Tốc độ phát triển của AI
 
-Một thước đo đáng chú ý là "time horizon" của METR: độ dài của một nhiệm vụ lập trình, tính theo thời gian một người cần để hoàn thành, mà model có thể làm xong với tỉ lệ thành công 50%. Vào giữa năm 2024, GPT-4o đạt khoảng 6 phút. Đến tháng 2/2026, Claude Opus 4.6 đạt khoảng 12 giờ. Theo ước tính của METR, chỉ số này tăng gấp đôi sau mỗi khoảng 3,5 tháng[^metr]. Đến giữa năm 2026, bộ bài kiểm tra của METR không còn đủ khó để đo chính xác các model mới nhất.
+Không có một thước đo duy nhất nào cho "tốc độ phát triển của AI". Vì vậy, bảng dưới đây tập hợp bốn chỉ số độc lập, mỗi chỉ số đo một khía cạnh khác nhau: năng lực giải bài toán thực tế, năng lực suy luận, tài nguyên huấn luyện và chi phí sử dụng.
+
+| Chỉ số | Thay đổi |
+| --- | --- |
+| SWE-bench, tỉ lệ lỗi phần mềm thực tế trên GitHub mà AI sửa được | Từ 4,4% (2023) lên 71,7% (2024)[^aiindex] |
+| Olympic Toán quốc tế (IMO) | Từ mức huy chương bạc (AlphaProof, 7/2024) lên huy chương vàng với 35/42 điểm (Gemini Deep Think, 7/2025)[^imo] |
+| Compute dùng để huấn luyện các model hàng đầu | Tăng 4 đến 5 lần mỗi năm, giai đoạn 2010 đến 2024[^compute] |
+| Giá để đạt năng lực của GPT-4 trên bộ câu hỏi khoa học cấp tiến sĩ (GPQA) | Giảm khoảng 40 lần mỗi năm[^price] |
+
+Các chỉ số này có giới hạn riêng. Benchmark có thể bão hòa hoặc bị "học tủ", và Epoch lưu ý rằng tốc độ giảm giá thay đổi rất mạnh tùy mức năng lực, từ 9 đến 900 lần mỗi năm[^price]. Tuy nhiên, điểm đáng chú ý là cả bốn chỉ số đều tăng theo cấp số nhân, thay vì tuyến tính.
+
+Một thước đo khác là "time horizon" của METR: độ dài của một nhiệm vụ lập trình, tính theo thời gian một người cần để hoàn thành, mà model có thể làm xong với tỉ lệ thành công 50%. Vào giữa năm 2024, GPT-4o đạt khoảng 6 phút. Đến tháng 2/2026, Claude Opus 4.6 đạt khoảng 12 giờ, và METR ước tính chỉ số này tăng gấp đôi sau mỗi khoảng 3,5 tháng[^metr]. Thước đo này chỉ phản ánh các nhiệm vụ lập trình, và đến giữa năm 2026 bộ bài kiểm tra của METR không còn đủ khó để đo chính xác các model mới nhất.
 
 <TimeHorizon />
 
@@ -36,7 +47,7 @@ Tiến bộ không chỉ giới hạn trong phần mềm. Tháng 4/2021, Neurali
   label="Trên: khỉ Pager chơi Pong bằng não năm 2021. Dưới: bệnh nhân Neuralink lái thủy phi cơ trong GTA VI bằng suy nghĩ năm 2026."
 />
 
-Tuy nhiên, ví dụ thuyết phục nhất đến từ toán học. Ngày 15/10/2026, trong một cuộc phỏng vấn với Numberphile, Terence Tao, một trong những nhà toán học hàng đầu hiện nay, được hỏi liệu giả thuyết Riemann có sắp được giải hay không. Ông cho rằng các công ty AI nhiều khả năng đã đầu tư vào bài toán này nhiều hơn những gì họ công bố, nhưng vẫn "couldn't touch it". Theo ông, cần một bước tiến vượt xa AI hiện tại, và có lẽ phải đến khoảng năm 2050, sự kết hợp giữa con người và AI mới tạo ra tiến triển đáng kể[^tao2050].
+Tuy nhiên, ví dụ thuyết phục nhất đến từ toán học. Chỉ trong khoảng hai năm, AI đi từ mức huy chương bạc IMO (2024), lên huy chương vàng (2025), rồi đến các bài toán nghiên cứu chưa có lời giải (2026). IMO là cuộc thi dành cho học sinh phổ thông, còn các bài toán dưới đây đã làm khó giới toán học hàng chục năm, có bài hơn một thế kỷ. Ngày 15/10/2026, trong một cuộc phỏng vấn với Numberphile, Terence Tao, một trong những nhà toán học hàng đầu hiện nay, được hỏi liệu giả thuyết Riemann có sắp được giải hay không. Ông cho rằng các công ty AI nhiều khả năng đã đầu tư vào bài toán này nhiều hơn những gì họ công bố, nhưng vẫn "couldn't touch it". Theo ông, cần một bước tiến vượt xa AI hiện tại, và có lẽ phải đến khoảng năm 2050, sự kết hợp giữa con người và AI mới tạo ra tiến triển đáng kể[^tao2050].
 
 Ngày 20/11/2026, Levent Alpöge, nhà toán học làm việc tại Anthropic, công bố một chứng minh cho giả thuyết Riemann tổng quát (GRH). Chứng minh được thực hiện cùng Claude và viết hoàn toàn bằng Lean, một ngôn ngữ cho phép máy tính kiểm tra từng bước của một chứng minh toán học. Theo nhật ký của Alpöge, quá trình này kéo dài 41 ngày, bắt đầu từ đầu tháng 10, gần như cùng thời điểm với cuộc phỏng vấn của Tao[^tao2050]. Andrew Sutherland (MIT) cùng một số người khác đã xác nhận bản Lean biên dịch thành công[^techcrunch]. Cùng thời điểm, Alpöge và các cộng sự cũng công bố hai chứng minh về hiện tượng blowup của phương trình Euler và Navier-Stokes, đều có sự hỗ trợ đáng kể của AI[^taoblog].
 
@@ -118,6 +129,10 @@ Các bằng chứng này đều đến từ những thử nghiệm nhỏ, ngắn
 **Con người sẽ chọn làm gì khi không còn bị buộc phải làm việc để sống?**
 
 [^metr]: METR, ["Time Horizon 1.1"](https://metr.org/blog/2026-01-29-time-horizon-1-1/), 29/1/2026, và trang [time horizons](https://metr.org/time-horizons/).
+[^aiindex]: Stanford HAI, ["The 2025 AI Index Report: Technical Performance"](https://hai.stanford.edu/ai-index/2025-ai-index-report/technical-performance), 2025.
+[^imo]: Google DeepMind, ["Advanced version of Gemini with Deep Think officially achieves gold-medal standard at the International Mathematical Olympiad"](https://deepmind.google/discover/blog/advanced-version-of-gemini-with-deep-think-officially-achieves-gold-medal-standard-at-the-international-mathematical-olympiad/), 21/7/2025. Kết quả năm 2024 của AlphaProof và AlphaGeometry 2 tương đương mức huy chương bạc.
+[^compute]: Epoch AI, ["Training compute of frontier AI models grows by 4-5x per year"](https://epoch.ai/blog/training-compute-of-frontier-ai-models-grows-by-4-to-5x-per-year), 28/5/2024.
+[^price]: Epoch AI, ["LLM inference prices have fallen rapidly but unequally across tasks"](https://epoch.ai/data-insights/llm-inference-price-trends), 12/3/2025.
 [^epoch]: Epoch AI, ["Frontier AI performance becomes accessible on consumer hardware within a year"](https://epoch.ai/data-insights/consumer-gpu-model-gap), 15/8/2025.
 [^spaghetti]: Wikipedia, ["Will Smith eating spaghetti test"](https://en.wikipedia.org/wiki/Will_Smith_eating_spaghetti_test).
 [^neuralink]: X Freeze, [tweet ngày 21/11/2026](https://x.com/XFreeze/status/2124030861653999815).
