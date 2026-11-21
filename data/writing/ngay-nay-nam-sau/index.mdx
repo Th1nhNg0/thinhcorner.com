@@ -1,0 +1,104 @@
+---
+title: "Ngày này năm sau"
+date: "2026-11-21T14:00:00Z"
+description: "Vài suy nghĩ và dự đoán của tôi về tốc độ của AI, và một câu hỏi tôi chưa trả lời được: con người sẽ làm gì khi không còn bị bắt phải làm để sống?"
+lang: "vi"
+tags: ["ai", "personal"]
+---
+
+import LoopVideo from "@/components/LoopVideo.astro";
+import neuralinkMp4 from "./neuralink.mp4";
+import neuralinkWebm from "./neuralink.webm";
+import TimeHorizon from "@/components/blog/ai-next-year/TimeHorizon.astro";
+
+Dạo này tôi nghĩ về AI khá nhiều, và tôi có vài dự đoán. Tôi ghi lại đây để năm sau mở ra xem mình sai tới đâu.
+
+Tôi nghĩ AI sẽ giải quyết được chuyện nông sản, ung thư và bệnh tật của con người. Tôi cũng nghĩ ngày này năm sau AI sẽ giải được 90% vấn đề của con người. Nghe thì giống người say AI, nên tôi thử nhìn lại xem AI đang nhanh tới mức nào.
+
+## AI đang nhanh tới mức nào
+
+METR đo một thứ họ gọi là "time horizon": một model làm được việc lập trình dài bao lâu (tính theo thời gian một người làm) với tỉ lệ thành công 50%. Giữa năm 2024, GPT-4o làm được việc dài khoảng 6 phút. Tháng 2/2026, Claude Opus 4.6 làm được việc dài khoảng 12 tiếng. Theo METR, con số này tăng gấp đôi khoảng mỗi 3,5 tháng[^metr]. Tới giữa năm 2026 thì bộ bài test của họ không còn đủ khó để đo tiếp.
+
+Model chạy được ở nhà cũng đuổi theo rất nhanh. Epoch AI thấy rằng với một card đồ họa chơi game như RTX 5090, ai cũng chạy được một model mạnh ngang model tốt nhất thế giới của 6 đến 12 tháng trước[^epoch]. Model mạnh nhất năm ngoái, thứ phải chạy trong data center của OpenAI hay Anthropic, giờ chạy được trên máy ở nhà.
+
+<TimeHorizon />
+
+Ngoài phần mềm cũng vậy. Tháng 4/2021, Neuralink cho xem một con khỉ tên Pager chơi Pong bằng não. Tháng 11/2026, một bệnh nhân lái máy bay trong GTA VI chỉ bằng suy nghĩ, điều khiển hai joystick và 12 nút. Trước khi cấy chip, anh ấy dùng iPad bằng một cây que ngậm trong miệng[^neuralink].
+
+<LoopVideo
+  webm={neuralinkWebm}
+  mp4={neuralinkMp4}
+  width={480}
+  height={540}
+  label="Trên: khỉ Pager chơi Pong bằng não năm 2021. Dưới: bệnh nhân Neuralink lái thủy phi cơ trong GTA VI bằng suy nghĩ năm 2026."
+/>
+
+Còn toán thì sao. Ngày 15/10/2026, Terence Tao, một trong những nhà toán học giỏi nhất còn sống, được Numberphile hỏi giả thuyết Riemann có sắp được giải không. Ông nói các công ty AI chắc đã âm thầm dồn sức vào nó nhiều hơn họ công bố, nhưng vẫn "couldn't touch it". Theo ông cần một thứ vượt xa AI hiện tại, và có lẽ phải tới khoảng năm 2050, người và AI cùng làm, mới tiến thêm được[^tao2050].
+
+Ngày 20/11, Levent Alpöge, một nhà toán học làm ở Anthropic, đăng một chứng minh giả thuyết Riemann tổng quát (GRH). Anh làm cùng Claude, và toàn bộ chứng minh được viết bằng Lean, một ngôn ngữ để máy kiểm tra chứng minh toán từng bước. Theo log của anh, đợt này kéo dài 41 ngày, bắt đầu từ đầu tháng 10, đúng tuần Tao trả lời Numberphile[^tao2050]. Vài người, trong đó có Andrew Sutherland ở MIT, đã xác nhận bản Lean chạy được[^techcrunch]. Cùng lúc đó Alpöge và các cộng sự còn công bố hai chứng minh khác, cho phương trình Euler và Navier-Stokes, cũng dùng AI rất nhiều[^taoblog].
+
+![Bài blog của Terence Tao ngày 20/11/2026 liệt kê ba kết quả: Euler, Navier-Stokes và Generalized Riemann Hypothesis](./tao-blog.webp "Terence Tao điểm lại ba kết quả trên blog của ông, 20/11/2026.")
+
+Bản Lean chạy được nghĩa là máy đã kiểm tra từng bước. Nhưng tới giờ chưa ai hiểu chứng minh GRH đi theo hướng nào, và Tao viết rằng việc "tiêu hóa" nó sẽ mất thời gian[^taoblog]. Dù vậy, từ "2050" xuống còn 41 ngày là một khoảng cách rất lớn. Người ta dành cả đời nghiên cứu một bài toán, giờ AI giải trong một thời gian ngắn.
+
+## Nếu ngành khác cũng có "Riemann"
+
+Toán có một lợi thế mà ngành khác không có: kiểm chứng gần như ngay lập tức. Lean chạy xong là biết đúng hay sai. Tôi nghĩ RSI (recursive self-improvement, AI tự cải thiện chính nó) đã được đem ra ngoài đời, chỉ là feedback không nhanh như LLM nên mình chưa thấy liền. Qua năm sau chắc sẽ thấy nghiên cứu được công bố liên tục, từ sinh học, hóa học đến vật lý.
+
+Tôi hỏi thử Claude Fable 5.2: mỗi ngành, cái gì sẽ là tin lớn ngang "giải được Riemann", kiểm chứng mất bao lâu, và khả năng có trước 2031 với AI làm phần lớn là bao nhiêu. Đây là vài dòng trong câu trả lời. Các con số là phỏng đoán của một model, không phải dữ liệu.
+
+| Ngành | Tin "ngang Riemann" | Kiểm chứng mất | Fable đoán tới 2031 |
+| --- | --- | --- | --- |
+| Khoa học máy tính | Chứng minh P ≠ NP | Vài tuần (Lean) | 2% |
+| Sinh học | Mô hình một tế bào vi khuẩn chỉ từ genome | Vài tháng | 10% |
+| Năng lượng | Nhà máy nhiệt hạch đưa điện lên lưới | Vài tháng | 8% |
+| Vật liệu | Siêu dẫn ở nhiệt độ phòng, áp suất thường | Vài tuần | 3% |
+| Y học | Thuốc chặn Alzheimer qua thử nghiệm phase 3 | 5 đến 8 năm | 3% |
+| Nông nghiệp | Lúa mì tự cố định đạm qua thử nghiệm ngoài đồng | 3 đến 5 năm | 3% |
+| Lão hóa | Liệu pháp kéo dài tuổi thọ khỏe mạnh ở người | Trên 10 năm | Dưới 1% |
+
+Cột thứ ba là điều tôi để ý nhất. Ngành nào kiểm chứng bằng máy tính hoặc thí nghiệm rẻ thì có thể chạy nhanh như toán. Ngành nào phải chờ trên cơ thể người, cây trồng hay khí hậu thì kẹt ở thời gian. Fable viết một câu khá gọn: thử nghiệm kéo dài 18 tháng thì vẫn mất 18 tháng. AI có thể tìm ra thuốc nhanh hơn, nhưng thuốc vẫn phải qua thử nghiệm trên người.
+
+## Có việc làm mới không
+
+Các cuộc cách mạng công nghiệp trước đều làm nhiều người mất việc, rồi lại tạo ra việc mới. Năm 1900, khoảng 40% lao động Mỹ làm nông. Bây giờ con số đó dưới 2%, và những người đó không thất nghiệp mà chuyển sang làm những nghề trước đây chưa có.
+
+Nhưng cũng có một nhóm không chuyển nghề được: con ngựa. Đầu thế kỷ 20 Mỹ có hơn 20 triệu con ngựa kéo xe, cày ruộng. Động cơ đốt trong ra đời, và ngựa không có "nghề mới" nào để chuyển sang.
+
+Máy móc trước đây thay phần cơ bắp, con người chuyển sang dùng đầu óc. Lần này AI thay luôn phần đầu óc. Vậy AI có tạo ra việc làm mới không, hay nó tự tạo ra vấn đề rồi tự giải quyết luôn?
+
+Tôi chưa biết. Có thể con người giống người nông dân năm 1900, cũng có thể giống con ngựa.
+
+## Con người sẽ làm gì
+
+Giả sử dự đoán của tôi đúng: AI giải được bệnh, sản xuất đủ đồ ăn, làm được phần lớn công việc. Khi đó không ai còn bị bắt phải đi làm để sống.
+
+Vậy con người sẽ chọn làm gì?
+
+Tôi nghĩ cho dù có tiến tới cộng sản đi nữa thì cũng phải trả lời được câu này mới tính tiếp được. Tôi chưa có đáp án.
+
+Năm 1930, Keynes viết rằng tới thời con cháu ông, người ta chỉ cần làm khoảng 15 tiếng một tuần, và vấn đề lớn nhất sẽ là sống sao cho hay với thời gian rảnh[^keynes]. Gần 100 năm sau, phần lớn chúng ta vẫn làm 40 tiếng hoặc hơn.
+
+Cùng ngày Alpöge đăng chứng minh của mình, Ravi Vakil ở Stanford đăng một chứng minh GRH khác, của postdoc Alessandro Masullo. Chứng minh này viết hoàn toàn bằng tay, không dùng AI, sau 12 năm làm. Nó chưa được viết bằng Lean nên chưa ai biết đúng sai. Masullo viết cho những nhà toán học đang nản: "we are still here. We are very much alive"[^techcrunch].
+
+Tôi không coi đây là đáp án. Tôi chỉ thấy có một người đã làm một việc suốt 12 năm mà không ai bắt.
+
+## Hẹn năm sau
+
+Tôi ghi lại đây các dự đoán của mình, kèm ngày, để 21/11/2027 mở ra chấm điểm.
+
+| Dự đoán (21/11/2026) | Hạn | Kết quả |
+| --- | --- | --- |
+| AI giải được 90% vấn đề của con người | 21/11/2027 | ? |
+| Liên tục có nghiên cứu lớn từ AI trong sinh học, hóa học, vật lý | 21/11/2027 | ? |
+| AI giải quyết nông sản, ung thư, bệnh tật | Chưa đặt hạn | ? |
+
+Và một câu hỏi, chưa có cột kết quả: con người sẽ chọn làm gì khi không bị bắt phải làm để sống?
+
+[^metr]: METR, ["Time Horizon 1.1"](https://metr.org/blog/2026-01-29-time-horizon-1-1/), 29/1/2026, và trang [time horizons](https://metr.org/time-horizons/).
+[^epoch]: Epoch AI, ["Frontier AI performance becomes accessible on consumer hardware within a year"](https://epoch.ai/data-insights/consumer-gpu-model-gap), 15/8/2025.
+[^neuralink]: X Freeze, [tweet ngày 21/11/2026](https://x.com/XFreeze/status/2124030861653999815).
+[^tao2050]: OfficeChai, ["Terence Tao Had Said A Month Ago That AI Could Solve Riemann Hypothesis Only By 2050"](https://officechai.com/ai/terence-tao-had-a-month-ago-that-ai-could-solve-riemann-hypothesis-only-by-2050/), 21/11/2026. Phỏng vấn gốc: Numberphile, "No More Heroes", 15/10/2026.
+[^techcrunch]: TechCrunch, ["AI claimed a solution to the 167-year-old Riemann hypothesis, and a human did, too"](https://techcrunch.com/2026/11/20/ai-claimed-a-solution-to-the-167-year-old-riemann-hypothesis-and-a-human-did-too/), 20/11/2026.
+[^taoblog]: Terence Tao, ["Unforced Euler singularity, unforced Navier-Stokes singularity, and the Generalized Riemann Hypothesis"](https://terrytao.wordpress.com/2026/11/20/unforced-euler-singularity-unforced-navier-stokes-singularity-and-the-generalized-riemann-hypothesis/), 20/11/2026.
+[^keynes]: John Maynard Keynes, "Economic Possibilities for our Grandchildren", 1930.
