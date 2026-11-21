@@ -1,7 +1,7 @@
 ---
 title: "Khi không còn phải làm việc để sống"
 date: "2026-11-21T14:00:00Z"
-description: "Một dự đoán: trong 5 đến 10 năm tới, AI sẽ giải quyết được khoảng 90% các vấn đề lớn của con người. Khi đó, con người sẽ chọn làm gì?"
+description: "Tôi đoán trong 5 đến 10 năm nữa, AI sẽ giải quyết được khoảng 90% vấn đề lớn của con người. Nếu vậy thì con người sẽ làm gì?"
 lang: "vi"
 tags: ["ai", "personal"]
 ---
@@ -12,21 +12,27 @@ import neuralinkMp4 from "./neuralink.mp4";
 import neuralinkWebm from "./neuralink.webm";
 import TimeHorizon from "@/components/blog/ai-next-year/TimeHorizon.astro";
 
-Bài viết này ghi lại một dự đoán: trong khoảng 5 đến 10 năm tới, tức từ 2031 đến 2036, AI sẽ giải quyết được khoảng 90% các vấn đề lớn của con người, chẳng hạn bảo đảm đủ lương thực hay điều trị các bệnh như ung thư. Dự đoán này nghe có phần cực đoan, vì vậy tôi ghi lại kèm thời điểm cụ thể để có thể đối chiếu sau này. Các phần dưới đây trình bày những cơ sở dẫn tôi đến nhận định đó, các giới hạn của nó, và câu hỏi đặt ra nếu nó trở thành sự thật.
+Tôi có một dự đoán hơi liều: trong 5 đến 10 năm nữa, AI sẽ giải quyết được khoảng 90% vấn đề lớn của con người, từ chuyện làm ra đủ lương thực cho tới chữa những bệnh như ung thư.
 
-## Tốc độ phát triển của AI
+Nghe thì giống người đang say AI. Nên tôi ghi lại ở đây, có ngày tháng rõ ràng, để sau này mở ra xem mình đúng hay sai. Bài này là những thứ khiến tôi nghĩ vậy, chỗ tôi thấy mình có thể sai, và một câu hỏi tôi thấy rất đáng suy nghĩ.
 
-Một thước đo đáng chú ý là "time horizon" của METR: độ dài của một nhiệm vụ lập trình, tính theo thời gian một người cần để hoàn thành, mà model có thể làm xong với tỉ lệ thành công 50%. Vào giữa năm 2024, GPT-4o đạt khoảng 6 phút. Đến tháng 2/2026, Claude Opus 4.6 đạt khoảng 12 giờ. Theo ước tính của METR, chỉ số này tăng gấp đôi sau mỗi khoảng 3,5 tháng[^metr]. Đến giữa năm 2026, bộ bài kiểm tra của METR không còn đủ khó để đo chính xác các model mới nhất.
+## AI đang nhanh tới mức nào
+
+METR có một cách đo khá dễ hiểu. Họ đưa cho model một việc lập trình, rồi xem việc dài nhất mà nó làm xong được một nửa số lần là bao lâu, tính theo thời gian một người làm.
+
+Giữa năm 2024, GPT-4o làm được việc dài khoảng 6 phút. Tháng 2/2026, Claude Opus 4.6 làm được việc dài khoảng 12 tiếng. Con số này cứ khoảng 3,5 tháng lại gấp đôi[^metr]. Tới giữa năm nay, METR không còn bài nào đủ khó để đo tiếp.
 
 <TimeHorizon />
 
-Khoảng cách giữa model hàng đầu và model chạy trên phần cứng cá nhân cũng đang thu hẹp. Epoch AI cho thấy chỉ với một card đồ họa phổ thông như RTX 5090, người dùng có thể chạy các model đạt điểm benchmark tương đương model mạnh nhất thế giới của 6 đến 12 tháng trước[^epoch]. Epoch cũng lưu ý rằng model nhỏ thường được tối ưu riêng cho benchmark, nên khoảng cách trong sử dụng thực tế có thể lớn hơn. Dù vậy, độ trễ hiện chỉ còn tính bằng tháng.
+Model chạy ở nhà cũng đuổi theo rất sát. Theo Epoch AI, chỉ cần một card chơi game như RTX 5090 là bạn chạy được model có điểm benchmark ngang model mạnh nhất thế giới của 6 đến 12 tháng trước[^epoch]. Dùng thật thì có thể kém hơn một chút, vì model nhỏ hay được tối ưu cho benchmark. Nhưng khoảng cách giờ chỉ còn tính bằng tháng.
 
-Xu hướng tương tự thể hiện rõ ở model tạo video. Tháng 3/2023, một người dùng Reddit dùng công cụ text-to-video của ModelScope tạo ra đoạn clip "Will Smith ăn mì Ý". Khuôn mặt bị biến dạng và chuyển động thiếu tự nhiên khiến clip lan truyền rộng rãi, và về sau trở thành một phép thử không chính thức cho các model video. Tháng 5/2025, Veo 3 của Google tái tạo cùng cảnh này với khuôn mặt và chuyển động chính xác hơn nhiều, kèm cả âm thanh. Tháng 2/2026, Forbes nhận định Seedance 2.0 đã vượt qua phép thử này[^spaghetti]. Trong vòng ba năm, chất lượng đã đi từ mức gây cười đến mức khó phân biệt với video quay thật.
+Video thì dễ thấy hơn nữa. Tháng 3/2023, có người trên Reddit dùng ModelScope làm một clip Will Smith ăn mì Ý. Mặt méo mó, mì bay lung tung, nhìn đáng sợ tới mức clip thành meme, rồi thành luôn một bài test không chính thức cho model video.
+
+Tháng 5/2025, Veo 3 của Google làm lại đúng cảnh đó, mặt ra mặt, có cả tiếng nhai. Tháng 2/2026, Forbes viết rằng Seedance 2.0 đã qua bài test này[^spaghetti]. Chỉ ba năm, từ một clip để cười thành thứ khó phân biệt với video thật.
 
 <YouTubeEmbed id="Tmfv3ijFtPY" title="Will Smith Eating Spaghetti: AI Evolution 2023-2026" />
 
-Tiến bộ không chỉ giới hạn trong phần mềm. Tháng 4/2021, Neuralink công bố đoạn video con khỉ Pager chơi Pong bằng tín hiệu não. Năm năm sau, một bệnh nhân của Neuralink điều khiển thủy phi cơ trong GTA VI chỉ bằng suy nghĩ, với hai joystick và 12 nút điều khiển. Trước khi được cấy thiết bị, bệnh nhân này phải dùng một cây que ngậm trong miệng để thao tác trên iPad[^neuralink].
+Ngoài màn hình cũng vậy. Tháng 4/2021, Neuralink cho xem con khỉ Pager chơi Pong bằng não. Năm năm sau, một bệnh nhân của họ lái thủy phi cơ trong GTA VI chỉ bằng suy nghĩ, điều khiển cùng lúc hai joystick và 12 nút. Trước khi gắn chip, anh ấy phải ngậm một cây que trong miệng để bấm iPad[^neuralink].
 
 <LoopVideo
   webm={neuralinkWebm}
@@ -36,21 +42,31 @@ Tiến bộ không chỉ giới hạn trong phần mềm. Tháng 4/2021, Neurali
   label="Trên: khỉ Pager chơi Pong bằng não năm 2021. Dưới: bệnh nhân Neuralink lái thủy phi cơ trong GTA VI bằng suy nghĩ năm 2026."
 />
 
-Tuy nhiên, ví dụ thuyết phục nhất đến từ toán học. Ngày 15/10/2026, trong một cuộc phỏng vấn với Numberphile, Terence Tao, một trong những nhà toán học hàng đầu hiện nay, được hỏi liệu giả thuyết Riemann có sắp được giải hay không. Ông cho rằng các công ty AI nhiều khả năng đã đầu tư vào bài toán này nhiều hơn những gì họ công bố, nhưng vẫn "couldn't touch it". Theo ông, cần một bước tiến vượt xa AI hiện tại, và có lẽ phải đến khoảng năm 2050, sự kết hợp giữa con người và AI mới tạo ra tiến triển đáng kể[^tao2050].
+## Riemann
 
-Ngày 20/11/2026, Levent Alpöge, nhà toán học làm việc tại Anthropic, công bố một chứng minh cho giả thuyết Riemann tổng quát (GRH). Chứng minh được thực hiện cùng Claude và viết hoàn toàn bằng Lean, một ngôn ngữ cho phép máy tính kiểm tra từng bước của một chứng minh toán học. Theo nhật ký của Alpöge, quá trình này kéo dài 41 ngày, bắt đầu từ đầu tháng 10, gần như cùng thời điểm với cuộc phỏng vấn của Tao[^tao2050]. Andrew Sutherland (MIT) cùng một số người khác đã xác nhận bản Lean biên dịch thành công[^techcrunch]. Cùng thời điểm, Alpöge và các cộng sự cũng công bố hai chứng minh về hiện tượng blowup của phương trình Euler và Navier-Stokes, đều có sự hỗ trợ đáng kể của AI[^taoblog].
+Nhưng chuyện làm tôi bất ngờ nhất là toán.
+
+Ngày 15/10, Terence Tao, một trong những nhà toán học giỏi nhất còn sống, được Numberphile hỏi giả thuyết Riemann có sắp được giải không. Ông nói các công ty AI chắc đã dồn sức vào nó nhiều hơn họ công bố, nhưng vẫn "couldn't touch it". Theo ông, có lẽ phải tới khoảng năm 2050, người và AI cùng làm, mới tiến thêm được[^tao2050].
+
+Ngày 20/11, Levent Alpöge, một nhà toán học làm ở Anthropic, đăng chứng minh cho giả thuyết Riemann tổng quát (GRH). Anh làm cùng Claude, và toàn bộ chứng minh được viết bằng Lean, một ngôn ngữ để máy kiểm tra chứng minh toán từng bước.
+
+Theo log của anh, cả quá trình mất 41 ngày, bắt đầu từ đầu tháng 10, gần như đúng tuần Tao trả lời phỏng vấn[^tao2050]. Andrew Sutherland ở MIT và vài người khác đã xác nhận bản Lean compile được[^techcrunch]. Cùng lúc đó, Alpöge và các cộng sự còn đăng thêm hai chứng minh cho phương trình Euler và Navier-Stokes, cũng nhờ AI rất nhiều[^taoblog].
 
 ![Bài blog của Terence Tao ngày 20/11/2026 liệt kê ba kết quả: Euler, Navier-Stokes và Generalized Riemann Hypothesis](./tao-blog.webp "Terence Tao điểm lại ba kết quả trên blog của ông, 20/11/2026.")
 
-Cần lưu ý rằng việc bản Lean biên dịch thành công chỉ xác nhận tính đúng đắn hình thức của từng bước. Hiện chưa ai nắm được chiến lược tổng thể của chứng minh, và Tao nhận định quá trình "tiêu hóa" nó sẽ cần thêm thời gian[^taoblog]. Dù vậy, nếu chứng minh đứng vững, mốc "khoảng 2050" đã bị rút ngắn gần 24 năm, và một bài toán từng chiếm trọn sự nghiệp của nhiều nhà toán học đã được giải trong khoảng một tháng rưỡi.
+Compile được thì mới chỉ có nghĩa là máy thấy từng bước đều đúng. Chưa ai hiểu chứng minh đi theo hướng nào, và Tao nói sẽ cần thời gian để "tiêu hóa" nó[^taoblog].
 
-## Giới hạn của kiểm chứng ở các ngành khác
+Dù vậy, nếu chứng minh này đứng vững, mốc "khoảng 2050" đã sai gần 24 năm. Có người dành cả đời cho một bài toán. Lần này, một nhà toán học và một model làm xong trong khoảng một tháng rưỡi.
 
-Toán học có một lợi thế đặc thù: kết quả có thể được kiểm chứng gần như ngay lập tức bằng các công cụ như Lean. Phần lớn các ngành khoa học khác không có điều kiện này. Tôi cho rằng cơ chế RSI (recursive self-improvement, AI tự cải thiện chính nó) đã bắt đầu được áp dụng ngoài lĩnh vực ngôn ngữ, nhưng vòng phản hồi trong phòng thí nghiệm chậm hơn nhiều so với huấn luyện LLM, nên kết quả chưa hiện ra ngay. Tôi dự đoán trong năm tới sẽ có nhiều nghiên cứu quan trọng có sự tham gia của AI được công bố trong sinh học, hóa học và vật lý.
+## Toán nhanh, mấy ngành khác thì chưa chắc
 
-Để hình dung, tôi đề nghị Claude Fable 5.2 liệt kê một cột mốc có tầm vóc tương đương giả thuyết Riemann cho từng ngành, thời gian cần để kiểm chứng, và xác suất cột mốc đó đạt được trước năm 2031 với vai trò chính của AI. Các con số dưới đây là ước đoán của model, không phải dữ liệu thực nghiệm.
+Toán có một lợi thế lớn: kiểm tra đúng sai gần như ngay lập tức. Lean chạy xong là biết.
 
-| Ngành | Cột mốc tương đương | Thời gian kiểm chứng | Ước đoán của Fable (đến 2031) |
+Mấy ngành khác không được vậy. Tôi nghĩ RSI (recursive self-improvement, AI tự cải thiện chính nó) đã được đem ra dùng ngoài đời rồi. Chỉ là vòng feedback trong phòng thí nghiệm chậm hơn LLM nhiều, nên mình chưa thấy ngay. Tôi đoán qua năm sau sẽ thấy nghiên cứu có AI được công bố liên tục, từ sinh học, hóa học tới vật lý.
+
+Tôi hỏi thử Claude Fable 5.2: mỗi ngành có "Riemann" nào, tức một tin lớn cỡ đó, kiểm chứng mất bao lâu, và khả năng có trước 2031 nếu AI làm phần lớn. Các con số dưới đây là model đoán, không phải dữ liệu.
+
+| Ngành | Tin "ngang Riemann" | Kiểm chứng mất | Fable đoán tới 2031 |
 | --- | --- | --- | --- |
 | Khoa học máy tính | Chứng minh P ≠ NP | Vài tuần (Lean) | 2% |
 | Sinh học | Mô hình một tế bào vi khuẩn chỉ từ genome | Vài tháng | 10% |
@@ -60,52 +76,70 @@ Toán học có một lợi thế đặc thù: kết quả có thể được ki
 | Nông nghiệp | Lúa mì tự cố định đạm qua thử nghiệm ngoài đồng | 3 đến 5 năm | 3% |
 | Lão hóa | Liệu pháp kéo dài tuổi thọ khỏe mạnh ở người | Trên 10 năm | Dưới 1% |
 
-Cột "thời gian kiểm chứng" cho thấy yếu tố quyết định tốc độ. Những ngành có thể kiểm chứng bằng tính toán hoặc thí nghiệm chi phí thấp có khả năng tiến nhanh tương tự toán học. Ngược lại, những ngành phụ thuộc vào phản ứng của cơ thể người, cây trồng hay khí hậu bị giới hạn bởi thời gian thực: một thử nghiệm lâm sàng kéo dài 18 tháng vẫn cần 18 tháng, dù ứng viên thuốc được tìm ra nhanh đến đâu. Nếu dự đoán 90% của tôi sai, nhiều khả năng nó sai ở điểm này.
+Cột tôi thấy quan trọng nhất là "kiểm chứng mất". Ngành nào kiểm được bằng máy tính hay thí nghiệm rẻ thì có thể chạy nhanh như toán. Ngành nào phải chờ cơ thể người, cây trồng hay khí hậu thì kẹt ở thời gian.
 
-## AI và thị trường lao động
+Một thử nghiệm thuốc kéo dài 18 tháng thì vẫn mất 18 tháng, dù AI tìm ra thuốc nhanh cỡ nào. Nếu dự đoán 90% của tôi sai, chắc nó sai ở chỗ này.
 
-Các cuộc cách mạng công nghiệp trước đây đều làm mất đi nhiều việc làm, nhưng về dài hạn lại tạo ra những ngành nghề mới. Năm 1900, khoảng 40% lực lượng lao động Mỹ làm nông nghiệp; ngày nay tỉ lệ này dưới 2%. Phần lao động dôi ra không biến mất mà chuyển sang những ngành nghề chưa tồn tại vào năm 1900.
+## Lần này có việc mới không
 
-Tuy vậy, lịch sử cũng ghi nhận một trường hợp ngược lại: ngựa kéo. Đầu thế kỷ 20, nước Mỹ có hơn 20 triệu con ngựa phục vụ vận tải và nông nghiệp. Khi động cơ đốt trong ra đời, không có vai trò mới nào thay thế cho chúng.
+Mỗi cuộc cách mạng công nghiệp đều làm nhiều người mất việc, rồi cuối cùng lại tạo ra việc mới. Năm 1900, khoảng 40% lao động Mỹ làm nông. Bây giờ chưa tới 2%. Số người đó không ngồi không, họ chuyển sang những nghề hồi 1900 chưa ai nghĩ ra.
 
-Máy móc trước đây chủ yếu thay thế sức lao động cơ bắp, và con người chuyển sang các công việc đòi hỏi trí tuệ. AI thay thế chính năng lực trí tuệ đó. Câu hỏi đặt ra là AI sẽ tạo ra việc làm mới cho con người, hay sẽ tự phát hiện và tự giải quyết vấn đề mà không cần đến con người. Hiện tôi chưa thể xác định con người lần này sẽ ở vị trí của người nông dân năm 1900 hay của con ngựa.
+Nhưng có một nhóm đã không chuyển nghề được: con ngựa. Đầu thế kỷ 20, Mỹ có hơn 20 triệu con ngựa kéo xe, cày ruộng. Động cơ đốt trong ra đời, và không có nghề mới nào cho ngựa cả.
+
+Máy móc trước đây thay phần cơ bắp, nên con người chuyển qua dùng đầu óc. Lần này AI thay luôn phần đầu óc. Nó sẽ tạo ra việc mới cho con người, hay tự tìm ra vấn đề rồi tự giải luôn?
+
+Tôi chưa biết lần này mình sẽ là người nông dân năm 1900, hay là con ngựa.
 
 ## Các dự đoán
 
-Dưới đây là các dự đoán của tôi tại thời điểm 21/11/2026.
+Đây là những gì tôi đoán hôm nay, 21/11/2026.
 
-| Dự đoán | Thời hạn | Kết quả |
+| Dự đoán | Hạn | Kết quả |
 | --- | --- | --- |
-| Các nghiên cứu quan trọng có sự tham gia của AI được công bố liên tục trong sinh học, hóa học, vật lý | 21/11/2027 | ? |
-| AI giải quyết được khoảng 90% các vấn đề lớn của con người, ví dụ lương thực, bệnh tật | 2031 đến 2036 | ? |
+| Nghiên cứu lớn có AI được công bố liên tục trong sinh học, hóa học, vật lý | 21/11/2027 | ? |
+| AI giải quyết được khoảng 90% vấn đề lớn của con người, ví dụ lương thực, bệnh tật | 2031 đến 2036 | ? |
 
 ## Con người sẽ làm gì
 
-Giả sử dự đoán thứ hai đúng: AI bảo đảm được lương thực, chăm sóc sức khỏe và đảm nhận phần lớn công việc, đến mức không ai còn buộc phải lao động để tồn tại. Khi đó xuất hiện một câu hỏi tôi từng đọc được trên mạng, mang tính triết học nhiều hơn kinh tế: con người sẽ chọn làm gì khi không còn bị buộc phải làm việc để sống? Theo tôi, kể cả khi xã hội tiến tới một mô hình như chủ nghĩa cộng sản, câu hỏi này vẫn cần được trả lời trước tiên.
+Giả sử dự đoán thứ hai đúng. AI lo được đồ ăn, bệnh tật và phần lớn công việc. Không ai còn phải đi làm để sống nữa.
 
-Câu hỏi này không mới. Các nhà tư tưởng đã đưa ra nhiều phỏng đoán, và một số nghiên cứu thực nghiệm cho phép kiểm tra chúng ở quy mô nhỏ.
+Tôi từng đọc được một câu hỏi trên mạng: con người sẽ chọn làm gì khi không còn bị buộc phải làm việc để sống? Với tôi, kể cả có tiến tới cộng sản đi nữa thì cũng phải trả lời được câu này trước đã.
 
-### Các phỏng đoán
+Câu hỏi này không mới. Người ta đã đoán nhiều lần, và cũng có vài nghiên cứu cho mình nhìn thử.
 
-Năm 1845, Marx và Engels hình dung một xã hội mà ở đó một người có thể "đi săn buổi sáng, câu cá buổi chiều, chăn nuôi buổi tối và phê bình sau bữa ăn" mà không bị đóng khung vào một nghề cố định[^marx]. Năm 1930, Keynes dự đoán rằng đến thế hệ cháu chắt của ông, con người chỉ cần làm việc khoảng 15 giờ mỗi tuần, và thách thức lớn nhất sẽ là sử dụng thời gian rảnh một cách có ý nghĩa[^keynes]. Bertrand Russell, trong "In Praise of Idleness" (1932), đề xuất ngày làm việc bốn giờ và cho rằng thời gian còn lại sẽ dành cho học hỏi, nghệ thuật và các mối quan hệ[^russell].
+### Người ta từng đoán gì
 
-Không phải ai cũng lạc quan. Năm 1958, Hannah Arendt cảnh báo về viễn cảnh "một xã hội của những người lao động không còn lao động", tức một xã hội đã tổ chức toàn bộ đời sống quanh công việc rồi đột ngột mất đi hoạt động duy nhất còn lại của nó[^arendt]. Năm 1978, Bernard Suits đưa ra một câu trả lời khác thường trong "The Grasshopper": trong một xã hội lý tưởng nơi mọi nhu cầu đều được đáp ứng, hoạt động duy nhất còn ý nghĩa là chơi trò chơi, tức tự nguyện vượt qua những trở ngại không cần thiết[^suits].
+Năm 1845, Marx và Engels tưởng tượng một xã hội mà ở đó bạn có thể "đi săn buổi sáng, câu cá buổi chiều, chăn nuôi buổi tối, và phê bình sau bữa ăn", không cần gắn cả đời với một nghề[^marx].
 
-### Các bằng chứng
+Năm 1930, Keynes đoán tới đời cháu chắt ông, người ta chỉ cần làm khoảng 15 tiếng một tuần. Cái khó nhất lúc đó sẽ là sống sao cho đáng với thời gian rảnh[^keynes]. Hai năm sau, Bertrand Russell viết "In Praise of Idleness", đề xuất mỗi ngày chỉ làm 4 tiếng và dành phần còn lại cho học hỏi, nghệ thuật, bạn bè[^russell].
 
-Chưa có xã hội nào thực sự không cần lao động, nhưng có một số tình huống gần giống.
+Có người thì lo. Năm 1958, Hannah Arendt cảnh báo về "một xã hội của những người lao động không còn lao động": một xã hội đã xây cả đời sống quanh công việc, rồi bỗng dưng mất luôn thứ duy nhất nó biết làm[^arendt].
 
-Nghiên cứu Marienthal (1933) của Marie Jahoda, Paul Lazarsfeld và Hans Zeisel khảo sát một thị trấn ở Áo nơi gần như toàn bộ dân cư mất việc sau khi nhà máy đóng cửa. Thời gian rảnh tăng lên không dẫn đến nhiều hoạt động hơn mà đến sự thờ ơ. Jahoda về sau kết luận rằng công việc mang lại năm thứ ngoài thu nhập: cấu trúc thời gian, quan hệ xã hội, mục đích chung, bản sắc và địa vị, và hoạt động đều đặn[^jahoda]. Mất việc nghĩa là mất cả năm thứ đó.
+Một câu trả lời khá lạ là của Bernard Suits trong "The Grasshopper" (1978). Ông cho rằng trong một xã hội lý tưởng, khi mọi nhu cầu đều được lo xong, thứ duy nhất còn đáng làm là chơi trò chơi, tức là tự nguyện vượt qua những thử thách không cần thiết[^suits]. Nghe thì buồn cười, nhưng nghĩ lại thì leo núi, chơi cờ, giải toán cho vui đều là vậy.
 
-Tuy nhiên, Marienthal là trường hợp mất việc kèm nghèo đói. Các thí nghiệm thu nhập vô điều kiện cho thấy một bức tranh khác. Trong thí nghiệm Mincome ở Dauphin, Canada (1974 đến 1979), số giờ làm việc chỉ giảm khoảng 1% ở nam giới, 3% ở phụ nữ đã kết hôn và 5% ở phụ nữ chưa kết hôn, trong khi số lần nhập viện giảm 8,5%[^mincome]. Ở Thụy Điển, những người trúng xổ số giảm thu nhập từ lao động ở mức khiêm tốn, và mức giảm kéo dài nhưng không lớn[^lottery]. Thí nghiệm của OpenResearch (2020 đến 2023) trả cho 1.000 người thu nhập thấp ở Mỹ 1.000 USD mỗi tháng trong ba năm. Người nhận giảm 1 đến 2 giờ làm việc mỗi tuần, phần thời gian tăng thêm chủ yếu dành cho nghỉ ngơi và giải trí, và mức hài lòng với cuộc sống chỉ cao hơn nhóm đối chứng trong năm đầu[^openresearch].
+### Thực tế cho thấy gì
 
-Cùng ngày 20/11/2026 khi Alpöge công bố chứng minh GRH, Ravi Vakil (Stanford) công bố một chứng minh khác của nghiên cứu sinh sau tiến sĩ Alessandro Masullo, hoàn toàn do con người thực hiện trong 12 năm và chưa được kiểm chứng bằng Lean. Masullo gửi đến các nhà toán học đang nản lòng thông điệp: "we are still here. We are very much alive"[^techcrunch].
+Chưa có xã hội nào thực sự không cần ai làm việc. Nhưng có vài trường hợp gần giống.
 
-### Những câu trả lời có vẻ đúng
+Năm 1933, Marie Jahoda và các cộng sự nghiên cứu Marienthal, một thị trấn ở Áo mà gần như cả thị trấn mất việc sau khi nhà máy đóng cửa. Có nhiều thời gian rảnh hơn, nhưng người ta không làm nhiều thứ hơn. Họ trở nên thờ ơ. Jahoda về sau kết luận rằng ngoài tiền lương, công việc còn cho con người năm thứ: nhịp sinh hoạt mỗi ngày, quan hệ xã hội, mục đích chung, bản sắc, và việc để làm đều đặn[^jahoda]. Mất việc là mất cả năm thứ đó.
 
-Từ các nghiên cứu trên, có thể rút ra vài nhận định thận trọng. Thứ nhất, khi có đủ tiền để sống, phần lớn người ta vẫn tiếp tục làm việc, chỉ làm ít đi một chút. Thứ hai, thời gian được giải phóng phần lớn chuyển sang nghỉ ngơi và giải trí, chứ không tự động trở thành học tập hay sáng tạo như Russell kỳ vọng. Thứ ba, điều con người thực sự mất khi mất việc không chỉ là thu nhập mà là những gì Jahoda liệt kê: một nhịp sống, một cộng đồng, một mục đích và một bản sắc. Một xã hội không cần lao động sẽ phải tìm nguồn khác cho những thứ đó, có thể qua trò chơi như Suits nói, qua chăm sóc người khác, hay qua những việc như Masullo chọn làm.
+Có điều Marienthal là mất việc kèm nghèo đói. Khi người ta được cho tiền mà không phải làm gì, kết quả khác hẳn:
 
-Các bằng chứng này đều đến từ những thử nghiệm nhỏ, ngắn hạn, trong một xã hội mà phần lớn người khác vẫn đi làm. Chưa ai quan sát được một xã hội mà không ai cần làm việc. Vì vậy câu hỏi vẫn còn mở:
+- Mincome ở Dauphin, Canada (1974 đến 1979): giờ làm chỉ giảm khoảng 1% ở nam giới, 3% ở phụ nữ đã kết hôn, 5% ở phụ nữ chưa kết hôn. Số lần nhập viện giảm 8,5%[^mincome].
+- Người trúng xổ số ở Thụy Điển: thu nhập từ đi làm giảm, nhưng giảm không nhiều[^lottery].
+- OpenResearch ở Mỹ (2020 đến 2023): 1.000 người thu nhập thấp nhận 1.000 USD mỗi tháng trong ba năm. Họ làm ít đi 1 đến 2 tiếng mỗi tuần, thời gian dư chủ yếu dành để nghỉ ngơi và giải trí. Họ thấy hạnh phúc hơn trong năm đầu, rồi trở lại như nhóm không nhận tiền[^openresearch].
+
+Và còn Alessandro Masullo. Cùng ngày Alpöge đăng chứng minh, Ravi Vakil ở Stanford đăng một chứng minh GRH khác của Masullo, một postdoc. Chứng minh này viết hoàn toàn bằng tay, không dùng AI, mất 12 năm, và chưa có bản Lean nên chưa ai biết đúng sai. Masullo gửi lời tới những nhà toán học đang nản: "we are still here. We are very much alive"[^techcrunch].
+
+### Vậy câu trả lời có thể là gì
+
+Từ những gì ở trên, tôi rút ra được vài điều.
+
+Có đủ tiền để sống thì phần lớn người ta vẫn đi làm, chỉ làm ít đi một chút. Thời gian rảnh có thêm thì chủ yếu để nghỉ ngơi, chứ không tự nhiên biến thành học hành hay sáng tạo như Russell mong. Còn thứ người ta thật sự mất khi không còn đi làm không phải tiền, mà là những thứ Jahoda liệt kê: nhịp sống, cộng đồng, mục đích, và cảm giác mình là ai.
+
+Nếu một ngày không ai cần đi làm nữa, có lẽ mình phải tìm những thứ đó ở chỗ khác. Có thể là trò chơi như Suits nói, là chăm sóc người khác, hay là theo đuổi một bài toán suốt 12 năm như Masullo.
+
+Nhưng tất cả những nghiên cứu này đều nhỏ, ngắn, và diễn ra trong một xã hội mà những người khác vẫn đi làm. Chưa ai từng thấy một thế giới mà không ai cần làm việc. Nên câu hỏi vẫn còn đó:
 
 **Con người sẽ chọn làm gì khi không còn bị buộc phải làm việc để sống?**
 
