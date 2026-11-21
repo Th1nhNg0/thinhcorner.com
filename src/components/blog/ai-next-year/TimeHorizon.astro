@@ -5,14 +5,14 @@
  */
 type P = { name: string; date: string; min: number; label: string };
 const pts: P[] = [
-  { name: "GPT-4", date: "2023-03-14", min: 3.5, label: "3.5 min" },
-  { name: "GPT-4o", date: "2024-05-13", min: 6, label: "6 min" },
-  { name: "Claude 3.7 Sonnet", date: "2025-02-24", min: 60, label: "1 hr" },
-  { name: "o3", date: "2025-04-16", min: 121, label: "2 hr" },
-  { name: "GPT-5", date: "2025-08-07", min: 214, label: "3.6 hr" },
-  { name: "Claude Opus 4.5", date: "2025-11-24", min: 320, label: "5.3 hr" },
-  { name: "Claude Opus 4.6", date: "2026-02-05", min: 720, label: "~12 hr" },
-  { name: "Claude Mythos Preview", date: "2026-03-20", min: 1044, label: "~17 hr" },
+  { name: "GPT-4", date: "2023-03-14", min: 3.5, label: "3,5 phút" },
+  { name: "GPT-4o", date: "2024-05-13", min: 6, label: "6 phút" },
+  { name: "Claude 3.7 Sonnet", date: "2025-02-24", min: 60, label: "1 giờ" },
+  { name: "o3", date: "2025-04-16", min: 121, label: "2 giờ" },
+  { name: "GPT-5", date: "2025-08-07", min: 214, label: "3,6 giờ" },
+  { name: "Claude Opus 4.5", date: "2025-11-24", min: 320, label: "5,3 giờ" },
+  { name: "Claude Opus 4.6", date: "2026-02-05", min: 720, label: "~12 giờ" },
+  { name: "Claude Mythos Preview", date: "2026-03-20", min: 1044, label: "~17 giờ" },
 ];
 const W = 440, H = 460, L = 58, R = 16, T = 12, B = 34;
 const t0 = Date.parse("2023-01-01"), t1 = Date.parse("2026-06-30");
@@ -21,9 +21,9 @@ const lo = Math.log10(2), hi = Math.log10(2200);
 const y = (m: number) => T + (1 - (Math.log10(m) - lo) / (hi - lo)) * (H - T - B);
 const path = pts.map((p, i) => `${i ? "L" : "M"}${x(p.date).toFixed(1)},${y(p.min).toFixed(1)}`).join(" ");
 const grid = [
-  { m: 5, t: "5 min" },
-  { m: 60, t: "1 hour" },
-  { m: 480, t: "8 hours" },
+  { m: 5, t: "5 phút" },
+  { m: 60, t: "1 giờ" },
+  { m: 480, t: "8 giờ" },
 ];
 const years = ["2023", "2024", "2025", "2026"];
 const yx = (yr: string) => x(`${yr}-01-01`);
@@ -32,7 +32,7 @@ const yx = (yr: string) => x(`${yr}-01-01`);
 <figure class="not-prose mx-auto my-8 max-w-[30rem]" data-time-horizon>
   <div class="rounded-surface border border-(--line) bg-(--surface) p-3">
     <svg viewBox={`0 0 ${W} ${H}`} class="block h-auto w-full" role="img"
-      aria-label="Length of coding task AI can finish half the time: GPT-4 3.5 minutes in 2023, Claude 3.7 Sonnet 1 hour in early 2025, Claude Mythos Preview about 17 hours in 2026">
+      aria-label="Độ dài nhiệm vụ lập trình mà AI hoàn thành được một nửa số lần: GPT-4 3,5 phút năm 2023, Claude 3.7 Sonnet 1 giờ đầu năm 2025, Claude Mythos Preview khoảng 17 giờ năm 2026">
       {grid.map((g) => (
         <g>
           <line x1={L} x2={W - R} y1={y(g.m)} y2={y(g.m)} stroke="#27272a" stroke-dasharray={g.m === 480 ? "0" : "3 4"} />
@@ -40,7 +40,7 @@ const yx = (yr: string) => x(`${yr}-01-01`);
         </g>
       ))}
       <rect x={L} y={T} width={W - L - R} height={y(960) - T} fill="#eab308" opacity="0.05" />
-      <text x={L + 8} y={T + 18} font-size="13" fill="#8f8f98">over 16 h: past what METR can test</text>
+      <text x={L + 8} y={T + 18} font-size="13" fill="#8f8f98">trên 16 giờ: vượt giới hạn đo của METR</text>
       {years.map((yr) => (
         <g>
           <line x1={yx(yr)} x2={yx(yr)} y1={H - B} y2={H - B + 5} stroke="#3f3f46" />
@@ -60,8 +60,8 @@ const yx = (yr: string) => x(`${yr}-01-01`);
     </svg>
   </div>
   <figcaption class="mt-2 text-balance text-center text-sm text-(--muted)">
-    How long a coding task (in human working time) each model can finish half of the time. The vertical axis is logarithmic.
-    <span class="mt-0.5 block font-mono text-xs text-(--faint)">Source: METR time horizons (Time Horizon 1.1), 2023–2026.</span>
+    Độ dài nhiệm vụ lập trình (tính theo thời gian làm việc của con người) mà mỗi model hoàn thành được với tỉ lệ thành công 50%. Trục dọc dùng thang logarit.
+    <span class="mt-0.5 block font-mono text-xs text-(--faint)">Nguồn: METR time horizons (Time Horizon 1.1), 2023 đến 2026.</span>
   </figcaption>
 </figure>
 
