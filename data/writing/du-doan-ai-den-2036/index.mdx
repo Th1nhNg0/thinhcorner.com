@@ -1,7 +1,7 @@
 ---
 title: "Vài dự đoán về AI đến năm 2036"
 date: "2026-11-21T14:00:00Z"
-description: "Các dự đoán về AI từ nay đến 2036, mỗi dự đoán kèm một mốc số liệu hiện tại để đối chiếu, và một câu hỏi mở về việc con người sẽ làm gì."
+description: "Tốc độ phát triển của AI, khái niệm singularity, và các dự đoán của tôi đến năm 2036, mỗi dự đoán kèm một mốc số liệu hiện tại để đối chiếu."
 lang: "vi"
 tags: ["ai", "personal"]
 ---
@@ -12,7 +12,9 @@ import neuralinkMp4 from "./neuralink.mp4";
 import neuralinkWebm from "./neuralink.webm";
 import TimeHorizon from "@/components/blog/ai-next-year/TimeHorizon.astro";
 
-Bài viết này ghi lại một số dự đoán của tôi về AI từ nay đến năm 2036, chẳng hạn AI giúp giảm mạnh nạn đói và số ca tử vong do ung thư, hay làm thay đổi số giờ con người phải làm việc. Một số dự đoán nghe có phần cực đoan, vì vậy tôi ghi lại kèm thời hạn và số liệu hiện tại để có thể đối chiếu sau này. Các phần dưới đây trình bày những cơ sở dẫn tôi đến các nhận định đó, các giới hạn của chúng, và câu hỏi đặt ra nếu chúng trở thành sự thật.
+Bài viết này ghi lại một số dự đoán của tôi về AI từ nay đến năm 2036, chẳng hạn AI giúp giảm mạnh nạn đói và số ca tử vong do ung thư, hay làm giảm số giờ con người phải làm việc. Một số dự đoán nghe có phần cực đoan, vì vậy tôi ghi lại kèm thời hạn và số liệu hiện tại để có thể đối chiếu sau này.
+
+Bài gồm năm phần: các số liệu về tốc độ phát triển của AI; khái niệm singularity; những giới hạn có thể làm chậm tiến trình này; bảng dự đoán; và một câu hỏi mà tôi cho là quan trọng hơn cả các dự đoán, đó là con người sẽ làm gì nếu chúng trở thành sự thật.
 
 ## Tốc độ phát triển của AI
 
@@ -25,7 +27,7 @@ Không có một thước đo duy nhất nào cho "tốc độ phát triển c�
 | Compute dùng để huấn luyện các model hàng đầu | Tăng 4 đến 5 lần mỗi năm, giai đoạn 2010 đến 2024[^compute] |
 | Giá để đạt năng lực của GPT-4 trên bộ câu hỏi khoa học cấp tiến sĩ (GPQA) | Giảm khoảng 40 lần mỗi năm[^price] |
 
-Các chỉ số này có giới hạn riêng. Benchmark có thể bão hòa hoặc bị "học tủ", và Epoch lưu ý rằng tốc độ giảm giá thay đổi rất mạnh tùy mức năng lực, từ 9 đến 900 lần mỗi năm[^price]. Tuy nhiên, điểm đáng chú ý là cả bốn chỉ số đều tăng theo cấp số nhân, thay vì tuyến tính.
+Các chỉ số này có giới hạn riêng. Benchmark có thể bão hòa hoặc bị "học tủ", và Epoch lưu ý rằng tốc độ giảm giá thay đổi rất mạnh tùy mức năng lực, từ 9 đến 900 lần mỗi năm[^price]. Dù vậy, cả bốn chỉ số đều cho cùng một kết luận: trong vài năm gần đây, năng lực của AI không cải thiện vài phần trăm mỗi năm mà thay đổi nhiều lần mỗi năm.
 
 Một thước đo khác là "time horizon" của METR: độ dài của một nhiệm vụ lập trình, tính theo thời gian một người cần để hoàn thành, mà model có thể làm xong với tỉ lệ thành công 50%. Vào giữa năm 2024, GPT-4o đạt khoảng 6 phút. Đến tháng 2/2026, Claude Opus 4.6 đạt khoảng 12 giờ, và METR ước tính chỉ số này tăng gấp đôi sau mỗi khoảng 3,5 tháng[^metr]. Thước đo này chỉ phản ánh các nhiệm vụ lập trình, và đến giữa năm 2026 bộ bài kiểm tra của METR không còn đủ khó để đo chính xác các model mới nhất.
 
@@ -55,9 +57,27 @@ Ngày 20/11/2026, Levent Alpöge, nhà toán học làm việc tại Anthropic, 
 
 Cần lưu ý rằng việc bản Lean biên dịch thành công chỉ xác nhận tính đúng đắn hình thức của từng bước. Hiện chưa ai nắm được chiến lược tổng thể của chứng minh, và Tao nhận định quá trình "tiêu hóa" nó sẽ cần thêm thời gian[^taoblog]. Dù vậy, nếu chứng minh đứng vững, mốc "khoảng 2050" đã bị rút ngắn gần 24 năm, và một bài toán từng chiếm trọn sự nghiệp của nhiều nhà toán học đã được giải trong khoảng một tháng rưỡi.
 
+## Singularity
+
+Một từ tiếng Anh tôi mới học được trong năm nay là "singularity", tạm dịch là điểm kỳ dị. Trong toán học và vật lý, singularity là điểm mà tại đó một đại lượng trở nên vô hạn và các quy luật thông thường không còn áp dụng được, ví dụ tâm của một hố đen. Hai kết quả về phương trình Euler và Navier-Stokes ở trên cũng là bài toán về singularity theo nghĩa này: chúng chứng minh rằng nghiệm của phương trình có thể "nổ" thành vô hạn sau một khoảng thời gian hữu hạn[^taoblog]. Trong bối cảnh AI, từ này mang một nghĩa khác, và nghĩa đó đã thay đổi qua nhiều thập kỷ.
+
+**Nguồn gốc.** Năm 1958, khi viết về John von Neumann, Stanislaw Ulam kể lại một cuộc trò chuyện trong đó von Neumann nhận xét rằng tiến bộ công nghệ ngày càng nhanh khiến loài người dường như đang tiến gần đến một "essential singularity", vượt qua điểm đó thì đời sống con người như ta biết sẽ không thể tiếp diễn[^ulam]. Đây là lần đầu tiên từ này được dùng cho lịch sử công nghệ.
+
+**Bùng nổ trí tuệ.** Năm 1965, nhà toán học I. J. Good, đồng nghiệp của Alan Turing ở Bletchley Park, đưa ra lập luận làm nền cho hầu hết các định nghĩa sau này. Nếu một cỗ máy thông minh hơn con người ở mọi hoạt động trí tuệ, nó cũng sẽ giỏi thiết kế máy móc hơn con người, và có thể tạo ra một cỗ máy thông minh hơn chính nó. Quá trình lặp lại đó dẫn đến một "intelligence explosion". Theo Good, cỗ máy siêu thông minh đầu tiên sẽ là phát minh cuối cùng con người cần làm ra[^good]. Ý tưởng này chính là RSI (recursive self-improvement) mà giới AI hiện nay nhắc đến.
+
+**Định nghĩa phổ biến.** Năm 1993, nhà toán học và nhà văn khoa học viễn tưởng Vernor Vinge kết hợp hai ý trên trong bài "The Coming Technological Singularity". Theo Vinge, singularity là thời điểm con người tạo ra trí tuệ vượt trội con người, và sau thời điểm đó tương lai không còn dự đoán được bằng hiểu biết hiện tại. Ông dự đoán điều này sẽ xảy ra trong vòng 30 năm, và nói rằng ông sẽ ngạc nhiên nếu nó xảy ra trước năm 2005 hoặc sau năm 2030[^vinge]. Năm 2005, Ray Kurzweil đưa ra mốc thời gian cụ thể hơn trong "The Singularity Is Near": AI ngang trí tuệ con người vào năm 2029, và singularity vào năm 2045. Ông giữ nguyên hai mốc này trong cuốn "The Singularity Is Nearer" xuất bản năm 2024[^kurzweil].
+
+**Phê phán.** Năm 2010, triết gia David Chalmers phân tích lập luận của Good một cách hệ thống và kết luận rằng nó đủ chặt chẽ để được xem xét nghiêm túc, dù có nhiều yếu tố có thể ngăn nó xảy ra[^chalmers]. Năm 2011, Paul Allen, đồng sáng lập Microsoft, phản bác Kurzweil bằng khái niệm "complexity brake": càng hiểu sâu về trí tuệ, ta càng gặp thêm độ phức tạp, nên tiến bộ sẽ chậm lại thay vì tăng tốc[^allen].
+
+**Cách hiểu gần đây.** Tháng 6/2025, Sam Altman viết bài "The Gentle Singularity", cho rằng loài người đã vượt qua "event horizon", tức điểm không thể quay lại, và quá trình cất cánh đã bắt đầu. Khác với hình dung về một bước nhảy đột ngột, Altman cho rằng singularity sẽ diễn ra từ từ: mỗi bước đều có vẻ bình thường khi ta đang sống trong nó, và chỉ khi nhìn lại mới thấy khoảng cách đã lớn đến đâu[^altman].
+
+Tổng hợp lại, các định nghĩa đều có chung hai thành phần: một vòng lặp trong đó AI cải thiện chính nó, và một giai đoạn mà tiến bộ diễn ra nhanh đến mức ta không còn dự đoán được bằng kinh nghiệm cũ. Điểm bất đồng lớn nhất là singularity sẽ đến như một bước nhảy đột ngột theo hình dung của Good và Vinge, hay như một quá trình từ từ theo cách Altman mô tả. Theo định nghĩa chặt của Good, singularity chưa xảy ra, vì AI chưa tự thiết kế ra một thế hệ AI mạnh hơn mà không cần con người. Nhưng với tốc độ ở phần trên, và nếu chứng minh GRH đứng vững thì đến cả Tao cũng đánh giá sai mốc thời gian của chính lĩnh vực mình chỉ một tháng trước đó, cách mô tả của Altman đang ngày càng khó bác bỏ.
+
+Tôi mong singularity sẽ xảy ra trong khoảng thời gian tôi còn sống. Nếu mốc 2045 của Kurzweil đúng, đó không phải là một mong muốn quá xa vời.
+
 ## Giới hạn của kiểm chứng ở các ngành khác
 
-Toán học có một lợi thế đặc thù: kết quả có thể được kiểm chứng gần như ngay lập tức bằng các công cụ như Lean. Phần lớn các ngành khoa học khác không có điều kiện này. Tôi cho rằng cơ chế RSI (recursive self-improvement, AI tự cải thiện chính nó) đã bắt đầu được áp dụng ngoài lĩnh vực ngôn ngữ, nhưng vòng phản hồi trong phòng thí nghiệm chậm hơn nhiều so với huấn luyện LLM, nên kết quả chưa hiện ra ngay. Tôi dự đoán trong năm tới sẽ có nhiều nghiên cứu quan trọng có sự tham gia của AI được công bố trong sinh học, hóa học và vật lý.
+Toán học có một lợi thế đặc thù: kết quả có thể được kiểm chứng gần như ngay lập tức bằng các công cụ như Lean. Phần lớn các ngành khoa học khác không có điều kiện này. Tôi cho rằng cơ chế RSI, tức vòng lặp tự cải thiện mà Good mô tả, đã bắt đầu được áp dụng ngoài lĩnh vực ngôn ngữ, nhưng vòng phản hồi trong phòng thí nghiệm chậm hơn nhiều so với huấn luyện LLM, nên kết quả chưa hiện ra ngay. Tôi dự đoán trong năm tới sẽ có nhiều nghiên cứu quan trọng có sự tham gia của AI được công bố trong sinh học, hóa học và vật lý.
 
 Để hình dung, tôi đề nghị Claude Fable 5.2 liệt kê một cột mốc có tầm vóc tương đương giả thuyết Riemann cho từng ngành, thời gian cần để kiểm chứng, và xác suất cột mốc đó đạt được trước năm 2031 với vai trò chính của AI. Các con số dưới đây là ước đoán của model, không phải dữ liệu thực nghiệm.
 
@@ -75,7 +95,7 @@ Cột "thời gian kiểm chứng" cho thấy yếu tố quyết định tốc �
 
 ## AI và thị trường lao động
 
-Các cuộc cách mạng công nghiệp trước đây đều làm mất đi nhiều việc làm, nhưng về dài hạn lại tạo ra những ngành nghề mới. Năm 1900, khoảng 40% lực lượng lao động Mỹ làm nông nghiệp; ngày nay tỉ lệ này dưới 2%. Phần lao động dôi ra không biến mất mà chuyển sang những ngành nghề chưa tồn tại vào năm 1900.
+Các cuộc cách mạng công nghiệp trước đây đều làm mất đi nhiều việc làm, nhưng về dài hạn lại tạo ra những ngành nghề mới. Năm 1900, khoảng 41% lực lượng lao động Mỹ làm nông nghiệp; đến năm 2000, tỉ lệ này chỉ còn 1,9%[^usda]. Phần lao động dôi ra không biến mất mà chuyển sang những ngành nghề chưa tồn tại vào năm 1900.
 
 Tuy vậy, lịch sử cũng ghi nhận một trường hợp ngược lại: ngựa kéo. Đầu thế kỷ 20, nước Mỹ có hơn 20 triệu con ngựa phục vụ vận tải và nông nghiệp. Khi động cơ đốt trong ra đời, không có vai trò mới nào thay thế cho chúng.
 
@@ -100,7 +120,7 @@ Lương thực và ung thư được chọn vì chúng có số liệu toàn c�
 
 ## Con người sẽ làm gì
 
-Giả sử các dự đoán dài hạn ở trên đều đúng: AI bảo đảm được lương thực, chăm sóc sức khỏe và đảm nhận phần lớn công việc, đến mức không ai còn buộc phải lao động để tồn tại. Khi đó xuất hiện một câu hỏi tôi từng đọc được trên mạng, mang tính triết học nhiều hơn kinh tế: con người sẽ chọn làm gì khi không còn bị buộc phải làm việc để sống? Theo tôi, kể cả khi xã hội tiến tới một mô hình như chủ nghĩa cộng sản, câu hỏi này vẫn cần được trả lời trước tiên.
+Giả sử các dự đoán dài hạn ở trên đều đúng: AI bảo đảm được lương thực, chăm sóc sức khỏe và đảm nhận phần lớn công việc, đến mức không ai còn buộc phải lao động để tồn tại. Nói cách khác, đó là thế giới sau singularity mà Vinge cho là không thể dự đoán. Khi đó xuất hiện một câu hỏi tôi từng đọc được trên mạng, mang tính triết học nhiều hơn kinh tế: con người sẽ chọn làm gì khi không còn bị buộc phải làm việc để sống? Theo tôi, kể cả khi xã hội tiến tới một mô hình như chủ nghĩa cộng sản, câu hỏi này vẫn cần được trả lời trước tiên.
 
 Câu hỏi này không mới. Các nhà tư tưởng đã đưa ra nhiều phỏng đoán, và một số nghiên cứu thực nghiệm cho phép kiểm tra chúng ở quy mô nhỏ.
 
@@ -139,6 +159,14 @@ Các bằng chứng này đều đến từ những thử nghiệm nhỏ, ngắn
 [^tao2050]: OfficeChai, ["Terence Tao Had Said A Month Ago That AI Could Solve Riemann Hypothesis Only By 2050"](https://officechai.com/ai/terence-tao-had-a-month-ago-that-ai-could-solve-riemann-hypothesis-only-by-2050/), 21/11/2026. Phỏng vấn gốc: Numberphile, "No More Heroes", 15/10/2026.
 [^techcrunch]: TechCrunch, ["AI claimed a solution to the 167-year-old Riemann hypothesis, and a human did, too"](https://techcrunch.com/2026/11/20/ai-claimed-a-solution-to-the-167-year-old-riemann-hypothesis-and-a-human-did-too/), 20/11/2026.
 [^taoblog]: Terence Tao, ["Unforced Euler singularity, unforced Navier-Stokes singularity, and the Generalized Riemann Hypothesis"](https://terrytao.wordpress.com/2026/11/20/unforced-euler-singularity-unforced-navier-stokes-singularity-and-the-generalized-riemann-hypothesis/), 20/11/2026.
+[^ulam]: Stanislaw Ulam, "Tribute to John von Neumann", Bulletin of the American Mathematical Society, 64(3), 1958.
+[^good]: I. J. Good, "Speculations Concerning the First Ultraintelligent Machine", Advances in Computers, tập 6, 1965.
+[^vinge]: Vernor Vinge, ["The Coming Technological Singularity: How to Survive in the Post-Human Era"](https://edoras.sdsu.edu/~vinge/misc/singularity.html), 1993.
+[^kurzweil]: Ray Kurzweil, "The Singularity Is Near", 2005; "The Singularity Is Nearer", 2024.
+[^chalmers]: David Chalmers, "The Singularity: A Philosophical Analysis", Journal of Consciousness Studies, 17, 2010.
+[^allen]: Paul Allen và Mark Greaves, ["The Singularity Isn't Near"](https://www.technologyreview.com/2011/10/12/190773/paul-allen-the-singularity-isnt-near/), MIT Technology Review, 12/10/2011.
+[^altman]: Sam Altman, ["The Gentle Singularity"](https://blog.samaltman.com/the-gentle-singularity), 10/6/2025.
+[^usda]: Carolyn Dimitri, Anne Effland, Neilson Conklin, ["The 20th Century Transformation of U.S. Agriculture and Farm Policy"](https://www.ers.usda.gov/webdocs/publications/44197/13566_eib3_1_.pdf), USDA Economic Research Service, 2005.
 [^keynes]: John Maynard Keynes, "Economic Possibilities for our Grandchildren", 1930.
 [^marx]: Karl Marx và Friedrich Engels, "The German Ideology", 1845.
 [^russell]: Bertrand Russell, "In Praise of Idleness", 1932.
